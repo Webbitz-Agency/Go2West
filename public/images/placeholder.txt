@@ -1,0 +1,29 @@
+Cartella per le immagini del sito Go2West
+
+Le seguenti immagini dovranno essere aggiunte:
+
+Hero Section:
+- hero-beach.jpg (immagine principale hero)
+
+Destinazioni:
+- north-america.jpg
+- japan.jpg  
+- kenya.jpg
+- australia.jpg
+- mexico.jpg
+- usa.jpg
+
+Tour e Proposte:
+- kenya-safari.jpg
+- kenya-wildlife.jpg
+- grand-canyon.jpg
+- nyc.jpg
+- california-coast.jpg
+- everglades.jpg
+
+Tour Details:
+- eiffel-tower.jpg
+- colosseum.jpg
+- venice-canal.jpg
+
+Per il momento il sito funzionerà anche senza le immagini (verranno mostrati i placeholder degli img tag). 
