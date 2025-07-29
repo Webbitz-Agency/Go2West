@@ -1,177 +1,938 @@
-/* Hero Section */
-.hero {
-  display: flex;
-  align-items: center;
-  min-height: 70vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  padding: 0 20px;
+/* Reset e Base */
+.home {
+  overflow-x: hidden;
 }
 
-.hero-content {
-  flex: 1;
-  max-width: 600px;
-  padding-right: 40px;
+/* Sezione Intro Compatta */
+.intro-section {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 60px 20px 50px;
+  text-align: center;
+  position: relative;
 }
 
-.hero-content h1 {
-  font-size: 3.5rem;
+.intro-content h1 {
+  font-size: 2.8rem;
   font-weight: 700;
-  margin-bottom: 20px;
-  color: #2c3e50;
-  line-height: 1.2;
-}
-
-.hero-content p {
-  font-size: 1.2rem;
-  margin-bottom: 30px;
-  color: #666;
-}
-
-.hero-image {
-  flex: 1;
-  text-align: center;
-}
-
-.hero-image img {
-  width: 100%;
-  max-width: 500px;
-  height: auto;
-  border-radius: 15px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-}
-
-/* Our Proposals */
-.our-proposals {
-  background: #f8f9fa;
-}
-
-.section-header {
-  text-align: center;
-  margin-bottom: 50px;
-}
-
-.section-header h2 {
-  color: #2c3e50;
-  font-size: 2.5rem;
+  color: white;
   margin-bottom: 15px;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
 
-.proposal-card {
-  display: flex;
-  align-items: center;
-  gap: 40px;
-  background: white;
-  padding: 40px;
+.intro-content p {
+  font-size: 1.2rem;
+  color: rgba(255,255,255,0.9);
+  font-weight: 300;
+}
+
+/* Layout Mosaico Creativo */
+.mosaic-destinations {
+  padding: 40px 3% 60px;
+  background: #f8f9fa;
+  position: relative;
+}
+
+/* Carousel Base Styles */
+.image-carousel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
   border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 
-.proposal-content {
-  flex: 1;
+.carousel-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.proposal-content h3 {
-  font-size: 2rem;
+.carousel-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+/* Controlli Carousel */
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 18px;
+  font-weight: bold;
   color: #2c3e50;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.carousel-btn:hover {
+  background: white;
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.prev-btn {
+  left: 15px;
+}
+
+.next-btn {
+  right: 15px;
+}
+
+/* Indicatori Carousel */
+.carousel-indicators {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+.indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.indicator.active {
+  background: white;
+  transform: scale(1.2);
+}
+
+.indicator:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+/* Prima Row - Kenya + Japan */
+.destination-row {
+  margin-bottom: 40px;
+}
+
+.row-1 {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 30px;
+  height: 450px;
+}
+
+/* Kenya Card - Grande */
+.destination-large-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+  position: relative;
+}
+
+.card-content {
+  display: flex;
+  height: 100%;
+}
+
+.text-section {
+  flex: 1.2;
+  padding: 40px 35px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.text-section h2 {
+  font-size: 2.5rem;
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-weight: 700;
+}
+
+.main-desc {
+  font-size: 1.1rem;
+  color: #555;
+  line-height: 1.7;
+  margin-bottom: 10px;
+}
+
+.short-desc {
+  font-size: 1rem;
+  color: #777;
+  font-style: italic;
   margin-bottom: 20px;
 }
 
-.proposal-content p {
-  font-size: 1.1rem;
-  line-height: 1.8;
+.experiences {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
   margin-bottom: 25px;
 }
 
-.learn-more {
-  color: #4A90E2;
-  font-weight: 600;
-  text-decoration: underline;
+.experience-tag {
+  background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 15px;
+  font-size: 0.85rem;
+  font-weight: 500;
 }
 
-.proposal-images {
-  display: flex;
-  gap: 20px;
+.images-section {
+  flex: 1;
+  padding: 20px;
 }
 
-.proposal-images img {
-  width: 200px;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 10px;
+/* Kenya Carousel Specifico */
+.kenya-carousel {
+  height: 100%;
+  border-radius: 15px;
 }
 
-/* Destinations */
-.destinations {
+.kenya-carousel .carousel-container {
+  height: 100%;
+}
+
+.kenya-carousel .carousel-image {
+  border-radius: 15px;
+}
+
+/* Japan Card - Media */
+.destination-medium-card {
   background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.1);
 }
 
-.destinations-grid {
+.japan-carousel {
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+}
+
+.japan-carousel .carousel-image {
+  border-radius: 20px;
+}
+
+.card-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0,0,0,0.9));
+  padding: 60px 25px 30px;
+  color: white;
+  z-index: 5;
+}
+
+.card-overlay h3 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.card-overlay p {
+  font-size: 1rem;
+  margin-bottom: 15px;
+  opacity: 0.9;
+}
+
+.mini-experiences {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.mini-experiences span {
+  font-size: 0.9rem;
+  color: #4facfe;
+  font-weight: 500;
+}
+
+/* Seconda Row - North America Wide */
+.row-2 {
+  margin: 60px 0;
+}
+
+.destination-wide-card {
+  background: white;
+  border-radius: 25px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+}
+
+.wide-content {
+  display: flex;
+  height: 350px;
+}
+
+.wide-images {
+  flex: 1.5;
+  padding: 25px;
+}
+
+.wide-carousel {
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+}
+
+.wide-carousel .carousel-image {
+  border-radius: 15px;
+}
+
+.wide-text {
+  flex: 1;
+  padding: 40px 35px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.wide-text h2 {
+  font-size: 2.2rem;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.wide-text p {
+  font-size: 1.1rem;
+  color: #555;
+  line-height: 1.7;
+  margin-bottom: 25px;
+}
+
+.experiences-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.exp-item {
+  background: #f8f9fa;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: #555;
+  text-align: center;
+  border-left: 3px solid #4facfe;
+}
+
+/* Sezione Tutte le Destinazioni - Carousel Intelligente */
+.all-destinations-section {
+  background: white;
+  padding: 80px 3% 100px;
+}
+
+.all-destinations-section .section-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.all-destinations-section .section-header h2 {
+  font-size: 2.8rem;
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-weight: 700;
+}
+
+.all-destinations-section .section-header p {
+  font-size: 1.2rem;
+  color: #666;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Container Carousel Destinazioni */
+.destinations-carousel-container {
+  position: relative;
+  display: flex;
+  align-items: center;
   gap: 30px;
   margin-bottom: 40px;
 }
 
-.destination-card {
-  background: white;
-  border-radius: 15px;
-  overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease;
+.destinations-carousel-content {
+  display: grid;
+  grid-template-columns: 1.2fr 0.9fr 0.9fr;
+  gap: 25px;
+  height: 400px;
+  flex: 1;
 }
 
-.destination-card:hover {
+/* Bottoni Navigazione Carousel */
+.destination-nav-btn {
+  background: linear-gradient(45deg, #4facfe, #00f2fe);
+  border: none;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba(79, 172, 254, 0.3);
+  z-index: 10;
+}
+
+.destination-nav-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 12px 35px rgba(79, 172, 254, 0.4);
+}
+
+.destination-nav-btn:active {
+  transform: scale(0.95);
+}
+
+/* Stili per Posizione 0 - Stile Australia */
+.destination-card.australia-style {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+  transition: transform 0.4s ease;
+}
+
+.destination-card.australia-style:hover {
   transform: translateY(-5px);
 }
 
-.destination-card img {
+.destination-card.australia-style .card-image {
+  height: 60%;
+  position: relative;
+}
+
+.destination-card.australia-style .australia-main-carousel {
   width: 100%;
-  height: 200px;
-  object-fit: cover;
+  height: 100%;
   border-radius: 0;
 }
 
-.destination-info {
-  padding: 25px;
+.destination-card.australia-style .floating-info {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(255,255,255,0.95);
+  padding: 15px 20px;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  z-index: 5;
 }
 
-.destination-info h3 {
+.destination-card.australia-style .floating-info h3 {
+  font-size: 1.4rem;
   color: #2c3e50;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
+  font-weight: 600;
 }
 
-.destination-info p {
+.destination-card.australia-style .floating-info p {
+  font-size: 0.9rem;
   color: #666;
+}
+
+.destination-card.australia-style .card-details {
+  height: 40%;
+  padding: 20px;
+  display: flex;
+  gap: 15px;
+}
+
+.destination-card.australia-style .detail-images {
+  flex: 1;
+}
+
+.destination-card.australia-style .australia-detail-carousel {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+
+.destination-card.australia-style .card-text {
+  flex: 1.5;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.destination-card.australia-style .card-text p {
+  font-size: 0.95rem;
+  color: #555;
   line-height: 1.6;
 }
 
-/* Responsive */
+/* Stili per Posizione 1 - Stile Mexico */
+.destination-card.mexico-style {
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+  transition: transform 0.4s ease;
+}
+
+.destination-card.mexico-style:hover {
+  transform: scale(1.02);
+}
+
+.destination-card.mexico-style .mexico-carousel {
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+}
+
+.destination-card.mexico-style .card-overlay-content {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(45deg, rgba(0,0,0,0.7), rgba(0,0,0,0.4));
+  padding: 30px 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: white;
+  z-index: 5;
+}
+
+.destination-card.mexico-style .card-overlay-content h3 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.destination-card.mexico-style .card-overlay-content p {
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+.destination-card.mexico-style .experience-mini {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin: 20px 0;
+}
+
+.destination-card.mexico-style .experience-mini span {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+/* Stili per Posizione 2 - Stile USA */
+.destination-card.usa-style {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+  transition: transform 0.4s ease;
+}
+
+.destination-card.usa-style:hover {
+  transform: translateY(-5px);
+}
+
+.destination-card.usa-style .usa-carousel-grid {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.destination-card.usa-style .usa-carousel {
+  flex: 2;
+  border-radius: 0;
+}
+
+.destination-card.usa-style .usa-text {
+  flex: 1;
+  padding: 20px;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.destination-card.usa-style .usa-text h3 {
+  font-size: 1.4rem;
+  color: #2c3e50;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.destination-card.usa-style .usa-text p {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+/* Dots Navigazione Carousel */
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 30px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ddd;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dot.active {
+  background: linear-gradient(45deg, #4facfe, #00f2fe);
+  transform: scale(1.2);
+}
+
+.dot:hover {
+  background: #999;
+}
+
+/* Sezione Statistiche */
+.stats-section {
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  padding: 60px 20px;
+  margin: 40px 0;
+}
+
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.stat-item {
+  text-align: center;
+  color: white;
+}
+
+.stat-item h3 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  background: linear-gradient(45deg, #4facfe, #00f2fe);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-item p {
+  font-size: 1rem;
+  opacity: 0.9;
+  font-weight: 300;
+}
+
+/* Bottoni e Link */
+.explore-btn {
+  display: inline-block;
+  background: linear-gradient(45deg, #4facfe, #00f2fe);
+  color: white;
+  padding: 12px 25px;
+  border-radius: 25px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba(79, 172, 254, 0.3);
+  font-size: 0.95rem;
+  align-self: flex-start;
+}
+
+.explore-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 35px rgba(79, 172, 254, 0.4);
+  color: white;
+  text-decoration: none;
+}
+
+.explore-link {
+  color: #4facfe;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: color 0.3s ease;
+}
+
+.explore-link:hover {
+  color: #2196f3;
+  text-decoration: none;
+}
+
+/* Sezione CTA Finale */
+.final-cta {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 80px 20px;
+  text-align: center;
+  color: white;
+}
+
+.cta-content h2 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.cta-content p {
+  font-size: 1.2rem;
+  margin-bottom: 40px;
+  opacity: 0.9;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.primary-cta {
+  display: inline-block;
+  background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+  color: white;
+  padding: 15px 35px;
+  border-radius: 30px;
+  font-weight: 700;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+}
+
+.primary-cta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 40px rgba(255, 107, 107, 0.4);
+  color: white;
+  text-decoration: none;
+}
+
+.secondary-cta {
+  display: inline-block;
+  background: transparent;
+  color: white;
+  padding: 15px 35px;
+  border: 2px solid white;
+  border-radius: 30px;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.secondary-cta:hover {
+  background: white;
+  color: #667eea;
+  text-decoration: none;
+  transform: translateY(-3px);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .row-1 {
+    grid-template-columns: 1.5fr 1fr;
+    height: 400px;
+  }
+  
+  .destinations-carousel-content {
+    grid-template-columns: 1fr 1fr 1fr;
+    height: 380px;
+  }
+  
+  .stats-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+  }
+
+  /* Carousel controls più piccoli su tablet */
+  .carousel-btn {
+    width: 35px;
+    height: 35px;
+    font-size: 16px;
+  }
+  
+  .prev-btn {
+    left: 10px;
+  }
+  
+  .next-btn {
+    right: 10px;
+  }
+
+  .destination-nav-btn {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+  }
+}
+
 @media (max-width: 768px) {
-  .hero {
-    flex-direction: column;
-    text-align: center;
-    padding: 40px 20px;
+  .intro-content h1 {
+    font-size: 2.2rem;
   }
   
-  .hero-content {
-    padding-right: 0;
-    margin-bottom: 40px;
+  .mosaic-destinations {
+    padding: 30px 5% 50px;
   }
   
-  .hero-content h1 {
-    font-size: 2.5rem;
-  }
-  
-  .proposal-card {
-    flex-direction: column;
-    text-align: center;
-  }
-  
-  .proposal-images {
-    justify-content: center;
-  }
-  
-  .destinations-grid {
+  .row-1 {
     grid-template-columns: 1fr;
+    height: auto;
+    gap: 25px;
+  }
+  
+  .destination-large-card .card-content {
+    flex-direction: column;
+    height: auto;
+  }
+  
+  .text-section {
+    order: 2;
+    padding: 30px 25px;
+  }
+  
+  .images-section {
+    order: 1;
+    padding: 20px 20px 0;
+    height: 250px;
+  }
+  
+  .wide-content {
+    flex-direction: column;
+    height: auto;
+  }
+  
+  .wide-images {
+    order: 1;
+    height: 200px;
+  }
+  
+  .wide-text {
+    order: 2;
+    padding: 30px 25px;
+  }
+  
+  /* Carousel Destinazioni Responsive */
+  .all-destinations-section {
+    padding: 60px 5% 80px;
+  }
+
+  .all-destinations-section .section-header h2 {
+    font-size: 2.2rem;
+  }
+
+  .destinations-carousel-container {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .destinations-carousel-content {
+    grid-template-columns: 1fr;
+    height: auto;
+    gap: 25px;
+  }
+  
+  .destination-card.australia-style,
+  .destination-card.mexico-style,
+  .destination-card.usa-style {
+    height: 350px;
+  }
+
+  .destination-nav-btn {
+    width: 45px;
+    height: 45px;
+    font-size: 18px;
+  }
+  
+  .stats-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+  }
+  
+  .stat-item h3 {
+    font-size: 2rem;
+  }
+  
+  .cta-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .primary-cta,
+  .secondary-cta {
+    width: 250px;
+    text-align: center;
+  }
+
+  /* Controlli carousel più piccoli su mobile */
+  .carousel-btn {
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+  }
+  
+  .prev-btn {
+    left: 8px;
+  }
+  
+  .next-btn {
+    right: 8px;
+  }
+  
+  .carousel-indicators {
+    bottom: 10px;
+  }
+  
+  .indicator {
+    width: 6px;
+    height: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .destination-card.australia-style,
+  .destination-card.mexico-style,
+  .destination-card.usa-style {
+    height: 300px;
+  }
+  
+  .stats-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .cta-content h2 {
+    font-size: 2rem;
+  }
+
+  /* Nascondere controlli su schermi molto piccoli per un'esperienza più pulita */
+  .carousel-btn {
+    display: none;
+  }
+
+  .all-destinations-section .section-header h2 {
+    font-size: 1.8rem;
+  }
+
+  .destination-nav-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
   }
 } 
