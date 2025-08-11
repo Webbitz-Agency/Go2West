@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import './Home.css';
 
@@ -15,6 +15,10 @@ const Home = () => {
 
   // Stato per il carousel delle destinazioni
   const [destinationCarouselIndex, setDestinationCarouselIndex] = useState(0);
+
+  // Riferimento e stato visibilità form contatti
+  const contactRef = useRef(null);
+  const [isContactVisible, setIsContactVisible] = useState(false);
 
   const destinations = [
     { 
@@ -82,6 +86,30 @@ const Home = () => {
 
     return () => clearInterval(interval);
   }, [destinations]);
+
+  // IntersectionObserver per mostrare/nascondere la CTA flottante
+  useEffect(() => {
+    const element = contactRef.current;
+    if (!element) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsContactVisible(entry.isIntersecting);
+        });
+      },
+      { root: null, threshold: 0.2 }
+    );
+
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
+
+  const scrollToContact = () => {
+    const element = contactRef.current;
+    if (!element) return;
+    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   // Funzione per cambiare immagine manualmente
   const changeImage = (destination, direction) => {
@@ -380,6 +408,57 @@ const Home = () => {
           ))}
         </div>
       </section>
+
+      {/* Sezione Contatti */}
+      <section className="contact-section" id="contact" ref={contactRef}>
+        <div className="contact-container">
+          <div className="contact-header">
+            <h2>Richiedi Informazioni</h2>
+            <p>Compila il form per essere ricontattato dal nostro team</p>
+          </div>
+          <form className="contact-form" onSubmit={(e) => e.preventDefault()}>
+            <div className="form-row">
+              <div className="form-group">
+                <label>Nome e Cognome</label>
+                <input type="text" placeholder="Mario Rossi" required />
+              </div>
+              <div className="form-group">
+                <label>Email</label>
+                <input type="email" placeholder="mario@example.com" required />
+              </div>
+            </div>
+            <div className="form-row">
+              <div className="form-group">
+                <label>Telefono</label>
+                <input type="tel" placeholder="+39 333 1234567" />
+              </div>
+              <div className="form-group">
+                <label>Destinazione d'interesse</label>
+                <select defaultValue="">
+                  <option value="" disabled>Seleziona una destinazione</option>
+                  {destinations.map((d) => (
+                    <option key={d.country} value={d.country}>{d.name}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <div className="form-group">
+              <label>Messaggio</label>
+              <textarea rows="5" placeholder="Raccontaci cosa stai cercando..." />
+            </div>
+            <button type="submit" className="submit-btn">Invia Richiesta</button>
+          </form>
+        </div>
+      </section>
+
+      {/* CTA flottante */}
+      <button 
+        className={`floating-cta ${isContactVisible ? 'hide' : 'show'}`}
+        onClick={scrollToContact}
+        aria-label="Vai al form contatti"
+      >
+        Richiedi Info
+      </button>
 
       {/* Sezione Statistiche e Info */}
       {/*
