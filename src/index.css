@@ -76,6 +76,11 @@ section {
   padding: 60px 0;
 }
 
+/* Le hero full-bleed possono azzerare il padding verticale */
+section.hero-videos {
+  padding: 0;
+}
+
 /* Pagination */
 .pagination {
   text-align: center;

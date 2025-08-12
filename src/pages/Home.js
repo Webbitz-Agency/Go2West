@@ -20,6 +20,22 @@ const Home = () => {
   const contactRef = useRef(null);
   const [isContactVisible, setIsContactVisible] = useState(false);
 
+  // Video hero iniziale
+  const heroVideos = [
+    '/images/video1.mp4',
+    '/images/video2.mp4',
+    '/images/video3.mp4',
+    '/images/video4.mp4',
+    '/images/video5.mp4'
+  ];
+  const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentHeroIndex((prev) => (prev + 1) % heroVideos.length);
+    }, 7000);
+    return () => clearInterval(intervalId);
+  }, [heroVideos.length]);
+
   const destinations = [
     { 
       name: 'Kenya', 
@@ -111,6 +127,12 @@ const Home = () => {
     element.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
+  const scrollToDestinations = () => {
+    const el = document.getElementById('all-destinations');
+    if (!el) return;
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   // Funzione per cambiare immagine manualmente
   const changeImage = (destination, direction) => {
     const destData = destinations.find(d => d.country === destination);
@@ -199,11 +221,31 @@ const Home = () => {
 
   return (
     <div className="home">
-      {/* Sezione Intro Compatta */}
-      <section className="intro-section">
-        <div className="intro-content">
-          <h1>Destinazioni d'Eccellenza</h1>
-          <p>Proposte di viaggio selezionate per clienti esigenti</p>
+      {/* Sezione Hero Video */}
+      <section id="hero-videos" className="hero-videos" aria-label="Video introduttivi">
+        <video
+          key={currentHeroIndex}
+          className="hero-video"
+          src={heroVideos[currentHeroIndex]}
+          autoPlay
+          muted
+          playsInline
+          onEnded={() => setCurrentHeroIndex((prev) => (prev + 1) % heroVideos.length)}
+        />
+        <div className="hero-overlay" />
+        <div className="hero-content">
+          <div className="hero-text">
+            <h1 className="hero-title">Viaggi su misura, emozioni autentiche</h1>
+            <p className="hero-subtitle">Scopri le nostre destinazioni d'eccellenza in tutto il mondo</p>
+          </div>
+          <div className="hero-actions">
+            <button className="hero-cta" onClick={scrollToDestinations}>
+              Scopri Destinazioni
+            </button>
+            <button className="hero-cta ghost" onClick={scrollToContact}>
+              Richiedi Info
+            </button>
+          </div>
         </div>
       </section>
 
@@ -289,7 +331,7 @@ const Home = () => {
       </section>
 
       {/* Sezione Tutte le Destinazioni - Carousel Intelligente */}
-      <section className="all-destinations-section">
+      <section id="all-destinations" className="all-destinations-section">
         <div className="section-header">
           <h2>Tutte le Destinazioni</h2>
           <p>Esplora la nostra collezione completa di destinazioni esclusive</p>
