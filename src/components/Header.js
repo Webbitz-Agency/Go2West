@@ -34,7 +34,7 @@ const Header = () => {
     <header className={`header ${location.pathname === '/' && isHeroVisible ? 'transparent' : 'solid'}`}>
       <div className="container">
         <Link to="/" className="logo">
-          <img src="/logo.jpg" alt="go2west" style={{width: '128px', height: '64px'}} className="logo-text" />
+          <img src="/logo-nobg.png" alt="go2west" style={{width: '128px', height: '64px'}} className="logo-text" />
         </Link>
         
         <nav className="nav">

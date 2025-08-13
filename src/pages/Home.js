@@ -55,7 +55,7 @@ const Home = () => {
     },
     { 
       name: 'North America', 
-      images: ['/images/north-america.jpg', '/images/usa-parks.jpg', '/images/canada-nature.jpg'], 
+      images: ['/images/north-america.jpg', '/images/usa-parks.jpg', '/images/north-america3.jpg'], 
       country: 'north-america',
       description: 'Dai grattacieli alle Montagne Rocciose, natura selvaggia e metropoli iconiche.',
       shortDesc: 'Natura maestosa e città che non dormono mai',

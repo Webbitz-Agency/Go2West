@@ -8,7 +8,7 @@
 .hero-videos {
   position: relative;
   width: 100%;
-  height: 85vh;
+  height: 100vh;
   min-height: 420px;
   /*max-height: 860px;*/
   overflow: hidden;
