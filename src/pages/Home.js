@@ -43,15 +43,15 @@ const Home = () => {
       country: 'kenya',
       description: 'Immergiti nella natura selvaggia del Kenya con safari mozzafiato tra i Big Five.',
       shortDesc: 'Safari autentici nel cuore dell\'Africa',
-      experiences: ['Safari Masai Mara', 'Big Five', 'Cultura Masai', 'Savana Infinita']
+      //experiences: ['Safari Masai Mara', 'Big Five', 'Cultura Masai', 'Savana Infinita']
     },
     { 
       name: 'Japan', 
-      images: ['/images/japan.jpg', '/images/japan-temple.jpg', '/images/japan-fuji.jpg'], 
+      images: ['/images/japan.jpg', '/images/japan2.jpg', '/images/japan3.jpg'], 
       country: 'japan',
       description: 'Perfetta armonia tra tradizione millenaria e innovazione futuristica.',
       shortDesc: 'Tradizione e modernità in perfetto equilibrio',
-      experiences: ['Templi di Kyoto', 'Monte Fuji', 'Tokyo Moderna', 'Cerimonia del Tè']
+      //experiences: ['Templi di Kyoto', 'Monte Fuji', 'Tokyo Moderna', 'Cerimonia del Tè']
     },
     { 
       name: 'North America', 
@@ -59,7 +59,7 @@ const Home = () => {
       country: 'north-america',
       description: 'Dai grattacieli alle Montagne Rocciose, natura selvaggia e metropoli iconiche.',
       shortDesc: 'Natura maestosa e città che non dormono mai',
-      experiences: ['Parchi Nazionali', 'Grandi Città', 'Route 66', 'Niagara Falls']
+      //experiences: ['Parchi Nazionali', 'Grandi Città', 'Route 66', 'Niagara Falls']
     },
     { 
       name: 'Australia', 
@@ -67,7 +67,7 @@ const Home = () => {
       country: 'australia',
       description: 'Terra di contrasti incredibili, dall\'Outback alla Grande Barriera Corallina.',
       shortDesc: 'Avventure uniche agli antipodi del mondo',
-      experiences: ['Grande Barriera', 'Outback Rosso', 'Sydney Opera', 'Fauna Unica']
+      //experiences: ['Grande Barriera', 'Outback Rosso', 'Sydney Opera', 'Fauna Unica']
     },
     { 
       name: 'Mexico', 
@@ -75,7 +75,7 @@ const Home = () => {
       country: 'mexico',
       description: 'Scopri l\'anima vibrante tra spiagge paradisiache e antiche civiltà Maya.',
       shortDesc: 'Cultura millenaria e spiagge da sogno',
-      experiences: ['Riviera Maya', 'Piramidi Azteche', 'Cenotes', 'Cucina Tradizionale']
+      //experiences: ['Riviera Maya', 'Piramidi Azteche', 'Cenotes', 'Cucina Tradizionale']
     },
     { 
       name: 'United States', 
@@ -83,7 +83,7 @@ const Home = () => {
       country: 'united-states',
       description: 'L\'America che ispira: diversità sorprendente da costa a costa.',
       shortDesc: 'Il sogno americano in tutte le sue forme',
-      experiences: ['National Parks', 'Las Vegas', 'New York', 'California Dreams']
+      //experiences: ['National Parks', 'Las Vegas', 'New York', 'California Dreams']
     }
   ];
 
@@ -135,15 +135,29 @@ const Home = () => {
 
   // Funzione per cambiare immagine manualmente
   const changeImage = (destination, direction) => {
-    const destData = destinations.find(d => d.country === destination);
+    // Normalizza eventuali camelCase in kebab-case (es. northAmerica -> north-america)
+    const normalizedDestination = destination.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`);
+    const destData = destinations.find(
+      (d) => d.country === destination || d.country === normalizedDestination
+    );
+    if (!destData) return;
+
     const maxIndex = destData.images.length - 1;
-    
-    setCurrentImageIndex(prev => ({
-      ...prev,
-      [destination]: direction === 'next' 
-        ? (prev[destination] + 1) > maxIndex ? 0 : prev[destination] + 1
-        : (prev[destination] - 1) < 0 ? maxIndex : prev[destination] - 1
-    }));
+
+    setCurrentImageIndex((prev) => {
+      const current = typeof prev[destination] === 'number' ? prev[destination] : 0;
+      return {
+        ...prev,
+        [destination]:
+          direction === 'next'
+            ? current + 1 > maxIndex
+              ? 0
+              : current + 1
+            : current - 1 < 0
+            ? maxIndex
+            : current - 1,
+      };
+    });
   };
 
   // Funzioni per il carousel delle destinazioni
@@ -260,11 +274,11 @@ const Home = () => {
                 <h2>{destinations[0].name}</h2>
                 <p className="main-desc">{destinations[0].description}</p>
                 <p className="short-desc">{destinations[0].shortDesc}</p>
-                <div className="experiences">
+                {/*<div className="experiences">
                   {destinations[0].experiences.map((exp, idx) => (
                     <span key={idx} className="experience-tag">{exp}</span>
                   ))}
-                </div>
+                </div>*/}
                 <Link to={`/destination/${destinations[0].country}`} className="explore-btn">
                   Esplora {destinations[0].name}
                 </Link>
@@ -289,11 +303,11 @@ const Home = () => {
             <div className="card-overlay">
               <h3>{destinations[1].name}</h3>
               <p>{destinations[1].shortDesc}</p>
-              <div className="mini-experiences">
+              {/*<div className="mini-experiences">
                 {destinations[1].experiences.slice(0, 2).map((exp, idx) => (
                   <span key={idx}>{exp}</span>
                 ))}
-              </div>
+              </div>*/}
               <Link to={`/destination/${destinations[1].country}`} className="explore-link">
                 Scopri il Giappone →
               </Link>
@@ -315,11 +329,11 @@ const Home = () => {
               <div className="wide-text">
                 <h2>{destinations[2].name}</h2>
                 <p>{destinations[2].description}</p>
-                <div className="experiences-grid">
+                {/*<div className="experiences-grid">
                   {destinations[2].experiences.map((exp, idx) => (
                     <span key={idx} className="exp-item">{exp}</span>
                   ))}
-                </div>
+                </div>*/}
                 <Link to={`/destination/${destinations[2].country}`} className="explore-btn">
                   Pianifica il Viaggio
                 </Link>
@@ -359,8 +373,7 @@ const Home = () => {
                         showControls={false}
                       />
                       <div className="floating-info">
-                        <h3>{destination.name}</h3>
-                        <p>{destination.shortDesc}</p>
+                        <h3 className="dest-title">{destination.name}</h3>
                       </div>
                     </div>
                     <div className="card-details">
@@ -374,11 +387,11 @@ const Home = () => {
                       </div>
                       <div className="card-text">
                         <p>{destination.description}</p>
-                        <Link to={`/destination/${destination.country}`} className="explore-link">
-                          Inizia l'Avventura →
-                        </Link>
                       </div>
                     </div>
+                    <Link to={`/destination/${destination.country}`} className="explore-btn image-cta">
+                      Scopri {destination.name}
+                    </Link>
                   </div>
                 );
               }
@@ -393,15 +406,15 @@ const Home = () => {
                       className="mexico-carousel"
                       showControls={false}
                     />
-                    <div className="card-overlay-content">
-                      <h3>{destination.name}</h3>
+                     <div className="card-overlay-content">
+                      <h3 className="dest-title">{destination.name}</h3>
                       <p>{destination.shortDesc}</p>
-                      <div className="experience-mini">
+                      {/*<div className="experience-mini">
                         {destination.experiences.slice(0, 3).map((exp, idx) => (
                           <span key={idx}>{exp}</span>
                         ))}
-                      </div>
-                      <Link to={`/destination/${destination.country}`} className="explore-btn">
+                      </div>*/}
+                      <Link to={`/destination/${destination.country}`} className="explore-btn image-cta">
                         Scopri {destination.name}
                       </Link>
                     </div>
@@ -413,19 +426,23 @@ const Home = () => {
               return (
                 <div key={`${destination.country}-${destinationCarouselIndex}-${position}`} className="destination-card usa-style">
                   <div className="usa-carousel-grid">
-                    <ImageCarousel 
-                      images={destination.images} 
-                      destination={`${destination.country}-usa`}
-                      className="usa-carousel"
-                      showControls={false}
-                    />
-                    <div className="usa-text">
-                      <h3>{destination.name}</h3>
-                      <p>{destination.shortDesc}</p>
-                      <Link to={`/destination/${destination.country}`} className="explore-link">
-                        Scopri {destination.name} →
-                      </Link>
+                    <div className="usa-carousel-wrapper">
+                      <ImageCarousel 
+                        images={destination.images} 
+                        destination={`${destination.country}-usa`}
+                        className="usa-carousel"
+                        showControls={false}
+                      />
+                        <div className="usa-overlay">
+                          <h3 className="dest-title">{destination.name}</h3>
+                        </div>
                     </div>
+                    <div className="usa-text">
+                      <p>{destination.shortDesc}</p>
+                    </div>
+                      <Link to={`/destination/${destination.country}`} className="explore-btn image-cta">
+                        Scopri {destination.name}
+                      </Link>
                   </div>
                 </div>
               );
