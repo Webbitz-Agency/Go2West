@@ -46,7 +46,23 @@
   text-align: center;
   padding: 0 24px;
   gap: 18px;
+  pointer-events: none; /* evita cattura eventi durante lo scroll */
 }
+
+.hero-content .hero-actions { pointer-events: auto; }
+
+/* Stato fixed centrato quando la sezione è in viewport */
+.hero-content.is-fixed {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: auto;
+}
+
+.hero-content.fade-out { opacity: 0; transition: opacity 350ms ease; }
+.hero-content:not(.fade-out) { opacity: 1; transition: opacity 350ms ease; }
 
 .hero-title {
   color: #fff;
@@ -345,6 +361,119 @@
   border-radius: 25px;
   overflow: hidden;
   box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+}
+
+/* Stile cartolina */
+.destination-wide-card.postcard {
+  /* Bordo airmail con strisce rosse/celesti */
+  background:
+    linear-gradient(#ffffff, #ffffff) padding-box,
+    repeating-linear-gradient(135deg,
+      #ff6b6b 0 12px,
+      #ff6b6b 12px 18px,
+      #59cbe8 18px 30px,
+      #59cbe8 30px 36px
+    ) border-box;
+  border: 10px solid transparent;
+  border-radius: 16px;
+  box-shadow: 0 18px 45px rgba(0,0,0,0.12);
+  position: relative;
+  transition: transform 320ms ease, box-shadow 320ms ease;
+}
+
+.destination-wide-card.postcard:hover {
+  transform: rotate(-1deg) translateY(-3px);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.18);
+}
+
+.destination-wide-card.postcard .wide-content {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* metà foto, metà testo */
+  align-items: stretch;
+  height: 520px; /* cartolina più alta */
+  background: none;
+}
+
+.destination-wide-card.postcard .wide-content::after {
+  content: "";
+  position: absolute;
+  top: 24px;
+  bottom: 24px;
+  left: 50%;
+  width: 2px;
+  transform: translateX(-1px);
+  background: rgba(230, 233, 240, 0.9);
+  border-radius: 2px;
+}
+
+.destination-wide-card.postcard .wide-images {
+  padding: 24px;
+  height: 100%;
+  overflow: hidden; /* il carosello resta dentro la metà sinistra */
+  box-sizing: border-box;
+}
+
+.destination-wide-card.postcard .wide-text {
+  position: relative;
+  padding: 40px 40px 40px 56px; /* più spazio interno per le righe */
+}
+
+/* righe tipo cartolina sul lato testo */
+.destination-wide-card.postcard .wide-text::before {
+  content: "";
+  position: absolute;
+  top: 96px; /* lascia spazio libero per il titolo */
+  right: 20px;
+  left: 50px;
+  bottom: 96px; /* lascia spazio libero per il bottone */
+  /* righe ogni 30px per allineare il testo */
+  background:
+    linear-gradient(#e9edf5 1px, transparent 1px) top left / 100% 30px repeat-y;
+  opacity: 0.7;
+  pointer-events: none;
+  z-index: 0; /* righe sotto al contenuto */
+}
+
+.destination-wide-card.postcard .wide-text h2 {
+  letter-spacing: 0.5px;
+  position: absolute;
+  top: 24px;
+  left: 56px;
+  right: 24px;
+  margin: 0;
+  z-index: 1;
+}
+
+.destination-wide-card.postcard .wide-text p {
+  color: #3f4d5f;
+  position: absolute;
+  top: 50%;
+  left: 56px;
+  right: 24px;
+  transform: translateY(-50%);
+  margin: 0;
+  line-height: 30px; /* allineamento alle righe */
+  z-index: 1;
+}
+
+.destination-wide-card.postcard .wide-text .explore-btn {
+  position: absolute;
+  right: 24px;
+  bottom: 24px;
+  z-index: 2; /* sopra le righe */
+  align-self: auto;
+}
+
+/* Mobile: la cartolina torna a layout verticale */
+@media (max-width: 768px) {
+  .destination-wide-card.postcard .wide-content { display: block; height: auto; }
+  .destination-wide-card.postcard .wide-content::after { display: none; }
+  .destination-wide-card.postcard .wide-images { padding: 20px; }
+  .destination-wide-card.postcard .wide-text { padding: 30px 25px; }
+  .destination-wide-card.postcard .wide-text h2,
+  .destination-wide-card.postcard .wide-text p,
+  .destination-wide-card.postcard .wide-text .explore-btn { position: static; transform: none; margin-bottom: 12px; }
 }
 
 .wide-content {

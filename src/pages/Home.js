@@ -20,6 +20,12 @@ const Home = () => {
   const contactRef = useRef(null);
   const [isContactVisible, setIsContactVisible] = useState(false);
 
+  // Refs per gestione sticky/fade della hero
+  const heroSectionRef = useRef(null);
+  const heroActionsRef = useRef(null);
+  const [isHeroFaded, setIsHeroFaded] = useState(false);
+  const [isHeroFixed, setIsHeroFixed] = useState(false);
+
   // Video hero iniziale
   const heroVideos = [
     '/images/video1.mp4',
@@ -35,6 +41,32 @@ const Home = () => {
     }, 7000);
     return () => clearInterval(intervalId);
   }, [heroVideos.length]);
+
+  // Effetto: blocco fixed centrato e fade quando il bottom della sezione supera i pulsanti
+  useEffect(() => {
+    const handleScroll = () => {
+      const section = heroSectionRef.current;
+      const actions = heroActionsRef.current;
+      if (!section || !actions) return;
+      const sectionRect = section.getBoundingClientRect();
+      const actionsRect = actions.getBoundingClientRect();
+      // Fissa il blocco al centro quando la sezione è in viewport (parte superiore passata) ma non ancora uscita dal basso
+      const shouldFix = sectionRect.top <= 0 && sectionRect.bottom >= 0;
+      if (shouldFix !== isHeroFixed) setIsHeroFixed(shouldFix);
+
+      // Attiva il fade quando il bottom della sezione video raggiunge i bottoni
+      const OFFSET = 0; // px di anticipo/ritardo
+      const shouldFade = sectionRect.bottom <= (actionsRect.bottom + OFFSET);
+      if (shouldFade !== isHeroFaded) setIsHeroFaded(shouldFade);
+    };
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
+  }, [isHeroFaded, isHeroFixed]);
 
   const destinations = [
     { 
@@ -57,7 +89,7 @@ const Home = () => {
       name: 'North America', 
       images: ['/images/north-america.jpg', '/images/usa-parks.jpg', '/images/north-america3.jpg'], 
       country: 'north-america',
-      description: 'Dai grattacieli alle Montagne Rocciose, natura selvaggia e metropoli iconiche.',
+      description: 'Dai grattacieli scintillanti di New York alle vette maestose delle Montagne Rocciose, dal mito intramontabile della Route 66 alle meraviglie naturali dei grandi parchi nazionali: il Nord America è un continente di contrasti e avventure. Qui puoi perderti tra metropoli che non dormono mai, respirare la libertà lungo strade infinite, scoprire culture diverse e tradizioni millenarie, oppure lasciarti conquistare dalla natura selvaggia che lascia senza fiato.',
       shortDesc: 'Natura maestosa e città che non dormono mai',
       //experiences: ['Parchi Nazionali', 'Grandi Città', 'Route 66', 'Niagara Falls']
     },
@@ -236,7 +268,7 @@ const Home = () => {
   return (
     <div className="home">
       {/* Sezione Hero Video */}
-      <section id="hero-videos" className="hero-videos" aria-label="Video introduttivi">
+      <section ref={heroSectionRef} id="hero-videos" className="hero-videos" aria-label="Video introduttivi">
         <video
           key={currentHeroIndex}
           className="hero-video"
@@ -247,12 +279,12 @@ const Home = () => {
           onEnded={() => setCurrentHeroIndex((prev) => (prev + 1) % heroVideos.length)}
         />
         <div className="hero-overlay" />
-        <div className="hero-content">
+        <div className={`hero-content ${isHeroFixed ? 'is-fixed' : ''} ${isHeroFaded ? 'fade-out' : ''}`}>
           <div className="hero-text">
             <h1 className="hero-title">Viaggi su misura, emozioni autentiche</h1>
             <p className="hero-subtitle">Scopri le nostre destinazioni d'eccellenza in tutto il mondo</p>
           </div>
-          <div className="hero-actions">
+          <div ref={heroActionsRef} className="hero-actions">
             <button className="hero-cta" onClick={scrollToDestinations}>
               Scopri Destinazioni
             </button>
@@ -317,7 +349,7 @@ const Home = () => {
 
         {/* Seconda Row - North America Wide */}
         <div className="destination-row row-2">
-          <div className="destination-wide-card north-america">
+          <div className="destination-wide-card north-america postcard">
             <div className="wide-content">
               <div className="wide-images">
                 <ImageCarousel 
