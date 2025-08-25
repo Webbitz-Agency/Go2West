@@ -13,7 +13,7 @@
   /*max-height: 860px;*/
   overflow: hidden;
   padding: 0; /* override padding globale dei <section> */
-  border-radius: 0 0 20px 20px;
+  /*border-radius: 0 0 20px 20px;*/
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
 }
 
@@ -24,7 +24,7 @@
   height: 100%;
   object-fit: cover;
   filter: brightness(0.9);
-  border-radius: 0 0 20px 20px;
+  /*border-radius: 0 0 20px 20px;*/
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
 }
 
@@ -69,7 +69,7 @@
   font-size: 2.4rem;
   line-height: 1.2;
   text-shadow: 0 6px 24px rgba(0,0,0,0.35);
-  font-weight: 800;
+  font-weight: 500;
 }
 
 .hero-subtitle {
@@ -90,7 +90,8 @@
   border: none;
   padding: 12px 20px;
   border-radius: 999px;
-  font-weight: 800;
+  font-weight: 600;
+  letter-spacing: 0.5px;
   cursor: pointer;
   box-shadow: 0 10px 28px rgba(79,172,254,0.35);
   transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
@@ -108,10 +109,47 @@
   background: rgba(255,255,255,0.2);
 }
 
+/* Intro Section */
+.intro-section {
+  background: linear-gradient(180deg, #ffffff, #f7f9fc);
+  padding: 64px 6% 40px;
+}
+
+.intro-container { max-width: 1100px; margin: 0 auto; text-align: center; }
+
+.intro-title {
+  font-family: 'DM Serif Text', serif;
+  font-size: 2.6rem;
+  line-height: 1.25;
+  color: #2c3e50;
+  margin: 0 0 12px 0;
+  font-weight: 500;
+}
+.intro-text {
+  font-size: 1.22rem;
+  line-height: 1.9;
+  color: #3a495a;
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* enfasi elegante nel testo introduttivo */
+.intro-text strong {
+  font-weight: 800;
+  color: #0f7ae5;
+}
+
+/* Reveal base */
+.reveal-on-scroll { opacity: 0; transform: translateY(20px); transition: opacity 420ms ease, transform 420ms ease; }
+.reveal-on-scroll.revealed { opacity: 1; transform: translateY(0); }
+
 @media (max-width: 768px) {
   .hero-title { font-size: 1.7rem; }
   .hero-actions { flex-direction: column; }
   .hero-cta { width: 220px; }
+  .intro-title { font-size: 2rem; }
+  .intro-text { font-size: 1.05rem; }
 }
 
 /* Layout Mosaico Creativo */
@@ -508,7 +546,7 @@
   font-size: 2.2rem;
   color: #2c3e50;
   margin-bottom: 20px;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .wide-text p {
@@ -550,7 +588,7 @@
   font-size: 2.8rem;
   color: #2c3e50;
   margin-bottom: 15px;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .all-destinations-section .section-header p {
@@ -642,7 +680,8 @@
   font-size: 1.4rem;
   color: #ffffff;
   margin-bottom: 0;
-  font-weight: 600;
+  font-weight: 500;
+  letter-spacing: 1px;
   text-shadow: 0 2px 10px rgba(0,0,0,0.45);
 }
 
@@ -721,7 +760,8 @@
 
 .destination-card.mexico-style .card-overlay-content h3 {
   font-size: 1.8rem;
-  font-weight: 600;
+  font-weight: 500;
+  letter-spacing: 1px;
   margin-bottom: 10px;
 }
 
@@ -783,7 +823,8 @@
 .destination-card.usa-style .usa-overlay h3 {
   color: #ffffff;
   margin: 0;
-  font-weight: 600;
+  font-weight: 500;
+  letter-spacing: 1px;
   text-shadow: 0 2px 10px rgba(0,0,0,0.45);
 }
 
@@ -791,7 +832,17 @@
 .image-cta { position: absolute; right: 20px; bottom: 20px; }
 
 /* Titolo destinazioni uniforme */
-.dest-title { font-size: 1.6rem !important; line-height: 1.2; }
+.dest-title { font-family: 'DM Serif Text', serif; font-size: 1.6rem !important; line-height: 1.2; }
+
+/* Forza Playfair anche sui titoli overlay nelle varie card */
+.destination-card.mexico-style .card-overlay-content h3,
+.destination-card.australia-style .floating-info h3,
+.destination-card.usa-style .usa-overlay h3,
+.destination-card.usa-style .usa-text h3,
+.options-header h2,
+.all-destinations-section .section-header h2 {
+  font-family: 'DM Serif Text', serif;
+}
 
 .destination-card.usa-style .usa-text {
   flex: 1;
@@ -989,8 +1040,10 @@
 /* Sezione Contatti */
 .contact-section {
   background: #f5f7fb;
-  padding: 80px 5% 120px;
+  padding: 44px 5% 70px; /* ulteriormente ridotto */
   position: relative;
+  /* evita che l'header fixed copra l'inizio quando si usa scrollIntoView/ancore */
+  scroll-margin-top: 96px;
 }
 
 .contact-container {
@@ -999,12 +1052,150 @@
   background: white;
   border-radius: 20px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
-  padding: 40px 30px;
+  padding: 28px 22px; /* meno spazio interno */
+  position: relative; /* base per il pin decorativo */
+}
+
+/* Pin decorativo sopra la card contatti */
+/* il pin ora è un <img> con classe .contact-pin; manteniamo l'ombra sul piano */
+
+/*.contact-container::after {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 12px;
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.22), rgba(0,0,0,0));
+  border-radius: 50%;
+  z-index: 1;
+  pointer-events: none;
+}*/
+
+/* immagine del pin reale */
+.contact-pin {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%) rotate(-12deg);
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,0.25));
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Travel Options - puzzle */
+.travel-options-section { background: #f8f9fb; padding: 50px 5% 50px; }
+.options-header { max-width: 1100px; margin: 0 auto 18px; text-align: center; }
+.options-header h2 { margin: 0 0 6px 0; font-size: 2rem; color: #2c3e50; font-weight: 500; }
+.options-header p { margin: 0; color: #667085; }
+.options-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr 1fr;
+  grid-auto-rows: 160px;
+  gap: 18px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+/* Nuovo layout 2x2 con rapporti 2/5 e 3/5 */
+.options-grid.two-by-two {
+  grid-template-columns: repeat(5, 1fr);
+  grid-auto-rows: 260px;
+}
+
+.option-card.photo {
+  background-size: cover;
+  background-position: center;
+  border-radius: 18px;
+  overflow: hidden;
+  position: relative;
+  color: #ffffff;
+  box-shadow: 0 14px 36px rgba(0,0,0,0.12);
+}
+.option-card.photo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.55));
+}
+.option-card.photo .option-overlay {
+  position: absolute;
+  inset: 0;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 8px;
+  z-index: 1;
+}
+.option-card.photo h3 { margin: 0; font-family: 'DM Serif Text', serif; font-size: 1.6rem; color: #fff; }
+.option-card.photo p { margin: 0; color: rgba(255,255,255,0.9); }
+.option-card.photo:hover { transform: translateY(-3px); box-shadow: 0 18px 46px rgba(0,0,0,0.18); }
+
+/* Posizionamento 2/5,3/5 e invertito sulla seconda riga */
+.two-by-two .r1c1 { grid-column: 1 / span 2; grid-row: 1; }
+.two-by-two .r1c2 { grid-column: 3 / span 3; grid-row: 1; }
+.two-by-two .r2c1 { grid-column: 1 / span 3; grid-row: 2; }
+.two-by-two .r2c2 { grid-column: 4 / span 2; grid-row: 2; }
+.option-card {
+  position: relative;
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 14px 36px rgba(0,0,0,0.08);
+  overflow: hidden;
+  transform-origin: center;
+}
+.option-card .option-content { padding: 18px; display: flex; flex-direction: column; gap: 8px; height: 100%; justify-content: space-between; }
+.option-card h3 { margin: 0; font-size: 1.2rem; color: #2c3e50; }
+.option-card p { margin: 0; color: #667085; font-size: 0.95rem; }
+
+/* dimensioni puzzle */
+.option-card.tall { grid-row: span 2; }
+.option-card.wide { grid-column: span 2; }
+.option-card.square { grid-column: span 1; grid-row: span 1; }
+
+/* Animazioni di espansione legate all'asse */
+.option-card.reveal-on-scroll { opacity: 0; }
+.option-card.reveal-on-scroll[data-dir="vertical"] { transform: scaleY(0.85); }
+.option-card.reveal-on-scroll[data-dir="horizontal"] { transform: scaleX(0.9); }
+.option-card.reveal-on-scroll.revealed { opacity: 1; transform: scale(1); transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1), opacity 420ms ease; }
+
+.options-footer { text-align: center; margin-top: 18px; }
+.options-cta {
+  background: linear-gradient(45deg, #4facfe, #00f2fe);
+  color: white;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 28px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(79, 172, 254, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.options-cta:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(79, 172, 254, 0.4); }
+
+/* sezione cartolina mexico reintrodotta */
+.postcard-mexico { padding: 40px 3% 60px; background: #ffffff; }
+
+@media (max-width: 992px) {
+  .options-grid { grid-template-columns: 1fr 1fr; grid-auto-rows: 150px; }
+  .options-grid.two-by-two { grid-template-columns: 1fr 1fr; grid-auto-rows: 220px; }
+  .options-grid.two-by-two .option-card { grid-column: auto; grid-row: auto; }
+  .option-card.wide { grid-column: span 2; }
+}
+
+@media (max-width: 640px) {
+  .options-grid { grid-template-columns: 1fr; grid-auto-rows: 160px; }
+  .options-grid.two-by-two { grid-template-columns: 1fr; grid-auto-rows: 200px; }
+  .option-card.tall, .option-card.wide { grid-column: span 1; grid-row: span 1; }
 }
 
 .contact-header {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 22px; /* meno spazio sopra al form */
 }
 
 .contact-header h2 {
@@ -1022,13 +1213,13 @@
 .contact-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px; /* compattato */
 }
 
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 16px; /* compattato */
 }
 
 .form-group {
@@ -1046,12 +1237,16 @@
 .form-group select,
 .form-group textarea {
   border: 1px solid #e3e8f0;
-  border-radius: 12px;
-  padding: 12px 14px;
-  font-size: 0.95rem;
+  border-radius: 10px;
+  padding: 10px 12px; /* campi più bassi */
+  font-size: 0.92rem;
+  line-height: 1.3;
   background: #fafbfe;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
+
+/* textarea un po' meno alta di default */
+.form-group textarea { min-height: 120px; }
 
 .form-group input:focus,
 .form-group select:focus,
@@ -1277,10 +1472,10 @@
   }
 
   .contact-section {
-    padding: 60px 5% 110px;
+    padding: 40px 5% 70px;
   }
   .contact-container {
-    padding: 28px 20px;
+    padding: 22px 18px;
   }
   .form-row {
     grid-template-columns: 1fr;

@@ -39,12 +39,13 @@ const Header = () => {
         
         <nav className="nav">
           <a href="/" className="nav-link">Home</a>
-          <a href="/destination/north-america" className="nav-link">North America</a>
-          <a href="/destination/mexico" className="nav-link">Mexico</a>
-          <a href="/destination/kenya" className="nav-link">Kenya</a>
-          <a href="/destination/japan" className="nav-link">Japan</a>
-          <a href="/destination/australia" className="nav-link">Australia</a>
-          <a href="/destination/united-states" className="nav-link">United States</a>
+          <a href="/destination/usa" className="nav-link">USA</a>
+          <a href="/destination/canada" className="nav-link">Canada</a>
+          <a href="/destination/messico" className="nav-link">Messico</a>
+          <a href="/destination/america-centrale" className="nav-link">America Centrale</a>
+          <a href="/destination/sud-america" className="nav-link">Sud America</a>
+          <a href="/destination/caraibi" className="nav-link">Caraibi</a>
+          <a href="/destination/polinesia-francese" className="nav-link">Polinesia Francese</a>
         </nav>
       </div>
     </header>

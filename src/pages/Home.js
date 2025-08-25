@@ -4,14 +4,7 @@ import './Home.css';
 
 const Home = () => {
   // Stati per i caroselli delle immagini
-  const [currentImageIndex, setCurrentImageIndex] = useState({
-    kenya: 0,
-    japan: 0,
-    northAmerica: 0,
-    australia: 0,
-    mexico: 0,
-    usa: 0
-  });
+  const [currentImageIndex, setCurrentImageIndex] = useState({});
 
   // Stato per il carousel delle destinazioni
   const [destinationCarouselIndex, setDestinationCarouselIndex] = useState(0);
@@ -69,69 +62,82 @@ const Home = () => {
   }, [isHeroFaded, isHeroFixed]);
 
   const destinations = [
-    { 
-      name: 'Kenya', 
-      images: ['/images/kenya.jpg', '/images/kenya-safari.jpg', '/images/kenya-wildlife.jpg'], 
-      country: 'kenya',
-      description: 'Immergiti nella natura selvaggia del Kenya con safari mozzafiato tra i Big Five.',
-      shortDesc: 'Safari autentici nel cuore dell\'Africa',
-      //experiences: ['Safari Masai Mara', 'Big Five', 'Cultura Masai', 'Savana Infinita']
+    {
+      name: 'USA',
+      images: ['/images/usa.jpg', '/images/usa-parks.jpg', '/images/north-america3.jpg'],
+      country: 'usa',
+      description: 'Dalle grandi città ai parchi nazionali iconici.',
+      shortDesc: 'Parchi, metropoli e strade leggendarie'
     },
-    { 
-      name: 'Japan', 
-      images: ['/images/japan.jpg', '/images/japan2.jpg', '/images/japan3.jpg'], 
-      country: 'japan',
-      description: 'Perfetta armonia tra tradizione millenaria e innovazione futuristica.',
-      shortDesc: 'Tradizione e modernità in perfetto equilibrio',
-      //experiences: ['Templi di Kyoto', 'Monte Fuji', 'Tokyo Moderna', 'Cerimonia del Tè']
+    {
+      name: 'Canada',
+      images: ['/images/north-america.jpg', '/images/north-america3.jpg', '/images/usa-parks.jpg'],
+      country: 'canada',
+      description: 'Natura immensa, città moderne e cultura accogliente.',
+      shortDesc: 'Natura maestosa e città vivibili'
     },
-    { 
-      name: 'North America', 
-      images: ['/images/north-america.jpg', '/images/usa-parks.jpg', '/images/north-america3.jpg'], 
-      country: 'north-america',
-      description: 'Dai grattacieli scintillanti di New York alle vette maestose delle Montagne Rocciose, dal mito intramontabile della Route 66 alle meraviglie naturali dei grandi parchi nazionali: il Nord America è un continente di contrasti e avventure. Qui puoi perderti tra metropoli che non dormono mai, respirare la libertà lungo strade infinite, scoprire culture diverse e tradizioni millenarie, oppure lasciarti conquistare dalla natura selvaggia che lascia senza fiato.',
-      shortDesc: 'Natura maestosa e città che non dormono mai',
-      //experiences: ['Parchi Nazionali', 'Grandi Città', 'Route 66', 'Niagara Falls']
+    {
+      name: 'Messico',
+      images: ['/images/mexico.jpg', '/images/mexico.jpg', '/images/mexico.jpg'],
+      country: 'messico',
+      description: 'Spiagge caraibiche da sogno, antiche rovine Maya immerse nella giungla e città dal cuore pulsante: il Messico è un mix esplosivo di storia, cultura e natura. Tra mercati colorati, piatti che profumano di spezie e tradizioni che raccontano secoli di civiltà, ogni angolo sorprende e conquista. Dai templi di Chichén Itzá alle acque cristalline di Tulum, fino alle feste che trasformano le strade in un tripudio di musica e colori, il Messico è un viaggio che unisce relax, avventura ed emozioni autentiche.',
+      shortDesc: 'Cultura millenaria e mare da sogno'
     },
-    { 
-      name: 'Australia', 
-      images: ['/images/australia.jpg', '/images/australia-reef.jpg', '/images/australia-outback.jpg'], 
-      country: 'australia',
-      description: 'Terra di contrasti incredibili, dall\'Outback alla Grande Barriera Corallina.',
-      shortDesc: 'Avventure uniche agli antipodi del mondo',
-      //experiences: ['Grande Barriera', 'Outback Rosso', 'Sydney Opera', 'Fauna Unica']
+    {
+      name: 'America Centrale',
+      images: ['/images/north-america3.jpg', '/images/usa-parks.jpg', '/images/north-america.jpg'],
+      country: 'america-centrale',
+      description: 'Foreste pluviali, vulcani e oceani a due passi.',
+      shortDesc: 'Avventura tra giungle e oceani'
     },
-    { 
-      name: 'Mexico', 
-      images: ['/images/mexico.jpg', '/images/mexico-beach.jpg', '/images/mexico-ruins.jpg'], 
-      country: 'mexico',
-      description: 'Scopri l\'anima vibrante tra spiagge paradisiache e antiche civiltà Maya.',
-      shortDesc: 'Cultura millenaria e spiagge da sogno',
-      //experiences: ['Riviera Maya', 'Piramidi Azteche', 'Cenotes', 'Cucina Tradizionale']
+    {
+      name: 'Sud America',
+      images: ['/images/usa-parks.jpg', '/images/north-america3.jpg', '/images/north-america.jpg'],
+      country: 'sud-america',
+      description: 'Paesaggi epici e tradizioni senza tempo.',
+      shortDesc: 'Grandi spazi e culture intense'
     },
-    { 
-      name: 'United States', 
-      images: ['/images/usa.jpg', '/images/usa-cities.jpg', '/images/usa-nature.jpg'], 
-      country: 'united-states',
-      description: 'L\'America che ispira: diversità sorprendente da costa a costa.',
-      shortDesc: 'Il sogno americano in tutte le sue forme',
-      //experiences: ['National Parks', 'Las Vegas', 'New York', 'California Dreams']
+    {
+      name: 'Caraibi',
+      images: ['/images/mexico.jpg', '/images/usa-parks.jpg', '/images/north-america3.jpg'],
+      country: 'caraibi',
+      description: 'Isole da cartolina, mare cristallino e relax.',
+      shortDesc: 'Isole da sogno e acque turchesi'
+    },
+    {
+      name: 'Polinesia Francese',
+      images: ['/images/north-america3.jpg', '/images/usa-parks.jpg', '/images/north-america.jpg'],
+      country: 'polinesia-francese',
+      description: 'Lagune turchesi e bungalow sull’acqua.',
+      shortDesc: 'Paradiso tropicale esclusivo'
     }
   ];
 
-  // Auto-scroll per i caroselli delle immagini
+  // Inizializza le chiavi per gli indici immagini in base alle destinazioni
+  useEffect(() => {
+    setCurrentImageIndex(prev => {
+      const next = { ...prev };
+      destinations.forEach(d => {
+        if (typeof next[d.country] !== 'number') next[d.country] = 0;
+      });
+      return next;
+    });
+  }, [destinations.length]);
+
+  // Auto-scroll generico per i caroselli delle immagini
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentImageIndex(prev => ({
-        kenya: (prev.kenya + 1) % destinations[0].images.length,
-        japan: (prev.japan + 1) % destinations[1].images.length,
-        northAmerica: (prev.northAmerica + 1) % destinations[2].images.length,
-        australia: (prev.australia + 1) % destinations[3].images.length,
-        mexico: (prev.mexico + 1) % destinations[4].images.length,
-        usa: (prev.usa + 1) % destinations[5].images.length
-      }));
+      setCurrentImageIndex(prev => {
+        const updated = { ...prev };
+        destinations.forEach(d => {
+          const len = d.images.length || 1;
+          const key = d.country;
+          const currentVal = typeof prev[key] === 'number' ? prev[key] : 0;
+          updated[key] = (currentVal + 1) % len;
+        });
+        return updated;
+      });
     }, 4000);
-
     return () => clearInterval(interval);
   }, [destinations]);
 
@@ -151,6 +157,25 @@ const Home = () => {
 
     observer.observe(element);
     return () => observer.disconnect();
+  }, []);
+
+  // IntersectionObserver per reveal delle sezioni
+  useEffect(() => {
+    const elements = document.querySelectorAll('.reveal-on-scroll');
+    if (!elements.length) return;
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+            obs.unobserve(entry.target);
+          }
+        });
+      },
+      { root: null, threshold: 0.2 }
+    );
+    elements.forEach((el) => obs.observe(el));
+    return () => obs.disconnect();
   }, []);
 
   const scrollToContact = () => {
@@ -295,86 +320,92 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Layout Mosaico Creativo */}
-      <section className="mosaic-destinations">
-        
-        {/* Prima Row - Kenya + Japan */}
-        <div className="destination-row row-1">
-          <div className="destination-large-card kenya">
-            <div className="card-content">
-              <div className="text-section">
-                <h2>{destinations[0].name}</h2>
-                <p className="main-desc">{destinations[0].description}</p>
-                <p className="short-desc">{destinations[0].shortDesc}</p>
-                {/*<div className="experiences">
-                  {destinations[0].experiences.map((exp, idx) => (
-                    <span key={idx} className="experience-tag">{exp}</span>
-                  ))}
-                </div>*/}
-                <Link to={`/destination/${destinations[0].country}`} className="explore-btn">
-                  Esplora {destinations[0].name}
-                </Link>
-              </div>
-              <div className="images-section">
-                <ImageCarousel 
-                  images={destinations[0].images} 
-                  destination="kenya"
-                  className="kenya-carousel"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="destination-medium-card japan">
-            <ImageCarousel 
-              images={destinations[1].images} 
-              destination="japan"
-              className="japan-carousel"
-              showControls={false}
-            />
-            <div className="card-overlay">
-              <h3>{destinations[1].name}</h3>
-              <p>{destinations[1].shortDesc}</p>
-              {/*<div className="mini-experiences">
-                {destinations[1].experiences.slice(0, 2).map((exp, idx) => (
-                  <span key={idx}>{exp}</span>
-                ))}
-              </div>*/}
-              <Link to={`/destination/${destinations[1].country}`} className="explore-link">
-                Scopri il Giappone →
-              </Link>
-            </div>
-          </div>
+      {/* Sezione Intro con fade-up */}
+      <section className="intro-section reveal-on-scroll" aria-label="Presentazione">
+        <div className="intro-container">
+          <h2 className="intro-title">Viaggiare con Go2West</h2>
+          <p className="intro-text">
+            Con Go2West ogni viaggio diventa un’<strong>esperienza indimenticabile</strong>. Proponiamo 
+            <strong> itinerari curati nei minimi dettagli</strong>, dalle <strong>metropoli più iconiche</strong> ai 
+            <strong> paesaggi naturali più spettacolari</strong>, per offrirti <strong>vacanze che lasciano il segno</strong>.
+            Con la nostra esperienza e passione, trasformiamo ogni destinazione in un ricordo da portare per sempre con te.
+          </p>
         </div>
-
-        {/* Seconda Row - North America Wide */}
-        <div className="destination-row row-2">
-          <div className="destination-wide-card north-america postcard">
-            <div className="wide-content">
-              <div className="wide-images">
-                <ImageCarousel 
-                  images={destinations[2].images} 
-                  destination="northAmerica"
-                  className="wide-carousel"
-                />
-              </div>
-              <div className="wide-text">
-                <h2>{destinations[2].name}</h2>
-                <p>{destinations[2].description}</p>
-                {/*<div className="experiences-grid">
-                  {destinations[2].experiences.map((exp, idx) => (
-                    <span key={idx} className="exp-item">{exp}</span>
-                  ))}
-                </div>*/}
-                <Link to={`/destination/${destinations[2].country}`} className="explore-btn">
-                  Pianifica il Viaggio
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-
       </section>
+
+      {/* Sezione Opzioni di Viaggio - layout a puzzle con reveal */}
+      <section className="travel-options-section">
+        <div className="options-header reveal-on-scroll">
+          <h2>Le nostre proposte</h2>
+          <p>Scegli lo stile di viaggio che ti rispecchia di più.</p>
+        </div>
+        <div className="options-grid two-by-two">
+          {/* Riga 1: 2/5 + 3/5 */}
+          <div className="option-card photo r1c1 reveal-on-scroll" style={{ backgroundImage: "url('/images/city.jpg')" }} data-dir="vertical">
+            <div className="option-overlay">
+              <h3>City Breaks</h3>
+              <p>Itinerari completi, guide esperte e zero pensieri.</p>
+              <Link to="/destination/usa" className="explore-btn">Scopri</Link>
+            </div>
+          </div>
+          <div className="option-card photo r1c2 reveal-on-scroll" style={{ backgroundImage: "url('/images/drive.jpg')" }} data-dir="horizontal">
+            <div className="option-overlay">
+              <h3>Fly & Drive</h3>
+              <p>Auto a noleggio e libertà totale di esplorare.</p>
+              <Link to="/destination/usa" className="explore-btn">Inizia</Link>
+            </div>
+          </div>
+
+          {/* Riga 2 invertita: 3/5 + 2/5 */}
+          <div className="option-card photo r2c1 reveal-on-scroll" style={{ backgroundImage: "url('/images/ride_in_harley.jpg')" }} data-dir="vertical">
+            <div className="option-overlay">
+              <h3>Ride in Harley</h3>
+              <p>Itinerari completi, guide esperte e zero pensieri.</p>
+              <Link to="/destination/canada" className="explore-btn">Scopri</Link>
+            </div>
+          </div>
+          <div className="option-card photo r2c2 reveal-on-scroll" style={{ backgroundImage: "url('/images/tour.jpg')" }} data-dir="horizontal">
+            <div className="option-overlay">
+              <h3>Tour Guidati</h3>
+              <p>Avventure tra parchi e fauna selvatica.</p>
+              <Link to="/destination/america-centrale" className="explore-btn">Scopri</Link>
+            </div>
+          </div>
+        </div>
+        <div className="options-footer reveal-on-scroll">
+          <button className="options-cta" onClick={scrollToDestinations}>
+            Scopri tutte le nostre opzioni di viaggio
+          </button>
+        </div>
+      </section>
+
+      {/* Cartolina Messico (reintrodotta) */}
+      {(() => {
+        const mexico = destinations.find(d => d.country === 'messico');
+        if (!mexico) return null;
+        return (
+          <section className="postcard-mexico">
+            <div className="destination-wide-card postcard">
+              <div className="wide-content">
+                <div className="wide-images">
+                  <ImageCarousel 
+                    images={mexico.images}
+                    destination={`${mexico.country}-postcard`}
+                    className="wide-carousel"
+                  />
+                </div>
+                <div className="wide-text">
+                  <h2>{mexico.name}</h2>
+                  <p>{mexico.description}</p>
+                  <Link to={`/destination/${mexico.country}`} className="explore-btn">
+                    Scopri {mexico.name}
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </section>
+        );
+      })()}
 
       {/* Sezione Tutte le Destinazioni - Carousel Intelligente */}
       <section id="all-destinations" className="all-destinations-section">
@@ -503,6 +534,7 @@ const Home = () => {
       {/* Sezione Contatti */}
       <section className="contact-section" id="contact" ref={contactRef}>
         <div className="contact-container">
+          <img src="/images/pin.png" alt="" aria-hidden="true" className="contact-pin" />
           <div className="contact-header">
             <h2>Richiedi Informazioni</h2>
             <p>Compila il form per essere ricontattato dal nostro team</p>
@@ -535,7 +567,7 @@ const Home = () => {
             </div>
             <div className="form-group">
               <label>Messaggio</label>
-              <textarea rows="5" placeholder="Raccontaci cosa stai cercando..." />
+              <textarea rows="4" placeholder="Raccontaci cosa stai cercando..." />
             </div>
             <button type="submit" className="submit-btn">Invia Richiesta</button>
           </form>
