@@ -8,6 +8,9 @@ const Home = () => {
 
   // Stato per il carousel delle destinazioni
   const [destinationCarouselIndex, setDestinationCarouselIndex] = useState(0);
+  
+  // Stato per il carousel showcase
+  const [showcaseIndex, setShowcaseIndex] = useState(0);
 
   // Riferimento e stato visibilità form contatti
   const contactRef = useRef(null);
@@ -67,49 +70,49 @@ const Home = () => {
       name: 'USA',
       images: ['/images/usa.jpg', '/images/usa-parks.jpg', '/images/north-america3.jpg'],
       country: 'usa',
-      description: 'Dalle grandi città ai parchi nazionali iconici.',
+      description: 'Dai grattacieli di New York ai canyon dell’Ovest, passando per strade leggendarie come la Route 66: gli Stati Uniti sono un viaggio tra natura estrema, cultura pop e città che non dormono mai..',
       shortDesc: 'Parchi, metropoli e strade leggendarie'
     },
     {
       name: 'Canada',
       images: ['/images/north-america.jpg', '/images/north-america3.jpg', '/images/usa-parks.jpg'],
       country: 'canada',
-      description: 'Natura immensa, città moderne e cultura accogliente.',
+      description: 'Paesaggi infiniti, laghi cristallini e le maestose Montagne Rocciose: il Canada è la meta perfetta per chi cerca avventura, natura incontaminata e città moderne immerse in scenari mozzafiato.',
       shortDesc: 'Natura maestosa e città vivibili'
     },
     {
       name: 'Messico',
       images: ['/images/mexico.jpg', '/images/mexico.jpg', '/images/mexico.jpg'],
       country: 'messico',
-      description: 'Spiagge caraibiche da sogno, antiche rovine Maya immerse nella giungla e città dal cuore pulsante: il Messico è un mix esplosivo di storia, cultura e natura. Tra mercati colorati, piatti che profumano di spezie e tradizioni che raccontano secoli di civiltà, ogni angolo sorprende e conquista. Dai templi di Chichén Itzá alle acque cristalline di Tulum, fino alle feste che trasformano le strade in un tripudio di musica e colori, il Messico è un viaggio che unisce relax, avventura ed emozioni autentiche.',
+      description: 'Spiagge caraibiche, rovine Maya e tradizioni coloratissime: il Messico è un mix di storia millenaria, paesaggi da cartolina e cucina indimenticabile che conquista tutti i sensi.',
       shortDesc: 'Cultura millenaria e mare da sogno'
     },
     {
       name: 'America Centrale',
       images: ['/images/north-america3.jpg', '/images/usa-parks.jpg', '/images/north-america.jpg'],
       country: 'america-centrale',
-      description: 'Foreste pluviali, vulcani e oceani a due passi.',
+      description: 'Un mosaico di paesi pieni di energia: vulcani, foreste tropicali, spiagge spettacolari e città coloniali. L’America Centrale è il cuore vibrante dell’avventura latina, dove natura e cultura si fondono.',
       shortDesc: 'Avventura tra giungle e oceani'
     },
     {
       name: 'Sud America',
       images: ['/images/usa-parks.jpg', '/images/north-america3.jpg', '/images/north-america.jpg'],
       country: 'sud-america',
-      description: 'Paesaggi epici e tradizioni senza tempo.',
+      description: 'Dal ritmo del samba brasiliano alle cime andine, il Sud America è pura emozione: una terra di contrasti, colori intensi, paesaggi straordinari e popoli accoglienti che regalano esperienze indimenticabili.',
       shortDesc: 'Grandi spazi e culture intense'
     },
     {
       name: 'Caraibi',
       images: ['/images/mexico.jpg', '/images/usa-parks.jpg', '/images/north-america3.jpg'],
       country: 'caraibi',
-      description: 'Isole da cartolina, mare cristallino e relax.',
+      description: 'Mare turchese, spiagge di sabbia bianca e atmosfere rilassate: i Caraibi sono il sogno tropicale per eccellenza. Tra isole da esplorare, natura rigogliosa e cultura vivace, il relax è assicurato.',
       shortDesc: 'Isole da sogno e acque turchesi'
     },
     {
       name: 'Polinesia Francese',
-      images: ['/images/north-america3.jpg', '/images/usa-parks.jpg', '/images/north-america.jpg'],
+      images: ['/images/polinesia.jpg', '/images/usa-parks.jpg', '/images/polinesia.jpg'],
       country: 'polinesia-francese',
-      description: 'Lagune turchesi e bungalow sull’acqua.',
+      description: 'Lagune turchesi, bungalow sull’acqua e paesaggi da sogno: la Polinesia Francese è il paradiso terrestre, perfetto per chi cerca romanticismo, natura incontaminata e un’esperienza indimenticabile in mezzo all’Oceano Pacifico.',
       shortDesc: 'Paradiso tropicale esclusivo'
     }
   ];
@@ -395,35 +398,66 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Cartolina Messico (reintrodotta) */}
-      {(() => {
-        const mexico = destinations.find(d => d.country === 'messico');
-        if (!mexico) return null;
-        return (
-          <section className="postcard-mexico">
-            <div className="postcard-container">
-              <div className="destination-wide-card postcard">
-                <div className="wide-content">
-                  <div className="wide-images">
-                    <ImageCarousel 
-                      images={mexico.images}
-                      destination={`${mexico.country}-postcard`}
-                      className="wide-carousel"
-                    />
+      {/* Nuovo Carosello Destinazioni con Hover Cartolina */}
+      <section className="destinations-showcase">
+        <div className="showcase-header">
+          <h2>Tutte le Destinazioni</h2>
+          <p>Scopri i nostri itinerari esclusivi in tutto il mondo</p>
+        </div>
+        
+        <div className="destinations-carousel-showcase">
+          <button 
+            className="showcase-nav-btn prev-showcase"
+            onClick={() => setShowcaseIndex(prev => prev === 0 ? Math.ceil(destinations.length / 4) - 1 : prev - 1)}
+          >
+            ‹
+          </button>
+          
+          <div className="showcase-content">
+            {destinations.slice(showcaseIndex * 4, (showcaseIndex * 4) + 4).map((destination, index) => (
+              <div key={`${destination.country}-showcase-${index}`} className="destination-showcase-card">
+                <div className="card-image">
+                  <img src={destination.images[0]} alt={destination.name} />
+                  <div className="card-title">
+                    <h3>{destination.name}</h3>
                   </div>
-                  <div className="wide-text">
-                    <h2>{mexico.name}</h2>
-                    <p>{mexico.description}</p>
-                    <Link to={`/destination/${mexico.country}`} className="explore-btn">
-                      Scopri {mexico.name}
+                </div>
+                
+                {/* Cartolina espansa su hover */}
+                <div className="card-expanded">
+                  <div className="expanded-image">
+                    <img src={destination.images[0]} alt={destination.name} />
+                  </div>
+                  <div className="expanded-content">
+                    <h3>{destination.name}</h3>
+                    <p>{destination.description}</p>
+                    <Link to={`/destination/${destination.country}`} className="explore-btn">
+                      Scopri
                     </Link>
                   </div>
                 </div>
               </div>
-            </div>
-          </section>
-        );
-      })()}
+            ))}
+          </div>
+          
+          <button 
+            className="showcase-nav-btn next-showcase"
+            onClick={() => setShowcaseIndex(prev => (prev + 1) % Math.ceil(destinations.length / 4))}
+          >
+            ›
+          </button>
+        </div>
+        
+        <div className="showcase-dots">
+          {Array.from({ length: Math.ceil(destinations.length / 4) }).map((_, index) => (
+            <span 
+              key={index}
+              className={`showcase-dot ${index === showcaseIndex ? 'active' : ''}`}
+              onClick={() => setShowcaseIndex(index)}
+            />
+          ))}
+        </div>
+      </section>
 
       {/* Sezione Tutte le Destinazioni - Carousel Intelligente */}
       <section id="all-destinations" className="all-destinations-section">
