@@ -43,8 +43,9 @@ const Home = () => {
       if (!section || !actions) return;
       const sectionRect = section.getBoundingClientRect();
       const actionsRect = actions.getBoundingClientRect();
+      
       // Fissa il blocco al centro quando la sezione è in viewport (parte superiore passata) ma non ancora uscita dal basso
-      const shouldFix = sectionRect.top <= 0 && sectionRect.bottom >= 0;
+      const shouldFix = sectionRect.top <= 0 && sectionRect.bottom > 100;
       if (shouldFix !== isHeroFixed) setIsHeroFixed(shouldFix);
 
       // Attiva il fade quando il bottom della sezione video raggiunge i bottoni
@@ -352,7 +353,7 @@ const Home = () => {
             <div className="option-overlay">
               <h3>Fly & Drive</h3>
               <p>Auto a noleggio e libertà totale di esplorare.</p>
-              <Link to="/destination/usa" className="explore-btn">Inizia</Link>
+              <Link to="/destination/usa" className="explore-btn">Scopri</Link>
             </div>
           </div>
 
@@ -379,27 +380,44 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Nuova Hero Section Polinesia */}
+      <section className="polynesia-hero">
+        <div className="polynesia-hero-image">
+          <img src="/images/polinesia.jpg" alt="Polinesia Francese - Paradiso tropicale" />
+        </div>
+        <div className="polynesia-hero-overlay" />
+        <div className="polynesia-hero-content">
+          <h2 className="polynesia-hero-title">Dove i sogni diventano realtà</h2>
+          <p className="polynesia-hero-subtitle">Scopri la magia della Polinesia Francese, dove ogni atollo racconta una storia di bellezza infinita</p>
+          <button className="polynesia-hero-cta" onClick={scrollToDestinations}>
+            Esplora Destinazioni
+          </button>
+        </div>
+      </section>
+
       {/* Cartolina Messico (reintrodotta) */}
       {(() => {
         const mexico = destinations.find(d => d.country === 'messico');
         if (!mexico) return null;
         return (
           <section className="postcard-mexico">
-            <div className="destination-wide-card postcard">
-              <div className="wide-content">
-                <div className="wide-images">
-                  <ImageCarousel 
-                    images={mexico.images}
-                    destination={`${mexico.country}-postcard`}
-                    className="wide-carousel"
-                  />
-                </div>
-                <div className="wide-text">
-                  <h2>{mexico.name}</h2>
-                  <p>{mexico.description}</p>
-                  <Link to={`/destination/${mexico.country}`} className="explore-btn">
-                    Scopri {mexico.name}
-                  </Link>
+            <div className="postcard-container">
+              <div className="destination-wide-card postcard">
+                <div className="wide-content">
+                  <div className="wide-images">
+                    <ImageCarousel 
+                      images={mexico.images}
+                      destination={`${mexico.country}-postcard`}
+                      className="wide-carousel"
+                    />
+                  </div>
+                  <div className="wide-text">
+                    <h2>{mexico.name}</h2>
+                    <p>{mexico.description}</p>
+                    <Link to={`/destination/${mexico.country}`} className="explore-btn">
+                      Scopri {mexico.name}
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
@@ -414,7 +432,8 @@ const Home = () => {
           <p>Esplora la nostra collezione completa di destinazioni esclusive</p>
         </div>
 
-        <div className="destinations-carousel-container">
+        <div className="all-destinations-container">
+          <div className="destinations-carousel-container">
           <button 
             className="destination-nav-btn prev-destinations"
             onClick={prevDestinations}
@@ -529,9 +548,10 @@ const Home = () => {
             />
           ))}
         </div>
+        </div>
       </section>
 
-      {/* Sezione Contatti */}
+      {/* Sezione Contatti - Bacheca da Viaggio */}
       <section className="contact-section" id="contact" ref={contactRef}>
         <div className="contact-container">
           <img src="/images/pin.png" alt="" aria-hidden="true" className="contact-pin" />
@@ -539,38 +559,46 @@ const Home = () => {
             <h2>Richiedi Informazioni</h2>
             <p>Compila il form per essere ricontattato dal nostro team</p>
           </div>
-          <form className="contact-form" onSubmit={(e) => e.preventDefault()}>
-            <div className="form-row">
-              <div className="form-group">
-                <label>Nome e Cognome</label>
-                <input type="text" placeholder="Mario Rossi" required />
-              </div>
-              <div className="form-group">
-                <label>Email</label>
-                <input type="email" placeholder="mario@example.com" required />
-              </div>
+          
+          <div className="contact-bulletin-board">
+            {/* Colonna sinistra rimossa - ora il form occupa tutta la larghezza */}
+            
+            {/* Form principale - ora occupa tutta la larghezza */}
+            <div className="contact-form-container">
+              <form className="contact-form" onSubmit={(e) => e.preventDefault()}>
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>Nome e Cognome</label>
+                    <input type="text" placeholder="Mario Rossi" required />
+                  </div>
+                  <div className="form-group">
+                    <label>Email</label>
+                    <input type="email" placeholder="mario@example.com" required />
+                  </div>
+                </div>
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>Telefono</label>
+                    <input type="tel" placeholder="+39 333 1234567" />
+                  </div>
+                  <div className="form-group">
+                    <label>Destinazione d'interesse</label>
+                    <select defaultValue="">
+                      <option value="" disabled>Seleziona una destinazione</option>
+                      {destinations.map((d) => (
+                        <option key={d.country} value={d.country}>{d.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                <div className="form-group">
+                  <label>Messaggio</label>
+                  <textarea rows="4" placeholder="Raccontaci cosa stai cercando..." />
+                </div>
+                <button type="submit" className="submit-btn">Invia Richiesta</button>
+              </form>
             </div>
-            <div className="form-row">
-              <div className="form-group">
-                <label>Telefono</label>
-                <input type="tel" placeholder="+39 333 1234567" />
-              </div>
-              <div className="form-group">
-                <label>Destinazione d'interesse</label>
-                <select defaultValue="">
-                  <option value="" disabled>Seleziona una destinazione</option>
-                  {destinations.map((d) => (
-                    <option key={d.country} value={d.country}>{d.name}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-            <div className="form-group">
-              <label>Messaggio</label>
-              <textarea rows="4" placeholder="Raccontaci cosa stai cercando..." />
-            </div>
-            <button type="submit" className="submit-btn">Invia Richiesta</button>
-          </form>
+          </div>
         </div>
       </section>
 

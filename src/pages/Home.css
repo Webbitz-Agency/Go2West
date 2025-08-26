@@ -4,6 +4,14 @@
   padding-top: 0; /* azzera spazio in cima quando header è fixed */
 }
 
+/* Variabili per larghezze standardizzate */
+:root {
+  --section-max-width: 1200px;
+  --section-padding-horizontal: 3%;
+  --section-padding-vertical: 80px;
+  --container-padding: 30px 30px 15px 30px;
+}
+
 /* Sezione Hero Video */
 .hero-videos {
   position: relative;
@@ -15,6 +23,7 @@
   padding: 0; /* override padding globale dei <section> */
   /*border-radius: 0 0 20px 20px;*/
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  background: #ffffff; /* fallback per il video */
 }
 
 .hero-video {
@@ -111,11 +120,29 @@
 
 /* Intro Section */
 .intro-section {
-  background: linear-gradient(180deg, #ffffff, #f7f9fc);
-  padding: 64px 6% 40px;
+  background: #ffffff;
+  padding: 64px var(--section-padding-horizontal) 40px;
+  position: relative;
 }
 
-.intro-container { max-width: 1100px; margin: 0 auto; text-align: center; }
+/* Aggiungiamo una sfumatura verso il basso per la transizione */
+.intro-section::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  /*background: linear-gradient(180deg, #ffffff, #e0f7fa);*/
+  pointer-events: none;
+}
+
+.intro-container { 
+  max-width: var(--section-max-width); 
+  margin: 0 auto; 
+  text-align: center; 
+  padding: 0 20px;
+}
 
 .intro-title {
   font-family: 'DM Serif Text', serif;
@@ -142,7 +169,11 @@
 
 /* Reveal base */
 .reveal-on-scroll { opacity: 0; transform: translateY(20px); transition: opacity 420ms ease, transform 420ms ease; }
-.reveal-on-scroll.revealed { opacity: 1; transform: translateY(0); }
+.reveal-on-scroll.revealed { 
+  opacity: 1;
+  transform: translateY(0);
+  padding: 40px 0;
+}
 
 @media (max-width: 768px) {
   .hero-title { font-size: 1.7rem; }
@@ -421,7 +452,7 @@
 
 .destination-wide-card.postcard:hover {
   transform: rotate(-1deg) translateY(-3px);
-  box-shadow: 0 30px 60px rgba(0,0,0,0.18);
+  /*box-shadow: 0 30px 60px rgba(0,0,0,0.18);*/
 }
 
 .destination-wide-card.postcard .wide-content {
@@ -575,8 +606,33 @@
 
 /* Sezione Tutte le Destinazioni - Carousel Intelligente */
 .all-destinations-section {
-  background: white;
-  padding: 80px 3% 100px;
+  background: #e0f7fa;
+  padding: var(--section-padding-vertical) var(--section-padding-horizontal) 100px;
+  position: relative;
+}
+
+/* Sfumatura verso l'alto per la transizione dal bianco */
+.all-destinations-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(180deg, #ffffff, #e0f7fa);
+  pointer-events: none;
+}
+
+/* Sfumatura verso il basso per la transizione verso il bianco */
+.all-destinations-section::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(180deg, #e0f7fa, #ffffff);
+  pointer-events: none;
 }
 
 .all-destinations-section .section-header {
@@ -584,8 +640,14 @@
   margin-bottom: 60px;
 }
 
+.all-destinations-container {
+  max-width: var(--section-max-width);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
 .all-destinations-section .section-header h2 {
-  font-size: 2.8rem;
+  font-size: 2.5rem;
   color: #2c3e50;
   margin-bottom: 15px;
   font-weight: 500;
@@ -593,7 +655,7 @@
 
 .all-destinations-section .section-header p {
   font-size: 1.2rem;
-  color: #666;
+  color: #4facfe;
   max-width: 600px;
   margin: 0 auto;
 }
@@ -601,9 +663,6 @@
 /* Container Carousel Destinazioni */
 .destinations-carousel-container {
   position: relative;
-  display: flex;
-  align-items: center;
-  gap: 30px;
   margin-bottom: 40px;
 }
 
@@ -612,32 +671,45 @@
   grid-template-columns: 1.2fr 0.9fr 0.9fr;
   gap: 25px;
   height: 400px;
-  flex: 1;
+  width: 100%;
 }
 
 /* Bottoni Navigazione Carousel */
 .destination-nav-btn {
-  background: linear-gradient(45deg, #4facfe, #00f2fe);
-  border: none;
-  width: 60px;
-  height: 60px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 107, 107, 0.9);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
-  font-size: 24px;
+  font-size: 18px;
   font-weight: bold;
   color: white;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 8px 25px rgba(79, 172, 254, 0.3);
-  z-index: 10;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  z-index: 20;
+}
+
+.prev-destinations {
+  left: 15px;
+}
+
+.next-destinations {
+  right: 15px;
 }
 
 .destination-nav-btn:hover {
-  transform: scale(1.1);
-  box-shadow: 0 12px 35px rgba(79, 172, 254, 0.4);
+  transform: translateY(-50%) scale(1.05);
+  background: rgba(255, 107, 107, 1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
 .destination-nav-btn:active {
-  transform: scale(0.95);
+  transform: translateY(-50%) scale(0.95);
 }
 
 /* Stili per Posizione 0 - Stile Australia */
@@ -932,7 +1004,7 @@
 /* Bottoni e Link */
 .explore-btn {
   display: inline-block;
-  background: linear-gradient(45deg, #4facfe, #00f2fe);
+  background: linear-gradient(45deg, #ff6b6b, #ee5a24);
   color: white;
   padding: 12px 25px;
   border-radius: 25px;
@@ -1037,24 +1109,41 @@
   transform: translateY(-3px);
 }
 
-/* Sezione Contatti */
+/* Sezione Contatti - Bacheca da Viaggio */
 .contact-section {
-  background: #f5f7fb;
-  padding: 44px 5% 70px; /* ulteriormente ridotto */
+  background: #ffffff;
+  padding: 60px var(--section-padding-horizontal) 80px;
   position: relative;
-  /* evita che l'header fixed copra l'inizio quando si usa scrollIntoView/ancore */
   scroll-margin-top: 96px;
 }
 
-.contact-container {
-  max-width: 1000px;
-  margin: 0 auto;
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
-  padding: 28px 22px; /* meno spazio interno */
-  position: relative; /* base per il pin decorativo */
+/* Sfumatura verso l'alto per la transizione dal lightcyan */
+.contact-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  /*background: linear-gradient(180deg, #e0f7fa, #ffffff);*/
+  pointer-events: none;
 }
+
+.contact-container {
+  max-width: var(--section-max-width);
+  margin: 0 auto;
+  background: #f8f9fa;
+  border-radius: 25px;
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(0, 0, 0, 0.05);
+  padding: var(--container-padding);
+  position: relative;
+  background-image: 
+    radial-gradient(circle at 20% 80%, rgba(79, 172, 254, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(0, 242, 254, 0.1) 0%, transparent 50%);
+}
+
 
 /* Pin decorativo sopra la card contatti */
 /* il pin ora è un <img> con classe .contact-pin; manteniamo l'ombra sul piano */
@@ -1073,31 +1162,66 @@
   pointer-events: none;
 }*/
 
-/* immagine del pin reale */
+/* Pin decorativo della bacheca */
 .contact-pin {
   position: absolute;
-  top: 0;
+  top: -8px;
   left: 50%;
-  transform: translateX(-50%) rotate(-12deg);
-  width: 30px;
-  height: 30px;
+  transform: translateX(-50%) rotate(-8deg);
+  width: 35px;
+  height: 35px;
   object-fit: contain;
-  filter: drop-shadow(0 6px 10px rgba(0,0,0,0.25));
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
   pointer-events: none;
-  z-index: 2;
+  z-index: 3;
+  animation: pin-bounce 0.6s ease-out;
+}
+
+@keyframes pin-bounce {
+  0% { transform: translateX(-50%) rotate(-8deg) scale(0.8); }
+  50% { transform: translateX(-50%) rotate(-8deg) scale(1.1); }
+  100% { transform: translateX(-50%) rotate(-8deg) scale(1); }
 }
 
 /* Travel Options - puzzle */
-.travel-options-section { background: #f8f9fb; padding: 50px 5% 50px; }
-.options-header { max-width: 1100px; margin: 0 auto 18px; text-align: center; }
-.options-header h2 { margin: 0 0 6px 0; font-size: 2rem; color: #2c3e50; font-weight: 500; }
-.options-header p { margin: 0; color: #667085; }
+.travel-options-section { 
+  background: #e0f7fa; 
+  padding: 50px var(--section-padding-horizontal) 50px; 
+  position: relative;
+}
+
+/* Sfumatura verso l'alto per la transizione dal bianco */
+.travel-options-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(180deg, #ffffff, #e0f7fa);
+  pointer-events: none;
+}
+
+/* Sfumatura verso il basso per la transizione verso il bianco */
+.travel-options-section::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(180deg, #e0f7fa, #ffffff);
+  pointer-events: none;
+}
+.options-header { max-width: var(--section-max-width); margin: 0 auto 18px; text-align: center; }
+.options-header h2 { margin: 0 0 6px 0; font-size: 2.5rem; color: #2c3e50; font-weight: 500; }
+.options-header p { margin: 0; font-size: 1.2rem; color: #4facfe; }
 .options-grid {
   display: grid;
   grid-template-columns: 1.1fr 1fr 1fr;
   grid-auto-rows: 160px;
   gap: 18px;
-  max-width: 1200px;
+  max-width: var(--section-max-width);
   margin: 0 auto;
 }
 /* Nuovo layout 2x2 con rapporti 2/5 e 3/5 */
@@ -1178,7 +1302,40 @@
 .options-cta:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(79, 172, 254, 0.4); }
 
 /* sezione cartolina mexico reintrodotta */
-.postcard-mexico { padding: 40px 3% 60px; background: #ffffff; }
+.postcard-mexico { 
+  padding: 40px var(--section-padding-horizontal) 60px; 
+  background: #ffffff; 
+  position: relative;
+}
+
+.postcard-container {
+  max-width: var(--section-max-width);
+  margin: 0 auto;
+}
+
+/* Sfumatura verso l'alto per la transizione dal lightcyan */
+.postcard-mexico::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  /*background: linear-gradient(180deg, #e0f7fa, #ffffff);*/
+  pointer-events: none;
+}
+
+/* Sfumatura verso il basso per la transizione verso il lightcyan */
+.postcard-mexico::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  /*background: linear-gradient(180deg, #ffffff, #e0f7fa);*/
+  pointer-events: none;
+}
 
 @media (max-width: 992px) {
   .options-grid { grid-template-columns: 1fr 1fr; grid-auto-rows: 150px; }
@@ -1193,86 +1350,149 @@
   .option-card.tall, .option-card.wide { grid-column: span 1; grid-row: span 1; }
 }
 
+/* Header della bacheca */
 .contact-header {
   text-align: center;
-  margin-bottom: 22px; /* meno spazio sopra al form */
+  margin-bottom: 40px;
+  position: relative;
 }
 
 .contact-header h2 {
-  font-size: 2.2rem;
+  font-size: 2.4rem;
   color: #2c3e50;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   font-weight: 700;
+  font-family: 'DM Serif Text', serif;
 }
 
 .contact-header p {
-  font-size: 1.05rem;
-  color: #666;
+  font-size: 1.1rem;
+  color: #4facfe;
+  font-weight: 500;
+}
+
+/* Layout bacheca - ora solo il form occupa tutta la larghezza */
+.contact-bulletin-board {
+  display: block;
+  margin-bottom: 30px;
+}
+
+/* Colonna sinistra rimossa - ora il form occupa tutta la larghezza */
+
+/* Polaroid rimosse - ora il form occupa tutta la larghezza */
+
+/* Note di viaggio stilizzate - RIMOSSE per design più pulito */
+
+/* Biglietto aereo rimosso */
+
+/* Rotte aeree rimosse */
+
+/* Tutte le rotte aeree sono state rimosse */
+
+/* Form principale - ora occupa tutta la larghezza */
+.contact-form-container {
+  background: white;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  border: 1px solid rgba(0,0,0,0.05);
+  max-width: 95%;
+  margin: 0 auto;
 }
 
 .contact-form {
   display: flex;
   flex-direction: column;
-  gap: 16px; /* compattato */
+  gap: 20px;
 }
 
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px; /* compattato */
+  gap: 20px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
 .form-group label {
   font-weight: 600;
   color: #2c3e50;
+  font-size: 0.95rem;
+  letter-spacing: 0.3px;
 }
 
 .form-group input,
 .form-group select,
 .form-group textarea {
-  border: 1px solid #e3e8f0;
-  border-radius: 10px;
-  padding: 10px 12px; /* campi più bassi */
-  font-size: 0.92rem;
-  line-height: 1.3;
+  border: 2px solid #e3e8f0;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 0.95rem;
+  line-height: 1.4;
   background: #fafbfe;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  transition: all 0.3s ease;
+  font-family: inherit;
 }
-
-/* textarea un po' meno alta di default */
-.form-group textarea { min-height: 120px; }
 
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
   outline: none;
   border-color: #4facfe;
-  box-shadow: 0 0 0 4px rgba(79, 172, 254, 0.12);
+  box-shadow: 0 0 0 4px rgba(79, 172, 254, 0.15);
   background: #fff;
+  transform: translateY(-1px);
+}
+
+/* textarea un po' meno alta di default */
+.form-group textarea { 
+  min-height: 120px; 
+  resize: vertical;
 }
 
 .submit-btn {
   align-self: flex-start;
-  background: linear-gradient(45deg, #4facfe, #00f2fe);
+  background: linear-gradient(45deg, #ff6b6b, #ee5a24);
   color: white;
-  padding: 12px 22px;
-  border-radius: 28px;
+  padding: 15px 30px;
+  border-radius: 30px;
   font-weight: 700;
   border: none;
   cursor: pointer;
-  box-shadow: 0 10px 25px rgba(79, 172, 254, 0.3);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 12px 30px rgba(79, 172, 254, 0.3);
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.submit-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.submit-btn:hover::before {
+  left: 100%;
 }
 
 .submit-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 14px 32px rgba(79, 172, 254, 0.4);
+  transform: translateY(-3px);
+  box-shadow: 0 18px 40px rgba(79, 172, 254, 0.4);
+}
+
+.submit-btn:active {
+  transform: translateY(-1px);
 }
 
 /* CTA flottante */
@@ -1280,7 +1500,7 @@
   position: fixed;
   right: 18px;
   bottom: 18px;
-  background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+  background: linear-gradient(45deg, #4facfe, #00f2fe);
   color: white;
   border: none;
   border-radius: 999px;
@@ -1345,9 +1565,17 @@
   }
 
   .destination-nav-btn {
-    width: 50px;
-    height: 50px;
-    font-size: 20px;
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+  
+  .prev-destinations {
+    left: 10px;
+  }
+  
+  .next-destinations {
+    right: 10px;
   }
 }
 
@@ -1422,9 +1650,17 @@
   }
 
   .destination-nav-btn {
-    width: 45px;
-    height: 45px;
-    font-size: 18px;
+    width: 38px;
+    height: 38px;
+    font-size: 15px;
+  }
+  
+  .prev-destinations {
+    left: 8px;
+  }
+  
+  .next-destinations {
+    right: 8px;
   }
   
   .stats-container {
@@ -1477,6 +1713,15 @@
   .contact-container {
     padding: 22px 18px;
   }
+  
+  /* Responsive per il form */
+  .contact-form-container {
+    padding: 30px 25px;
+    margin: 0 20px;
+  }
+  
+  /* Polaroid e rotte aeree rimosse */
+  
   .form-row {
     grid-template-columns: 1fr;
   }
@@ -1507,8 +1752,163 @@
   }
 
   .destination-nav-btn {
-    width: 40px;
-    height: 40px;
-    font-size: 16px;
+    width: 35px;
+    height: 35px;
+    font-size: 14px;
+  }
+  
+  .prev-destinations {
+    left: 5px;
+  }
+  
+  .next-destinations {
+    right: 5px;
+  }
+} 
+
+/* Nuova Hero Section Polinesia */
+.polynesia-hero {
+  position: relative;
+  width: 100%;
+  height: 70vh;
+  min-height: 500px;
+  max-height: 700px;
+  overflow: hidden;
+  margin: 0;
+  background: #ffffff;
+}
+
+.polynesia-hero-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.polynesia-hero-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.85);
+}
+
+.polynesia-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.3) 0%,
+    rgba(0, 0, 0, 0.1) 50%,
+    rgba(0, 0, 0, 0.4) 100%
+  );
+  pointer-events: none;
+}
+
+.polynesia-hero-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 24px;
+  gap: 24px;
+  z-index: 5;
+}
+
+.polynesia-hero-title {
+  color: #ffffff;
+  font-size: 3.2rem;
+  line-height: 1.1;
+  text-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  font-weight: 500;
+  font-family: 'DM Serif Text', serif;
+  max-width: 800px;
+  margin: 0;
+}
+
+.polynesia-hero-subtitle {
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 1.4rem;
+  line-height: 1.6;
+  font-weight: 400;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  max-width: 700px;
+  margin: 0;
+}
+
+.polynesia-hero-cta {
+  background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 999px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  box-shadow: 0 12px 32px rgba(255, 107, 107, 0.4);
+  transition: all 0.3s ease;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+}
+
+.polynesia-hero-cta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 40px rgba(255, 107, 107, 0.5);
+}
+
+.polynesia-hero-cta:active {
+  transform: translateY(-1px);
+}
+
+/* Responsive per la hero Polinesia */
+@media (max-width: 1200px) {
+  .polynesia-hero-title {
+    font-size: 2.8rem;
+  }
+  
+  .polynesia-hero-subtitle {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .polynesia-hero {
+    height: 60vh;
+    min-height: 400px;
+  }
+  
+  .polynesia-hero-title {
+    font-size: 2.2rem;
+  }
+  
+  .polynesia-hero-subtitle {
+    font-size: 1.1rem;
+  }
+  
+  .polynesia-hero-cta {
+    padding: 14px 28px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .polynesia-hero {
+    height: 50vh;
+    min-height: 350px;
+  }
+  
+  .polynesia-hero-title {
+    font-size: 1.8rem;
+  }
+  
+  .polynesia-hero-subtitle {
+    font-size: 1rem;
+  }
+  
+  .polynesia-hero-cta {
+    padding: 12px 24px;
+    font-size: 0.9rem;
   }
 } 
