@@ -557,6 +557,17 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Sezione Descrittiva - Non un viaggio qualsiasi */}
+      <section className="descriptive-section" style={{paddingTop: '0px'}}>
+        <div className="descriptive-container">
+          <h2>Non un viaggio qualsiasi</h2>
+          <p>
+            Ogni proposta che trovi su Go2West è pensata per farti scoprire il <strong>meglio di ogni destinazione</strong>, senza stress. 
+            Lasciati ispirare, scegli il tuo percorso e preparati a raccogliere <strong>ricordi che dureranno per sempre</strong>.
+          </p>
+        </div>
+      </section>
+
       {/* Sezione I nostri suggerimenti - Nuove Proposte di Viaggio */}
       <section id="all-destinations" className="suggestions-section">
         <div className="section-header">
@@ -587,7 +598,7 @@ const Home = () => {
                     </div>
                     <Link to={`/travel/${suggestion.typeSlug}/${suggestion.destination}`} className="suggestion-btn">
                       Scopri Viaggio
-                    </Link>
+                      </Link>
                   </div>
                 </div>
               ))}
@@ -601,23 +612,23 @@ const Home = () => {
             >
               <i className="fa-solid fa-angle-left"></i>
             </button>
-            <button 
+          <button 
               className="suggestion-nav-btn next-suggestion"
               onClick={nextSuggestions}
-            >
+          >
               <i className="fa-solid fa-angle-right"></i>
-            </button>
-          </div>
+          </button>
+        </div>
 
           <div className="suggestions-dots">
             {Array.from({ length: maxIndex + 1 }).map((_, index) => (
-              <span 
-                key={index}
+            <span 
+              key={index}
                 className={`suggestion-dot ${index === suggestionCarouselIndex ? 'active' : ''}`}
                 onClick={() => setSuggestionCarouselIndex(index)}
-              />
-            ))}
-          </div>
+            />
+          ))}
+        </div>
         </div>
       </section>
 
@@ -670,6 +681,31 @@ const Home = () => {
               </form>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Sezione Descrittiva - Dal sogno alla partenza */}
+      <section className="descriptive-section">
+        <div className="descriptive-container">
+          <h2>Dal sogno alla partenza</h2>
+          <p>
+            Che tu stia pensando a una <strong>fuga romantica</strong>, a un'<strong>avventura on the road</strong> o a un <strong>viaggio con tutta la famiglia</strong>, 
+            con Go2West trasformi il <strong>desiderio in itinerario</strong>. Noi ci occupiamo dei dettagli, tu solo di <strong>viverlo</strong>.
+          </p>
+        </div>
+      </section>
+
+      {/* Hero Finale con Citazione */}
+      <section className="quote-hero">
+        <div className="quote-hero-image">
+          <img src="/images/argentina.jpg" alt="Argentina - Paesaggio mozzafiato" />
+        </div>
+        <div className="quote-hero-overlay" />
+        <div className="quote-hero-content">
+          <blockquote className="quote-text">
+            "Il mondo è un libro e quelli che non viaggiano ne leggono solo una pagina."
+          </blockquote>
+          <cite className="quote-author">— Sant'Agostino</cite>
         </div>
       </section>
 
