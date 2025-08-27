@@ -18,6 +18,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/destination/:country" element={<DestinationTours />} />
+            <Route path="/travel/:type/:country" element={<DestinationTours />} />
             <Route path="/tour/:tourId" element={<TourDetails />} />
           </Routes>
         </main>

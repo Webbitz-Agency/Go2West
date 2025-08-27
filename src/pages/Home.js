@@ -12,6 +12,9 @@ const Home = () => {
   // Stato per il carousel showcase
   const [showcaseIndex, setShowcaseIndex] = useState(0);
 
+  // Stato per il carousel suggerimenti
+  const [suggestionCarouselIndex, setSuggestionCarouselIndex] = useState(0);
+
   // Riferimento e stato visibilità form contatti
   const contactRef = useRef(null);
   const [isContactVisible, setIsContactVisible] = useState(false);
@@ -114,6 +117,76 @@ const Home = () => {
       country: 'polinesia-francese',
       description: 'Lagune turchesi, bungalow sull’acqua e paesaggi da sogno: la Polinesia Francese è il paradiso terrestre, perfetto per chi cerca romanticismo, natura incontaminata e un’esperienza indimenticabile in mezzo all’Oceano Pacifico.',
       shortDesc: 'Paradiso tropicale esclusivo'
+    }
+  ];
+
+  // Proposte di viaggio creative
+  const travelSuggestions = [
+    {
+      id: 1,
+      type: 'City Break',
+      typeSlug: 'city-breaks',
+      title: 'New York da Film',
+      description: 'Vivi la Grande Mela come nei film: grattacieli iconici, Broadway e Central Park in un weekend indimenticabile',
+      image: '/images/city.jpg',
+      duration: '4 giorni',
+      price: '€ 890',
+      destination: 'usa'
+    },
+    {
+      id: 2,
+      type: 'Ride in Harley',
+      typeSlug: 'ride-harley',
+      title: 'Route 66 in Libertà',
+      description: 'Percorri la strada più famosa d\'America su una Harley Davidson, da Chicago a Los Angeles',
+      image: '/images/ride_in_harley.jpg',
+      duration: '12 giorni',
+      price: '€ 2.890',
+      destination: 'usa'
+    },
+    {
+      id: 3,
+      type: 'Fly & Drive',
+      typeSlug: 'fly-drive',
+      title: 'Coast to Coast Canada',
+      description: 'Dalle Montagne Rocciose all\'Oceano Atlantico, un viaggio epico attraverso il Canada selvaggio',
+      image: '/images/drive.jpg',
+      duration: '15 giorni',
+      price: '€ 1.990',
+      destination: 'canada'
+    },
+    {
+      id: 4,
+      type: 'Luxury Travel',
+      typeSlug: 'luxury-travel',
+      title: 'Polinesia Esclusiva',
+      description: 'Overwater bungalow e lagune turchesi in un paradiso tropicale riservato a pochi',
+      image: '/images/polinesia.jpg',
+      duration: '8 giorni',
+      price: '€ 4.500',
+      destination: 'polinesia-francese'
+    },
+    {
+      id: 5,
+      type: 'Tour Guidati',
+      typeSlug: 'tour-guidati',
+      title: 'Tesori del Messico',
+      description: 'Dalle piramidi Maya alle spiagge di Tulum, scopri la cultura millenaria messicana',
+      image: '/images/mexico.jpg',
+      duration: '10 giorni',
+      price: '€ 1.650',
+      destination: 'messico'
+    },
+    {
+      id: 6,
+      type: 'Safari & Wildlife',
+      typeSlug: 'safari-wildlife',
+      title: 'Avventura Costaricana',
+      description: 'Vulcani attivi, foreste pluviali e wildlife unico nel cuore dell\'America Centrale',
+      image: '/images/tour.jpg',
+      duration: '9 giorni',
+      price: '€ 2.200',
+      destination: 'america-centrale'
     }
   ];
 
@@ -244,6 +317,31 @@ const Home = () => {
     return result;
   };
 
+  // Funzioni per il carousel suggerimenti
+  const maxIndex = travelSuggestions.length - 3; // Ultima posizione valida (per mostrare le ultime 3)
+  
+  const nextSuggestions = () => {
+    setSuggestionCarouselIndex(prev => 
+      prev >= maxIndex ? 0 : prev + 1
+    );
+  };
+
+  const prevSuggestions = () => {
+    setSuggestionCarouselIndex(prev => 
+      prev === 0 ? maxIndex : prev - 1
+    );
+  };
+
+  // Ottenere le 3 proposte correnti per il carousel
+  const getCurrentSuggestions = () => {
+    const result = [];
+    for (let i = 0; i < 3; i++) {
+      const index = (suggestionCarouselIndex + i) % travelSuggestions.length;
+      result.push(travelSuggestions[index]);
+    }
+    return result;
+  };
+
   // Componente Carousel personalizzato per le immagini
   const ImageCarousel = ({ images, destination, className = "", showControls = true }) => {
     const currentIndex = currentImageIndex[destination] || 0;
@@ -270,13 +368,13 @@ const Home = () => {
               className="carousel-btn prev-btn"
               onClick={() => changeImage(destination, 'prev')}
             >
-              ‹
+              <i class="fa-solid fa-angle-left"></i>
             </button>
             <button 
               className="carousel-btn next-btn"
               onClick={() => changeImage(destination, 'next')}
             >
-              ›
+              <i class="fa-solid fa-angle-right"></i>
             </button>
             
             <div className="carousel-indicators">
@@ -410,7 +508,7 @@ const Home = () => {
             className="showcase-nav-btn prev-showcase"
             onClick={() => setShowcaseIndex(prev => prev === 0 ? Math.ceil(destinations.length / 4) - 1 : prev - 1)}
           >
-            ‹
+            <i class="fa-solid fa-angle-left"></i>
           </button>
           
           <div className="showcase-content">
@@ -444,7 +542,7 @@ const Home = () => {
             className="showcase-nav-btn next-showcase"
             onClick={() => setShowcaseIndex(prev => (prev + 1) % Math.ceil(destinations.length / 4))}
           >
-            ›
+            <i class="fa-solid fa-angle-right"></i>
           </button>
         </div>
         
@@ -459,129 +557,67 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Sezione Tutte le Destinazioni - Carousel Intelligente */}
-      <section id="all-destinations" className="all-destinations-section">
+      {/* Sezione I nostri suggerimenti - Nuove Proposte di Viaggio */}
+      <section id="all-destinations" className="suggestions-section">
         <div className="section-header">
-          <h2>Tutte le Destinazioni</h2>
-          <p>Esplora la nostra collezione completa di destinazioni esclusive</p>
+          <h2>I nostri suggerimenti</h2>
+          <p>Proposte di viaggio curate per esperienze indimenticabili</p>
         </div>
 
-        <div className="all-destinations-container">
-          <div className="destinations-carousel-container">
-          <button 
-            className="destination-nav-btn prev-destinations"
-            onClick={prevDestinations}
-          >
-            ‹
-          </button>
-
-          <div className="destinations-carousel-content">
-            {getCurrentDestinations().map((destination, position) => {
-              // Posizione 0: Stile Australia (card larga con dettagli)
-              if (position === 0) {
-                return (
-                  <div key={`${destination.country}-${destinationCarouselIndex}-${position}`} className="destination-card australia-style">
-                    <div className="card-image">
-                      <ImageCarousel 
-                        images={[destination.images[0]]} 
-                        destination={destination.country}
-                        className="australia-main-carousel"
-                        showControls={false}
-                      />
-                      <div className="floating-info">
-                        <h3 className="dest-title">{destination.name}</h3>
-                      </div>
+        <div className="suggestions-container">
+          <div className="suggestions-carousel-wrapper">
+            <div className="suggestions-carousel-content">
+              {getCurrentSuggestions().map((suggestion, position) => (
+                <div 
+                  key={`${suggestion.id}-${suggestionCarouselIndex}`}
+                  className={`suggestion-card ${position === 1 ? 'featured' : ''}`}
+                  style={{ 
+                    backgroundImage: `url('${suggestion.image}')`,
+                    transition: 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)'
+                  }}
+                >
+                  <div className="suggestion-overlay" />
+                  <div className="suggestion-content">
+                    <div className="suggestion-tag">{suggestion.type}</div>
+                    <h3 className="suggestion-title">{suggestion.title}</h3>
+                    <p className="suggestion-description">{suggestion.description}</p>
+                    <div className="suggestion-details">
+                      <span className="suggestion-duration">{suggestion.duration}</span>
+                      <span className="suggestion-price">Da {suggestion.price}</span>
                     </div>
-                    <div className="card-details">
-                      <div className="detail-images">
-                        <ImageCarousel 
-                          images={destination.images.slice(1)} 
-                          destination={`${destination.country}-detail`}
-                          className="australia-detail-carousel"
-                          showControls={false}
-                        />
-                      </div>
-                      <div className="card-text">
-                        <p>{destination.description}</p>
-                      </div>
-                    </div>
-                    <Link to={`/destination/${destination.country}`} className="explore-btn image-cta">
-                      Scopri {destination.name}
+                    <Link to={`/travel/${suggestion.typeSlug}/${suggestion.destination}`} className="suggestion-btn">
+                      Scopri Viaggio
                     </Link>
                   </div>
-                );
-              }
-              
-              // Posizione 1: Stile Mexico (overlay scuro)
-              if (position === 1) {
-                return (
-                  <div key={`${destination.country}-${destinationCarouselIndex}-${position}`} className="destination-card mexico-style">
-                    <ImageCarousel 
-                      images={destination.images} 
-                      destination={`${destination.country}-mexico`}
-                      className="mexico-carousel"
-                      showControls={false}
-                    />
-                     <div className="card-overlay-content">
-                      <h3 className="dest-title">{destination.name}</h3>
-                      <p>{destination.shortDesc}</p>
-                      {/*<div className="experience-mini">
-                        {destination.experiences.slice(0, 3).map((exp, idx) => (
-                          <span key={idx}>{exp}</span>
-                        ))}
-                      </div>*/}
-                      <Link to={`/destination/${destination.country}`} className="explore-btn image-cta">
-                        Scopri {destination.name}
-                      </Link>
-                    </div>
-                  </div>
-                );
-              }
-              
-              // Posizione 2: Stile USA (carousel con testo sotto)
-              return (
-                <div key={`${destination.country}-${destinationCarouselIndex}-${position}`} className="destination-card usa-style">
-                  <div className="usa-carousel-grid">
-                    <div className="usa-carousel-wrapper">
-                      <ImageCarousel 
-                        images={destination.images} 
-                        destination={`${destination.country}-usa`}
-                        className="usa-carousel"
-                        showControls={false}
-                      />
-                        <div className="usa-overlay">
-                          <h3 className="dest-title">{destination.name}</h3>
-                        </div>
-                    </div>
-                    <div className="usa-text">
-                      <p>{destination.shortDesc}</p>
-                    </div>
-                      <Link to={`/destination/${destination.country}`} className="explore-btn image-cta">
-                        Scopri {destination.name}
-                      </Link>
-                  </div>
                 </div>
-              );
-            })}
+              ))}
+            </div>
           </div>
 
-          <button 
-            className="destination-nav-btn next-destinations"
-            onClick={nextDestinations}
-          >
-            ›
-          </button>
-        </div>
+          <div className="suggestions-navigation">
+            <button 
+              className="suggestion-nav-btn prev-suggestion"
+              onClick={prevSuggestions}
+            >
+              <i className="fa-solid fa-angle-left"></i>
+            </button>
+            <button 
+              className="suggestion-nav-btn next-suggestion"
+              onClick={nextSuggestions}
+            >
+              <i className="fa-solid fa-angle-right"></i>
+            </button>
+          </div>
 
-        <div className="carousel-dots">
-          {destinations.map((_, index) => (
-            <span 
-              key={index}
-              className={`dot ${index === destinationCarouselIndex ? 'active' : ''}`}
-              onClick={() => setDestinationCarouselIndex(index)}
-            />
-          ))}
-        </div>
+          <div className="suggestions-dots">
+            {Array.from({ length: maxIndex + 1 }).map((_, index) => (
+              <span 
+                key={index}
+                className={`suggestion-dot ${index === suggestionCarouselIndex ? 'active' : ''}`}
+                onClick={() => setSuggestionCarouselIndex(index)}
+              />
+            ))}
+          </div>
         </div>
       </section>
 
@@ -622,6 +658,7 @@ const Home = () => {
                       {destinations.map((d) => (
                         <option key={d.country} value={d.country}>{d.name}</option>
                       ))}
+                      <option key="altro" value="altro">Altro</option>
                     </select>
                   </div>
                 </div>
