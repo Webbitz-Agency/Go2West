@@ -560,7 +560,7 @@ const Home = () => {
       {/* Sezione I nostri suggerimenti - Nuove Proposte di Viaggio */}
       <section id="all-destinations" className="suggestions-section">
         <div className="section-header">
-          <h2>I nostri suggerimenti</h2>
+          <h2>Viaggi su misura</h2>
           <p>Proposte di viaggio curate per esperienze indimenticabili</p>
         </div>
 
