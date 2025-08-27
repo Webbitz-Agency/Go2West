@@ -107,13 +107,13 @@ const Header = () => {
             {activeDropdown === 'destinations' && (
               <div className="dropdown-menu">
                 {destinations.map((dest) => (
-                  <Link 
+                  <a 
                     key={dest.country}
-                    to={`/destination/${dest.country}`}
+                    href={`/destination/${dest.country}`}
                     className="dropdown-item"
                   >
                     {dest.name}
-                  </Link>
+                  </a>
                 ))}
               </div>
             )}
@@ -149,13 +149,13 @@ const Header = () => {
                 {activeSubMenu && (
                   <div className="submenu">
                     {destinations.map((dest) => (
-                      <Link 
+                      <a 
                         key={`${activeSubMenu}-${dest.country}`}
-                        to={`/travel/${activeSubMenu}/${dest.country}`}
+                        href={`/travel/${activeSubMenu}/${dest.country}`}
                         className="submenu-item"
                       >
                         {dest.name}
-                      </Link>
+                      </a>
                     ))}
                   </div>
                 )}
