@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Home.css';
 
 const Home = () => {
@@ -24,6 +24,30 @@ const Home = () => {
   const heroActionsRef = useRef(null);
   const [isHeroFaded, setIsHeroFaded] = useState(false);
   const [isHeroFixed, setIsHeroFixed] = useState(false);
+
+  // Stato e logica Modale selezione destinazione/viaggio
+  const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTravelType, setSelectedTravelType] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState('');
+  const [pendingTravelType, setPendingTravelType] = useState('');
+
+  const openTravelModal = (travelTypeSlug) => {
+    setPendingTravelType(travelTypeSlug);
+    setSelectedTravelType(travelTypeSlug);
+    setIsModalOpen(true);
+  };
+
+  const closeTravelModal = () => {
+    setIsModalOpen(false);
+    setSelectedCountry('');
+  };
+
+  const goToSelectedTravel = () => {
+    if (!selectedTravelType || !selectedCountry) return;
+    navigate(`/travel/${selectedTravelType}/${selectedCountry}`);
+    closeTravelModal();
+  };
 
   // Video hero iniziale
   const heroVideos = [
@@ -415,9 +439,9 @@ const Home = () => {
             <button className="hero-cta" onClick={scrollToDestinations}>
               Scopri Destinazioni
             </button>
-            <button className="hero-cta ghost" onClick={scrollToContact}>
+            {/*<button className="hero-cta ghost" onClick={scrollToContact}>
               Richiedi Info
-            </button>
+            </button>*/}
           </div>
         </div>
       </section>
@@ -443,36 +467,36 @@ const Home = () => {
         </div>
         <div className="options-grid two-by-two">
           {/* Card cliccabili come grandi pulsanti */}
-          <Link to="/destination/usa" className="option-card photo r1c1 reveal-on-scroll" style={{ backgroundImage: "url('/images/city.jpg')" }} data-dir="vertical">
+          <div onClick={() => openTravelModal('city-breaks')} className="option-card photo r1c1 reveal-on-scroll" style={{ backgroundImage: "url('/images/city.jpg')" }} data-dir="vertical">
             <div className="option-overlay">
               <h3>City Breaks</h3>
               <p>Itinerari completi, guide esperte e zero pensieri.</p>
               <span className="explore-btn">Scopri</span>
             </div>
-          </Link>
-          <Link to="/destination/usa" className="option-card photo r1c2 reveal-on-scroll" style={{ backgroundImage: "url('/images/drive.jpg')" }} data-dir="horizontal">
+          </div>
+          <div onClick={() => openTravelModal('fly-drive')} className="option-card photo r1c2 reveal-on-scroll" style={{ backgroundImage: "url('/images/drive.jpg')" }} data-dir="horizontal">
             <div className="option-overlay">
               <h3>Fly & Drive</h3>
               <p>Auto a noleggio e libertà totale di esplorare.</p>
               <span className="explore-btn">Scopri</span>
             </div>
-          </Link>
+          </div>
 
           {/* Riga 2 */}
-          <Link to="/destination/canada" className="option-card photo r2c1 reveal-on-scroll" style={{ backgroundImage: "url('/images/ride_in_harley.jpg')" }} data-dir="vertical">
+          <div onClick={() => openTravelModal('ride-harley')} className="option-card photo r2c1 reveal-on-scroll" style={{ backgroundImage: "url('/images/ride_in_harley.jpg')" }} data-dir="vertical">
             <div className="option-overlay">
               <h3>Ride in Harley</h3>
               <p>Itinerari completi, guide esperte e zero pensieri.</p>
               <span className="explore-btn">Scopri</span>
             </div>
-          </Link>
-          <Link to="/destination/america-centrale" className="option-card photo r2c2 reveal-on-scroll" style={{ backgroundImage: "url('/images/tour.jpg')" }} data-dir="horizontal">
+          </div>
+          <div onClick={() => openTravelModal('tour-guidati')} className="option-card photo r2c2 reveal-on-scroll" style={{ backgroundImage: "url('/images/tour.jpg')" }} data-dir="horizontal">
             <div className="option-overlay">
               <h3>Tour Guidati</h3>
               <p>Avventure tra parchi e fauna selvatica.</p>
               <span className="explore-btn">Scopri</span>
             </div>
-          </Link>
+          </div>
         </div>
         <div className="options-footer reveal-on-scroll">
           <button className="options-cta" onClick={scrollToDestinations}>
@@ -708,6 +732,38 @@ const Home = () => {
           <cite className="quote-author">— Sant'Agostino</cite>
         </div>
       </section>
+
+      {/* Modale Selezione Destinazione/Viaggio */}
+      {isModalOpen && (
+        <div className="modal-backdrop" role="dialog" aria-modal="true" onClick={closeTravelModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close" aria-label="Chiudi" onClick={closeTravelModal}>×</button>
+            <h3>Seleziona la destinazione</h3>
+            <p>Scegli in quale destinazione vuoi informazioni per questa tipologia di viaggio.</p>
+            <div className="modal-form">
+              <div className="form-group">
+                <label>Tipologia di viaggio</label>
+                <select value={selectedTravelType} onChange={(e) => setSelectedTravelType(e.target.value)}>
+                  <option value="city-breaks">City Breaks</option>
+                  <option value="fly-drive">Fly & Drive</option>
+                  <option value="ride-harley">Ride in Harley</option>
+                  <option value="tour-guidati">Tour Guidati</option>
+                </select>
+              </div>
+              <div className="form-group">
+                <label>Destinazione</label>
+                <select value={selectedCountry} onChange={(e) => setSelectedCountry(e.target.value)}>
+                  <option value="" disabled>Seleziona una destinazione</option>
+                  {destinations.map((d) => (
+                    <option key={d.country} value={d.country}>{d.name}</option>
+                  ))}
+                </select>
+              </div>
+              <button className="submit-btn go-btn" disabled={!selectedCountry} onClick={goToSelectedTravel}>Vai</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* CTA flottante rimosso - ora integrato nell'header */}
 
