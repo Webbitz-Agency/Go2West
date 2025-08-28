@@ -442,37 +442,37 @@ const Home = () => {
           <p>Scegli lo stile di viaggio che ti rispecchia di più.</p>
         </div>
         <div className="options-grid two-by-two">
-          {/* Riga 1: 2/5 + 3/5 */}
-          <div className="option-card photo r1c1 reveal-on-scroll" style={{ backgroundImage: "url('/images/city.jpg')" }} data-dir="vertical">
+          {/* Card cliccabili come grandi pulsanti */}
+          <Link to="/destination/usa" className="option-card photo r1c1 reveal-on-scroll" style={{ backgroundImage: "url('/images/city.jpg')" }} data-dir="vertical">
             <div className="option-overlay">
               <h3>City Breaks</h3>
               <p>Itinerari completi, guide esperte e zero pensieri.</p>
-              <Link to="/destination/usa" className="explore-btn">Scopri</Link>
+              <span className="explore-btn">Scopri</span>
             </div>
-          </div>
-          <div className="option-card photo r1c2 reveal-on-scroll" style={{ backgroundImage: "url('/images/drive.jpg')" }} data-dir="horizontal">
+          </Link>
+          <Link to="/destination/usa" className="option-card photo r1c2 reveal-on-scroll" style={{ backgroundImage: "url('/images/drive.jpg')" }} data-dir="horizontal">
             <div className="option-overlay">
               <h3>Fly & Drive</h3>
               <p>Auto a noleggio e libertà totale di esplorare.</p>
-              <Link to="/destination/usa" className="explore-btn">Scopri</Link>
+              <span className="explore-btn">Scopri</span>
             </div>
-          </div>
+          </Link>
 
-          {/* Riga 2 invertita: 3/5 + 2/5 */}
-          <div className="option-card photo r2c1 reveal-on-scroll" style={{ backgroundImage: "url('/images/ride_in_harley.jpg')" }} data-dir="vertical">
+          {/* Riga 2 */}
+          <Link to="/destination/canada" className="option-card photo r2c1 reveal-on-scroll" style={{ backgroundImage: "url('/images/ride_in_harley.jpg')" }} data-dir="vertical">
             <div className="option-overlay">
               <h3>Ride in Harley</h3>
               <p>Itinerari completi, guide esperte e zero pensieri.</p>
-              <Link to="/destination/canada" className="explore-btn">Scopri</Link>
+              <span className="explore-btn">Scopri</span>
             </div>
-          </div>
-          <div className="option-card photo r2c2 reveal-on-scroll" style={{ backgroundImage: "url('/images/tour.jpg')" }} data-dir="horizontal">
+          </Link>
+          <Link to="/destination/america-centrale" className="option-card photo r2c2 reveal-on-scroll" style={{ backgroundImage: "url('/images/tour.jpg')" }} data-dir="horizontal">
             <div className="option-overlay">
               <h3>Tour Guidati</h3>
               <p>Avventure tra parchi e fauna selvatica.</p>
-              <Link to="/destination/america-centrale" className="explore-btn">Scopri</Link>
+              <span className="explore-btn">Scopri</span>
             </div>
-          </div>
+          </Link>
         </div>
         <div className="options-footer reveal-on-scroll">
           <button className="options-cta" onClick={scrollToDestinations}>
@@ -709,14 +709,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* CTA flottante */}
-      <button 
-        className={`floating-cta ${isContactVisible ? 'hide' : 'show'}`}
-        onClick={scrollToContact}
-        aria-label="Vai al form contatti"
-      >
-        Richiedi Info
-      </button>
+      {/* CTA flottante rimosso - ora integrato nell'header */}
 
       {/* Sezione Statistiche e Info */}
       {/*

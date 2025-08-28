@@ -7,6 +7,9 @@ const Header = () => {
   const [isHeroVisible, setIsHeroVisible] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [activeSubMenu, setActiveSubMenu] = useState(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileMenuLevel, setMobileMenuLevel] = useState('main'); // 'main', 'destinations', 'travels'
+  const [activeTravelType, setActiveTravelType] = useState(null);
 
   // Dati delle destinazioni
   const destinations = [
@@ -79,6 +82,62 @@ const Header = () => {
   const handleSubMenuClick = (subMenu) => {
     setActiveSubMenu(activeSubMenu === subMenu ? null : subMenu);
   };
+
+  const toggleMobileMenu = () => {
+    if (!mobileMenuOpen) {
+      // Se stiamo aprendo il menu, resettiamo sempre al livello principale
+      setMobileMenuLevel('main');
+      setActiveTravelType(null);
+    }
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
+    setMobileMenuLevel('main');
+    setActiveTravelType(null);
+  };
+
+  const goToDestinations = () => {
+    setMobileMenuLevel('destinations');
+  };
+
+  const goToTravels = () => {
+    setMobileMenuLevel('travels');
+  };
+
+  const goToTravelType = (typeSlug) => {
+    setActiveTravelType(typeSlug);
+    setMobileMenuLevel('travel-destinations');
+  };
+
+  const goBackToMain = () => {
+    setMobileMenuLevel('main');
+    setActiveTravelType(null);
+  };
+
+  const goBackToTravels = () => {
+    setMobileMenuLevel('travels');
+    setActiveTravelType(null);
+  };
+
+  const scrollToContact = () => {
+    const element = document.getElementById('contact');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    // Chiudi il menu mobile se è aperto
+    if (mobileMenuOpen) {
+      closeMobileMenu();
+    }
+  };
+
+  // Chiudi menu mobile quando cambia la rotta
+  useEffect(() => {
+    setMobileMenuOpen(false);
+    setMobileMenuLevel('main');
+    setActiveTravelType(null);
+  }, [location.pathname]);
 
   return (
     <header className={`header ${location.pathname === '/' && isHeroVisible ? 'transparent' : 'solid'}`}>
@@ -163,6 +222,125 @@ const Header = () => {
             )}
           </div>
         </nav>
+
+        {/* CTA Richiedi Info - Desktop */}
+        <button className="header-cta" onClick={scrollToContact}>
+          Richiedi Info
+        </button>
+
+        {/* Burger Menu */}
+        <div className={`burger-menu ${mobileMenuOpen ? 'active' : ''}`} onClick={toggleMobileMenu}>
+          <div className="burger-line"></div>
+          <div className="burger-line"></div>
+          <div className="burger-line"></div>
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      <div className={`mobile-menu ${mobileMenuOpen ? 'active' : ''}`}>
+        <div className="mobile-nav">
+          {/* Menu principale */}
+          {mobileMenuLevel === 'main' && (
+            <>
+              <Link to="/" className={`mobile-nav-link ${isActiveSection('home') ? 'active' : ''}`} onClick={closeMobileMenu}>
+                Home
+              </Link>
+              
+              <button className="mobile-nav-link" onClick={goToDestinations}>
+                Destinazioni
+                <span className="mobile-arrow"><i className="fa-solid fa-angle-right"></i></span>
+              </button>
+              
+              <button className="mobile-nav-link" onClick={goToTravels}>
+                Viaggi
+                <span className="mobile-arrow"><i className="fa-solid fa-angle-right"></i></span>
+              </button>
+              
+              {/* CTA nel menu mobile principale */}
+              <button className="mobile-cta" onClick={scrollToContact}>
+                Richiedi Info
+              </button>
+            </>
+          )}
+
+          {/* Submenu Destinazioni */}
+          {mobileMenuLevel === 'destinations' && (
+            <>
+              <button className="mobile-nav-back" onClick={goBackToMain}>
+                <span className="back-arrow"><i className="fa-solid fa-angle-left"></i></span>
+                Destinazioni
+              </button>
+              
+              {destinations.map((dest) => (
+                <Link 
+                  key={dest.country}
+                  to={`/destination/${dest.country}`}
+                  className="mobile-submenu-item"
+                  onClick={closeMobileMenu}
+                >
+                  {dest.name}
+                </Link>
+              ))}
+              
+              {/* CTA nel submenu destinazioni */}
+              <button className="mobile-cta" onClick={scrollToContact}>
+                Richiedi Info
+              </button>
+            </>
+          )}
+
+          {/* Submenu Viaggi */}
+          {mobileMenuLevel === 'travels' && (
+            <>
+              <button className="mobile-nav-back" onClick={goBackToMain}>
+                <span className="back-arrow"><i className="fa-solid fa-angle-left"></i></span>
+                Viaggi
+              </button>
+              
+              {travelTypes.map((type) => (
+                <button 
+                  key={type.slug}
+                  className="mobile-nav-link" 
+                  onClick={() => goToTravelType(type.slug)}
+                >
+                  {type.name}
+                  <span className="mobile-arrow"><i className="fa-solid fa-angle-right"></i></span>
+                </button>
+              ))}
+              
+              {/* CTA nel submenu viaggi */}
+              <button className="mobile-cta" onClick={scrollToContact}>
+                Richiedi Info
+              </button>
+            </>
+          )}
+
+          {/* Submenu specifico tipo di viaggio */}
+          {mobileMenuLevel === 'travel-destinations' && activeTravelType && (
+            <>
+              <button className="mobile-nav-back" onClick={goBackToTravels}>
+                <span className="back-arrow"><i className="fa-solid fa-angle-left"></i></span>
+                {travelTypes.find(t => t.slug === activeTravelType)?.name}
+              </button>
+              
+              {destinations.map((dest) => (
+                <Link 
+                  key={`${activeTravelType}-${dest.country}`}
+                  to={`/travel/${activeTravelType}/${dest.country}`}
+                  className="mobile-submenu-item"
+                  onClick={closeMobileMenu}
+                >
+                  {dest.name}
+                </Link>
+              ))}
+              
+              {/* CTA nel submenu specifico */}
+              <button className="mobile-cta" onClick={scrollToContact}>
+                Richiedi Info
+              </button>
+            </>
+          )}
+        </div>
       </div>
     </header>
   );
