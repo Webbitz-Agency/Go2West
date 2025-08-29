@@ -29,30 +29,38 @@ const Header = () => {
     { name: 'Ride in Harley', slug: 'ride-harley' },
     { name: 'Tour Guidati', slug: 'tour-guidati' },
     { name: 'Luxury Travel', slug: 'luxury-travel' },
-    { name: 'Safari & Wildlife', slug: 'safari-wildlife' }
+    { name: 'Camper Adventures', slug: 'camper-adventures' }
   ];
 
   useEffect(() => {
-    // Attiva comportamento trasparente solo in home
-    if (location.pathname !== '/') {
-      setIsHeroVisible(false);
-      return;
-    }
+    // Funzione semplice per controllare se una hero section è visibile
+    const checkHeroVisibility = () => {
+      // Cerca elementi con classe 'home-hero' o 'hero-top'
+      const heroElement = document.querySelector('.home-hero, .hero-top');
+      
+      if (!heroElement) {
+        setIsHeroVisible(false);
+        return;
+      }
+      
+      // Controlla se la hero è visibile nel viewport
+      const rect = heroElement.getBoundingClientRect();
+      const isVisible = rect.top <= 0 && rect.bottom > 100;
+      
+      setIsHeroVisible(isVisible);
+    };
 
-    const hero = document.querySelector('#hero-videos');
-    if (!hero) {
-      setIsHeroVisible(false);
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => setIsHeroVisible(entry.isIntersecting));
-      },
-      { threshold: 0.35 }
-    );
-    observer.observe(hero);
-    return () => observer.disconnect();
+    // Controlla immediatamente
+    checkHeroVisibility();
+    
+    // Aggiungi listener per scroll e resize
+    window.addEventListener('scroll', checkHeroVisibility, { passive: true });
+    window.addEventListener('resize', checkHeroVisibility);
+    
+    return () => {
+      window.removeEventListener('scroll', checkHeroVisibility);
+      window.removeEventListener('resize', checkHeroVisibility);
+    };
   }, [location.pathname]);
 
   // Funzione per verificare se un menu è attivo
@@ -140,7 +148,7 @@ const Header = () => {
   }, [location.pathname]);
 
   return (
-    <header className={`header ${location.pathname === '/' && isHeroVisible ? 'transparent' : 'solid'}`}>
+    <header className={`header ${isHeroVisible ? 'transparent' : 'solid'}`}>
       <div className="container">
         <Link to="/" className="logo">
           <img src="/logo-nobg.png" alt="go2west" style={{width: '128px', height: '64px'}} className="logo-text" />

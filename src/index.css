@@ -68,7 +68,7 @@ a {
 }
 
 .cta-button:hover, .tour-button:hover, .book-now-btn:hover {
-  background: #357ABD;
+  /*background: #357ABD;*/
   transform: translateY(-2px);
 }
 

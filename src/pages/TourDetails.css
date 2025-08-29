@@ -39,10 +39,10 @@
 
 /* Tour Content */
 .tour-content {
-  display: grid;
+  display: flex;
   grid-template-columns: 2fr 1fr;
-  gap: 60px;
-  padding: 60px 0;
+  gap: 30px;
+  padding: 60px 35px;
 }
 
 .tour-main {

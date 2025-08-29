@@ -109,7 +109,7 @@
 }
 
 /* Sezione Hero Video */
-.hero-videos {
+.home-hero {
   position: relative;
   width: 100%;
   height: 100vh;
@@ -122,18 +122,16 @@
   background: #ffffff; /* fallback per il video */
 }
 
-.hero-video {
+.home-hero-video {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   filter: brightness(0.9);
-  /*border-radius: 0 0 20px 20px;*/
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
 }
 
-.hero-overlay {
+.home-hero-overlay {
   position: absolute;
   inset: 0;
   background: radial-gradient(ellipse at center, rgba(0,0,0,0.15), rgba(0,0,0,0.35));
@@ -141,7 +139,7 @@
 }
 
 /* Contenuti sovrapposti all'hero */
-.hero-content {
+.home-hero-content {
   position: absolute;
   inset: 0;
   display: flex;
@@ -151,13 +149,14 @@
   text-align: center;
   padding: 0 clamp(20px, 5vw, 24px);
   gap: clamp(12px, 3vw, 18px);
-  pointer-events: none; /* evita cattura eventi durante lo scroll */
+  pointer-events: none;
 }
 
-.hero-content .hero-actions { pointer-events: auto; }
+.home-hero-content .home-hero-text,
+.home-hero-content .home-hero-actions { pointer-events: auto; }
 
 /* Stato fixed centrato quando la sezione è in viewport */
-.hero-content.is-fixed {
+.home-hero-content.is-fixed {
   position: fixed;
   left: 0;
   right: 0;
@@ -166,60 +165,64 @@
   height: auto;
 }
 
-.hero-content.fade-out { opacity: 0; transition: opacity 350ms ease; }
-.hero-content:not(.fade-out) { opacity: 1; transition: opacity 350ms ease; }
+.home-hero-content.fade-out { opacity: 0; transition: opacity 350ms ease; }
+.home-hero-content:not(.fade-out) { opacity: 1; transition: opacity 350ms ease; }
 
-.hero-title {
+.home-hero-title {
   color: #fff;
-  font-size: clamp(1.8rem, 5vw, 2.5rem);
+  font-size: clamp(2.5rem, 6vw, 3.5rem);
   line-height: 1.2;
   text-shadow: 0 6px 24px rgba(0,0,0,0.35);
   font-weight: 500;
   max-width: 90vw;
   margin: 0 auto;
+  font-family: 'DM Serif Text', serif;
 }
 
-.hero-subtitle {
+.home-hero-subtitle {
   color: rgba(255,255,255,0.95);
   font-weight: 500;
   text-shadow: 0 2px 14px rgba(0,0,0,0.35);
-  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  font-size: clamp(1.1rem, 2.8vw, 1.4rem);
   max-width: 85vw;
   margin: 0 auto;
+  line-height: 1.6;
 }
 
-.hero-actions {
+.home-hero-actions {
   display: flex;
-  gap: 12px;
-  margin-top: 6px;
+  flex-direction: column;
+  gap: clamp(12px, 3vw, 16px);
+  align-items: center;
 }
 
-.hero-cta {
-  background: linear-gradient(45deg, #4facfe, #00f2fe);
+.home-hero-cta {
+  background: linear-gradient(45deg, #ff6b6b, #ee5a24);
   color: white;
   border: none;
-  padding: clamp(10px, 2vw, 14px) clamp(16px, 3vw, 24px);
-  border-radius: 999px;
+  padding: clamp(12px, 3vw, 16px) clamp(24px, 5vw, 32px);
+  border-radius: 50px;
   font-weight: 600;
-  letter-spacing: 0.5px;
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
   cursor: pointer;
-  box-shadow: 0 10px 28px rgba(79,172,254,0.35);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
-  font-size: clamp(0.9rem, 2.2vw, 1rem);
-  min-width: fit-content;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+  letter-spacing: 0.3px;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
 }
 
-.hero-cta:hover { transform: translateY(-2px); box-shadow: 0 14px 36px rgba(79,172,254,0.45); }
-
-.hero-cta.ghost {
-  background: rgba(255,255,255,0.12);
-  border: 1px solid rgba(255,255,255,0.6);
-  box-shadow: 0 10px 28px rgba(0,0,0,0.15);
+.home-hero-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
 }
 
-.hero-cta.ghost:hover {
-  background: rgba(255,255,255,0.2);
+.home-hero-cta:active {
+  transform: translateY(0);
 }
+
+
 
 /* Intro Section */
 .intro-section {
@@ -294,7 +297,7 @@
   }
   
   /* Assicuriamoci che su mobile il video sia sempre full height */
-  .hero-videos {
+  .home-hero {
     height: 100vh;
     min-height: 100vh;
   }
@@ -318,7 +321,7 @@
 
 /* Landscape mobile - altezza ridotta per schermi orizzontali */
 @media (max-height: 500px) and (orientation: landscape) {
-  .hero-videos {
+  .home-hero {
     height: 100vh;
     min-height: 100vh;
   }
@@ -2087,7 +2090,7 @@
 }
 
 @media (max-width: 768px) {
-  .hero-videos { height: 100vh; min-height: 320px; }
+  .hero-top { height: 100vh; min-height: 320px; }
   
   .mosaic-destinations {
     padding: 30px 5% 50px;

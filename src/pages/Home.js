@@ -419,29 +419,26 @@ const Home = () => {
   return (
     <div className="home">
       {/* Sezione Hero Video */}
-      <section ref={heroSectionRef} id="hero-videos" className="hero-videos" aria-label="Video introduttivi">
+      <section ref={heroSectionRef} id="hero-videos" className="home-hero" aria-label="Video introduttivi">
         <video
           key={currentHeroIndex}
-          className="hero-video"
+          className="home-hero-video"
           src={heroVideos[currentHeroIndex]}
           autoPlay
           muted
           playsInline
           onEnded={() => setCurrentHeroIndex((prev) => (prev + 1) % heroVideos.length)}
         />
-        <div className="hero-overlay" />
-        <div className={`hero-content ${isHeroFixed ? 'is-fixed' : ''} ${isHeroFaded ? 'fade-out' : ''}`}>
-          <div className="hero-text">
-            <h1 className="hero-title">Viaggi su misura, emozioni autentiche</h1>
-            <p className="hero-subtitle">Scopri le nostre destinazioni d'eccellenza in tutto il mondo</p>
+        <div className="home-hero-overlay" />
+        <div className={`home-hero-content ${isHeroFixed ? 'is-fixed' : ''} ${isHeroFaded ? 'fade-out' : ''}`}>
+          <div className="home-hero-text">
+            <h1 className="home-hero-title">Viaggi su misura, emozioni autentiche</h1>
+            <p className="home-hero-subtitle">Scopri le nostre destinazioni d'eccellenza in tutto il mondo</p>
           </div>
-          <div ref={heroActionsRef} className="hero-actions">
-            <button className="hero-cta" onClick={scrollToDestinations}>
+          <div ref={heroActionsRef} className="home-hero-actions">
+            <button className="home-hero-cta" onClick={scrollToDestinations}>
               Scopri Destinazioni
             </button>
-            {/*<button className="hero-cta ghost" onClick={scrollToContact}>
-              Richiedi Info
-            </button>*/}
           </div>
         </div>
       </section>
