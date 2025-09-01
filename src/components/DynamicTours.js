@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import TourService from '../services/TourService';
 import './DynamicTours.css';
@@ -12,16 +12,21 @@ const DynamicTours = ({ type, country, limit = 6, showFilters = false }) => {
   const [selectedDuration, setSelectedDuration] = useState('all');
   const [selectedPrice, setSelectedPrice] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
+
+  // Ref per mantenere il focus sulla searchbar
+  const searchInputRef = useRef(null);
+  const debounceTimeoutRef = useRef(null);
 
   // Tipi di tour disponibili
   const tourTypes = [
-    { name: 'Tutti i Tour', value: 'all', icon: '🌍' },
-    { name: 'Tour Guidati', value: 'tour', icon: '🗺️' },
-    { name: 'Fly & Drive', value: 'fly-drive', icon: '✈️' },
-    { name: 'Safari', value: 'safari', icon: '🦁' },
-    { name: 'Crociere', value: 'cruise', icon: '🚢' },
-    { name: 'Avventura', value: 'adventure', icon: '🏔️' },
-    { name: 'Motorcycle', value: 'motorcycle', icon: '🏍️' }
+    { name: 'Tutti i Tour', value: 'all' },
+    { name: 'Tour Guidati', value: 'tour' },
+    { name: 'Fly & Drive', value: 'fly-drive' },
+    { name: 'Safari', value: 'safari' },
+    { name: 'Crociere', value: 'cruise' },
+    { name: 'Avventura', value: 'adventure' },
+    { name: 'Motorcycle', value: 'motorcycle' }
   ];
 
   // Filtri durata
@@ -42,6 +47,23 @@ const DynamicTours = ({ type, country, limit = 6, showFilters = false }) => {
     { name: '€2000+', value: '2000+' }
   ];
 
+  // Debounce per la ricerca
+  useEffect(() => {
+    if (debounceTimeoutRef.current) {
+      clearTimeout(debounceTimeoutRef.current);
+    }
+
+    debounceTimeoutRef.current = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 300); // 300ms di delay
+
+    return () => {
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
+    };
+  }, [searchQuery]);
+
   useEffect(() => {
     const fetchTours = async () => {
       try {
@@ -49,16 +71,12 @@ const DynamicTours = ({ type, country, limit = 6, showFilters = false }) => {
         let data;
         
         if (country && selectedType !== 'all') {
-          // Filtra per paese e tipo specifico
           data = await TourService.getToursByCountryAndType(country, selectedType);
         } else if (country) {
-          // Filtra solo per paese (quando selectedType è 'all')
           data = await TourService.getToursByCountry(country);
         } else if (selectedType && selectedType !== 'all') {
-          // Filtra solo per tipo (quando non c'è country)
           data = await TourService.getToursByType(selectedType);
         } else {
-          // Tutti i tour
           data = await TourService.getAllTours();
         }
         
@@ -93,15 +111,14 @@ const DynamicTours = ({ type, country, limit = 6, showFilters = false }) => {
           });
         }
 
-        // Filtro per ricerca
-        if (searchQuery.trim()) {
+        // Filtro per ricerca (usa il valore debounced)
+        if (debouncedSearchQuery.trim()) {
           filteredData = filteredData.filter(tour => 
-            tour.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            tour.description.toLowerCase().includes(searchQuery.toLowerCase())
+            tour.title.toLowerCase().includes(debouncedSearchQuery.toLowerCase()) ||
+            tour.description.toLowerCase().includes(debouncedSearchQuery.toLowerCase())
           );
         }
         
-        // Limita il numero di risultati
         setTours(filteredData.slice(0, limit));
       } catch (err) {
         setError('Errore nel caricamento dei tour: ' + err.message);
@@ -111,7 +128,7 @@ const DynamicTours = ({ type, country, limit = 6, showFilters = false }) => {
     };
 
     fetchTours();
-  }, [type, country, limit, selectedType, selectedDuration, selectedPrice, searchQuery]);
+  }, [type, country, limit, selectedType, selectedDuration, selectedPrice, debouncedSearchQuery]);
 
   const clearAllFilters = () => {
     setSelectedType('all');
@@ -125,10 +142,7 @@ const DynamicTours = ({ type, country, limit = 6, showFilters = false }) => {
   if (loading) {
     return (
       <div className="dynamic-tours-loading">
-        <div className="loading-spinner">
-          <div className="spinner"></div>
-          <p>Caricamento tour...</p>
-        </div>
+        <div className="loading">Caricamento tour...</div>
       </div>
     );
   }
@@ -136,10 +150,7 @@ const DynamicTours = ({ type, country, limit = 6, showFilters = false }) => {
   if (error) {
     return (
       <div className="dynamic-tours-error">
-        <div className="error-message">
-          <span className="error-icon">⚠️</span>
-          {error}
-        </div>
+        <div className="error-message">{error}</div>
       </div>
     );
   }
@@ -147,12 +158,12 @@ const DynamicTours = ({ type, country, limit = 6, showFilters = false }) => {
   return (
     <div className="dynamic-tours">
       {showFilters && (
-        <div className="modern-filters-section">
+        <div className="filters-section">
           {/* Barra di ricerca */}
-          <div className="search-bar-container">
+          <div className="search-container">
             <div className="search-input-wrapper">
-              <span className="search-icon">🔍</span>
               <input
+                ref={searchInputRef}
                 type="text"
                 placeholder="Cerca tour, destinazioni, esperienze..."
                 value={searchQuery}
@@ -170,66 +181,52 @@ const DynamicTours = ({ type, country, limit = 6, showFilters = false }) => {
             </div>
           </div>
 
-          {/* Filtri principali */}
-          <div className="filters-container">
-            <div className="filter-group">
-              <h3 className="filter-group-title">Tipo di Viaggio</h3>
-              <div className="filter-buttons">
+          {/* Filtri a tendina su una riga */}
+          <div className="dropdown-filters">
+            <div className="filter-dropdown">
+              <select 
+                value={selectedType} 
+                onChange={(e) => setSelectedType(e.target.value)}
+                className="filter-select"
+              >
                 {tourTypes.map((tourType) => (
-                  <button
-                    key={tourType.value}
-                    className={`filter-btn ${selectedType === tourType.value ? 'active' : ''}`}
-                    onClick={() => setSelectedType(tourType.value)}
-                  >
-                    <span className="filter-icon">{tourType.icon}</span>
-                    <span className="filter-text">{tourType.name}</span>
-                  </button>
+                  <option key={tourType.value} value={tourType.value}>
+                    {tourType.name}
+                  </option>
                 ))}
-              </div>
+              </select>
             </div>
 
-            <div className="filter-group">
-              <h3 className="filter-group-title">Durata</h3>
-              <div className="filter-buttons">
+            <div className="filter-dropdown">
+              <select 
+                value={selectedDuration} 
+                onChange={(e) => setSelectedDuration(e.target.value)}
+                className="filter-select"
+              >
                 {durationFilters.map((duration) => (
-                  <button
-                    key={duration.value}
-                    className={`filter-btn ${selectedDuration === duration.value ? 'active' : ''}`}
-                    onClick={() => setSelectedDuration(duration.value)}
-                  >
+                  <option key={duration.value} value={duration.value}>
                     {duration.name}
-                  </button>
+                  </option>
                 ))}
-              </div>
+              </select>
             </div>
 
-            <div className="filter-group">
-              <h3 className="filter-group-title">Fascia di Prezzo</h3>
-              <div className="filter-buttons">
+            <div className="filter-dropdown">
+              <select 
+                value={selectedPrice} 
+                onChange={(e) => setSelectedPrice(e.target.value)}
+                className="filter-select"
+              >
                 {priceFilters.map((price) => (
-                  <button
-                    key={price.value}
-                    className={`filter-btn ${selectedPrice === price.value ? 'active' : ''}`}
-                    onClick={() => setSelectedPrice(price.value)}
-                  >
+                  <option key={price.value} value={price.value}>
                     {price.name}
-                  </button>
+                  </option>
                 ))}
-              </div>
+              </select>
             </div>
-          </div>
 
-          {/* Contatore risultati e pulsante reset */}
-          <div className="results-header">
-            <div className="results-counter">
-              <span className="results-number">{tours.length}</span>
-              <span className="results-text">
-                {tours.length === 1 ? 'tour trovato' : 'tour trovati'}
-              </span>
-            </div>
             {hasActiveFilters && (
               <button onClick={clearAllFilters} className="clear-filters-btn">
-                <span className="clear-icon">🔄</span>
                 Cancella Filtri
               </button>
             )}
@@ -239,58 +236,28 @@ const DynamicTours = ({ type, country, limit = 6, showFilters = false }) => {
       
       {/* Grid dei tour */}
       <div className="tours-grid">
-        {tours.map((tour, index) => (
-          <div key={tour.id} className={`modern-tour-card ${index % 2 === 0 ? 'even' : 'odd'}`}>
+        {tours.map((tour) => (
+          <div key={tour.id} className="tour-card">
             <div className="tour-card-image">
               <img 
                 src={tour.mainImage || '/images/placeholder.jpg'} 
                 alt={tour.title} 
               />
-              <div className="tour-card-overlay">
-                <div className="tour-card-badge">
-                  <span className="badge-icon">⭐</span>
-                  <span className="badge-text">Popolare</span>
-                </div>
-              </div>
             </div>
             <div className="tour-card-content">
-              <div className="tour-card-header">
-                <h3 className="tour-card-title">{tour.title}</h3>
-                <div className="tour-card-rating">
-                  <span className="stars">★★★★★</span>
-                  <span className="rating-text">5.0</span>
-                </div>
-              </div>
-              
+              <h3 className="tour-card-title">{tour.title}</h3>
               <p className="tour-card-description">{tour.description}</p>
               
-              <div className="tour-card-features">
-                <div className="feature-item">
-                  <span className="feature-icon">🗓️</span>
-                  <span className="feature-text">
-                    {tour.duration ? `${tour.duration} giorni` : 'Durata variabile'}
-                  </span>
+              <div className="tour-card-details">
+                <div className="tour-duration">
+                  {tour.duration ? `${tour.duration} giorni` : 'Durata variabile'}
                 </div>
-                <div className="feature-item">
-                  <span className="feature-icon">👥</span>
-                  <span className="feature-text">Gruppo piccolo</span>
-                </div>
-                <div className="feature-item">
-                  <span className="feature-icon">🏨</span>
-                  <span className="feature-text">Hotel inclusi</span>
-                </div>
+                <div className="tour-price">€ {tour.price}</div>
               </div>
               
-              <div className="tour-card-footer">
-                <div className="tour-card-price">
-                  <span className="price-label">A partire da</span>
-                  <span className="price-amount">€ {tour.price}</span>
-                </div>
-                <Link to={`/tour/${tour.slug}`} className="tour-card-button">
-                  <span className="button-text">Scopri Viaggio</span>
-                  <span className="button-icon">→</span>
-                </Link>
-              </div>
+              <Link to={`/tour/${tour.slug}`} className="tour-card-button">
+                Scopri Viaggio
+              </Link>
             </div>
           </div>
         ))}
@@ -298,7 +265,6 @@ const DynamicTours = ({ type, country, limit = 6, showFilters = false }) => {
 
       {tours.length === 0 && (
         <div className="no-results">
-          <div className="no-results-icon">🔍</div>
           <h3>Nessun tour trovato</h3>
           <p>Prova a modificare i filtri o la ricerca per trovare altri tour disponibili.</p>
           <button onClick={clearAllFilters} className="reset-filters-btn">

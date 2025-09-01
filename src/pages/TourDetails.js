@@ -54,61 +54,52 @@ const TourDetails = () => {
     <div className="tour-details">
       {/* Hero Section */}
       <section className="tour-hero">
-        <div className="container">
-          <h1>{tour.title}</h1>
-          <p>{tour.description}</p>
-          <div className="tour-meta">
-            <span className="tour-country">{tour.country}</span>
-            <span className="tour-type">{tour.type}</span>
-            {tour.duration && <span className="tour-duration">{tour.duration} giorni</span>}
+        <div className="hero-background">
+          {tour.mainImage && <img src={tour.mainImage} alt={tour.title} />}
+          <div className="hero-overlay"></div>
+        </div>
+        <div className="hero-content">
+          <div className="container">
+            <h1 className="hero-title">{tour.title}</h1>
+            <p className="hero-description">{tour.description}</p>
+            <div className="hero-meta">
+              <span className="meta-item">{tour.country}</span>
+              <span className="meta-item">{tour.type}</span>
+              {tour.duration && <span className="meta-item">{tour.duration} giorni</span>}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Tour Images */}
-      {tour.mainImage && (
-        <section className="tour-gallery">
-          <div className="container">
-            <div className="gallery-grid">
-              <div className="gallery-item main-image">
-                <img src={tour.mainImage} alt={tour.title} />
-              </div>
-              {tour.images && tour.images.length > 0 && tour.images.map((image, index) => (
-                <div key={index} className="gallery-item">
-                  <img src={image} alt={`${tour.title} - Immagine ${index + 2}`} />
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
       <div className="container">
         <div className="tour-content">
-          {/* Left Column */}
+          {/* Left Column - Main Content */}
           <div className="tour-main">
             {/* Tour Highlights */}
             {tour.highlights && tour.highlights.length > 0 && (
-              <section className="tour-highlights">
-                <h2>Punti Salienti</h2>
-                <ul>
+              <section className="tour-section">
+                <h2 className="section-title">Punti Salienti</h2>
+                <div className="highlights-grid">
                   {tour.highlights.map((highlight, index) => (
-                    <li key={index}>{highlight}</li>
+                    <div key={index} className="highlight-item">
+                      <span className="highlight-icon">✓</span>
+                      <span className="highlight-text">{highlight}</span>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </section>
             )}
 
             {/* Itinerary */}
             {tour.itinerary && tour.itinerary.length > 0 && (
-              <section className="itinerary">
-                <h2>Itinerario</h2>
+              <section className="tour-section">
+                <h2 className="section-title">Itinerario</h2>
                 <div className="itinerary-list">
                   {tour.itinerary.map((item, index) => (
                     <div key={index} className="itinerary-item">
-                      <div className="day-number">Giorno {index + 1}</div>
-                      <div className="activity-content">
-                        <h3>{item}</h3>
+                      <div className="day-badge">Giorno {index + 1}</div>
+                      <div className="day-content">
+                        <h3 className="day-title">{item}</h3>
                       </div>
                     </div>
                   ))}
@@ -118,68 +109,82 @@ const TourDetails = () => {
 
             {/* Inclusions */}
             {tour.included && tour.included.length > 0 && (
-              <section className="inclusions">
-                <h2>Servizi Inclusi</h2>
-                <ul>
+              <section className="tour-section">
+                <h2 className="section-title">Servizi Inclusi</h2>
+                <div className="inclusions-list">
                   {tour.included.map((inclusion, index) => (
-                    <li key={index}><i className="fas fa-check"></i> {inclusion}</li>
+                    <div key={index} className="inclusion-item">
+                      <span className="inclusion-icon">✓</span>
+                      <span className="inclusion-text">{inclusion}</span>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </section>
             )}
 
             {/* Exclusions */}
             {tour.notIncluded && tour.notIncluded.length > 0 && (
-              <section className="exclusions">
-                <h2>Servizi Non Inclusi</h2>
-                <ul>
+              <section className="tour-section">
+                <h2 className="section-title">Servizi Non Inclusi</h2>
+                <div className="exclusions-list">
                   {tour.notIncluded.map((exclusion, index) => (
-                    <li key={index}><i className="fas fa-times"></i> {exclusion}</li>
+                    <div key={index} className="exclusion-item">
+                      <span className="exclusion-icon">✗</span>
+                      <span className="exclusion-text">{exclusion}</span>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </section>
             )}
 
             {/* Notes */}
             {tour.notes && (
-              <section className="notes">
-                <h2>Note Importanti</h2>
-                <p>{tour.notes}</p>
+              <section className="tour-section">
+                <h2 className="section-title">Note Importanti</h2>
+                <div className="notes-content">
+                  <p>{tour.notes}</p>
+                </div>
               </section>
             )}
           </div>
 
-          {/* Right Column - Pricing */}
+          {/* Right Column - Sidebar */}
           <div className="tour-sidebar">
+            {/* Pricing Card */}
             <div className="pricing-card">
-              <h2>Prezzo</h2>
-              <div className="price">
-                <span className="price-amount">€ {tour.price}</span>
-                <span className="price-per">per persona</span>
+              <div className="price-header">
+                <h3 className="price-title">Prezzo</h3>
+                <div className="price-amount">€ {tour.price}</div>
+                <div className="price-per">per persona</div>
               </div>
-              <p className="price-note">
-                Prezzo a partire da € {tour.price} per persona. Supplemento singola disponibile. 
-                Contattaci per prezzi di gruppo e opzioni di personalizzazione.
-              </p>
-              <button className="book-now-btn">Prenota Ora</button>
+              <div className="price-note">
+                Prezzo a partire da € {tour.price} per persona. Supplemento singola disponibile.
+              </div>
+              <button className="book-button">Prenota Ora</button>
             </div>
 
-            {/* Tour Info */}
-            <div className="tour-info-card">
-              <h3>Informazioni Tour</h3>
-              <div className="info-item">
-                <strong>Destinazione:</strong> {tour.country}
-              </div>
-              <div className="info-item">
-                <strong>Tipo:</strong> {tour.type}
-              </div>
-              {tour.duration && (
+            {/* Tour Info Card */}
+            <div className="info-card">
+              <h3 className="info-title">Informazioni Tour</h3>
+              <div className="info-list">
                 <div className="info-item">
-                  <strong>Durata:</strong> {tour.duration} giorni
+                  <span className="info-label">Destinazione:</span>
+                  <span className="info-value">{tour.country}</span>
                 </div>
-              )}
-              <div className="info-item">
-                <strong>Codice Tour:</strong> {tour.slug}
+                <div className="info-item">
+                  <span className="info-label">Tipo:</span>
+                  <span className="info-value">{tour.type}</span>
+                </div>
+                {tour.duration && (
+                  <div className="info-item">
+                    <span className="info-label">Durata:</span>
+                    <span className="info-value">{tour.duration} giorni</span>
+                  </div>
+                )}
+                <div className="info-item">
+                  <span className="info-label">Codice:</span>
+                  <span className="info-value">{tour.slug}</span>
+                </div>
               </div>
             </div>
           </div>
