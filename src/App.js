@@ -8,6 +8,7 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import DestinationTours from './pages/DestinationTours';
 import TourDetails from './pages/TourDetails';
+import Admin from './pages/Admin';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path="/destination/:country" element={<DestinationTours />} />
             <Route path="/travel/:type/:country" element={<DestinationTours />} />
             <Route path="/tour/:tourId" element={<TourDetails />} />
+            <Route path="/admin" element={<Admin />} />
           </Routes>
         </main>
         <Footer />

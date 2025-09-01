@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import DynamicTours from '../components/DynamicTours';
 import './Home.css';
 
 const Home = () => {
@@ -11,9 +12,6 @@ const Home = () => {
   
   // Stato per il carousel showcase
   const [showcaseIndex, setShowcaseIndex] = useState(0);
-
-  // Stato per il carousel suggerimenti
-  const [suggestionCarouselIndex, setSuggestionCarouselIndex] = useState(0);
 
   // Riferimento e stato visibilità form contatti
   const contactRef = useRef(null);
@@ -144,76 +142,6 @@ const Home = () => {
     }
   ];
 
-  // Proposte di viaggio creative
-  const travelSuggestions = [
-    {
-      id: 1,
-      type: 'City Break',
-      typeSlug: 'city-breaks',
-      title: 'New York da Film',
-      description: 'Vivi la Grande Mela come nei film: grattacieli iconici, Broadway e Central Park in un weekend indimenticabile',
-      image: '/images/city.jpg',
-      duration: '4 giorni',
-      price: '€ 890',
-      destination: 'usa'
-    },
-    {
-      id: 2,
-      type: 'Ride in Harley',
-      typeSlug: 'ride-harley',
-      title: 'Route 66 in Libertà',
-      description: 'Percorri la strada più famosa d\'America su una Harley Davidson, da Chicago a Los Angeles',
-      image: '/images/ride_in_harley.jpg',
-      duration: '12 giorni',
-      price: '€ 2.890',
-      destination: 'usa'
-    },
-    {
-      id: 3,
-      type: 'Fly & Drive',
-      typeSlug: 'fly-drive',
-      title: 'Coast to Coast Canada',
-      description: 'Dalle Montagne Rocciose all\'Oceano Atlantico, un viaggio epico attraverso il Canada selvaggio',
-      image: '/images/drive.jpg',
-      duration: '15 giorni',
-      price: '€ 1.990',
-      destination: 'canada'
-    },
-    {
-      id: 4,
-      type: 'Luxury Travel',
-      typeSlug: 'luxury-travel',
-      title: 'Polinesia Esclusiva',
-      description: 'Overwater bungalow e lagune turchesi in un paradiso tropicale riservato a pochi',
-      image: '/images/polinesia.jpg',
-      duration: '8 giorni',
-      price: '€ 4.500',
-      destination: 'polinesia-francese'
-    },
-    {
-      id: 5,
-      type: 'Tour Guidati',
-      typeSlug: 'tour-guidati',
-      title: 'Tesori del Messico',
-      description: 'Dalle piramidi Maya alle spiagge di Tulum, scopri la cultura millenaria messicana',
-      image: '/images/mexico.jpg',
-      duration: '10 giorni',
-      price: '€ 1.650',
-      destination: 'messico'
-    },
-    {
-      id: 6,
-      type: 'Safari & Wildlife',
-      typeSlug: 'safari-wildlife',
-      title: 'Avventura Costaricana',
-      description: 'Vulcani attivi, foreste pluviali e wildlife unico nel cuore dell\'America Centrale',
-      image: '/images/tour.jpg',
-      duration: '9 giorni',
-      price: '€ 2.200',
-      destination: 'america-centrale'
-    }
-  ];
-
   // Inizializza le chiavi per gli indici immagini in base alle destinazioni
   useEffect(() => {
     setCurrentImageIndex(prev => {
@@ -337,31 +265,6 @@ const Home = () => {
     for (let i = 0; i < 3; i++) {
       const index = (destinationCarouselIndex + i) % destinations.length;
       result.push(destinations[index]);
-    }
-    return result;
-  };
-
-  // Funzioni per il carousel suggerimenti
-  const maxIndex = travelSuggestions.length - 3; // Ultima posizione valida (per mostrare le ultime 3)
-  
-  const nextSuggestions = () => {
-    setSuggestionCarouselIndex(prev => 
-      prev >= maxIndex ? 0 : prev + 1
-    );
-  };
-
-  const prevSuggestions = () => {
-    setSuggestionCarouselIndex(prev => 
-      prev === 0 ? maxIndex : prev - 1
-    );
-  };
-
-  // Ottenere le 3 proposte correnti per il carousel
-  const getCurrentSuggestions = () => {
-    const result = [];
-    for (let i = 0; i < 3; i++) {
-      const index = (suggestionCarouselIndex + i) % travelSuggestions.length;
-      result.push(travelSuggestions[index]);
     }
     return result;
   };
@@ -589,7 +492,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Sezione I nostri suggerimenti - Nuove Proposte di Viaggio */}
+      {/* Sezione I nostri suggerimenti - Tour Dinamici dal Backend */}
       <section id="all-destinations" className="suggestions-section">
         <div className="section-header">
           <h2>Viaggi su misura</h2>
@@ -597,59 +500,7 @@ const Home = () => {
         </div>
 
         <div className="suggestions-container">
-          <div className="suggestions-carousel-wrapper">
-            <div className="suggestions-carousel-content">
-              {getCurrentSuggestions().map((suggestion, position) => (
-                <div 
-                  key={`${suggestion.id}-${suggestionCarouselIndex}`}
-                  className={`suggestion-card ${position === 1 ? 'featured' : ''}`}
-                  style={{ 
-                    backgroundImage: `url('${suggestion.image}')`,
-                    transition: 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)'
-                  }}
-                >
-                  <div className="suggestion-overlay" />
-                  <div className="suggestion-content">
-                    <div className="suggestion-tag">{suggestion.type}</div>
-                    <h3 className="suggestion-title">{suggestion.title}</h3>
-                    <p className="suggestion-description">{suggestion.description}</p>
-                    <div className="suggestion-details">
-                      <span className="suggestion-duration">{suggestion.duration}</span>
-                      <span className="suggestion-price">Da {suggestion.price}</span>
-                    </div>
-                    <Link to={`/travel/${suggestion.typeSlug}/${suggestion.destination}`} className="suggestion-btn">
-                      Scopri Viaggio
-                      </Link>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="suggestions-navigation">
-            <button 
-              className="suggestion-nav-btn prev-suggestion"
-              onClick={prevSuggestions}
-            >
-              <i className="fa-solid fa-angle-left"></i>
-            </button>
-          <button 
-              className="suggestion-nav-btn next-suggestion"
-              onClick={nextSuggestions}
-          >
-              <i className="fa-solid fa-angle-right"></i>
-          </button>
-        </div>
-
-          <div className="suggestions-dots">
-            {Array.from({ length: maxIndex + 1 }).map((_, index) => (
-            <span 
-              key={index}
-                className={`suggestion-dot ${index === suggestionCarouselIndex ? 'active' : ''}`}
-                onClick={() => setSuggestionCarouselIndex(index)}
-            />
-          ))}
-        </div>
+          <DynamicTours limit={6} />
         </div>
       </section>
 
