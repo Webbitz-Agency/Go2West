@@ -28,6 +28,11 @@ export class TourService {
     return await apiGet(API_CONFIG.ENDPOINTS.TOURS_BY_TYPE(type));
   }
 
+  // Ottieni tour per paese e tipo
+  static async getToursByCountryAndType(country, type) {
+    return await apiGet(API_CONFIG.ENDPOINTS.TOURS_BY_COUNTRY_AND_TYPE(country, type));
+  }
+
   // Crea un nuovo tour
   static async createTour(tourData) {
     return await apiPost(API_CONFIG.ENDPOINTS.TOURS, tourData);

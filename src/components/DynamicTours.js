@@ -17,7 +17,8 @@ const DynamicTours = ({ type, country, limit = 6, showFilters = false }) => {
     { name: 'Fly & Drive', value: 'fly-drive' },
     { name: 'Safari', value: 'safari' },
     { name: 'Crociera', value: 'cruise' },
-    { name: 'Avventura', value: 'adventure' }
+    { name: 'Avventura', value: 'adventure' },
+    { name: 'Motorcycle', value: 'motorcycle' }
   ];
 
   useEffect(() => {
@@ -26,20 +27,15 @@ const DynamicTours = ({ type, country, limit = 6, showFilters = false }) => {
         setLoading(true);
         let data;
         
-        const currentType = selectedType === 'all' ? type : selectedType;
-        
-        if (currentType && country) {
-          // Filtra per tipo e paese
-          const allTours = await TourService.getAllTours();
-          data = allTours.filter(tour => 
-            tour.type === currentType && tour.country === country
-          );
-        } else if (currentType && currentType !== 'all') {
-          // Filtra solo per tipo
-          data = await TourService.getToursByType(currentType);
+        if (country && selectedType !== 'all') {
+          // Filtra per paese e tipo specifico
+          data = await TourService.getToursByCountryAndType(country, selectedType);
         } else if (country) {
-          // Filtra solo per paese
+          // Filtra solo per paese (quando selectedType è 'all')
           data = await TourService.getToursByCountry(country);
+        } else if (selectedType && selectedType !== 'all') {
+          // Filtra solo per tipo (quando non c'è country)
+          data = await TourService.getToursByType(selectedType);
         } else {
           // Tutti i tour
           data = await TourService.getAllTours();
