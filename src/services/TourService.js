@@ -1,4 +1,5 @@
-import { apiGet, apiPost, apiPut, apiDelete, API_CONFIG } from '../config/api';
+import { apiGet, apiPost, apiPut, apiDelete } from '../config/api';
+import API_CONFIG from '../config/api';
 
 // Servizio per la gestione dei tour
 export class TourService {
