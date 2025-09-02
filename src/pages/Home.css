@@ -1349,7 +1349,7 @@
 /* Riduci padding su mobile per eliminare spazio extra */
 @media (max-width: 768px) {
   .travel-options-section {
-    padding: 40px var(--section-padding-horizontal) 20px;
+    padding: 40px var(--section-padding-horizontal) 10px; /* Ridotto da 20px a 10px */
   }
 }
 
@@ -1541,6 +1541,13 @@
   padding: 40px var(--section-padding-horizontal) 60px; 
   background: #ffffff; 
   position: relative;
+}
+
+/* Riduci padding su mobile per la sezione postcard */
+@media (max-width: 768px) {
+  .postcard-mexico {
+    padding: 40px var(--section-padding-horizontal) 20px; /* Ridotto da 60px a 20px */
+  }
 }
 
 .postcard-container {
@@ -2135,7 +2142,7 @@
   
   /* Carousel Destinazioni Responsive */
   .all-destinations-section {
-    padding: 60px 5% 80px;
+    padding: 60px 5% 40px; /* Ridotto da 80px a 40px */
   }
 
   .all-destinations-section .section-header h2 {
@@ -3352,6 +3359,14 @@
   overflow: visible; /* Rimuove il taglio */
   background: #ffffff;
   margin-bottom: 80px; /* Margine per separare dalla sezione successiva */
+  padding: 0;
+}
+
+/* Riduci margin-bottom su mobile */
+@media (max-width: 768px) {
+  .layered-section {
+    margin-bottom: 40px; /* Ridotto da 80px a 40px */
+  }
 }
 
 /* Immagine di sfondo sinistra - stretta e verticale dietro il testo */
@@ -3508,7 +3523,8 @@
     min-height: 600px;
     flex-direction: column;
     position: relative;
-    margin-top: 80px;
+    margin-top: 0;
+    padding: 0;
   }
   
   /* Nascondi l'immagine di destra su tablet */
@@ -3521,7 +3537,7 @@
     position: relative;
     left: auto;
     width: 100%;
-    height: 600px;
+    height: 100vh;
     border-radius: 20px;
     margin-bottom: 0;
     overflow: hidden;
@@ -3550,9 +3566,9 @@
   
   .layered-text-container {
     width: 85%;
-    max-width: 450px;
+    max-width: 500px;
     height: auto;
-    max-height: 400px;
+    max-height: 550px;
     margin: 0 auto;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
@@ -3567,17 +3583,18 @@
 
 @media (max-width: 768px) {
   .layered-section {
-    min-height: 500px;
-    margin-top: 70px;
+    min-height: 600px;
+    margin-top: 0; /* Ridotto drasticamente da 70px */
+    padding: 0;
   }
   
   .layered-image-bg-left {
-    height: 500px;
+    /*height: 600px; /* Aumentato da 500px */
   }
   
   .layered-image-bg-left img {
-    height: 130%;
-    transform: translateY(-15%);
+    height: 140%; /* Aumentato da 130% */
+    transform: translateY(-20%); /* Aumentato da -15% */
   }
   
   .layered-content {
@@ -3585,10 +3602,10 @@
   }
   
   .layered-text-container {
-    padding: 25px;
+    padding: 30px; /* Aumentato da 25px */
     width: 90%;
     max-width: 400px;
-    max-height: 350px;
+    max-height: 450px; /* Aumentato da 350px */
   }
   
   .layered-title {
@@ -3612,17 +3629,17 @@
 
 @media (max-width: 480px) {
   .layered-section {
-    min-height: 400px;
-    margin-top: 60px;
+    min-height: 500px; /* Aumentato da 400px */
+    margin-top: 15px; /* Ridotto da 60px */
   }
   
   .layered-image-bg-left {
-    height: 400px;
+    height: 500px; /* Aumentato da 400px */
   }
   
   .layered-image-bg-left img {
-    height: 140%;
-    transform: translateY(-20%);
+    height: 150%; /* Aumentato da 140% */
+    transform: translateY(-25%); /* Aumentato da -20% */
   }
   
   .layered-content {
@@ -3630,10 +3647,10 @@
   }
   
   .layered-text-container {
-    padding: 20px;
+    padding: 25px; /* Aumentato da 20px */
     width: 95%;
     max-width: 350px;
-    max-height: 300px;
+    max-height: 380px; /* Aumentato da 300px */
   }
   
   .layered-title {
