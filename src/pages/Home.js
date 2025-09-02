@@ -352,7 +352,7 @@ const Home = () => {
 
       {/* Sezione Intro con fade-up */}
       <section className="intro-section reveal-on-scroll" aria-label="Presentazione">
-        <div className="intro-container">
+        {/*<div className="intro-container">
           <h2 className="intro-title">Viaggiare con Go2West</h2>
           <p className="intro-text">
             Con Go2West ogni viaggio diventa un’<strong>esperienza indimenticabile</strong>. Proponiamo 
@@ -360,7 +360,7 @@ const Home = () => {
             <strong> paesaggi naturali più spettacolari</strong>, per offrirti <strong>vacanze che lasciano il segno</strong>.
             Con la nostra esperienza e passione, trasformiamo ogni destinazione in un ricordo da portare per sempre con te.
           </p>
-        </div>
+        </div>*/}
       </section>
 
       {/* Nuova Sezione Stratificata - Immagine e Testo Sovrapposti */}
@@ -373,7 +373,7 @@ const Home = () => {
         </div>
         <div className="layered-content">
           <div className="layered-text-container">
-            <h2 className="layered-title">Esplorare il mondo con passione</h2>
+            <h2 className="layered-title">Viaggiare con Go2West</h2>
             <p className="layered-text">
               Ogni destinazione racconta una storia unica, ogni viaggio è un capitolo della tua vita. 
               Con Go2West non ti limitiamo a mostrarti luoghi, ti guidiamo attraverso esperienze che 
