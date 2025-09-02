@@ -219,6 +219,10 @@ const Home = () => {
     el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
+  const navigateToNewYork = () => {
+    navigate('/destination/usa?filter=new-york');
+  };
+
   // Funzione per cambiare immagine manualmente
   const changeImage = (destination, direction) => {
     // Normalizza eventuali camelCase in kebab-case (es. northAmerica -> north-america)
@@ -359,6 +363,37 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Nuova Sezione Stratificata - Immagine e Testo Sovrapposti */}
+      <section className="layered-section" aria-label="La nostra missione">
+        <div className="layered-image-bg-left">
+          <img src="/images/ny2.jpg" alt="New York City - Skyline e grattacieli iconici" />
+        </div>
+        <div className="layered-image">
+          <img src="/images/ny1.jpg" alt="Safari in Kenya - Avventura e natura selvaggia" />
+        </div>
+        <div className="layered-content">
+          <div className="layered-text-container">
+            <h2 className="layered-title">Esplorare il mondo con passione</h2>
+            <p className="layered-text">
+              Ogni destinazione racconta una storia unica, ogni viaggio è un capitolo della tua vita. 
+              Con Go2West non ti limitiamo a mostrarti luoghi, ti guidiamo attraverso esperienze che 
+              trasformano il modo di vedere il mondo. 
+            </p>
+            <p className="layered-text-secondary">
+              Scopri la magia di New York, dove ogni angolo racconta una storia diversa. Dai grattacieli 
+              iconici di Manhattan ai quartieri bohémien di Brooklyn, dalla frenesia di Times Square alla 
+              tranquillità di Central Park. Lasciati trasportare dall'energia unica di questa città che 
+              non dorme mai.
+            </p>
+                         <div className="layered-cta">
+               <button className="layered-cta-btn" onClick={navigateToNewYork}>
+                 Esplora New York
+               </button>
+               </div>
+          </div>
+        </div>
+      </section>
+
       {/* Sezione Opzioni di Viaggio - layout a puzzle con reveal */}
       <section className="travel-options-section">
         <div className="options-header reveal-on-scroll">
@@ -415,7 +450,7 @@ const Home = () => {
           <h2 className="polynesia-hero-title">Dove i sogni diventano realtà</h2>
           <p className="polynesia-hero-subtitle">Scopri la magia della Polinesia Francese, dove ogni atollo racconta una storia di bellezza infinita</p>
           <button className="polynesia-hero-cta" onClick={scrollToDestinations}>
-            Esplora Destinazioni
+            Scopri viaggi
           </button>
         </div>
       </section>
