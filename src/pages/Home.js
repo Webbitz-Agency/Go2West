@@ -22,6 +22,7 @@ const Home = () => {
   const heroActionsRef = useRef(null);
   const [isHeroFaded, setIsHeroFaded] = useState(false);
   const [isHeroFixed, setIsHeroFixed] = useState(false);
+  const [isScrollIndicatorVisible, setIsScrollIndicatorVisible] = useState(true);
 
   // Stato e logica Modale selezione destinazione/viaggio
   const navigate = useNavigate();
@@ -80,6 +81,14 @@ const Home = () => {
       const OFFSET = 0; // px di anticipo/ritardo
       const shouldFade = sectionRect.bottom <= (actionsRect.bottom + OFFSET);
       if (shouldFade !== isHeroFaded) setIsHeroFaded(shouldFade);
+
+      // Gestisce la visibilità della freccia di scroll
+      // La freccia scompare quando si inizia a scrollare (top della sezione < 0)
+      // e riappare quando la hero è completamente visibile (top >= 0)
+      const shouldShowIndicator = sectionRect.top >= 0;
+      if (shouldShowIndicator !== isScrollIndicatorVisible) {
+        setIsScrollIndicatorVisible(shouldShowIndicator);
+      }
     };
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -88,7 +97,7 @@ const Home = () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleScroll);
     };
-  }, [isHeroFaded, isHeroFixed]);
+  }, [isHeroFaded, isHeroFixed, isScrollIndicatorVisible]);
 
   const destinations = [
     {
@@ -217,6 +226,13 @@ const Home = () => {
     const el = document.getElementById('all-destinations');
     if (!el) return;
     el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const scrollToNextSection = () => {
+    const nextSection = document.querySelector('.intro-section');
+    if (nextSection) {
+      nextSection.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   const navigateToNewYork = () => {
@@ -348,6 +364,15 @@ const Home = () => {
             </button>
           </div>
         </div>
+        
+        {/* Freccia di scroll con animazione rimbalzo */}
+        <div className={`scroll-indicator ${isScrollIndicatorVisible ? 'visible' : 'hidden'}`}>
+          <div className="scroll-arrow" onClick={scrollToNextSection}>
+            <svg width="35" height="35" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7 10L12 15L17 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </div>
+        </div>
       </section>
 
       {/* Sezione Intro con fade-up */}
@@ -363,33 +388,38 @@ const Home = () => {
         </div>*/}
       </section>
 
-      {/* Nuova Sezione Stratificata - Immagine e Testo Sovrapposti */}
-      <section className="layered-section" aria-label="La nostra missione">
-        <div className="layered-image-bg-left">
-          <img src="/images/ny2.jpg" alt="New York City - Skyline e grattacieli iconici" />
-        </div>
-        <div className="layered-image">
-          <img src="/images/ny1.jpg" alt="Safari in Kenya - Avventura e natura selvaggia" />
-        </div>
-        <div className="layered-content">
-          <div className="layered-text-container">
-            <h2 className="layered-title">Viaggiare con Go2West</h2>
-            <p className="layered-text">
+      {/* Sezione Orizzontale - Immagini e Testo sullo stesso piano */}
+      <section className="horizontal-section" aria-label="La nostra missione">
+        <div className="horizontal-container">
+          {/* Immagine sinistra - più piccola */}
+          <div className="horizontal-image-left">
+            <img src="/images/ny2.jpg" alt="New York City - Skyline e grattacieli iconici" />
+          </div>
+          
+          {/* Container di testo centrale */}
+          <div className="horizontal-text-container">
+            <h2 className="horizontal-title">Viaggiare con Go2West</h2>
+            <p className="horizontal-text">
               Ogni destinazione racconta una storia unica, ogni viaggio è un capitolo della tua vita. 
               Con Go2West non ti limitiamo a mostrarti luoghi, ti guidiamo attraverso esperienze che 
               trasformano il modo di vedere il mondo. 
             </p>
-            <p className="layered-text-secondary">
+            <p className="horizontal-text-secondary">
               Scopri la magia di New York, dove ogni angolo racconta una storia diversa. Dai grattacieli 
               iconici di Manhattan ai quartieri bohémien di Brooklyn, dalla frenesia di Times Square alla 
               tranquillità di Central Park. Lasciati trasportare dall'energia unica di questa città che 
               non dorme mai.
             </p>
-                         <div className="layered-cta">
-               <button className="layered-cta-btn" onClick={navigateToNewYork}>
-                 Esplora New York
-               </button>
-               </div>
+            <div className="horizontal-cta">
+              <button className="horizontal-cta-btn" onClick={navigateToNewYork}>
+                Esplora New York
+              </button>
+            </div>
+          </div>
+          
+          {/* Immagine destra - più grande */}
+          <div className="horizontal-image-right">
+            <img src="/images/ny1.jpg" alt="New York City - Strada urbana e architettura iconica" />
           </div>
         </div>
       </section>
@@ -545,7 +575,7 @@ const Home = () => {
           <img src="/images/pin.png" alt="" aria-hidden="true" className="contact-pin" />
           <div className="contact-header">
             <h2>Richiedi Informazioni</h2>
-            <p>Compila il form per essere ricontattato dal nostro team</p>
+            <p>Compila il form per RICEVERE INFORMAZIONI e/O essere ricontattati dal nostro team</p>
           </div>
           
           <div className="contact-bulletin-board">

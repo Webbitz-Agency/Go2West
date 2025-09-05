@@ -10,10 +10,12 @@
     "eject": "react-scripts eject"
   },
   "dependencies": {
+    "d3": "^7.9.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.8.0",
-    "react-scripts": "5.0.1"
+    "react-scripts": "5.0.1",
+    "topojson-client": "^3.1.0"
   },
   "browserslist": {
     "production": [
@@ -27,4 +29,4 @@
       "last 1 safari version"
     ]
   }
-} 
+}
