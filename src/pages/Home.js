@@ -31,6 +31,10 @@ const Home = () => {
   const [selectedCountry, setSelectedCountry] = useState('');
   const [pendingTravelType, setPendingTravelType] = useState('');
 
+  // Stati per i caroselli della sezione orizzontale
+  const [currentLeftImage, setCurrentLeftImage] = useState(0);
+  const [currentRightImage, setCurrentRightImage] = useState(0);
+
   const openTravelModal = (travelTypeSlug) => {
     setPendingTravelType(travelTypeSlug);
     setSelectedTravelType(travelTypeSlug);
@@ -98,6 +102,26 @@ const Home = () => {
       window.removeEventListener('resize', handleScroll);
     };
   }, [isHeroFaded, isHeroFixed, isScrollIndicatorVisible]);
+
+  // Array delle immagini per i caroselli della sezione orizzontale
+  const leftImages = ['ny2.jpg', 'ny5.jpg', 'ny6.jpg', 'ny7.jpg'];
+  const rightImages = ['ny1.jpg', 'ny3.jpg', 'ny4.jpg', 'city.jpg'];
+
+  // Auto-scroll per i caroselli della sezione orizzontale
+  useEffect(() => {
+    const leftInterval = setInterval(() => {
+      setCurrentLeftImage(prev => (prev + 1) % leftImages.length);
+    }, 4000);
+
+    const rightInterval = setInterval(() => {
+      setCurrentRightImage(prev => (prev + 1) % rightImages.length);
+    }, 5000);
+
+    return () => {
+      clearInterval(leftInterval);
+      clearInterval(rightInterval);
+    };
+  }, [leftImages.length, rightImages.length]);
 
   const destinations = [
     {
@@ -289,6 +313,24 @@ const Home = () => {
     return result;
   };
 
+
+  // Funzioni per i caroselli della sezione orizzontale
+  const nextLeftImage = () => {
+    setCurrentLeftImage(prev => (prev + 1) % leftImages.length);
+  };
+
+  const prevLeftImage = () => {
+    setCurrentLeftImage(prev => prev === 0 ? leftImages.length - 1 : prev - 1);
+  };
+
+  const nextRightImage = () => {
+    setCurrentRightImage(prev => (prev + 1) % rightImages.length);
+  };
+
+  const prevRightImage = () => {
+    setCurrentRightImage(prev => prev === 0 ? rightImages.length - 1 : prev - 1);
+  };
+
   // Componente Carousel personalizzato per le immagini
   const ImageCarousel = ({ images, destination, className = "", showControls = true }) => {
     const currentIndex = currentImageIndex[destination] || 0;
@@ -391,9 +433,30 @@ const Home = () => {
       {/* Sezione Orizzontale - Immagini e Testo sullo stesso piano */}
       <section className="horizontal-section" aria-label="La nostra missione">
         <div className="horizontal-container">
-          {/* Immagine sinistra - più piccola */}
+          {/* Carosello immagine sinistra - più piccola */}
           <div className="horizontal-image-left">
-            <img src="/images/ny2.jpg" alt="New York City - Skyline e grattacieli iconici" />
+            <div className="horizontal-carousel">
+              <div className="carousel-container">
+                {leftImages.map((image, index) => (
+                  <img
+                    key={index}
+                    src={`/images/${image}`}
+                    alt={`New York City - Immagine ${index + 1}`}
+                    className={`carousel-image ${index === currentLeftImage ? 'active' : ''}`}
+                  />
+                ))}
+              </div>
+              
+              <div className="carousel-indicators">
+                {leftImages.map((_, index) => (
+                  <span
+                    key={index}
+                    className={`indicator ${index === currentLeftImage ? 'active' : ''}`}
+                    onClick={() => setCurrentLeftImage(index)}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
           
           {/* Container di testo centrale */}
@@ -417,9 +480,30 @@ const Home = () => {
             </div>
           </div>
           
-          {/* Immagine destra - più grande */}
+          {/* Carosello immagine destra - più grande */}
           <div className="horizontal-image-right">
-            <img src="/images/ny1.jpg" alt="New York City - Strada urbana e architettura iconica" />
+            <div className="horizontal-carousel">
+              <div className="carousel-container">
+                {rightImages.map((image, index) => (
+                  <img
+                    key={index}
+                    src={`/images/${image}`}
+                    alt={`New York City - Immagine ${index + 1}`}
+                    className={`carousel-image ${index === currentRightImage ? 'active' : ''}`}
+                  />
+                ))}
+              </div>
+              
+              <div className="carousel-indicators">
+                {rightImages.map((_, index) => (
+                  <span
+                    key={index}
+                    className={`indicator ${index === currentRightImage ? 'active' : ''}`}
+                    onClick={() => setCurrentRightImage(index)}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
