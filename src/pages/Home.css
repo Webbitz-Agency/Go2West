@@ -2,6 +2,7 @@
 .home {
   overflow-x: hidden;
   padding-top: 0; /* azzera spazio in cima quando header è fixed */
+  background: #eefdff;
 }
 
 /* Variabili per larghezze standardizzate */
@@ -70,7 +71,7 @@
 
 .modal-form .form-group select {
   border: 2px solid #e3e8f0;
-  border-radius: 12px;
+  border-radius: 13px;
   padding: 12px 14px;
   font-size: 0.95rem;
   background: #fafbfe;
@@ -129,6 +130,12 @@
   height: 100%;
   object-fit: cover;
   filter: brightness(0.9);
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out;
+}
+
+.home-hero-video.active {
+  opacity: 1;
 }
 
 .home-hero-overlay {
@@ -352,7 +359,7 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
-  border-radius: 15px;
+  border-radius: 13px;
 }
 
 .carousel-container {
@@ -446,7 +453,7 @@
 /* Kenya Card - Grande */
 .destination-large-card {
   background: white;
-  border-radius: 20px;
+  border-radius: 13px;
   overflow: hidden;
   box-shadow: 0 15px 35px rgba(0,0,0,0.1);
   position: relative;
@@ -497,7 +504,7 @@
   background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
   color: white;
   padding: 6px 12px;
-  border-radius: 15px;
+  border-radius: 13px;
   font-size: 0.85rem;
   font-weight: 500;
 }
@@ -510,7 +517,7 @@
 /* Kenya Carousel Specifico */
 .kenya-carousel {
   height: 100%;
-  border-radius: 15px;
+  border-radius: 13px;
 }
 
 .kenya-carousel .carousel-container {
@@ -518,13 +525,13 @@
 }
 
 .kenya-carousel .carousel-image {
-  border-radius: 15px;
+  border-radius: 13px;
 }
 
 /* Japan Card - Media */
 .destination-medium-card {
   background: white;
-  border-radius: 20px;
+  border-radius: 13px;
   overflow: hidden;
   position: relative;
   box-shadow: 0 15px 35px rgba(0,0,0,0.1);
@@ -533,11 +540,11 @@
 .japan-carousel {
   width: 100%;
   height: 100%;
-  border-radius: 20px;
+  border-radius: 13px;
 }
 
 .japan-carousel .carousel-image {
-  border-radius: 20px;
+  border-radius: 13px;
 }
 
 .card-overlay {
@@ -714,11 +721,11 @@
 .wide-carousel {
   width: 100%;
   height: 100%;
-  border-radius: 15px;
+  border-radius: 13px;
 }
 
 .wide-carousel .carousel-image {
-  border-radius: 15px;
+  border-radius: 13px;
 }
 
 .wide-text {
@@ -871,7 +878,7 @@
 /* Stili per Posizione 0 - Stile Australia */
 .destination-card.australia-style {
   background: white;
-  border-radius: 20px;
+  border-radius: 13px;
   overflow: hidden;
   box-shadow: 0 15px 35px rgba(0,0,0,0.1);
   transition: transform 0.4s ease;
@@ -957,7 +964,7 @@
 
 /* Stili per Posizione 1 - Stile Mexico */
 .destination-card.mexico-style {
-  border-radius: 20px;
+  border-radius: 13px;
   overflow: hidden;
   position: relative;
   box-shadow: 0 15px 35px rgba(0,0,0,0.1);
@@ -971,7 +978,7 @@
 .destination-card.mexico-style .mexico-carousel {
   width: 100%;
   height: 100%;
-  border-radius: 20px;
+  border-radius: 13px;
 }
 
 .destination-card.mexico-style .card-overlay-content {
@@ -1014,7 +1021,7 @@
 /* Stili per Posizione 2 - Stile USA */
 .destination-card.usa-style {
   background: white;
-  border-radius: 20px;
+  border-radius: 13px;
   overflow: hidden;
   box-shadow: 0 15px 35px rgba(0,0,0,0.1);
   transition: transform 0.4s ease;
@@ -1342,7 +1349,7 @@
 /* Travel Options - puzzle */
 .travel-options-section { 
   background: #e0f7fa; 
-  padding: 50px var(--section-padding-horizontal) 30px; 
+  padding: 20px var(--section-padding-horizontal) 30px; 
   position: relative;
 }
 
@@ -1354,7 +1361,7 @@
 }
 
 /* Sfumatura verso l'alto per la transizione dal bianco */
-.travel-options-section::before {
+/*.travel-options-section::before {
   content: '';
   position: absolute;
   top: 0;
@@ -1363,10 +1370,10 @@
   height: 60px;
   background: linear-gradient(180deg, #ffffff, #e0f7fa);
   pointer-events: none;
-}
+}*/
 
 /* Sfumatura verso il basso per la transizione verso il bianco */
-.travel-options-section::after {
+/*.travel-options-section::after {
   content: '';
   position: absolute;
   bottom: 0;
@@ -1375,7 +1382,7 @@
   height: 60px;
   background: linear-gradient(180deg, #e0f7fa, #ffffff);
   pointer-events: none;
-}
+}*/
 .options-header { max-width: 100%; margin: 0 auto 18px; text-align: center; }
 .options-header h2 { margin: 0 0 clamp(4px, 1vw, 6px) 0; font-size: clamp(1.8rem, 4.5vw, 2.5rem); color: #2c3e50; font-weight: 500; }
 .options-header p { margin: 0; font-size: clamp(1rem, 2.5vw, 1.2rem); color: #4facfe; }
@@ -1820,7 +1827,7 @@
 .contact-form-container {
   background: white;
   padding: 40px;
-  border-radius: 15px;
+  border-radius: 13px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.08);
   border: 1px solid rgba(0,0,0,0.05);
   max-width: 95%;
@@ -1856,7 +1863,7 @@
 .form-group select,
 .form-group textarea {
   border: 2px solid #e3e8f0;
-  border-radius: 12px;
+  border-radius: 13px;
   padding: 12px 16px;
   font-size: 0.95rem;
   line-height: 1.4;
@@ -2303,10 +2310,19 @@
 }
 
 .polynesia-hero-image img {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   filter: brightness(0.85);
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out;
+}
+
+.polynesia-hero-image img.active {
+  opacity: 1;
 }
 
 .polynesia-hero-overlay {
@@ -2432,7 +2448,7 @@
 
 /* Nuovo Carosello Destinazioni con Hover Cartolina */
 .destinations-showcase {
-  background: #ffffff;
+  background: #e0f7fa;
   padding: 80px var(--section-padding-horizontal) 100px;
   position: relative;
 }
@@ -2465,8 +2481,8 @@
 
 .showcase-content {
   display: flex;
-  gap: clamp(15px, 1.5vw, 30px);
-  margin: 0 clamp(20px, 2vw, 40px);
+  gap: 5px /*clamp(15px, 1.5vw, 30px)*/;
+  /*margin: 0 clamp(20px, 2vw, 40px);*/
   align-items: stretch;
   height: clamp(350px, 25vh, 450px);
   justify-content: center;
@@ -2476,9 +2492,10 @@
   position: relative;
   flex: 1;
   min-width: clamp(280px, 18vw, 400px);
-  max-width: clamp(320px, 22vw, 450px);
+  /*max-width: clamp(320px, 22vw, 450px);*/
+  max-width: 25%;
   height: clamp(350px, 25vh, 450px);
-  border-radius: 20px;
+  border-radius: 13px;
   overflow: hidden;
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -2524,7 +2541,7 @@
   right: 0;
   bottom: 0;
   background: white;
-  border-radius: 20px;
+  border-radius: 13px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
   opacity: 0;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -2563,7 +2580,7 @@
 
 /* Stile cartolina per la card espansa */
 .destination-showcase-card:hover {
-  background: 
+  /*background: 
     linear-gradient(#ffffff, #ffffff) padding-box,
     repeating-linear-gradient(135deg,
       #ff6b6b 0 8px,
@@ -2571,8 +2588,8 @@
       #59cbe8 12px 20px,
       #59cbe8 20px 24px
     ) border-box;
-  border: 8px solid transparent;
-  border-radius: 20px;
+  border: 8px solid transparent;*/
+  border-radius: 13px;
   padding: 15px;
 }
 
@@ -2580,14 +2597,14 @@
   flex: 1;
   position: relative;
   overflow: hidden;
-  padding: 10px;
+  /*padding: 10px;*/
 }
 
 .expanded-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 12px;
+  border-radius: 13px 0 0 13px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
@@ -2713,31 +2730,33 @@
     max-width: clamp(500px, 35vw, 700px);
   }
   
-  .showcase-content {
+  /*.showcase-content {
     gap: clamp(25px, 2vw, 40px);
     margin: 0 clamp(40px, 3vw, 60px);
-  }
+  }*/
 }
 
 @media (min-width: 1920px) {
   .destination-showcase-card {
     min-width: clamp(350px, 20vw, 450px);
-    max-width: clamp(400px, 25vw, 550px);
+    /*max-width: clamp(400px, 25vw, 550px);*/
+    max-width: 25%;
   }
   
   .destination-showcase-card:hover {
     min-width: clamp(550px, 35vw, 750px);
-    max-width: clamp(600px, 40vw, 800px);
+    /*max-width: clamp(600px, 40vw, 800px);*/
+    max-width: 35%;
   }
   
-  .showcase-content {
+  /*.showcase-content {
     gap: clamp(30px, 2.5vw, 50px);
     margin: 0 clamp(50px, 4vw, 80px);
-  }
+  }*/
 }
 
 @media (max-width: 1200px) {
-  .showcase-content,
+  
   .suggestions-carousel-content {
     margin: 0 20px;
   }
@@ -2745,7 +2764,8 @@
   .destination-showcase-card,
   .suggestion-card {
     min-width: 180px;
-    max-width: 280px;
+    /*max-width: 280px;*/
+    max-width: 25%;
   }
   
   .destination-showcase-card:hover,
@@ -2781,14 +2801,15 @@
 }
 
 @media (max-width: 992px) {
-  .showcase-content {
+  /*.showcase-content {
     margin: 0 20px;
-  }
+  }*/
   
   .destination-showcase-card {
     height: 350px;
     min-width: 160px;
-    max-width: 250px;
+    /*max-width: 250px;*/
+    max-width: 25%;
   }
   
   .destination-showcase-card:hover {
@@ -2914,7 +2935,7 @@
 /* === SEZIONI DESCRITTIVE === */
 
 .descriptive-section {
-  background: #ffffff;
+  background: #e0f7fa;
   padding: 60px var(--section-padding-horizontal);
   position: relative;
 }
@@ -2966,7 +2987,7 @@
 /* === SEZIONE SUGGERIMENTI === */
 
 .suggestions-section {
-  background: #e0f7fa;
+  background: #eefdff;
   padding: var(--section-padding-vertical) var(--section-padding-horizontal) 120px;
   position: relative;
 }
@@ -2992,7 +3013,7 @@
 }
 
 /* Sfumature per transizioni */
-.suggestions-section::before {
+/*.suggestions-section::before {
   content: '';
   position: absolute;
   top: 0;
@@ -3001,9 +3022,9 @@
   height: 60px;
   background: linear-gradient(180deg, #ffffff, #e0f7fa);
   pointer-events: none;
-}
+}*/
 
-.suggestions-section::after {
+/*.suggestions-section::after {
   content: '';
   position: absolute;
   bottom: 0;
@@ -3012,7 +3033,7 @@
   height: 60px;
   background: linear-gradient(180deg, #e0f7fa, #ffffff);
   pointer-events: none;
-}
+}*/
 
 .suggestions-container {
   max-width: 100%;
@@ -3044,7 +3065,7 @@
 /* Card base */
 .suggestion-card {
   position: relative;
-  border-radius: 20px;
+  border-radius: 13px;
   overflow: hidden;
   background-size: cover;
   background-position: center;
@@ -3103,7 +3124,7 @@
   background: linear-gradient(45deg, #4facfe, #00f2fe);
   color: white;
   padding: 6px 12px;
-  border-radius: 15px;
+  border-radius: 13px;
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.3px;
@@ -3149,7 +3170,7 @@
 .suggestion-duration {
   background: rgba(255, 255, 255, 0.2);
   padding: 6px 12px;
-  border-radius: 15px;
+  border-radius: 13px;
   font-size: 0.9rem;
   backdrop-filter: blur(5px);
 }
@@ -3350,7 +3371,7 @@
 /* === SEZIONE ORIZZONTALE - IMMAGINI E TESTO SULLO STESSO PIANO === */
 
 .horizontal-section {
-  background: #ffffff;
+  background: #eefdff;
   padding: 0;
   margin-bottom: 80px;
   position: relative;
@@ -3488,7 +3509,7 @@
 }
 
 .horizontal-text {
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   line-height: 1.6;
   color: #3a495a;
   margin: 0 0 20px 0;
@@ -3874,7 +3895,7 @@
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   padding: clamp(40px, 5vw, 60px);
-  border-radius: 20px; /* Bordo destro arrotondato per l'overlay */
+  border-radius: 13px; /* Bordo destro arrotondato per l'overlay */
   box-shadow: 
     0 20px 40px rgba(0, 0, 0, 0.1),
     0 0 0 1px rgba(255, 255, 255, 0.2);
@@ -3984,7 +4005,7 @@
     left: auto;
     width: 100%;
     height: 100vh;
-    border-radius: 20px;
+    border-radius: 13px;
     margin-bottom: 0;
     overflow: hidden;
   }
@@ -4018,7 +4039,7 @@
     margin: 0 auto;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
-    border-radius: 20px;
+    border-radius: 13px;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
     padding: 30px;
     display: flex;

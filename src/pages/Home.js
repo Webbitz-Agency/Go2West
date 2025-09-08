@@ -35,6 +35,9 @@ const Home = () => {
   const [currentLeftImage, setCurrentLeftImage] = useState(0);
   const [currentRightImage, setCurrentRightImage] = useState(0);
 
+  // Stato per il carosello della Polinesia
+  const [currentPolynesiaImage, setCurrentPolynesiaImage] = useState(0);
+
   const openTravelModal = (travelTypeSlug) => {
     setPendingTravelType(travelTypeSlug);
     setSelectedTravelType(travelTypeSlug);
@@ -61,12 +64,27 @@ const Home = () => {
     '/images/video5.mp4'
   ];
   const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
+  
+  // Gestione del cambio automatico dei video
   useEffect(() => {
     const intervalId = setInterval(() => {
       setCurrentHeroIndex((prev) => (prev + 1) % heroVideos.length);
     }, 7000);
     return () => clearInterval(intervalId);
   }, [heroVideos.length]);
+
+  // Gestione del preload e controllo dei video
+  useEffect(() => {
+    const videos = document.querySelectorAll('.home-hero-video');
+    videos.forEach((video, index) => {
+      if (index === currentHeroIndex) {
+        video.play().catch(console.error);
+      } else {
+        video.pause();
+        video.currentTime = 0;
+      }
+    });
+  }, [currentHeroIndex]);
 
   // Effetto: blocco fixed centrato e fade quando il bottom della sezione supera i pulsanti
   useEffect(() => {
@@ -107,6 +125,9 @@ const Home = () => {
   const leftImages = ['ny2.jpg', 'ny5.jpg', 'ny6.jpg', 'ny7.jpg'];
   const rightImages = ['ny1.jpg', 'ny3.jpg', 'ny4.jpg', 'city.jpg'];
 
+  // Array delle immagini per il carosello della Polinesia
+  const polynesiaImages = ['polinesia.jpg', 'polinesia2.jpg', 'polinesia3.jpg', 'polinesia4.jpg', 'polinesia5.jpg'];
+
   // Auto-scroll per i caroselli della sezione orizzontale
   useEffect(() => {
     const leftInterval = setInterval(() => {
@@ -122,6 +143,17 @@ const Home = () => {
       clearInterval(rightInterval);
     };
   }, [leftImages.length, rightImages.length]);
+
+  // Auto-scroll per il carosello della Polinesia
+  useEffect(() => {
+    const polynesiaInterval = setInterval(() => {
+      setCurrentPolynesiaImage(prev => (prev + 1) % polynesiaImages.length);
+    }, 6000);
+
+    return () => {
+      clearInterval(polynesiaInterval);
+    };
+  }, [polynesiaImages.length]);
 
   const destinations = [
     {
@@ -385,15 +417,17 @@ const Home = () => {
     <div className="home">
       {/* Sezione Hero Video */}
       <section ref={heroSectionRef} id="hero-videos" className="home-hero" aria-label="Video introduttivi">
-        <video
-          key={currentHeroIndex}
-          className="home-hero-video"
-          src={heroVideos[currentHeroIndex]}
-          autoPlay
-          muted
-          playsInline
-          onEnded={() => setCurrentHeroIndex((prev) => (prev + 1) % heroVideos.length)}
-        />
+        {heroVideos.map((video, index) => (
+          <video
+            key={index}
+            className={`home-hero-video ${index === currentHeroIndex ? 'active' : ''}`}
+            src={video}
+            autoPlay={index === currentHeroIndex}
+            muted
+            playsInline
+            onEnded={() => setCurrentHeroIndex((prev) => (prev + 1) % heroVideos.length)}
+          />
+        ))}
         <div className="home-hero-overlay" />
         <div className={`home-hero-content ${isHeroFixed ? 'is-fixed' : ''} ${isHeroFaded ? 'fade-out' : ''}`}>
           <div className="home-hero-text">
@@ -418,7 +452,7 @@ const Home = () => {
       </section>
 
       {/* Sezione Intro con fade-up */}
-      <section className="intro-section reveal-on-scroll" aria-label="Presentazione">
+      <section className="intro-section reveal-on-scroll" aria-label="Presentazione" style={{ background: '#eefdff' }}>
         {/*<div className="intro-container">
           <h2 className="intro-title">Viaggiare con Go2West</h2>
           <p className="intro-text">
@@ -460,7 +494,7 @@ const Home = () => {
           </div>
           
           {/* Container di testo centrale */}
-          <div className="horizontal-text-container">
+          <div className="horizontal-text-container" style={{ background: '#eefdff' }}>
             <h2 className="horizontal-title">Viaggiare con Go2West</h2>
             <p className="horizontal-text">
               Ogni destinazione racconta una storia unica, ogni viaggio è un capitolo della tua vita. 
@@ -519,7 +553,7 @@ const Home = () => {
           <div onClick={() => openTravelModal('city-breaks')} className="option-card photo r1c1 reveal-on-scroll" style={{ backgroundImage: "url('/images/city.jpg')" }} data-dir="vertical">
             <div className="option-overlay">
               <h3>City Breaks</h3>
-              <p>Itinerari completi, guide esperte e zero pensieri.</p>
+              <p>Alla scoperta delle metropoli più iconiche.</p>
               <span className="explore-btn">Scopri</span>
             </div>
           </div>
@@ -535,14 +569,14 @@ const Home = () => {
           <div onClick={() => openTravelModal('ride-harley')} className="option-card photo r2c1 reveal-on-scroll" style={{ backgroundImage: "url('/images/ride_in_harley.jpg')" }} data-dir="vertical">
             <div className="option-overlay">
               <h3>Ride in Harley</h3>
-              <p>Itinerari completi, guide esperte e zero pensieri.</p>
+              <p>Monta in sella e scopri i territori più suggestivi.</p>
               <span className="explore-btn">Scopri</span>
             </div>
           </div>
           <div onClick={() => openTravelModal('tour-guidati')} className="option-card photo r2c2 reveal-on-scroll" style={{ backgroundImage: "url('/images/tour.jpg')" }} data-dir="horizontal">
             <div className="option-overlay">
               <h3>Tour Guidati</h3>
-              <p>Avventure tra parchi e fauna selvatica.</p>
+              <p>Itinerari completi, guide esperte e zero pensieri.</p>
               <span className="explore-btn">Scopri</span>
             </div>
           </div>
@@ -557,7 +591,14 @@ const Home = () => {
       {/* Nuova Hero Section Polinesia */}
       <section className="polynesia-hero">
         <div className="polynesia-hero-image">
-          <img src="/images/polinesia.jpg" alt="Polinesia Francese - Paradiso tropicale" />
+          {polynesiaImages.map((image, index) => (
+            <img 
+              key={index}
+              src={`/images/${image}`} 
+              alt={`Polinesia Francese - Paradiso tropicale ${index + 1}`}
+              className={index === currentPolynesiaImage ? 'active' : ''}
+            />
+          ))}
         </div>
         <div className="polynesia-hero-overlay" />
         <div className="polynesia-hero-content">
