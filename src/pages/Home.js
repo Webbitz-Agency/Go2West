@@ -38,6 +38,9 @@ const Home = () => {
   // Stato per il carosello della Polinesia
   const [currentPolynesiaImage, setCurrentPolynesiaImage] = useState(0);
 
+  // Stato per i caroselli delle destinazioni showcase
+  const [currentDestinationImage, setCurrentDestinationImage] = useState({});
+
   const openTravelModal = (travelTypeSlug) => {
     setPendingTravelType(travelTypeSlug);
     setSelectedTravelType(travelTypeSlug);
@@ -158,58 +161,86 @@ const Home = () => {
   const destinations = [
     {
       name: 'USA',
-      images: ['/images/usa.jpg', '/images/usa-parks.jpg', '/images/north-america3.jpg'],
+      images: ['/images/usa.jpg', '/images/usa1.jpg', '/images/usa2.jpg', '/images/usa3.jpg'],
       country: 'usa',
       description: 'Dai grattacieli di New York ai canyon dell’Ovest, passando per strade leggendarie come la Route 66: gli Stati Uniti sono un viaggio tra natura estrema, cultura pop e città che non dormono mai..',
       shortDesc: 'Parchi, metropoli e strade leggendarie'
     },
     {
       name: 'Canada',
-      images: ['/images/north-america.jpg', '/images/north-america3.jpg', '/images/usa-parks.jpg'],
+      images: ['/images/canada.jpg', '/images/canada1.jpg', '/images/canada2.jpg', '/images/canada3.jpg'],
       country: 'canada',
       description: 'Paesaggi infiniti, laghi cristallini e le maestose Montagne Rocciose: il Canada è la meta perfetta per chi cerca avventura, natura incontaminata e città moderne immerse in scenari mozzafiato.',
       shortDesc: 'Natura maestosa e città vivibili'
     },
     {
       name: 'Messico',
-      images: ['/images/mexico.jpg', '/images/mexico.jpg', '/images/mexico.jpg'],
+      images: ['/images/messico1.jpg', '/images/mexico.jpg', '/images/messico2.jpg', '/images/messico3.jpg'],
       country: 'messico',
       description: 'Spiagge caraibiche, rovine Maya e tradizioni coloratissime: il Messico è un mix di storia millenaria, paesaggi da cartolina e cucina indimenticabile che conquista tutti i sensi.',
       shortDesc: 'Cultura millenaria e mare da sogno'
     },
     {
       name: 'America Centrale',
-      images: ['/images/north-america3.jpg', '/images/usa-parks.jpg', '/images/north-america.jpg'],
+      images: ['/images/americaCentrale.jpg', '/images/americaCentrale1.jpg', '/images/americaCentrale2.jpg', '/images/americaCentrale3.jpg'],
       country: 'america-centrale',
       description: 'Un mosaico di paesi pieni di energia: vulcani, foreste tropicali, spiagge spettacolari e città coloniali. L’America Centrale è il cuore vibrante dell’avventura latina, dove natura e cultura si fondono.',
       shortDesc: 'Avventura tra giungle e oceani'
     },
     {
       name: 'Sud America',
-      images: ['/images/usa-parks.jpg', '/images/north-america3.jpg', '/images/north-america.jpg'],
+      images: ['/images/sudamerica.jpg', '/images/sudamerica1.jpg', '/images/sudamerica2.jpg', '/images/sudamerica3.jpg'],
       country: 'sud-america',
       description: 'Dal ritmo del samba brasiliano alle cime andine, il Sud America è pura emozione: una terra di contrasti, colori intensi, paesaggi straordinari e popoli accoglienti che regalano esperienze indimenticabili.',
       shortDesc: 'Grandi spazi e culture intense'
     },
     {
       name: 'Caraibi',
-      images: ['/images/mexico.jpg', '/images/usa-parks.jpg', '/images/north-america3.jpg'],
+      images: ['/images/caraibi.jpg', '/images/caraibi1.jpg', '/images/caraibi2.jpg', '/images/caraibi3.jpg'],
       country: 'caraibi',
       description: 'Mare turchese, spiagge di sabbia bianca e atmosfere rilassate: i Caraibi sono il sogno tropicale per eccellenza. Tra isole da esplorare, natura rigogliosa e cultura vivace, il relax è assicurato.',
       shortDesc: 'Isole da sogno e acque turchesi'
     },
     {
       name: 'Polinesia Francese',
-      images: ['/images/polinesia.jpg', '/images/usa-parks.jpg', '/images/polinesia.jpg'],
+      images: ['/images/polinesia.jpg', '/images/polinesia2.jpg', '/images/polinesia3.jpg', '/images/polinesia4.jpg'],
       country: 'polinesia-francese',
       description: 'Lagune turchesi, bungalow sull’acqua e paesaggi da sogno: la Polinesia Francese è il paradiso terrestre, perfetto per chi cerca romanticismo, natura incontaminata e un’esperienza indimenticabile in mezzo all’Oceano Pacifico.',
       shortDesc: 'Paradiso tropicale esclusivo'
     }
   ];
 
+  // Auto-scroll per i caroselli delle destinazioni showcase
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentDestinationImage(prev => {
+        const updated = { ...prev };
+        destinations.forEach(d => {
+          const len = d.images.length || 1;
+          const key = d.country;
+          const currentVal = typeof prev[key] === 'number' ? prev[key] : 0;
+          updated[key] = (currentVal + 1) % len;
+        });
+        return updated;
+      });
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [destinations]);
+
   // Inizializza le chiavi per gli indici immagini in base alle destinazioni
   useEffect(() => {
     setCurrentImageIndex(prev => {
+      const next = { ...prev };
+      destinations.forEach(d => {
+        if (typeof next[d.country] !== 'number') next[d.country] = 0;
+      });
+      return next;
+    });
+  }, [destinations.length]);
+
+  // Inizializza le chiavi per gli indici immagini delle destinazioni showcase
+  useEffect(() => {
+    setCurrentDestinationImage(prev => {
       const next = { ...prev };
       destinations.forEach(d => {
         if (typeof next[d.country] !== 'number') next[d.country] = 0;
@@ -610,7 +641,8 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Nuovo Carosello Destinazioni con Hover Cartolina */}
+      {/* Nuovo Carosello Destinazioni con Hover Cartolina - COMMENTATO */}
+      {/*
       <section className="destinations-showcase">
         <div className="showcase-header">
           <h2>Tutte le Destinazioni</h2>
@@ -635,7 +667,6 @@ const Home = () => {
                   </div>
                 </div>
                 
-                {/* Cartolina espansa su hover */}
                 <div className="card-expanded">
                   <div className="expanded-image">
                     <img src={destination.images[0]} alt={destination.name} />
@@ -667,6 +698,106 @@ const Home = () => {
               className={`showcase-dot ${index === showcaseIndex ? 'active' : ''}`}
               onClick={() => setShowcaseIndex(index)}
             />
+          ))}
+        </div>
+      </section>
+      */}
+
+      {/* Nuova Sezione Destinazioni - Layout A&K Style */}
+      <section className="destinations-showcase-new">
+        <div className="showcase-header-new">
+          <h2>Le nostre destinazioni</h2>
+          <p>Scopri i nostri itinerari esclusivi in tutto il mondo</p>
+        </div>
+        
+        <div className="destinations-grid-new">
+          {/* Prima riga: USA a larghezza massima */}
+          <div className="destination-card-new full-width-card">
+            <div className="destination-image-new">
+              {destinations[0].images.map((image, index) => (
+                <img 
+                  key={index}
+                  src={image} 
+                  alt={`${destinations[0].name} - Immagine ${index + 1}`}
+                  className={`destination-carousel-image ${index === (currentDestinationImage[destinations[0].country] || 0) ? 'active' : ''}`}
+                />
+              ))}
+              <div className="image-overlay">
+                <h3>{destinations[0].name}</h3>
+              </div>
+            </div>
+            
+            <div className="destination-content-new" style={{ background: '#eefdff' }}>
+              <div className="destination-text-content">
+                <h3 className="destination-title-new">{destinations[0].name}</h3>
+                <p className="destination-description-new">{destinations[0].description}</p>
+                <div className="destination-short-new">
+                  {/*<span>{destinations[0].shortDesc}</span>*/}
+                </div>
+              </div>
+              <div className="destination-btn-container">
+                <Link to={`/destination/${destinations[0].country}`} className="explore-btn">
+                  Scopri di più
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* Dalle altre destinazioni in poi: layout a due colonne alternato */}
+          {destinations.slice(1).reduce((rows, destination, index) => {
+            const rowIndex = Math.floor(index / 2);
+            const isLeftCard = index % 2 === 0;
+            const isEvenRow = rowIndex % 2 === 0;
+            const cardClass = isEvenRow 
+              ? (isLeftCard ? 'wide-card' : 'narrow-card')
+              : (isLeftCard ? 'narrow-card' : 'wide-card');
+            
+            const card = (
+              <div key={`${destination.country}-new-${index + 1}`} className={`destination-card-new ${cardClass}`}>
+                <div className="destination-image-new">
+                  {destination.images.map((image, index) => (
+                    <img 
+                      key={index}
+                      src={image} 
+                      alt={`${destination.name} - Immagine ${index + 1}`}
+                      className={`destination-carousel-image ${index === (currentDestinationImage[destination.country] || 0) ? 'active' : ''}`}
+                    />
+                  ))}
+                  <div className="image-overlay">
+                    <h3>{destination.name}</h3>
+                  </div>
+                </div>
+                
+                <div className="destination-content-new" style={{ background: '#eefdff' }}>
+                  <div className="destination-text-content">
+                    <h3 className="destination-title-new">{destination.name}</h3>
+                    <p className="destination-description-new">{destination.description}</p>
+                    <div className="destination-short-new">
+                      {/*<span>{destination.shortDesc}</span>*/}
+                    </div>
+                  </div>
+                  <div className="destination-btn-container">
+                    <Link to={`/destination/${destination.country}`} className="explore-btn">
+                      Scopri di più
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            );
+
+            if (isLeftCard) {
+              // Inizia una nuova riga
+              rows.push([card]);
+            } else {
+              // Aggiungi alla riga esistente
+              rows[rows.length - 1].push(card);
+            }
+            
+            return rows;
+          }, []).map((row, rowIndex) => (
+            <div key={`row-${rowIndex}`} className="destinations-row">
+              {row}
+            </div>
           ))}
         </div>
       </section>
