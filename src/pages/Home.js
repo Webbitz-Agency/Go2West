@@ -38,8 +38,14 @@ const Home = () => {
   // Stato per il carosello della Polinesia
   const [currentPolynesiaImage, setCurrentPolynesiaImage] = useState(0);
 
-  // Stato per i caroselli delle destinazioni showcase
-  const [currentDestinationImage, setCurrentDestinationImage] = useState({});
+  // Stati per i caroselli delle destinazioni showcase (metodo Polinesia)
+  const [currentUSAImage, setCurrentUSAImage] = useState(0);
+  const [currentCanadaImage, setCurrentCanadaImage] = useState(0);
+  const [currentMexicoImage, setCurrentMexicoImage] = useState(0);
+  const [currentAmericaCentraleImage, setCurrentAmericaCentraleImage] = useState(0);
+  const [currentSudAmericaImage, setCurrentSudAmericaImage] = useState(0);
+  const [currentCaraibiImage, setCurrentCaraibiImage] = useState(0);
+  const [currentPolinesiaImage, setCurrentPolinesiaImage] = useState(0);
 
   const openTravelModal = (travelTypeSlug) => {
     setPendingTravelType(travelTypeSlug);
@@ -128,8 +134,15 @@ const Home = () => {
   const leftImages = ['ny2.jpg', 'ny5.jpg', 'ny6.jpg', 'ny7.jpg'];
   const rightImages = ['ny1.jpg', 'ny3.jpg', 'ny4.jpg', 'city.jpg'];
 
-  // Array delle immagini per il carosello della Polinesia
+  // Array delle immagini per i caroselli (metodo Polinesia)
   const polynesiaImages = ['polinesia.jpg', 'polinesia2.jpg', 'polinesia3.jpg', 'polinesia4.jpg', 'polinesia5.jpg'];
+  const usaImages = ['usa.jpg', 'usa1.jpg', 'usa2.jpg', 'usa3.jpg'];
+  const canadaImages = ['canada.jpg', 'canada1.jpg', 'canada2.jpg', 'canada3.jpg'];
+  const mexicoImages = ['messico1.jpg', 'mexico.jpg', 'messico2.jpg', 'messico3.jpg'];
+  const americaCentraleImages = ['americaCentrale.jpg', 'americaCentrale1.jpg', 'americaCentrale2.jpg', 'americaCentrale3.jpg'];
+  const sudAmericaImages = ['sudamerica.jpg', 'sudamerica1.jpg', 'sudamerica2.jpg', 'sudamerica3.jpg'];
+  const caraibiImages = ['caraibi.jpg', 'caraibi1.jpg', 'caraibi2.jpg', 'caraibi3.jpg'];
+  const polinesiaDestImages = ['polinesia.jpg', 'polinesia2.jpg', 'polinesia3.jpg', 'polinesia4.jpg', 'polinesia5.jpg'];
 
   // Auto-scroll per i caroselli della sezione orizzontale
   useEffect(() => {
@@ -210,61 +223,48 @@ const Home = () => {
     }
   ];
 
-  // Auto-scroll per i caroselli delle destinazioni showcase
+  // Auto-scroll per i caroselli delle destinazioni showcase (metodo Polinesia)
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentDestinationImage(prev => {
-        const updated = { ...prev };
-        destinations.forEach(d => {
-          const len = d.images.length || 1;
-          const key = d.country;
-          const currentVal = typeof prev[key] === 'number' ? prev[key] : 0;
-          updated[key] = (currentVal + 1) % len;
-        });
-        return updated;
-      });
+    const usaInterval = setInterval(() => {
+      setCurrentUSAImage(prev => (prev + 1) % usaImages.length);
+    }, 6000);
+
+    const canadaInterval = setInterval(() => {
+      setCurrentCanadaImage(prev => (prev + 1) % canadaImages.length);
     }, 5000);
-    return () => clearInterval(interval);
-  }, [destinations]);
 
-  // Inizializza le chiavi per gli indici immagini in base alle destinazioni
-  useEffect(() => {
-    setCurrentImageIndex(prev => {
-      const next = { ...prev };
-      destinations.forEach(d => {
-        if (typeof next[d.country] !== 'number') next[d.country] = 0;
-      });
-      return next;
-    });
-  }, [destinations.length]);
+    const mexicoInterval = setInterval(() => {
+      setCurrentMexicoImage(prev => (prev + 1) % mexicoImages.length);
+    }, 5000);
 
-  // Inizializza le chiavi per gli indici immagini delle destinazioni showcase
-  useEffect(() => {
-    setCurrentDestinationImage(prev => {
-      const next = { ...prev };
-      destinations.forEach(d => {
-        if (typeof next[d.country] !== 'number') next[d.country] = 0;
-      });
-      return next;
-    });
-  }, [destinations.length]);
+    const americaCentraleInterval = setInterval(() => {
+      setCurrentAmericaCentraleImage(prev => (prev + 1) % americaCentraleImages.length);
+    }, 5000);
 
-  // Auto-scroll generico per i caroselli delle immagini
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImageIndex(prev => {
-        const updated = { ...prev };
-        destinations.forEach(d => {
-          const len = d.images.length || 1;
-          const key = d.country;
-          const currentVal = typeof prev[key] === 'number' ? prev[key] : 0;
-          updated[key] = (currentVal + 1) % len;
-        });
-        return updated;
-      });
-    }, 4000);
-    return () => clearInterval(interval);
-  }, [destinations]);
+    const sudAmericaInterval = setInterval(() => {
+      setCurrentSudAmericaImage(prev => (prev + 1) % sudAmericaImages.length);
+    }, 5000);
+
+    const caraibiInterval = setInterval(() => {
+      setCurrentCaraibiImage(prev => (prev + 1) % caraibiImages.length);
+    }, 5000);
+
+    const polinesiaInterval = setInterval(() => {
+      setCurrentPolinesiaImage(prev => (prev + 1) % polinesiaDestImages.length);
+    }, 5000);
+
+    return () => {
+      clearInterval(usaInterval);
+      clearInterval(canadaInterval);
+      clearInterval(mexicoInterval);
+      clearInterval(americaCentraleInterval);
+      clearInterval(sudAmericaInterval);
+      clearInterval(caraibiInterval);
+      clearInterval(polinesiaInterval);
+    };
+  }, [usaImages.length, canadaImages.length, mexicoImages.length, americaCentraleImages.length, sudAmericaImages.length, caraibiImages.length, polinesiaDestImages.length]);
+
+  // Auto-scroll generico per i caroselli delle immagini (rimosso per evitare conflitti)
 
   // IntersectionObserver per mostrare/nascondere la CTA flottante
   useEffect(() => {
@@ -376,6 +376,20 @@ const Home = () => {
     return result;
   };
 
+
+  // Funzione helper per ottenere l'array immagini e l'indice corrente per destinazione
+  const getImageData = (country) => {
+    switch(country) {
+      case 'usa': return { images: usaImages, currentIndex: currentUSAImage };
+      case 'canada': return { images: canadaImages, currentIndex: currentCanadaImage };
+      case 'messico': return { images: mexicoImages, currentIndex: currentMexicoImage };
+      case 'america-centrale': return { images: americaCentraleImages, currentIndex: currentAmericaCentraleImage };
+      case 'sud-america': return { images: sudAmericaImages, currentIndex: currentSudAmericaImage };
+      case 'caraibi': return { images: caraibiImages, currentIndex: currentCaraibiImage };
+      case 'polinesia-francese': return { images: polinesiaDestImages, currentIndex: currentPolinesiaImage };
+      default: return { images: [], currentIndex: 0 };
+    }
+  };
 
   // Funzioni per i caroselli della sezione orizzontale
   const nextLeftImage = () => {
@@ -714,12 +728,12 @@ const Home = () => {
           {/* Prima riga: USA a larghezza massima */}
           <div className="destination-card-new full-width-card">
             <div className="destination-image-new">
-              {destinations[0].images.map((image, index) => (
+              {usaImages.map((image, index) => (
                 <img 
                   key={index}
-                  src={image} 
+                  src={`/images/${image}`} 
                   alt={`${destinations[0].name} - Immagine ${index + 1}`}
-                  className={`destination-carousel-image ${index === (currentDestinationImage[destinations[0].country] || 0) ? 'active' : ''}`}
+                  className={`destination-carousel-image ${index === currentUSAImage ? 'active' : ''}`}
                 />
               ))}
               <div className="image-overlay">
@@ -755,12 +769,12 @@ const Home = () => {
             const card = (
               <div key={`${destination.country}-new-${index + 1}`} className={`destination-card-new ${cardClass}`}>
                 <div className="destination-image-new">
-                  {destination.images.map((image, index) => (
+                  {getImageData(destination.country).images.map((image, index) => (
                     <img 
                       key={index}
-                      src={image} 
+                      src={`/images/${image}`} 
                       alt={`${destination.name} - Immagine ${index + 1}`}
-                      className={`destination-carousel-image ${index === (currentDestinationImage[destination.country] || 0) ? 'active' : ''}`}
+                      className={`destination-carousel-image ${index === getImageData(destination.country).currentIndex ? 'active' : ''}`}
                     />
                   ))}
                   <div className="image-overlay">
