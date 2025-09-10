@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import DynamicTours from '../components/DynamicTours';
+import { destinations, destinationImages } from '../config/destinations';
 import './Home.css';
 
 const Home = () => {
@@ -134,15 +135,15 @@ const Home = () => {
   const leftImages = ['ny2.jpg', 'ny5.jpg', 'ny6.jpg', 'ny7.jpg'];
   const rightImages = ['ny1.jpg', 'ny3.jpg', 'ny4.jpg', 'city.jpg'];
 
-  // Array delle immagini per i caroselli (metodo Polinesia)
-  const polynesiaImages = ['polinesia.jpg', 'polinesia2.jpg', 'polinesia3.jpg', 'polinesia4.jpg', 'polinesia5.jpg'];
-  const usaImages = ['usa.jpg', 'usa1.jpg', 'usa2.jpg', 'usa3.jpg'];
-  const canadaImages = ['canada.jpg', 'canada1.jpg', 'canada2.jpg', 'canada3.jpg'];
-  const mexicoImages = ['messico1.jpg', 'mexico.jpg', 'messico2.jpg', 'messico3.jpg'];
-  const americaCentraleImages = ['americaCentrale.jpg', 'americaCentrale1.jpg', 'americaCentrale2.jpg', 'americaCentrale3.jpg'];
-  const sudAmericaImages = ['sudamerica.jpg', 'sudamerica1.jpg', 'sudamerica2.jpg', 'sudamerica3.jpg'];
-  const caraibiImages = ['caraibi.jpg', 'caraibi1.jpg', 'caraibi2.jpg', 'caraibi3.jpg'];
-  const polinesiaDestImages = ['polinesia.jpg', 'polinesia2.jpg', 'polinesia3.jpg', 'polinesia4.jpg', 'polinesia5.jpg'];
+  // Array delle immagini per i caroselli (metodo Polinesia) - ora dalla configurazione condivisa
+  const polynesiaImages = destinationImages['polinesia-francese'];
+  const usaImages = destinationImages['usa'];
+  const canadaImages = destinationImages['canada'];
+  const mexicoImages = destinationImages['messico'];
+  const americaCentraleImages = destinationImages['america-centrale'];
+  const sudAmericaImages = destinationImages['sud-america'];
+  const caraibiImages = destinationImages['caraibi'];
+  const polinesiaDestImages = destinationImages['polinesia-francese'];
 
   // Auto-scroll per i caroselli della sezione orizzontale
   useEffect(() => {
@@ -171,57 +172,18 @@ const Home = () => {
     };
   }, [polynesiaImages.length]);
 
-  const destinations = [
-    {
-      name: 'USA',
-      images: ['/images/usa.jpg', '/images/usa1.jpg', '/images/usa2.jpg', '/images/usa3.jpg'],
-      country: 'usa',
-      description: 'Dai grattacieli di New York ai canyon dell’Ovest, passando per strade leggendarie come la Route 66: gli Stati Uniti sono un viaggio tra natura estrema, cultura pop e città che non dormono mai..',
-      shortDesc: 'Parchi, metropoli e strade leggendarie'
-    },
-    {
-      name: 'Canada',
-      images: ['/images/canada.jpg', '/images/canada1.jpg', '/images/canada2.jpg', '/images/canada3.jpg'],
-      country: 'canada',
-      description: 'Paesaggi infiniti, laghi cristallini e le maestose Montagne Rocciose: il Canada è la meta perfetta per chi cerca avventura, natura incontaminata e città moderne immerse in scenari mozzafiato.',
-      shortDesc: 'Natura maestosa e città vivibili'
-    },
-    {
-      name: 'Messico',
-      images: ['/images/messico1.jpg', '/images/mexico.jpg', '/images/messico2.jpg', '/images/messico3.jpg'],
-      country: 'messico',
-      description: 'Spiagge caraibiche, rovine Maya e tradizioni coloratissime: il Messico è un mix di storia millenaria, paesaggi da cartolina e cucina indimenticabile che conquista tutti i sensi.',
-      shortDesc: 'Cultura millenaria e mare da sogno'
-    },
-    {
-      name: 'America Centrale',
-      images: ['/images/americaCentrale.jpg', '/images/americaCentrale1.jpg', '/images/americaCentrale2.jpg', '/images/americaCentrale3.jpg'],
-      country: 'america-centrale',
-      description: 'Un mosaico di paesi pieni di energia: vulcani, foreste tropicali, spiagge spettacolari e città coloniali. L’America Centrale è il cuore vibrante dell’avventura latina, dove natura e cultura si fondono.',
-      shortDesc: 'Avventura tra giungle e oceani'
-    },
-    {
-      name: 'Sud America',
-      images: ['/images/sudamerica.jpg', '/images/sudamerica1.jpg', '/images/sudamerica2.jpg', '/images/sudamerica3.jpg'],
-      country: 'sud-america',
-      description: 'Dal ritmo del samba brasiliano alle cime andine, il Sud America è pura emozione: una terra di contrasti, colori intensi, paesaggi straordinari e popoli accoglienti che regalano esperienze indimenticabili.',
-      shortDesc: 'Grandi spazi e culture intense'
-    },
-    {
-      name: 'Caraibi',
-      images: ['/images/caraibi.jpg', '/images/caraibi1.jpg', '/images/caraibi2.jpg', '/images/caraibi3.jpg'],
-      country: 'caraibi',
-      description: 'Mare turchese, spiagge di sabbia bianca e atmosfere rilassate: i Caraibi sono il sogno tropicale per eccellenza. Tra isole da esplorare, natura rigogliosa e cultura vivace, il relax è assicurato.',
-      shortDesc: 'Isole da sogno e acque turchesi'
-    },
-    {
-      name: 'Polinesia Francese',
-      images: ['/images/polinesia.jpg', '/images/polinesia2.jpg', '/images/polinesia3.jpg', '/images/polinesia4.jpg'],
-      country: 'polinesia-francese',
-      description: 'Lagune turchesi, bungalow sull’acqua e paesaggi da sogno: la Polinesia Francese è il paradiso terrestre, perfetto per chi cerca romanticismo, natura incontaminata e un’esperienza indimenticabile in mezzo all’Oceano Pacifico.',
-      shortDesc: 'Paradiso tropicale esclusivo'
-    }
-  ];
+  // Destinazioni ora dalla configurazione condivisa - aggiungiamo le proprietà mancanti
+  const destinationsWithImages = destinations.map(dest => ({
+    ...dest,
+    images: destinationImages[dest.country].map(img => `/images/${img}`),
+    shortDesc: dest.name === 'USA' ? 'Parchi, metropoli e strade leggendarie' :
+               dest.name === 'Canada' ? 'Natura maestosa e città vivibili' :
+               dest.name === 'Messico' ? 'Cultura millenaria e mare da sogno' :
+               dest.name === 'America Centrale' ? 'Avventura tra giungle e oceani' :
+               dest.name === 'Sud America' ? 'Grandi spazi e culture intense' :
+               dest.name === 'Caraibi' ? 'Isole da sogno e acque turchesi' :
+               'Paradiso tropicale esclusivo'
+  }));
 
   // Auto-scroll per i caroselli delle destinazioni showcase (metodo Polinesia)
   useEffect(() => {
@@ -764,7 +726,7 @@ const Home = () => {
           </div>
 
           {/* Dalle altre destinazioni in poi: layout a due colonne alternato */}
-          {destinations.slice(1).reduce((rows, destination, index) => {
+          {destinationsWithImages.slice(1).reduce((rows, destination, index) => {
             const rowIndex = Math.floor(index / 2);
             const isLeftCard = index % 2 === 0;
             const isEvenRow = rowIndex % 2 === 0;
@@ -879,7 +841,7 @@ const Home = () => {
                     <label>Destinazione d'interesse</label>
                     <select defaultValue="">
                       <option value="" disabled>Seleziona una destinazione</option>
-                      {destinations.map((d) => (
+                      {destinationsWithImages.map((d) => (
                         <option key={d.country} value={d.country}>{d.name}</option>
                       ))}
                       <option key="altro" value="altro">Altro</option>
@@ -943,7 +905,7 @@ const Home = () => {
                 <label>Destinazione</label>
                 <select value={selectedCountry} onChange={(e) => setSelectedCountry(e.target.value)}>
                   <option value="" disabled>Seleziona una destinazione</option>
-                  {destinations.map((d) => (
+                  {destinationsWithImages.map((d) => (
                     <option key={d.country} value={d.country}>{d.name}</option>
                   ))}
                 </select>

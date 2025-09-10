@@ -50,7 +50,7 @@
 
 .hero-title {
   font-size: clamp(2rem, 5vw, 3rem);
-  font-weight: 600;
+  font-weight: 500;
   margin-bottom: 20px;
   font-family: 'DM Serif Text', serif;
   line-height: 1.2;

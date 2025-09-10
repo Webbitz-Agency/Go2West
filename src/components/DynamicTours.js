@@ -5,18 +5,17 @@ import './DynamicTours.css';
 
 // Componente per i tour dinamici caricati dal backend
 const DynamicTours = ({ type, country, limit = 6, showFilters = false }) => {
-  const [tours, setTours] = useState([]);
+  const [allTours, setAllTours] = useState([]); // Tutti i tour caricati
+  const [filteredTours, setFilteredTours] = useState([]); // Tour filtrati lato client
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedType, setSelectedType] = useState(type || 'all');
   const [selectedDuration, setSelectedDuration] = useState('all');
   const [selectedPrice, setSelectedPrice] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
 
   // Ref per mantenere il focus sulla searchbar
   const searchInputRef = useRef(null);
-  const debounceTimeoutRef = useRef(null);
 
   // Tipi di tour disponibili
   const tourTypes = [
@@ -47,79 +46,70 @@ const DynamicTours = ({ type, country, limit = 6, showFilters = false }) => {
     { name: '€2000+', value: '2000+' }
   ];
 
-  // Debounce per la ricerca
-  useEffect(() => {
-    if (debounceTimeoutRef.current) {
-      clearTimeout(debounceTimeoutRef.current);
+  // Funzione per filtrare i tour lato client
+  const filterTours = useCallback((tours, type, duration, price, search) => {
+    let filtered = [...tours];
+
+    // Filtro per tipo
+    if (type && type !== 'all') {
+      filtered = filtered.filter(tour => tour.type === type);
     }
 
-    debounceTimeoutRef.current = setTimeout(() => {
-      setDebouncedSearchQuery(searchQuery);
-    }, 300); // 300ms di delay
+    // Filtro per durata
+    if (duration && duration !== 'all') {
+      filtered = filtered.filter(tour => {
+        const tourDuration = parseInt(tour.duration) || 0;
+        switch (duration) {
+          case '1-3': return tourDuration >= 1 && tourDuration <= 3;
+          case '4-7': return tourDuration >= 4 && tourDuration <= 7;
+          case '8-14': return tourDuration >= 8 && tourDuration <= 14;
+          case '15+': return tourDuration >= 15;
+          default: return true;
+        }
+      });
+    }
 
-    return () => {
-      if (debounceTimeoutRef.current) {
-        clearTimeout(debounceTimeoutRef.current);
-      }
-    };
-  }, [searchQuery]);
+    // Filtro per prezzo
+    if (price && price !== 'all') {
+      filtered = filtered.filter(tour => {
+        const tourPrice = parseInt(tour.price) || 0;
+        switch (price) {
+          case '0-500': return tourPrice >= 0 && tourPrice <= 500;
+          case '500-1000': return tourPrice >= 500 && tourPrice <= 1000;
+          case '1000-2000': return tourPrice >= 1000 && tourPrice <= 2000;
+          case '2000+': return tourPrice >= 2000;
+          default: return true;
+        }
+      });
+    }
 
+    // Filtro per ricerca
+    if (search && search.trim()) {
+      const searchLower = search.toLowerCase();
+      filtered = filtered.filter(tour => 
+        tour.title.toLowerCase().includes(searchLower) ||
+        tour.description.toLowerCase().includes(searchLower) ||
+        (tour.country && tour.country.toLowerCase().includes(searchLower))
+      );
+    }
+
+    return filtered;
+  }, []);
+
+  // Carica tutti i tour una sola volta
   useEffect(() => {
-    const fetchTours = async () => {
+    const fetchAllTours = async () => {
       try {
         setLoading(true);
         let data;
         
-        if (country && selectedType !== 'all') {
-          data = await TourService.getToursByCountryAndType(country, selectedType);
-        } else if (country) {
+        if (country) {
           data = await TourService.getToursByCountry(country);
-        } else if (selectedType && selectedType !== 'all') {
-          data = await TourService.getToursByType(selectedType);
         } else {
           data = await TourService.getAllTours();
         }
         
-        // Applica filtri aggiuntivi
-        let filteredData = data;
-
-        // Filtro per durata
-        if (selectedDuration !== 'all') {
-          filteredData = filteredData.filter(tour => {
-            const duration = parseInt(tour.duration) || 0;
-            switch (selectedDuration) {
-              case '1-3': return duration >= 1 && duration <= 3;
-              case '4-7': return duration >= 4 && duration <= 7;
-              case '8-14': return duration >= 8 && duration <= 14;
-              case '15+': return duration >= 15;
-              default: return true;
-            }
-          });
-        }
-
-        // Filtro per prezzo
-        if (selectedPrice !== 'all') {
-          filteredData = filteredData.filter(tour => {
-            const price = parseInt(tour.price) || 0;
-            switch (selectedPrice) {
-              case '0-500': return price >= 0 && price <= 500;
-              case '500-1000': return price >= 500 && price <= 1000;
-              case '1000-2000': return price >= 1000 && price <= 2000;
-              case '2000+': return price >= 2000;
-              default: return true;
-            }
-          });
-        }
-
-        // Filtro per ricerca (usa il valore debounced)
-        if (debouncedSearchQuery.trim()) {
-          filteredData = filteredData.filter(tour => 
-            tour.title.toLowerCase().includes(debouncedSearchQuery.toLowerCase()) ||
-            tour.description.toLowerCase().includes(debouncedSearchQuery.toLowerCase())
-          );
-        }
-        
-        setTours(filteredData.slice(0, limit));
+        setAllTours(data);
       } catch (err) {
         setError('Errore nel caricamento dei tour: ' + err.message);
       } finally {
@@ -127,8 +117,14 @@ const DynamicTours = ({ type, country, limit = 6, showFilters = false }) => {
       }
     };
 
-    fetchTours();
-  }, [type, country, limit, selectedType, selectedDuration, selectedPrice, debouncedSearchQuery]);
+    fetchAllTours();
+  }, [country]);
+
+  // Filtra i tour ogni volta che cambiano i filtri
+  useEffect(() => {
+    const filtered = filterTours(allTours, selectedType, selectedDuration, selectedPrice, searchQuery);
+    setFilteredTours(filtered.slice(0, limit));
+  }, [allTours, selectedType, selectedDuration, selectedPrice, searchQuery, limit, filterTours]);
 
   const clearAllFilters = () => {
     setSelectedType('all');
@@ -236,7 +232,7 @@ const DynamicTours = ({ type, country, limit = 6, showFilters = false }) => {
       
       {/* Grid dei tour */}
       <div className="tours-grid">
-        {tours.map((tour) => (
+        {filteredTours.map((tour) => (
           <div key={tour.id} className="tour-card">
             <div className="tour-card-image">
               <img 
@@ -263,7 +259,7 @@ const DynamicTours = ({ type, country, limit = 6, showFilters = false }) => {
         ))}
       </div>
 
-      {tours.length === 0 && (
+      {filteredTours.length === 0 && !loading && (
         <div className="no-results">
           <h3>Nessun tour trovato</h3>
           <p>Prova a modificare i filtri o la ricerca per trovare altri tour disponibili.</p>
