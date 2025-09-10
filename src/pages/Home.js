@@ -309,8 +309,14 @@ const Home = () => {
     element.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  const scrollToDestinations = () => {
+  const scrollToJourneys = () => {
     const el = document.getElementById('all-destinations');
+    if (!el) return;
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const scrollToDestinations = () => {
+    const el = document.getElementById('destinations-showcase-new');
     if (!el) return;
     el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
@@ -627,7 +633,7 @@ const Home = () => {
           </div>
         </div>
         <div className="options-footer reveal-on-scroll">
-          <button className="options-cta" onClick={scrollToDestinations}>
+          <button className="options-cta" onClick={scrollToJourneys}>
             Scopri tutte le nostre opzioni di viaggio
           </button>
         </div>
@@ -649,7 +655,7 @@ const Home = () => {
         <div className="polynesia-hero-content">
           <h2 className="polynesia-hero-title">Dove i sogni diventano realtà</h2>
           <p className="polynesia-hero-subtitle">Scopri la magia della Polinesia Francese, dove ogni atollo racconta una storia di bellezza infinita</p>
-          <button className="polynesia-hero-cta" onClick={scrollToDestinations}>
+          <button className="polynesia-hero-cta" onClick={scrollToJourneys}>
             Scopri viaggi
           </button>
         </div>
@@ -718,7 +724,7 @@ const Home = () => {
       */}
 
       {/* Nuova Sezione Destinazioni - Layout A&K Style */}
-      <section className="destinations-showcase-new">
+      <section id="destinations-showcase-new" className="destinations-showcase-new">
         <div className="showcase-header-new">
           <h2>Le nostre destinazioni</h2>
           <p>Scopri i nostri itinerari esclusivi in tutto il mondo</p>
