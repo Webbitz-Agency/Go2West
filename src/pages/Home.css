@@ -2166,39 +2166,45 @@
 
 @media (max-width: 768px) {
   .quote-hero {
-    height: 50vh;
-    min-height: 400px;
+    height: 40vh;
+    min-height: 300px;
+    max-height: 400px;
   }
   
   .quote-hero-content {
-    padding: 0 30px;
+    padding: 0 20px;
+    gap: 15px;
   }
   
   .quote-text {
-    font-size: 1.8rem;
+    font-size: 1.4rem;
+    line-height: 1.4;
   }
   
   .quote-author {
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
 }
 
 @media (max-width: 480px) {
   .quote-hero {
-    height: 45vh;
-    min-height: 350px;
+    height: 35vh;
+    min-height: 250px;
+    max-height: 300px;
   }
   
   .quote-hero-content {
-    padding: 0 25px;
+    padding: 0 15px;
+    gap: 12px;
   }
   
   .quote-text {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
+    line-height: 1.3;
   }
   
   .quote-author {
-    font-size: 0.95rem;
+    font-size: 0.85rem;
   }
 }
 
@@ -4966,6 +4972,7 @@
   .destination-description-new {
     font-size: 0.9rem;
     margin-bottom: 15px;
+    line-height: 20px;
   }
   
   .destination-short-new span {
