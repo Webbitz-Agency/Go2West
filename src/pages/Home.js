@@ -51,12 +51,14 @@ const Home = () => {
   const openTravelModal = (travelTypeSlug) => {
     setPendingTravelType(travelTypeSlug);
     setSelectedTravelType(travelTypeSlug);
+    document.body.classList.add('body-modal-open');
     setIsModalOpen(true);
   };
 
   const closeTravelModal = () => {
     setIsModalOpen(false);
     setSelectedCountry('');
+    document.body.classList.remove('body-modal-open');
   };
 
   const goToSelectedTravel = () => {

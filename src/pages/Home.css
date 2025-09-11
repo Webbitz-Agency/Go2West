@@ -289,6 +289,13 @@
   padding: 40px 0 75px;
 }
 
+/* Padding ridotto per mobile */
+@media (max-width: 768px) {
+  .reveal-on-scroll.revealed {
+    padding: 0;
+  }
+}
+
 @media (max-width: 768px) {
   .hero-actions { 
     flex-direction: column;
@@ -3685,47 +3692,177 @@
 
 @media (max-width: 992px) {
   .horizontal-section {
-    padding: 60px var(--section-padding-horizontal);
+    padding: 50px var(--section-padding-horizontal);
+  }
+  
+  .horizontal-container {
+    flex-direction: row;
+    height: auto;
+    gap: 20px;
+    align-items: stretch;
+  }
+  
+  /* Layout a due colonne per tablet: testo a sinistra, immagini a destra */
+  .horizontal-text-container {
+    flex: 1;
+    order: 1;
+    padding: 40px 30px;
+    border-radius: 15px 0 0 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .horizontal-title {
+    font-size: 2rem;
+    margin-bottom: 18px;
+  }
+  
+  .horizontal-text {
+    font-size: 1.1rem;
+    margin-bottom: 18px;
+  }
+  
+  .horizontal-text-secondary {
+    font-size: 1rem;
+    margin-bottom: 25px;
+  }
+  
+  /* Container per le immagini a destra */
+  .horizontal-image-left {
+    flex: 1;
+    order: 2;
+    height: 400px;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  
+  .horizontal-image-right {
+    flex: 1;
+    order: 3;
+    height: 400px;
+    border-radius: 0 15px 15px 0;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  }
+}
+
+@media (max-width: 850px) {
+  .horizontal-section {
+    padding: 45px 5%;
   }
   
   .horizontal-container {
     flex-direction: column;
     height: auto;
-    gap: 25px;
+    gap: 0;
   }
   
-  .horizontal-image-left {
-    flex: none;
-    height: 300px;
-    order: 1;
-  }
-  
+  /* Testo in alto */
   .horizontal-text-container {
+    order: 1;
     flex: none;
-    order: 2;
-    padding: 40px 30px;
+    padding: 35px 25px;
+    background: #ffffff;
+    border-radius: 15px 15px 0 0;
+    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
   }
   
+  .horizontal-title {
+    font-size: 1.9rem;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  
+  .horizontal-text {
+    font-size: 1rem;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  
+  .horizontal-text-secondary {
+    font-size: 0.95rem;
+    margin-bottom: 25px;
+    text-align: center;
+  }
+  
+  .horizontal-cta {
+    text-align: center;
+  }
+  
+  /* Nascondi immagine sinistra su mobile grande */
+  .horizontal-image-left {
+    display: none;
+  }
+  
+  /* Solo immagine destra su mobile grande */
   .horizontal-image-right {
+    order: 2;
     flex: none;
-    height: 300px;
-    order: 3;
+    height: 280px;
+    border-radius: 0 0 15px 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
   }
 }
 
 @media (max-width: 768px) {
   .horizontal-section {
-    padding: 50px 5%;
-    margin-bottom: 40px;
+    padding: 40px 5%;
+    margin-bottom: 30px;
   }
   
   .horizontal-container {
-    gap: 20px;
+    flex-direction: column;
+    height: auto;
+    gap: 0;
   }
   
-  .horizontal-image-left,
+  /* Testo in alto su mobile */
+  .horizontal-text-container {
+    order: 1;
+    flex: none;
+    padding: 30px 20px;
+    background: #ffffff;
+    border-radius: 15px 15px 0 0;
+    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .horizontal-title {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+  
+  .horizontal-text {
+    font-size: 0.95rem;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+  
+  .horizontal-text-secondary {
+    font-size: 0.9rem;
+    margin-bottom: 25px;
+    text-align: center;
+  }
+  
+  .horizontal-cta {
+    text-align: center;
+  }
+  
+  .horizontal-cta-btn {
+    padding: 12px 25px;
+    font-size: 1rem;
+  }
+  
+  /* Nascondi immagine sinistra su mobile */
+  .horizontal-image-left {
+    display: none;
+  }
+  
+  /* Solo immagine destra su mobile */
   .horizontal-image-right {
+    order: 2;
+    flex: none;
     height: 250px;
+    border-radius: 0 0 15px 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
   }
   
   /* Stili responsive per i caroselli */
@@ -3751,40 +3888,48 @@
     width: 5px;
     height: 5px;
   }
-  
-  .horizontal-text-container {
-    padding: 30px 25px;
-  }
-  
-  .horizontal-title {
-    font-size: 1.8rem;
-    margin-bottom: 15px;
-  }
-  
-  .horizontal-text {
-    font-size: 0.95rem;
-    margin-bottom: 15px;
-  }
-  
-  .horizontal-text-secondary {
-    font-size: 0.9rem;
-    margin-bottom: 25px;
-  }
-  
-  .horizontal-cta-btn {
-    padding: 12px 25px;
-    font-size: 1rem;
-  }
 }
 
 @media (max-width: 480px) {
   .horizontal-section {
-    padding: 40px 5%;
+    padding: 30px 5%;
+    margin-bottom: 20px;
   }
   
-  .horizontal-image-left,
+  .horizontal-text-container {
+    padding: 25px 15px;
+    border-radius: 12px 12px 0 0;
+  }
+  
+  .horizontal-title {
+    font-size: 1.6rem;
+    margin-bottom: 12px;
+  }
+  
+  .horizontal-text {
+    font-size: 0.9rem;
+    margin-bottom: 12px;
+  }
+  
+  .horizontal-text-secondary {
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+  }
+  
+  .horizontal-cta-btn {
+    padding: 10px 20px;
+    font-size: 0.95rem;
+  }
+  
+  /* Nascondi immagine sinistra su mobile piccolo */
+  .horizontal-image-left {
+    display: none;
+  }
+  
+  /* Solo immagine destra su mobile piccolo */
   .horizontal-image-right {
     height: 200px;
+    border-radius: 0 0 12px 12px;
   }
   
   /* Stili responsive per i caroselli su schermi piccoli */
@@ -3809,30 +3954,6 @@
   .horizontal-carousel .indicator {
     width: 4px;
     height: 4px;
-  }
-  
-  .horizontal-text-container {
-    padding: 25px 20px;
-  }
-  
-  .horizontal-title {
-    font-size: 1.6rem;
-    margin-bottom: 12px;
-  }
-  
-  .horizontal-text {
-    font-size: 0.9rem;
-    margin-bottom: 12px;
-  }
-  
-  .horizontal-text-secondary {
-    font-size: 0.85rem;
-    margin-bottom: 20px;
-  }
-  
-  .horizontal-cta-btn {
-    padding: 10px 20px;
-    font-size: 0.95rem;
   }
 }
 
@@ -4541,10 +4662,13 @@
   
   .destination-card-new {
     border-radius: 15px;
+    height: 60vh;
+    min-height: 60vh;
   }
   
   .destination-image-new {
-    height: 250px;
+    height: 60%;
+    flex: 0 0 60%;
   }
   
   
@@ -4554,9 +4678,42 @@
     justify-content: space-between;
   }
   
+  /* Nascondi il titolo nella sezione testo su mobile */
   .destination-title-new {
-    font-size: 1.6rem;
-    margin-bottom: 15px;
+    display: none;
+  }
+  
+  /* Assicura che l'overlay con il titolo sia sempre visibile su mobile */
+  .image-overlay {
+    opacity: 1 !important;
+  }
+  
+  .image-overlay h3 {
+    font-size: 1.8rem;
+  }
+  
+  /* Assicura che tutte le cards abbiano immagini al 60% su mobile */
+  .destination-card-new.full-width-card .destination-image-new,
+  .destination-card-new.wide-card .destination-image-new,
+  .destination-card-new.narrow-card .destination-image-new {
+    height: 60% !important;
+    flex: 0 0 60% !important;
+  }
+  
+  /* Assicura che tutte le cards abbiano l'overlay visibile */
+  .destination-card-new.full-width-card .image-overlay,
+  .destination-card-new.wide-card .image-overlay,
+  .destination-card-new.narrow-card .image-overlay {
+    opacity: 1 !important;
+  }
+  
+  /* Rimuovi le proprietà flex su mobile per evitare problemi con le immagini */
+  .destination-card-new.wide-card {
+    flex: none;
+  }
+  
+  .destination-card-new.narrow-card {
+    flex: none;
   }
   
   .destination-description-new {
@@ -4599,10 +4756,13 @@
   
   .destination-card-new {
     border-radius: 12px;
+    height: 60vh;
+    min-height: 60vh;
   }
   
   .destination-image-new {
-    height: 200px;
+    height: 60%;
+    flex: 0 0 60%;
   }
   
   
@@ -4612,9 +4772,42 @@
     justify-content: space-between;
   }
   
+  /* Nascondi il titolo nella sezione testo su mobile piccolo */
   .destination-title-new {
-    font-size: 1.4rem;
-    margin-bottom: 12px;
+    display: none;
+  }
+  
+  /* Assicura che l'overlay con il titolo sia sempre visibile su mobile piccolo */
+  .image-overlay {
+    opacity: 1 !important;
+  }
+  
+  .image-overlay h3 {
+    font-size: 1.6rem;
+  }
+  
+  /* Assicura che tutte le cards abbiano immagini al 60% su mobile piccolo */
+  .destination-card-new.full-width-card .destination-image-new,
+  .destination-card-new.wide-card .destination-image-new,
+  .destination-card-new.narrow-card .destination-image-new {
+    height: 60% !important;
+    flex: 0 0 60% !important;
+  }
+  
+  /* Assicura che tutte le cards abbiano l'overlay visibile */
+  .destination-card-new.full-width-card .image-overlay,
+  .destination-card-new.wide-card .image-overlay,
+  .destination-card-new.narrow-card .image-overlay {
+    opacity: 1 !important;
+  }
+  
+  /* Rimuovi le proprietà flex su mobile piccolo per evitare problemi con le immagini */
+  .destination-card-new.wide-card {
+    flex: none;
+  }
+  
+  .destination-card-new.narrow-card {
+    flex: none;
   }
   
   .destination-description-new {

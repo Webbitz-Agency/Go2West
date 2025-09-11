@@ -48,6 +48,9 @@
 }
 
 .logo-text {
+  width: clamp(120px, 12vw, 170px);
+  height: clamp(60px, 6vw, 85px);
+  object-fit: contain;
   background: linear-gradient(45deg, #4A90E2, #7CB9E8);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -508,11 +511,16 @@
   
   .header .container-header {
     justify-content: space-between;
-    padding: 20px 18px 0;
+    padding: 15px 18px 0;
   }
   
   .logo {
     position: static;
+  }
+  
+  .logo-text {
+    width: clamp(100px, 15vw, 140px);
+    height: clamp(50px, 7.5vw, 70px);
   }
 }
 
@@ -530,6 +538,15 @@
   .mobile-submenu-item {
     padding: 10px 12px;
     font-size: clamp(0.85rem, 3.5vw, 0.95rem);
+  }
+  
+  .logo-text {
+    width: clamp(80px, 18vw, 120px);
+    height: clamp(40px, 9vw, 60px);
+  }
+  
+  .header .container-header {
+    padding: 12px 15px 0;
   }
 }
 
