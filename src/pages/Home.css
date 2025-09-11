@@ -1936,6 +1936,145 @@
   transform: translateY(-1px);
 }
 
+/* ===== FORM DESKTOP - Nascondi placeholder, mostra label ===== */
+.form-input-mobile::placeholder,
+.form-textarea-mobile::placeholder {
+  opacity: 0;
+}
+
+/* ===== FORM MOBILE - Forza nascondere label ===== */
+@media (max-width: 768px) {
+  .contact-form .form-group label {
+    display: none !important;
+  }
+}
+
+/* ===== FORM MOBILE OPTIMIZATION ===== */
+@media (max-width: 768px) {
+  .contact-form-container {
+    padding: 25px 20px;
+    margin: 0 10px;
+    max-width: calc(100% - 20px);
+  }
+  
+  .contact-form {
+    gap: 10px;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  /* Nascondi label su mobile */
+  .form-group label,
+  .form-label-desktop {
+    display: none !important;
+  }
+  
+  /* Mostra placeholder su mobile */
+  .form-input-mobile::placeholder,
+  .form-textarea-mobile::placeholder {
+    opacity: 1;
+  }
+  
+  .form-group {
+    gap: 0;
+  }
+  
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 16px 18px;
+    font-size: 1rem;
+    border-radius: 12px;
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+  }
+  
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    background: #fff;
+    border-color: #4facfe;
+    box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+  }
+  
+  .form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+  
+  .submit-btn {
+    width: 100%;
+    padding: 18px 30px;
+    font-size: 1.1rem;
+    border-radius: 12px;
+    margin-top: 10px;
+  }
+  
+  /* Stile speciale per select su mobile */
+  .form-select-mobile {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 16px;
+    padding-right: 45px;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-form-container {
+    padding: 20px 15px;
+    margin: 0 5px;
+    max-width: calc(100% - 10px);
+  }
+  
+  .contact-form {
+    gap: 8px;
+  }
+  
+  .form-row {
+    gap: 8px;
+  }
+  
+  /* Nascondi label su mobile piccolo */
+  .form-group label,
+  .form-label-desktop {
+    display: none !important;
+  }
+  
+  /* Mantieni placeholder visibili su mobile piccolo */
+  .form-input-mobile::placeholder,
+  .form-textarea-mobile::placeholder {
+    opacity: 1;
+  }
+  
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 14px 16px;
+    font-size: 0.95rem;
+    border-radius: 10px;
+  }
+  
+  .form-group textarea {
+    min-height: 90px;
+  }
+  
+  .submit-btn {
+    padding: 16px 25px;
+    font-size: 1rem;
+    border-radius: 10px;
+  }
+  
+  .form-select-mobile {
+    background-size: 14px;
+    padding-right: 40px;
+  }
+}
+
 /* CTA flottante rimosso - ora integrato nell'header */
 
 /* === HERO FINALE CON CITAZIONE === */
@@ -2247,8 +2386,11 @@
   
   /* Responsive per il form */
   .contact-form-container {
-    padding: 30px 25px;
-    margin: 0 20px;
+    padding: 0;
+    /*margin: 0 ;*/
+    background: none;
+    border: none;
+    box-shadow: none;
   }
   
   /* Polaroid e rotte aeree rimosse */

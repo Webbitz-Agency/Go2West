@@ -210,7 +210,7 @@ const MasonryTours = ({ itemsPerPage = 6 }) => {
               
               <div className="tour-card-meta">
                 <div className="tour-duration">
-                  <span className="meta-icon">⏱️</span>
+                  {/*<span className="meta-icon"></span>*/}
                   {tour.duration ? `${tour.duration} giorni` : 'Durata variabile'}
                 </div>
                 <div className="tour-type">

@@ -827,22 +827,22 @@ const Home = () => {
               <form className="contact-form" onSubmit={(e) => e.preventDefault()}>
                 <div className="form-row">
                   <div className="form-group">
-                    <label>Nome e Cognome</label>
-                    <input type="text" placeholder="Mario Rossi" required />
+                    <label className="form-label-desktop">Nome e Cognome</label>
+                    <input type="text" placeholder="Mario Rossi" className="form-input-mobile" required />
                   </div>
                   <div className="form-group">
-                    <label>Email</label>
-                    <input type="email" placeholder="mario@example.com" required />
+                    <label className="form-label-desktop">Email</label>
+                    <input type="email" placeholder="mario@example.com" className="form-input-mobile" required />
                   </div>
                 </div>
                 <div className="form-row">
                   <div className="form-group">
-                    <label>Telefono</label>
-                    <input type="tel" placeholder="+39 333 1234567" />
+                    <label className="form-label-desktop">Telefono</label>
+                    <input type="tel" placeholder="+39 333 1234567" className="form-input-mobile" />
                   </div>
                   <div className="form-group">
-                    <label>Destinazione d'interesse</label>
-                    <select defaultValue="">
+                    <label className="form-label-desktop">Destinazione d'interesse</label>
+                    <select defaultValue="" className="form-select-mobile">
                       <option value="" disabled>Seleziona una destinazione</option>
                       {destinationsWithImages.map((d) => (
                         <option key={d.country} value={d.country}>{d.name}</option>
@@ -852,8 +852,8 @@ const Home = () => {
                   </div>
                 </div>
                 <div className="form-group">
-                  <label>Messaggio</label>
-                  <textarea rows="4" placeholder="Raccontaci cosa stai cercando..." />
+                  <label className="form-label-desktop">Messaggio</label>
+                  <textarea rows="4" placeholder="Raccontaci cosa stai cercando..." className="form-textarea-mobile" />
                 </div>
                 <button type="submit" className="submit-btn">Invia Richiesta</button>
               </form>
