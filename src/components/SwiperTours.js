@@ -41,19 +41,10 @@ const SwiperTours = ({ itemsPerPage = 6 }) => {
     }, 10000);
   };
 
-  // Gestisce il cambio slide con scroll
+  // Gestisce il cambio slide (senza scroll su mobile)
   const handleSlideChange = () => {
     handleUserInteraction();
-    
-    // Scroll all'inizio della sezione su mobile
-    const sectionElement = document.getElementById('all-destinations');
-    if (sectionElement) {
-      sectionElement.scrollIntoView({ 
-        behavior: 'smooth',
-        block: 'start',
-        inline: 'nearest'
-      });
-    }
+    // Scroll disabilitato per mobile - solo gestione interazione utente
   };
 
   if (loading) {

@@ -5,7 +5,6 @@
   margin: 40px 0;
   position: relative;
   display: none; /* Nascondi di default */
-  scroll-margin-top: 80px; /* Offset per lo scroll smooth */
 }
 
 /* Mostra Swiper solo su mobile */
