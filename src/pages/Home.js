@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import DynamicTours from '../components/DynamicTours';
+import MasonryTours from '../components/MasonryTours';
 import { destinations, destinationImages } from '../config/destinations';
 import './Home.css';
 
@@ -805,7 +806,7 @@ const Home = () => {
         </div>
 
         <div className="suggestions-container">
-          <DynamicTours limit={6} />
+          <MasonryTours limit={6} />
         </div>
       </section>
 

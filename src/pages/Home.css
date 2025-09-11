@@ -4673,9 +4673,10 @@
   
   
   .destination-content-new {
-    padding: 20px 15px;
+    padding: 20px 15px 60px 15px;
     min-height: 160px;
     justify-content: space-between;
+    position: relative;
   }
   
   /* Nascondi il titolo nella sezione testo su mobile */
@@ -4717,13 +4718,22 @@
   }
   
   .destination-description-new {
-    font-size: 0.95rem;
+    font-size: 0.8rem;
     margin-bottom: 20px;
   }
   
   .destination-btn-new {
     padding: 12px 25px;
     font-size: 0.9rem;
+  }
+  
+  /* Fissa il bottone in basso a sinistra su mobile */
+  .destination-btn-container {
+    position: absolute;
+    bottom: 15px;
+    left: 20px;
+    margin-top: 0;
+    padding-top: 0;
   }
 }
 
@@ -4767,9 +4777,10 @@
   
   
   .destination-content-new {
-    padding: 15px 12px;
+    padding: 15px 12px 55px 12px;
     min-height: 140px;
     justify-content: space-between;
+    position: relative;
   }
   
   /* Nascondi il titolo nella sezione testo su mobile piccolo */
@@ -4823,5 +4834,14 @@
   .destination-btn-new {
     padding: 10px 20px;
     font-size: 0.85rem;
+  }
+  
+  /* Fissa il bottone in basso a sinistra su mobile piccolo */
+  .destination-btn-container {
+    position: absolute;
+    bottom: 12px;
+    left: 15px;
+    margin-top: 0;
+    padding-top: 0;
   }
 }

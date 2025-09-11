@@ -1,0 +1,444 @@
+/* ===== CONTAINER MASONRY ===== */
+.masonry-tours-container {
+  width: 100%;
+  padding: 0 20px;
+  margin: 40px 0;
+  scroll-margin-top: 80px; /* Offset per lo scroll smooth */
+}
+
+/* Nascondi Masonry su mobile */
+@media (max-width: 768px) {
+  .masonry-tours-container {
+    display: none;
+  }
+}
+
+/* ===== GRIGLIA MASONRY ===== */
+.masonry-grid {
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+.masonry-tour-card {
+  width: calc(33.333% - 20px);
+  margin: 0 10px 20px 10px;
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border: 1px solid #f0f0f0;
+  display: flex;
+  flex-direction: column;
+}
+
+.masonry-tour-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* ===== IMMAGINE TOUR ===== */
+.tour-card-image {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+
+.tour-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.masonry-tour-card:hover .tour-card-image img {
+  transform: scale(1.08);
+}
+
+.tour-card-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.3) 100%);
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 15px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.masonry-tour-card:hover .tour-card-overlay {
+  opacity: 1;
+}
+
+.tour-card-price {
+  background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+}
+
+/* ===== CONTENUTO TOUR ===== */
+.tour-card-content {
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.tour-card-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0 0 15px 0;
+  line-height: 1.3;
+  font-family: 'DM Serif Text', serif;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.tour-card-description {
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ===== META INFO ===== */
+.tour-card-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 15px 0;
+  border-top: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.tour-duration,
+.tour-type {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #666;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.meta-icon {
+  font-size: 0.9rem;
+}
+
+/* ===== PULSANTE ===== */
+.tour-card-button {
+  display: inline-block;
+  padding: 14px 28px;
+  background: linear-gradient(45deg, #4facfe, #00f2fe);
+  color: white;
+  text-decoration: none;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+
+.tour-card-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+
+.tour-card-button:hover::before {
+  left: 100%;
+}
+
+.tour-card-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4);
+  color: white;
+  text-decoration: none;
+}
+
+/* ===== PAGINAZIONE ===== */
+.masonry-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-top: 40px;
+  padding: 20px 0;
+}
+
+.pagination-btn {
+  width: 50px;
+  height: 50px;
+  border: none;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.pagination-btn:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+}
+
+.pagination-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2c3e50;
+  background: #f8f9fa;
+  padding: 12px 24px;
+  border-radius: 25px;
+  border: 2px solid #e9ecef;
+}
+
+.current-page {
+  color: #4facfe;
+  font-size: 1.3rem;
+}
+
+.separator {
+  color: #6c757d;
+  font-weight: 400;
+}
+
+.total-pages {
+  color: #495057;
+}
+
+/* ===== STATI SPECIALI ===== */
+.masonry-loading {
+  text-align: center;
+  padding: 80px 20px;
+  background: #f8f9fa;
+  border-radius: 16px;
+  border: 2px solid #e9ecef;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #4facfe;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.masonry-loading p {
+  color: #4facfe;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.masonry-error {
+  text-align: center;
+  padding: 80px 20px;
+  background: #fff5f5;
+  border-radius: 16px;
+  border: 2px solid #fed7d7;
+}
+
+.masonry-error h3 {
+  color: #e53e3e;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  font-weight: 600;
+  font-family: 'DM Serif Text', serif;
+}
+
+.masonry-error p {
+  color: #c53030;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.no-tours-message {
+  text-align: center;
+  padding: 80px 20px;
+  background: #f8f9fa;
+  border-radius: 16px;
+  border: 2px solid #e9ecef;
+}
+
+.no-tours-message h3 {
+  color: #2c3e50;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  font-weight: 600;
+  font-family: 'DM Serif Text', serif;
+}
+
+.no-tours-message p {
+  color: #666;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .masonry-tour-card {
+    width: calc(50% - 20px);
+  }
+  
+  .masonry-tours-container {
+    padding: 0 15px;
+  }
+  
+  .tour-card-content {
+    padding: 20px;
+  }
+  
+  .tour-card-title {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .masonry-tour-card {
+    width: calc(50% - 15px);
+    margin: 0 7.5px 15px 7.5px;
+  }
+  
+  .masonry-tours-container {
+    padding: 0 10px;
+  }
+  
+  .tour-card-image {
+    height: 180px;
+  }
+  
+  .tour-card-content {
+    padding: 18px;
+  }
+  
+  .tour-card-title {
+    font-size: 1.2rem;
+    margin-bottom: 12px;
+  }
+  
+  .tour-card-description {
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+  }
+  
+  .tour-card-meta {
+    margin-bottom: 15px;
+    padding: 12px 0;
+  }
+  
+  .tour-card-button {
+    padding: 12px 24px;
+    font-size: 0.85rem;
+  }
+  
+  .pagination-btn {
+    width: 45px;
+    height: 45px;
+    font-size: 1.1rem;
+  }
+  
+  .pagination-info {
+    font-size: 1rem;
+    padding: 10px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .masonry-tour-card {
+    width: calc(100% - 20px);
+    margin: 0 10px 15px 10px;
+  }
+  
+  .masonry-tours-container {
+    padding: 0 5px;
+  }
+  
+  .tour-card-image {
+    height: 160px;
+  }
+  
+  .tour-card-content {
+    padding: 15px;
+  }
+  
+  .tour-card-title {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+  }
+  
+  .tour-card-description {
+    font-size: 0.85rem;
+    margin-bottom: 12px;
+  }
+  
+  .tour-card-meta {
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 12px;
+    padding: 10px 0;
+  }
+  
+  .tour-card-button {
+    padding: 10px 20px;
+    font-size: 0.8rem;
+  }
+  
+  .pagination-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+  
+  .pagination-info {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+  }
+}
