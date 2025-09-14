@@ -204,7 +204,7 @@
 }
 
 .home-hero-cta {
-  background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+  background: linear-gradient(45deg, #ff3f3f, #ee2424);
   color: white;
   border: none;
   padding: clamp(12px, 3vw, 16px) clamp(24px, 5vw, 32px);
@@ -508,7 +508,7 @@
 }
 
 .experience-tag {
-  background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
+  background: linear-gradient(45deg, #ff3f3f, #ee2424);
   color: white;
   padding: 6px 12px;
   border-radius: 13px;
@@ -608,10 +608,10 @@
   background:
     linear-gradient(#ffffff, #ffffff) padding-box,
     repeating-linear-gradient(135deg,
-      #ff6b6b 0 12px,
-      #ff6b6b 12px 18px,
-      #59cbe8 18px 30px,
-      #59cbe8 30px 36px
+      #ff3f3f 0 12px,
+      #ff3f3f 12px 18px,
+      #006fcf 18px 30px,
+      #004cfe 30px 36px
     ) border-box;
   border: 10px solid transparent;
   border-radius: 16px;
@@ -1127,7 +1127,7 @@
 }
 
 .dot.active {
-  background: linear-gradient(45deg, #4facfe, #00f2fe);
+  background: linear-gradient(45deg, #006fcf, #004cfe);
   transform: scale(1.2);
 }
 
@@ -1159,7 +1159,7 @@
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 10px;
-  background: linear-gradient(45deg, #4facfe, #00f2fe);
+  background: linear-gradient(45deg, #006fcf, #004cfe);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -1174,7 +1174,7 @@
 /* Bottoni e Link */
 .explore-btn {
   display: inline-block;
-  background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+  background: linear-gradient(45deg, #ff3f3f, #ee2424);
   color: white;
   padding: clamp(8px, 1.8vw, 12px) clamp(16px, 3vw, 25px);
   border-radius: clamp(20px, 4vw, 25px);
@@ -1211,7 +1211,7 @@
 
 /* Sezione CTA Finale */
 .final-cta {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(45deg, #006fcf, #004cfe);
   padding: 80px 20px;
   text-align: center;
   color: white;
@@ -1241,7 +1241,7 @@
 
 .primary-cta {
   display: inline-block;
-  background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+  background: linear-gradient(45deg, #ff3f3f, #ee2424);
   color: white;
   padding: 15px 35px;
   border-radius: 30px;
@@ -1392,7 +1392,7 @@
 }*/
 .options-header { max-width: 100%; margin: 0 auto 18px; text-align: center; }
 .options-header h2 { margin: 0 0 clamp(4px, 1vw, 6px) 0; font-size: clamp(1.8rem, 4.5vw, 2.5rem); color: #2c3e50; font-weight: 500; }
-.options-header p { margin: 0; font-size: clamp(1rem, 2.5vw, 1.2rem); color: #4facfe; }
+.options-header p { margin: 0; font-size: clamp(1rem, 2.5vw, 1.2rem); color: #0f7ae5; }
 .options-grid {
   display: grid;
   grid-template-columns: 1.1fr 1fr 1fr;
@@ -1536,7 +1536,7 @@
   }
 }
 .options-cta {
-  background: linear-gradient(45deg, #4facfe, #00f2fe);
+  background: linear-gradient(45deg, #006fcf, #004cfe);
   color: white;
   border: none;
   padding: clamp(10px, 2vw, 12px) clamp(18px, 3vw, 22px);
@@ -1808,7 +1808,7 @@
 
 .contact-header p {
   font-size: 1.1rem;
-  color: #4facfe;
+  color: #0f7ae5;
   font-weight: 500;
 }
 
@@ -1897,7 +1897,7 @@
 
 .submit-btn {
   align-self: flex-start;
-  background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+  background: linear-gradient(45deg, #ff3f3f, #ee2424);
   color: white;
   padding: 15px 30px;
   border-radius: 30px;
@@ -2527,7 +2527,7 @@
 }
 
 .polynesia-hero-cta {
-  background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+  background: linear-gradient(45deg, #ff3f3f, #ee2424);
   color: white;
   border: none;
   padding: 16px 32px;
@@ -2869,7 +2869,7 @@
 
 .showcase-dot.active,
 .suggestion-dot.active {
-  background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+  background: linear-gradient(45deg, #ff3f3f, #ee2424);
   transform: scale(1.2);
 }
 
@@ -3162,7 +3162,7 @@
 
 .suggestions-section .section-header p {
   font-size: 1.2rem;
-  color: #4facfe;
+  color: #0f7ae5;
   max-width: 600px;
   margin: 0 auto;
 }
@@ -3276,7 +3276,7 @@
   position: absolute;
   top: 15px;
   left: 15px;
-  background: linear-gradient(45deg, #4facfe, #00f2fe);
+  background: linear-gradient(45deg, #006fcf, #004cfe);
   color: white;
   padding: 6px 12px;
   border-radius: 13px;
@@ -3339,7 +3339,7 @@
 
 /* Bottone CTA */
 .suggestion-btn {
-  background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+  background: linear-gradient(45deg, #ff3f3f, #ee2424);
   color: white;
   padding: 12px 24px;
   border-radius: 25px;
@@ -3411,7 +3411,7 @@
 }
 
 .suggestion-dot.active {
-  background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+  background: linear-gradient(45deg, #ff3f3f, #ee2424);
   transform: scale(1.2);
 }
 
@@ -3691,7 +3691,7 @@
 }
 
 .horizontal-cta-btn {
-  background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+  background: linear-gradient(45deg, #ff3f3f, #ee2424);
   color: white;
   border: none;
   padding: 15px 30px;
@@ -4217,7 +4217,7 @@
 }
 
 .layered-cta-btn {
-  background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+  background: linear-gradient(45deg, #ff3f3f, #ee2424);
   color: white;
   border: none;
   padding: clamp(12px, 1.5vw, 16px) clamp(24px, 2.5vw, 32px);
@@ -4526,7 +4526,7 @@
 
 .showcase-header-new p {
   font-size: 1.2rem;
-  color: #4facfe;
+  color: #0f7ae5;
   margin: 0;
   line-height: 1.6;
 }

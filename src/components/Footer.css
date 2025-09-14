@@ -10,6 +10,28 @@
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 30px;
   margin-bottom: 30px;
+  position: relative;
+}
+
+/* Logo nel footer */
+.footer-logo {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+}
+
+.footer-logo-img {
+  width: clamp(100px, 10vw, 140px);
+  height: clamp(50px, 5vw, 70px);
+  object-fit: contain;
+  opacity: 0.9;
+  transition: opacity 0.3s ease;
+}
+
+.footer-logo-img:hover {
+  opacity: 1;
 }
 
 /* Footer mobile - tutto su una riga */
@@ -51,6 +73,12 @@
   .footer-bottom p {
     font-size: 0.7rem;
   }
+  
+  /* Logo footer su mobile - stesso posizionamento ma dimensioni uniformi */
+  .footer-logo-img {
+    width: clamp(120px, 15vw, 160px);
+    height: clamp(60px, 7.5vw, 80px);
+  }
 }
 
 @media (max-width: 480px) {
@@ -84,6 +112,12 @@
   
   .footer-bottom p {
     font-size: 0.65rem;
+  }
+  
+  /* Logo footer su mobile piccolo - dimensioni uniformi con header */
+  .footer-logo-img {
+    width: clamp(120px, 18vw, 160px);
+    height: clamp(60px, 9vw, 80px);
   }
 }
 

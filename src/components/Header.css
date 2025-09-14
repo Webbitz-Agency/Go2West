@@ -85,7 +85,7 @@
 
 /* Stato attivo (pagina corrente) */
 .nav-link.active {
-  background: linear-gradient(45deg, #4facfe, #00f2fe);
+  background: linear-gradient(45deg, #006fcf, #004cfe);
   color: white;
   box-shadow: 0 4px 12px rgba(79, 172, 254, 0.4);
 }
@@ -111,7 +111,7 @@
 
 /* Stato attivo mantiene il gradient anche con header trasparente */
 .header.transparent .nav-link.active {
-  background: linear-gradient(45deg, #4facfe, #00f2fe);
+  background: linear-gradient(45deg, #006fcf, #004cfe);
   color: white;
   box-shadow: 0 4px 12px rgba(79, 172, 254, 0.4);
   text-shadow: none;
@@ -120,7 +120,7 @@
 /* L'hover su link attivo mantiene lo stesso stile */
 .header.transparent .nav-link.active:hover,
 .nav-link.active:hover {
-  background: linear-gradient(45deg, #4facfe, #00f2fe);
+  background: linear-gradient(45deg, #006fcf, #004cfe);
   color: white;
   box-shadow: 0 6px 16px rgba(79, 172, 254, 0.5);
   transform: translateY(-1px);
@@ -182,14 +182,14 @@
 }
 
 .dropdown-item:hover {
-  background: linear-gradient(45deg, #4facfe, #00f2fe);
+  background: linear-gradient(45deg, #006fcf, #004cfe);
   color: white;
   transform: translateX(4px);
 }
 
 /* Stato attivo per item del dropdown viaggi */
 .dropdown-item.active {
-  background: linear-gradient(45deg, #4facfe, #00f2fe);
+  background: linear-gradient(45deg, #006fcf, #004cfe);
   color: white;
 }
 
@@ -267,7 +267,7 @@
 }
 
 .submenu-item:hover {
-  background: linear-gradient(45deg, #4facfe, #00f2fe);
+  background: linear-gradient(45deg, #006fcf, #004cfe);
   color: white;
   transform: translateX(2px);
 }
@@ -329,7 +329,7 @@
 
 /* CTA Header Desktop */
 .header-cta {
-  background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+  background: linear-gradient(45deg, #ff3f3f, #ee2424);
   color: white;
   border: none;
   padding: 10px 20px;
@@ -399,7 +399,7 @@
 
 .mobile-nav-link:hover,
 .mobile-nav-link.active {
-  background: linear-gradient(45deg, #4facfe, #00f2fe);
+  background: linear-gradient(45deg, #006fcf, #004cfe);
   color: white;
   transform: translateX(10px);
   border-color: rgba(79, 172, 254, 0.3);
@@ -447,7 +447,7 @@
 
 /* CTA Mobile Menu */
 .mobile-cta {
-  background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+  background: linear-gradient(45deg, #ff3f3f, #ee2424);
   color: white;
   border: none;
   padding: 15px 20px;
@@ -489,7 +489,7 @@
 }
 
 .mobile-submenu-item:hover {
-  background: linear-gradient(45deg, #4facfe, #00f2fe);
+  background: linear-gradient(45deg, #006fcf, #004cfe);
   color: white;
   transform: scale(1.02);
 }
@@ -516,11 +516,12 @@
   
   .logo {
     position: static;
+    padding-top: 0;
   }
   
   .logo-text {
-    width: clamp(100px, 15vw, 140px);
-    height: clamp(50px, 7.5vw, 70px);
+    width: clamp(120px, 15vw, 160px);
+    height: clamp(60px, 7.5vw, 80px);
   }
 }
 
@@ -541,8 +542,8 @@
   }
   
   .logo-text {
-    width: clamp(80px, 18vw, 120px);
-    height: clamp(40px, 9vw, 60px);
+    width: clamp(120px, 18vw, 160px);
+    height: clamp(60px, 9vw, 80px);
   }
   
   .header .container-header {
@@ -565,13 +566,13 @@
 
 .header.transparent .dropdown-item:hover,
 .header.transparent .submenu-item:hover {
-  background: linear-gradient(45deg, #4facfe, #00f2fe);
+  background: linear-gradient(45deg, #006fcf, #004cfe);
   color: white;
 }
 
 .header.solid .dropdown-item:hover,
 .header.solid .submenu-item:hover {
-  background: linear-gradient(45deg, #4facfe, #00f2fe);
+  background: linear-gradient(45deg, #006fcf, #004cfe);
   color: white;
 }
 

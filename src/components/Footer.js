@@ -21,6 +21,10 @@ const Footer = () => {
             <h4>Privacy Policy</h4>
             <p>Terms of Service</p>
           </div>
+          
+          <div className="footer-logo">
+            <img src="/logo-nobg.png" alt="go2west" className="footer-logo-img" />
+          </div>
         </div>
         
         <div className="footer-bottom">
