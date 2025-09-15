@@ -138,6 +138,12 @@
   opacity: 1;
 }
 
+/* Fade-in immediato per il primo video quando è caricato */
+.home-hero-video.first-loaded {
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+}
+
 .home-hero-overlay {
   position: absolute;
   inset: 0;
@@ -180,7 +186,7 @@
   display: none;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 20px;
+  /*margin-bottom: 20px;*/
 }
 
 .hero-logo-image {
@@ -221,6 +227,8 @@
   max-width: 85vw;
   margin: 0 auto;
   line-height: 1.6;
+  font-family: 'DM Serif Text', serif;
+  letter-spacing: 0.7px;
 }
 
 .home-hero-actions {

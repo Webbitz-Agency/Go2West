@@ -77,6 +77,7 @@ const Home = () => {
     '/images/video5.mp4'
   ];
   const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
+  const [isFirstVideoLoaded, setIsFirstVideoLoaded] = useState(false);
   
   // Gestione del cambio automatico dei video
   useEffect(() => {
@@ -98,6 +99,29 @@ const Home = () => {
       }
     });
   }, [currentHeroIndex]);
+
+  // Gestione del caricamento del primo video per evitare flash nero
+  useEffect(() => {
+    const firstVideo = document.querySelector('.home-hero-video');
+    if (firstVideo) {
+      const handleCanPlay = () => {
+        setIsFirstVideoLoaded(true);
+        firstVideo.removeEventListener('canplay', handleCanPlay);
+      };
+      
+      firstVideo.addEventListener('canplay', handleCanPlay);
+      
+      // Fallback: se il video non si carica entro 2 secondi, mostra comunque
+      const timeout = setTimeout(() => {
+        setIsFirstVideoLoaded(true);
+      }, 2000);
+      
+      return () => {
+        firstVideo.removeEventListener('canplay', handleCanPlay);
+        clearTimeout(timeout);
+      };
+    }
+  }, []);
 
   // Effetto: blocco fixed centrato e fade quando il bottom della sezione supera i pulsanti
   useEffect(() => {
@@ -436,12 +460,14 @@ const Home = () => {
         {heroVideos.map((video, index) => (
           <video
             key={index}
-            className={`home-hero-video ${index === currentHeroIndex ? 'active' : ''}`}
+            className={`home-hero-video ${index === currentHeroIndex ? 'active' : ''} ${index === 0 && isFirstVideoLoaded ? 'first-loaded' : ''}`}
             src={video}
             autoPlay={index === currentHeroIndex}
             muted
             playsInline
+            preload="metadata"
             onEnded={() => setCurrentHeroIndex((prev) => (prev + 1) % heroVideos.length)}
+            onLoadedData={index === 0 ? () => setIsFirstVideoLoaded(true) : undefined}
           />
         ))}
         <div className="home-hero-overlay" />
