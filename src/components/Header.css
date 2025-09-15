@@ -33,7 +33,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px 18px;
+  padding: 32.5px 18px;
   position: relative;
 }
 
@@ -48,8 +48,8 @@
 }
 
 .logo-text {
-  width: clamp(120px, 12vw, 170px);
-  height: clamp(60px, 6vw, 85px);
+  width: clamp(150px, 15vw, 220px);
+  height: clamp(75px, 7.5vw, 110px);
   object-fit: contain;
   background: linear-gradient(45deg, #4A90E2, #7CB9E8);
   -webkit-background-clip: text;
@@ -511,7 +511,7 @@
   
   .header .container-header {
     justify-content: space-between;
-    padding: 15px 18px 0;
+    padding: 20px 18px 0;
   }
   
   .logo {
@@ -520,8 +520,18 @@
   }
   
   .logo-text {
-    width: clamp(120px, 15vw, 160px);
-    height: clamp(60px, 7.5vw, 80px);
+    width: clamp(140px, 18vw, 180px);
+    height: clamp(70px, 9vw, 90px);
+  }
+  
+  /* Nascondi logo quando header è trasparente su mobile */
+  .header.transparent .logo {
+    display: none;
+  }
+  
+  /* Mostra logo quando header è solido su mobile */
+  .header.solid .logo {
+    display: block;
   }
 }
 
@@ -542,12 +552,12 @@
   }
   
   .logo-text {
-    width: clamp(120px, 18vw, 160px);
-    height: clamp(60px, 9vw, 80px);
+    width: clamp(130px, 20vw, 170px);
+    height: clamp(65px, 10vw, 85px);
   }
   
   .header .container-header {
-    padding: 12px 15px 0;
+    padding: 18px 15px 0;
   }
 }
 
