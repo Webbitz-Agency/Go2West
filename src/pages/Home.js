@@ -114,7 +114,7 @@ const Home = () => {
       // Fallback: se il video non si carica entro 2 secondi, mostra comunque
       const timeout = setTimeout(() => {
         setIsFirstVideoLoaded(true);
-      }, 2000);
+      }, 500);
       
       return () => {
         firstVideo.removeEventListener('canplay', handleCanPlay);
