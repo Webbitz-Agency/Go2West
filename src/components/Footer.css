@@ -13,6 +13,11 @@
   align-items: start;
 }
 
+.footer-section:last-child {
+  align-self: end;
+  filter: drop-shadow(0 5px 10px rgba(255, 255, 255, 2));
+}
+
 .footer-container {
   padding: 0 30px;
 }
@@ -33,7 +38,7 @@
   object-fit: contain;
   opacity: 0.95;
   transition: all 0.3s ease;
-  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.9));
+  filter: drop-shadow(0 3px 3px rgba(255, 255, 255, 2));
 }
 
 .footer-logo-img:hover {
@@ -47,6 +52,11 @@
   .footer-content {
     grid-template-columns: 1fr 1fr 1fr auto;
     gap: 20px;
+  }
+  
+  .footer-section:last-child {
+    align-self: end;
+    filter: drop-shadow(0 0px 10px rgba(255, 255, 255, 2));
   }
   
   .footer-section h4 {
@@ -94,6 +104,10 @@
     gap: 12px;
   }
   
+  .footer-section:last-child {
+    align-self: end;
+  }
+  
   .footer-section h4 {
     font-size: 0.85rem;
     margin-bottom: 5px;
@@ -137,6 +151,10 @@
   .footer-content {
     grid-template-columns: 1fr 1fr 1fr auto;
     gap: 10px;
+  }
+  
+  .footer-section:last-child {
+    align-self: end;
   }
   
   .footer-section h4 {
@@ -200,6 +218,7 @@
     order: -1;
     text-align: center;
     margin-bottom: 5px;
+    align-self: center;
   }
   
   .footer-section:last-child .footer-logo-img {
@@ -221,8 +240,7 @@
     font-size: 0.95rem;
     margin-bottom: 8px;
     text-align: center;
-    font-weight: 600;
-  }
+    }
   
   .footer-section p {
     font-size: 0.75rem;
@@ -280,7 +298,6 @@
   .footer-section h4 {
     font-size: 0.9rem;
     margin-bottom: 6px;
-    font-weight: 600;
   }
   
   .footer-section p {
@@ -358,6 +375,7 @@
 .footer-bottom p {
   color: rgba(255, 255, 255, 0.8);
   margin: 0;
+  font-size: 0.875rem;
 }
 
 /* Stili per i link del footer */

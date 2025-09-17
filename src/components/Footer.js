@@ -8,17 +8,15 @@ const Footer = () => {
         <div className="footer-content">
           <div className="footer-section">
             <h4>Chi Siamo</h4>
-            <p>Scopri il mondo con Go2West, la tua agenzia di viaggi di fiducia.
-            Esperienza, passione e dedizione per creare viaggi indimenticabili.
-            Specializzati in Americhe, Caraibi e Polinesia.</p>
+            <p><a href="/about" className="footer-link">About Us</a></p>
+            <p style={{marginBottom: "10px"}}><strong>Sede legale:</strong> EKO Ltd srl - via Damiano Chiesa 7D - 58100 Grosseto (GR) ITALIA</p>
           </div>
           
           <div className="footer-section">
             <h4>Contatti</h4>
-            <p><strong>Email:</strong> ---</p>
-            <p><strong>Telefono:</strong> ---</p>
-            <p><strong>WhatsApp:</strong> ---</p>
-            <p><strong>Orari:</strong> ---</p>
+            <p><strong>Email:</strong> info@go2west.org</p>
+            <p><strong>Richiedi preventivo:</strong> preventivi@go2west.org</p>
+            <p><strong>Telefono:</strong> ---</p>            
           </div>
           
           {/*<div className="footer-section">
@@ -45,6 +43,7 @@ const Footer = () => {
         
         <div className="footer-bottom">
           <p>&copy; 2025 Go2West. Tutti i diritti riservati.</p>
+          <p class="mt-1">Made in <a href="https://webbitz.it" target="_blank" rel="noopener noreferrer" style={{color: "#0000d6"}}>Webbitz</a></p>
         </div>
       </div>
     </footer>
