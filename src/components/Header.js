@@ -68,6 +68,9 @@ const Header = () => {
     if (section === 'home') {
       return location.pathname === '/';
     }
+    if (section === 'about') {
+      return location.pathname === '/about';
+    }
     if (section === 'destinations') {
       return location.pathname.startsWith('/destination/');
     }
@@ -160,6 +163,8 @@ const Header = () => {
             Home
           </Link>
 
+          
+
           {/* Destinazioni Dropdown */}
           <div 
             className="nav-dropdown"
@@ -229,6 +234,10 @@ const Header = () => {
               </div>
             )}
           </div>
+          {/* About */}
+          <Link to="/about" className={`nav-link ${isActiveSection('about') ? 'active' : ''}`}>
+            About us
+          </Link>
         </nav>
 
         {/* CTA Richiedi Info - Desktop */}
@@ -253,6 +262,7 @@ const Header = () => {
               <Link to="/" className={`mobile-nav-link ${isActiveSection('home') ? 'active' : ''}`} onClick={closeMobileMenu}>
                 Home
               </Link>
+                         
               
               <button className="mobile-nav-link" onClick={goToDestinations}>
                 Destinazioni
@@ -263,7 +273,9 @@ const Header = () => {
                 Viaggi
                 <span className="mobile-arrow"><i className="fa-solid fa-angle-right"></i></span>
               </button>
-              
+              <Link to="/about" className={`mobile-nav-link ${isActiveSection('about') ? 'active' : ''}`} onClick={closeMobileMenu}>
+                About
+              </Link>
               {/* CTA nel menu mobile principale */}
               <button className="mobile-cta" onClick={scrollToContact}>
                 Richiedi Info
