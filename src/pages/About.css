@@ -450,7 +450,7 @@
   position: relative;
 }
 
-.contact-pin {
+/*.contact-pin {
   position: absolute;
   top: 20px;
   right: 20px;
@@ -458,7 +458,7 @@
   height: 40px;
   opacity: 0.1;
 }
-
+*/
 .about-contact-container {
   /*max-width: 1200px;*/
   margin: 0 auto;
@@ -531,7 +531,7 @@
   margin: 0;
 }
 
-.contact-form-container {
+.contact-form-container-about{
   background: white;
   padding: 40px;
   border-radius: 15px;
@@ -733,7 +733,7 @@
     align-items: center;
   }
   
-  .contact-form-container {
+  .contact-form-container-about{
     padding: 30px 20px;
   }
 }

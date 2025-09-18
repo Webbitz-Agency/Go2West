@@ -344,7 +344,7 @@ const About = () => {
               </div>
             </div>
             
-            <div className="contact-form-container">
+            <div className="contact-form-container-about">
               <form className="contact-form" onSubmit={(e) => e.preventDefault()}>
                 <div className="form-row">
                   <div className="form-group">

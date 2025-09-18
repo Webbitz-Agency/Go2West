@@ -3189,7 +3189,7 @@
 
 .suggestions-section {
   background: #eefdff;
-  padding: var(--section-padding-vertical) var(--section-padding-horizontal) 120px;
+  padding: var(--section-padding-vertical) var(--section-padding-horizontal) 0px;
   position: relative;
 }
 
