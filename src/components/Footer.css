@@ -394,4 +394,22 @@
 
 .footer-link:active {
   transform: translateY(0);
+}
+
+/* Stili per i link di contatto nel footer */
+.footer-contact-link {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.footer-contact-link:hover {
+  color: white;
+  text-decoration: underline;
+  transform: translateY(-1px);
+}
+
+.footer-contact-link:active {
+  transform: translateY(0);
 } 

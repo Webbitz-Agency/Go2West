@@ -193,7 +193,7 @@
   width: clamp(300px, 70vw, 500px);
   height: auto;
   object-fit: contain;
-  filter: drop-shadow(0 25px 25px rgba(255, 255, 255, 2));
+  filter: drop-shadow(0 30px 20px rgba(255, 255, 255, 2));
   margin-bottom: 10px;
 }
 
@@ -333,7 +333,7 @@
   /* Mostra logo enorme su mobile nella hero */
   .home-hero-logo-mobile {
     display: flex;
-    filter: drop-shadow(0 0px 10px rgba(255, 255, 255, 2));
+    filter: drop-shadow(0 0px 5px rgba(255, 255, 255, 2));
   }
   
   /* Nascondi titolo su mobile */
@@ -3515,7 +3515,7 @@
 
 @media (max-width: 768px) {
   .suggestions-section {
-    padding: 60px 5% 100px;
+    padding: 60px 5% 0px;
   }
   
   .suggestion-card:not(.featured),

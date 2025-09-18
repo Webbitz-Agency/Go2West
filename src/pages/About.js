@@ -323,7 +323,8 @@ const About = () => {
                 <i className="fa-solid fa-envelope"></i>
                 <div>
                   <h4>Email</h4>
-                  <p>info@go2west.org</p>
+                  <p>Info: <a href="mailto:info@go2west.org" className="about-contact-link">info@go2west.org</a></p>
+                  <p>Preventivi: <a href="mailto:preventivi@go2west.org" className="about-contact-link">preventivi@go2west.org</a></p>
                 </div>
               </div>
               
@@ -331,7 +332,7 @@ const About = () => {
                 <i className="fa-solid fa-phone"></i>
                 <div>
                   <h4>Telefono</h4>
-                  <p>+39 000 000 0000</p>
+                  <p><a href="tel:+39056428595" className="about-contact-link">+39 0564 28595</a></p>
                 </div>
               </div>
               

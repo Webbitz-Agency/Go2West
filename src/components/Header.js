@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './Header.css';
 
 const Header = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [isHeroVisible, setIsHeroVisible] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [activeSubMenu, setActiveSubMenu] = useState(null);
@@ -134,12 +135,27 @@ const Header = () => {
 
   const scrollToContact = () => {
     const element = document.getElementById('contact');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    
     // Chiudi il menu mobile se è aperto
     if (mobileMenuOpen) {
       closeMobileMenu();
+    }
+    
+    if (element) {
+      // Se il form di contatti esiste nella pagina corrente, scrolla fino ad esso
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      // Se il form non esiste, vai alla home con hash per lo scroll
+      if (location.pathname !== '/') {
+        // Se non siamo già nella home, vai alla home con hash
+        navigate('/#contact');
+      } else {
+        // Se siamo già nella home ma il form non è visibile, scrolla al form
+        const homeContactElement = document.getElementById('contact');
+        if (homeContactElement) {
+          homeContactElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
     }
   };
 
@@ -150,18 +166,31 @@ const Header = () => {
     setActiveTravelType(null);
   }, [location.pathname]);
 
+  // Gestisci lo scroll al form di contatti quando arriviamo alla home
+  useEffect(() => {
+    if (location.pathname === '/' && location.hash === '#contact') {
+      // Piccolo delay per assicurarsi che la pagina sia completamente renderizzata
+      setTimeout(() => {
+        const contactElement = document.getElementById('contact');
+        if (contactElement) {
+          contactElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 300);
+    }
+  }, [location.pathname, location.hash]);
+
   return (
     <header className={`header ${isHeroVisible ? 'transparent' : 'solid'}`}>
       <div className="container-header">
-        <Link to="/" className="logo">
+        <a href="/" className="logo">
           <img src="/logo-nobg.png" alt="go2west" className="logo-text" />
-        </Link>
+        </a>
         
         <nav className="nav">
           {/* Home */}
-          <Link to="/" className={`nav-link ${isActiveSection('home') ? 'active' : ''}`}>
+          <a href="/" className={`nav-link ${isActiveSection('home') ? 'active' : ''}`}>
             Home
-          </Link>
+          </a>
 
           
 
@@ -235,9 +264,9 @@ const Header = () => {
             )}
           </div>
           {/* About */}
-          <Link to="/about" className={`nav-link ${isActiveSection('about') ? 'active' : ''}`}>
+          <a href="/about" className={`nav-link ${isActiveSection('about') ? 'active' : ''}`}>
             About us
-          </Link>
+          </a>
         </nav>
 
         {/* CTA Richiedi Info - Desktop */}
