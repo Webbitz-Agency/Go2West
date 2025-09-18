@@ -6,6 +6,7 @@ import './App.css';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './pages/Home';
+import About from './pages/About';
 import DestinationTours from './pages/DestinationTours';
 import TourDetails from './pages/TourDetails';
 import Admin from './pages/Admin';
@@ -18,6 +19,7 @@ function App() {
         <main>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
             <Route path="/destination/:country" element={<DestinationTours />} />
             <Route path="/travel/:type/:country" element={<DestinationTours />} />
             <Route path="/tour/:tourId" element={<TourDetails />} />
