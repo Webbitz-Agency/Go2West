@@ -92,13 +92,19 @@ const DestinationTours = () => {
         <div className="hero-overlay" />
         <div className={`hero-content ${isHeroFixed ? 'is-fixed' : ''} ${isHeroFaded ? 'fade-out' : ''}`}>
           <div ref={heroTextRef} className="hero-text">
-            <h1 className="hero-title">{currentDestination.name}</h1>
-            <p className="hero-subtitle">{currentDestination.description}</p>
+            <h1 className="destination-hero-title">{currentDestination.name}</h1>
           </div>
         </div>
       </section>
 
       <div className="container-tours">
+        
+        {/* Introduzione Destinazione */}
+        <section className="destination-intro-section">
+          <div className="destination-intro">
+            <p className="destination-intro-text">{currentDestination.description}</p>
+          </div>
+        </section>
         
         {/* Tours Section */}
         <section className="tours-section">

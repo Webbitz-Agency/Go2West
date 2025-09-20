@@ -82,15 +82,17 @@
   z-index: 10; /* Quando è visibile, sta sopra */
 }
 
-.hero-title {
+/* Nuovo titolo per le destinazioni - più grande e specifico */
+.destination-hero-title {
   color: #fff;
-  font-size: clamp(2.5rem, 6vw, 3.5rem);
-  line-height: 1.2;
-  text-shadow: 0 6px 24px rgba(0,0,0,0.35);
+  font-size: clamp(3.5rem, 8vw, 5.5rem);
+  line-height: 1.1;
+  text-shadow: 0 8px 32px rgba(0,0,0,0.4);
   font-weight: 500;
   max-width: 90vw;
   margin: 0 auto;
   font-family: 'DM Serif Text', serif;
+  letter-spacing: -0.02em;
 }
 
 .hero-subtitle {
@@ -126,6 +128,31 @@
   }
 }
 
+/* Sezione introduzione destinazione */
+.destination-intro-section {
+  padding: 80px 0 40px;
+  position: relative;
+  z-index: 20;
+  background: linear-gradient(135deg, #f8f9ff 0%, #fff8f8 100%);
+}
+
+.destination-intro {
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.destination-intro-text {
+  font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+  line-height: 1.7;
+  color: #444;
+  font-weight: 400;
+  margin: 0;
+  padding: 0 20px;
+  text-align: justify;
+  text-align-last: center;
+}
+
 /* Tours Section */
 .tours-section {
   padding: 60px 0;
@@ -142,13 +169,36 @@
   padding: 0 30px;
 }
 
-/* Responsive per la sezione tours */
+/* Responsive per la sezione tours e introduzione */
 @media (max-width: 768px) {
+  .destination-intro-section {
+    padding: 60px 0 30px;
+  }
+  
+  .destination-intro-text {
+    font-size: clamp(1rem, 3vw, 1.1rem);
+    line-height: 1.6;
+    padding: 0 15px;
+    text-align: center;
+  }
+  
   .tours-section {
     padding: 40px 0;
   }
   
   .container-tours {
     padding: 0 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .destination-intro-section {
+    padding: 40px 0 20px;
+  }
+  
+  .destination-intro-text {
+    font-size: clamp(0.95rem, 4vw, 1rem);
+    line-height: 1.5;
+    padding: 0 12px;
   }
 } 

@@ -186,88 +186,90 @@ const Header = () => {
           <img src="/logo-nobg.png" alt="go2west" className="logo-text" />
         </a>
         
-        <nav className="nav">
-          {/* Home */}
-          <a href="/" className={`nav-link ${isActiveSection('home') ? 'active' : ''}`}>
-            Home
-          </a>
+        <div className="nav-wrapper">
+          <nav className="nav">
+            {/* Home */}
+            <a href="/" className={`nav-link ${isActiveSection('home') ? 'active' : ''}`}>
+              Home
+            </a>
 
-          
-
-          {/* Destinazioni Dropdown */}
-          <div 
-            className="nav-dropdown"
-            onMouseEnter={() => handleMouseEnter('destinations')}
-            onMouseLeave={handleMouseLeave}
-          >
-            <span className={`nav-link ${isActiveSection('destinations') ? 'active' : ''}`}>
-              Destinazioni
-              <span className="dropdown-arrow"><i class="fa-solid fa-angle-down"></i></span>
-            </span>
             
-            {activeDropdown === 'destinations' && (
-              <div className="dropdown-menu">
-                {destinations.map((dest) => (
-                  <a 
-                    key={dest.country}
-                    href={`/destination/${dest.country}`}
-                    className="dropdown-item"
-                  >
-                    {dest.name}
-                  </a>
-                ))}
-              </div>
-            )}
-          </div>
 
-          {/* Viaggi Dropdown */}
-          <div 
-            className="nav-dropdown"
-            onMouseEnter={() => handleMouseEnter('travels')}
-            onMouseLeave={handleMouseLeave}
-          >
-            <span className={`nav-link ${isActiveSection('travels') ? 'active' : ''}`}>
-              Viaggi
-              <span className="dropdown-arrow"><i class="fa-solid fa-angle-down"></i></span>
-            </span>
-            
-            {activeDropdown === 'travels' && (
-              <div className="dropdown-menu">
-                {travelTypes.map((type) => (
-                  <div 
-                    key={type.slug}
-                    className="dropdown-item-with-submenu"
-                    onClick={() => handleSubMenuClick(type.slug)}
-                  >
-                    <span className={`dropdown-item ${activeSubMenu === type.slug ? 'active' : ''}`}>
-                      {type.name}
-                      <span className="submenu-arrow"><i class="fa-solid fa-angle-right"></i></span>
-                    </span>
-                  </div>
-                ))}
-                
-                {/* Submenu posizionato sempre alla stessa altezza */}
-                {activeSubMenu && (
-                  <div className="submenu">
-                    {destinations.map((dest) => (
-                      <a 
-                        key={`${activeSubMenu}-${dest.country}`}
-                        href={`/travel/${activeSubMenu}/${dest.country}`}
-                        className="submenu-item"
-                      >
-                        {dest.name}
-                      </a>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-          {/* About */}
-          <a href="/about" className={`nav-link ${isActiveSection('about') ? 'active' : ''}`}>
-            About us
-          </a>
-        </nav>
+            {/* Destinazioni Dropdown */}
+            <div 
+              className="nav-dropdown"
+              onMouseEnter={() => handleMouseEnter('destinations')}
+              onMouseLeave={handleMouseLeave}
+            >
+              <span className={`nav-link ${isActiveSection('destinations') ? 'active' : ''}`}>
+                Destinazioni
+                <span className="dropdown-arrow"><i class="fa-solid fa-angle-down"></i></span>
+              </span>
+              
+              {activeDropdown === 'destinations' && (
+                <div className="dropdown-menu">
+                  {destinations.map((dest) => (
+                    <a 
+                      key={dest.country}
+                      href={`/destination/${dest.country}`}
+                      className="dropdown-item"
+                    >
+                      {dest.name}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Viaggi Dropdown */}
+            <div 
+              className="nav-dropdown"
+              onMouseEnter={() => handleMouseEnter('travels')}
+              onMouseLeave={handleMouseLeave}
+            >
+              <span className={`nav-link ${isActiveSection('travels') ? 'active' : ''}`}>
+                Viaggi
+                <span className="dropdown-arrow"><i class="fa-solid fa-angle-down"></i></span>
+              </span>
+              
+              {activeDropdown === 'travels' && (
+                <div className="dropdown-menu">
+                  {travelTypes.map((type) => (
+                    <div 
+                      key={type.slug}
+                      className="dropdown-item-with-submenu"
+                      onClick={() => handleSubMenuClick(type.slug)}
+                    >
+                      <span className={`dropdown-item ${activeSubMenu === type.slug ? 'active' : ''}`}>
+                        {type.name}
+                        <span className="submenu-arrow"><i class="fa-solid fa-angle-right"></i></span>
+                      </span>
+                    </div>
+                  ))}
+                  
+                  {/* Submenu posizionato sempre alla stessa altezza */}
+                  {activeSubMenu && (
+                    <div className="submenu">
+                      {destinations.map((dest) => (
+                        <a 
+                          key={`${activeSubMenu}-${dest.country}`}
+                          href={`/travel/${activeSubMenu}/${dest.country}`}
+                          className="submenu-item"
+                        >
+                          {dest.name}
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+            {/* About */}
+            <a href="/about" className={`nav-link ${isActiveSection('about') ? 'active' : ''}`}>
+              About us
+            </a>
+          </nav>
+        </div>
 
         {/* CTA Richiedi Info - Desktop */}
         <button className="header-cta" onClick={scrollToContact}>
