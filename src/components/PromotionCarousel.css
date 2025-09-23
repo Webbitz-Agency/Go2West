@@ -1,9 +1,8 @@
 /* Promotion Carousel Styles */
 .promotion-carousel-container {
-  width: 100%;
-  max-width: 1200px;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 0 20px 60px 20px;
+  padding: 0 0 60px 0;
 }
 
 .promotion-carousel-wrapper {
@@ -259,11 +258,12 @@
 
 @media (max-width: 768px) {
   .promotion-carousel-container {
-    padding: 0 15px 40px 15px;
+    padding: 0 0 40px 0;
   }
   
   .promotion-tour-card {
     width: 280px;
+    height: 360px; /* Aumentata altezza per includere il bottone */
   }
   
   .promotion-horizontal-scroll {
@@ -271,40 +271,73 @@
   }
   
   .tour-card-image {
-    height: 200px;
+    height: 150px; /* Ridotta altezza immagine */
   }
   
   .tour-card-content {
-    padding: 20px;
+    padding: 15px; /* Ridotto padding */
   }
   
   .tour-card-title {
-    font-size: 18px;
+    font-size: 16px; /* Ridotta dimensione titolo */
+    margin-bottom: 8px;
+  }
+  
+  .tour-card-description {
+    font-size: 12px; /* Ridotta dimensione descrizione */
+    margin-bottom: 12px;
+  }
+  
+  .tour-card-meta {
+    margin-bottom: 12px;
+    font-size: 11px;
+  }
+  
+  .tour-card-button {
+    padding: 8px 16px; /* Ridotto padding bottone */
+    font-size: 13px;
   }
 }
 
 @media (max-width: 480px) {
   .promotion-carousel-container {
-    padding: 0 10px 30px 10px;
+    padding: 0 0 30px 0;
   }
   
   .promotion-tour-card {
     width: 250px;
+    height: 340px; /* Aumentata altezza per includere il bottone */
   }
   
   .promotion-horizontal-scroll {
     gap: 12px;
   }
   
+  .tour-card-image {
+    height: 130px; /* Ancora più bassa immagine */
+  }
+  
   .tour-card-content {
-    padding: 15px;
+    padding: 12px; /* Ancora meno padding */
   }
   
   .tour-card-title {
-    font-size: 16px;
+    font-size: 15px; /* Ancora più piccolo titolo */
+    margin-bottom: 6px;
   }
   
   .tour-card-description {
-    font-size: 13px;
+    font-size: 11px; /* Ancora più piccola descrizione */
+    margin-bottom: 10px;
+  }
+  
+  .tour-card-meta {
+    margin-bottom: 10px;
+    font-size: 10px;
+  }
+  
+  .tour-card-button {
+    padding: 6px 12px; /* Ancora meno padding bottone */
+    font-size: 12px;
   }
 }
