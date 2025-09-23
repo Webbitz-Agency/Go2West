@@ -289,8 +289,8 @@
   width: 100%;
   background: #007bff;
   color: white;
-  padding: 12px 20px;
-  border-radius: 8px;
+  padding: 10px 20px;
+  border-radius: 50px;
   text-decoration: none;
   font-weight: 500;
   transition: all 0.3s ease;
@@ -324,32 +324,6 @@
   color: #495057;
 }
 
-/* CTA Section */
-.promotions-cta {
-  background: #2c3e50;
-  color: white;
-  padding: 80px 0;
-  text-align: center;
-}
-
-.cta-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-.cta-container h2 {
-  font-size: 2.5rem;
-  margin-bottom: 20px;
-  font-weight: 500;
-}
-
-.cta-container p {
-  font-size: 1.2rem;
-  opacity: 0.9;
-  margin-bottom: 40px;
-}
-
 .cta-buttons {
   display: flex;
   gap: 20px;
@@ -358,8 +332,8 @@
 }
 
 .cta-btn {
-  padding: 15px 30px;
-  border-radius: 25px;
+  padding: 10px 30px;
+  border-radius: 50px;
   text-decoration: none;
   font-weight: 500;
   transition: all 0.3s ease;
@@ -434,6 +408,59 @@
   background: #0056b3;
   transform: translateY(-3px);
   box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+}
+
+/* Quote Hero */
+.promotions-cta{
+  position: relative;
+  width: 100%;
+  height: 50vh;
+  /*min-height: 500px;*/
+  max-height: 700px;
+  overflow: hidden;
+  margin: 0;
+  background: #2c3e50;
+}
+
+.promotions-cta-hero-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.promotions-cta-hero-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.7);
+}
+
+.promotions-cta-hero-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 40px;
+  gap: 20px;
+  z-index: 3;
+}
+
+.promotions-cta-hero-content h2 {
+  color: #fff;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+.promotions-cta-hero-content p {
+  color: #fff;
+  font-size: 1.2rem;
+  margin-bottom: 40px;
 }
 
 @keyframes slideInUp {

@@ -218,10 +218,10 @@ const Promotions = () => {
                     </div>
                   </div>
                   
-                  <Link to={`/tour/${tour.slug}`} className="promotion-btn">
+                  <a href={`/tour/${tour.slug}`} className="promotion-btn">
                     Scopri Offerta
                     <i className="fa-solid fa-arrow-right"></i>
-                  </Link>
+                  </a>
                 </div>
               </div>
             ))}
@@ -238,16 +238,19 @@ const Promotions = () => {
 
       {/* CTA Section */}
       <section className="promotions-cta">
-        <div className="cta-container">
+      <div className="promotions-cta-hero-image">
+          <img src="/images/map.jpg" alt="Cartina città" />
+        </div>
+        <div className="promotions-cta-hero-content">
           <h2>Non trovi quello che cerchi?</h2>
           <p>Contattaci per una consulenza personalizzata e scopri le migliori offerte per te</p>
           <div className="cta-buttons">
             <Link to="/#contact" className="cta-btn primary">
               Richiedi Consulenza
             </Link>
-            <Link to="/" className="cta-btn secondary">
+            <a href="/" className="cta-btn secondary">
               Torna alla Home
-            </Link>
+            </a>
           </div>
         </div>
       </section>
