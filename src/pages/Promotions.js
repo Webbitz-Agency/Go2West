@@ -127,26 +127,23 @@ const Promotions = () => {
   return (
     <div className="promotions-page">
       {/* Hero Section */}
-      <section className="promotions-hero">
-        {/* Carosello immagini */}
-        <div className="promotions-hero-images">
+      <section id="promotions-hero" className="hero-top" aria-label="Promozioni - Hero">
+        <div className="hero-background-image">
           {heroImages.map((image, index) => (
             <img
               key={index}
               src={image}
               alt={`Destinazione promozione ${index + 1}`}
-              className={`hero-image ${index === currentHeroImage ? 'active' : ''}`}
+              className={`hero-carousel-image ${index === currentHeroImage ? 'active' : ''}`}
             />
           ))}
         </div>
-        
-        {/* Overlay */}
-        <div className="promotions-hero-overlay"></div>
-        
-        {/* Contenuto */}
-        <div className="promotions-hero-content">
-          <h1>Viaggi in Promozione</h1>
-          <p>Scopri le nostre offerte speciali e last minute per vivere esperienze indimenticabili</p>
+        <div className="hero-overlay" />
+        <div className="hero-content">
+          <div className="hero-text">
+            <h1 className="destination-hero-title">Viaggi in Promozione</h1>
+            <p className="hero-subtitle">Scopri le nostre offerte speciali e last minute per vivere esperienze indimenticabili</p>
+          </div>
         </div>
       </section>
 

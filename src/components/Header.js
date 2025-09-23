@@ -37,7 +37,7 @@ const Header = () => {
     // Funzione semplice per controllare se una hero section è visibile
     const checkHeroVisibility = () => {
       // Cerca elementi con classe 'home-hero' o 'hero-top'
-      const heroElement = document.querySelector('.home-hero, .hero-top');
+      const heroElement = document.querySelector('.home-hero, .hero-top, .promotions-hero');
       
       if (!heroElement) {
         setIsHeroVisible(false);
@@ -46,7 +46,10 @@ const Header = () => {
       
       // Controlla se la hero è visibile nel viewport
       const rect = heroElement.getBoundingClientRect();
-      const isVisible = rect.top <= 0 && rect.bottom > 100;
+      // La hero è considerata "attiva" quando:
+      // 1. È completamente visibile (top >= 0) OPPURE
+      // 2. È parzialmente scrollata (top <= 0) ma ancora visibile (bottom > 100)
+      const isVisible = (rect.top >= 0) || (rect.top <= 0 && rect.bottom > 100);
       
       setIsHeroVisible(isVisible);
     };
