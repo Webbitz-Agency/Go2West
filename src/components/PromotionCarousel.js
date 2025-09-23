@@ -72,6 +72,41 @@ const PromotionCarousel = ({ itemsPerPage = 6 }) => {
     setAnimationStartTime(Date.now());
   };
 
+  // Evita click accidentali dopo un drag: se movimento oltre soglia, blocca click fino al mouseup
+  const clickBlockRef = useRef(false);
+
+  useEffect(() => {
+    if (!isDragging) {
+      // sblocca il click al termine del drag nel prossimo tick
+      const t = setTimeout(() => { clickBlockRef.current = false; }, 0);
+      return () => clearTimeout(t);
+    }
+  }, [isDragging]);
+
+  const handleGlobalMouseMove = (e) => {
+    if (isDragging) {
+      const newDragCurrent = e.clientX;
+      if (Math.abs(newDragCurrent - dragStart) > 5) {
+        clickBlockRef.current = true;
+      }
+      setDragCurrent(newDragCurrent);
+      const dragDistance = newDragCurrent - dragStart;
+      setCurrentTransform(manualOffset + dragDistance);
+    }
+  };
+
+  const handleGlobalMouseUp = () => {
+    if (isDragging) {
+      setIsDragging(false);
+      setIsPaused(false);
+      const dragDistance = dragCurrent - dragStart;
+      const newManualOffset = manualOffset + dragDistance;
+      setManualOffset(newManualOffset);
+      setCurrentTransform(newManualOffset);
+      setAnimationStartTime(Date.now());
+    }
+  };
+
   // Pausa al hover/touch (senza drag)
   const handleMouseEnter = () => {
     if (!isDragging) {
@@ -87,27 +122,6 @@ const PromotionCarousel = ({ itemsPerPage = 6 }) => {
 
   // Event listeners globali per il drag
   useEffect(() => {
-    const handleGlobalMouseMove = (e) => {
-      if (isDragging) {
-        const newDragCurrent = e.clientX;
-        setDragCurrent(newDragCurrent);
-        const dragDistance = newDragCurrent - dragStart;
-        setCurrentTransform(manualOffset + dragDistance);
-      }
-    };
-
-    const handleGlobalMouseUp = () => {
-      if (isDragging) {
-        setIsDragging(false);
-        setIsPaused(false);
-        const dragDistance = dragCurrent - dragStart;
-        const newManualOffset = manualOffset + dragDistance;
-        setManualOffset(newManualOffset);
-        setCurrentTransform(newManualOffset);
-        setAnimationStartTime(Date.now());
-      }
-    };
-
     if (isDragging) {
       document.addEventListener('mousemove', handleGlobalMouseMove);
       document.addEventListener('mouseup', handleGlobalMouseUp);
@@ -117,7 +131,7 @@ const PromotionCarousel = ({ itemsPerPage = 6 }) => {
       document.removeEventListener('mousemove', handleGlobalMouseMove);
       document.removeEventListener('mouseup', handleGlobalMouseUp);
     };
-  }, [isDragging, dragStart, dragCurrent, scrollOffset]);
+  }, [isDragging, dragStart, dragCurrent, manualOffset]);
 
   // Duplica i tour per creare l'effetto infinito
   const duplicatedTours = [...tours, ...tours, ...tours];
