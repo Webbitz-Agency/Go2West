@@ -3189,7 +3189,7 @@
 
 .suggestions-section {
   background: #eefdff;
-  padding: var(--section-padding-vertical) var(--section-padding-horizontal) 0px;
+  padding: var(--section-padding-vertical) var(--section-padding-horizontal) 80px;
   position: relative;
 }
 
@@ -3515,7 +3515,7 @@
 
 @media (max-width: 768px) {
   .suggestions-section {
-    padding: 60px 5% 0px;
+    padding: 60px 5% 60px;
   }
   
   .suggestion-card:not(.featured),

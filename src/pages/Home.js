@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import DynamicTours from '../components/DynamicTours';
 import MasonryTours from '../components/MasonryTours';
+import PromotionCarousel from '../components/PromotionCarousel';
 import { destinations, destinationImages } from '../config/destinations';
 import './Home.css';
 
@@ -828,15 +829,15 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Sezione I nostri suggerimenti - Tour Dinamici dal Backend */}
+      {/* Sezione Viaggi in promozione - Carosello */}
       <section id="all-destinations" className="suggestions-section">
         <div className="section-header">
-          <h2>Viaggi su misura</h2>
-          <p>Proposte di viaggio curate per esperienze indimenticabili</p>
+          <h2>Viaggi in promozione</h2>
+          <p>Offerte last minute per esperienze indimenticabili</p>
         </div>
 
         <div className="suggestions-container">
-          <MasonryTours limit={6} />
+          <PromotionCarousel limit={6} />
         </div>
       </section>
 

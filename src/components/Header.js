@@ -193,6 +193,11 @@ const Header = () => {
               Home
             </a>
 
+            {/* Promozioni */}
+            <Link to="/promozioni" className={`nav-link ${location.pathname === '/promozioni' ? 'active' : ''}`}>
+              Promozioni
+            </Link>
+
             
 
             {/* Destinazioni Dropdown */}
@@ -292,6 +297,10 @@ const Header = () => {
             <>
               <Link to="/" className={`mobile-nav-link ${isActiveSection('home') ? 'active' : ''}`} onClick={closeMobileMenu}>
                 Home
+              </Link>
+              
+              <Link to="/promozioni" className={`mobile-nav-link ${location.pathname === '/promozioni' ? 'active' : ''}`} onClick={closeMobileMenu}>
+                Promozioni
               </Link>
                          
               

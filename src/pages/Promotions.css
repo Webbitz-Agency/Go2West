@@ -1,0 +1,520 @@
+/* Promotions Page Styles */
+.promotions-page {
+  min-height: 100vh;
+  background: #f8f9fa;
+}
+
+/* Hero Section */
+.promotions-hero {
+  position: relative;
+  height: 55vh;
+  min-height: 420px;
+  overflow: hidden;
+  margin-top: 80px;
+}
+
+.promotions-hero-images {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.hero-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.hero-image.active {
+  opacity: 1;
+}
+
+.promotions-hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 2;
+}
+
+.promotions-hero-content {
+  position: relative;
+  z-index: 3;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 20px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.promotions-hero-content h1 {
+  font-size: 3.5rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  font-family: 'DM Serif Text', serif;
+  color: white;
+}
+
+.promotions-hero-content p {
+  font-size: 1.3rem;
+  color: white;
+  opacity: 1;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Filtri */
+.promotions-filters {
+  background: white;
+  padding: 60px 0;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.filters-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.filters-container h2 {
+  text-align: center;
+  font-size: 2rem;
+  color: #2c3e50;
+  margin-bottom: 40px;
+  font-weight: 500;
+}
+
+.filters-grid {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  background: #f8f9fa;
+  border: 2px solid #e9ecef;
+  color: #6c757d;
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.filter-btn:hover {
+  background: #007bff;
+  border-color: #007bff;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.filter-btn.active {
+  background: #007bff;
+  border-color: #007bff;
+  color: white;
+}
+
+/* Griglia Promozioni */
+.promotions-grid-section {
+  padding: 80px 0;
+}
+
+.promotions-grid-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.promotions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 30px;
+}
+
+.promotion-card {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.promotion-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.promotion-card-image {
+  position: relative;
+  height: 250px;
+  overflow: hidden;
+}
+
+.promotion-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.promotion-card:hover .promotion-card-image img {
+  transform: scale(1.05);
+}
+
+.promotion-badge {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: #dc3545;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 15px;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.promotion-price {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 10px 15px;
+  border-radius: 20px;
+  text-align: center;
+}
+
+.price-label {
+  display: block;
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.price-amount {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.promotion-card-content {
+  padding: 25px;
+}
+
+.promotion-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  font-size: 13px;
+  color: #6c757d;
+}
+
+.promotion-type {
+  background: #e3f2fd;
+  color: #1976d2;
+  padding: 4px 8px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+.promotion-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+
+.promotion-description {
+  color: #6c757d;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.promotion-features {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: #28a745;
+}
+
+.feature i {
+  font-size: 14px;
+}
+
+.promotion-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  background: #007bff;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.promotion-btn:hover {
+  background: #0056b3;
+  color: white;
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+
+.promotion-btn i {
+  transition: transform 0.3s ease;
+}
+
+.promotion-btn:hover i {
+  transform: translateX(3px);
+}
+
+/* Nessuna promozione */
+.no-promotions {
+  text-align: center;
+  padding: 80px 20px;
+  color: #6c757d;
+}
+
+.no-promotions h3 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  color: #495057;
+}
+
+/* CTA Section */
+.promotions-cta {
+  background: #2c3e50;
+  color: white;
+  padding: 80px 0;
+  text-align: center;
+}
+
+.cta-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.cta-container h2 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+.cta-container p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  margin-bottom: 40px;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.cta-btn {
+  padding: 15px 30px;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  min-width: 180px;
+}
+
+.cta-btn.primary {
+  background: #007bff;
+  color: white;
+}
+
+.cta-btn.primary:hover {
+  background: #0056b3;
+  transform: translateY(-2px);
+  color: white;
+  text-decoration: none;
+}
+
+.cta-btn.secondary {
+  background: transparent;
+  color: white;
+  border: 2px solid white;
+}
+
+.cta-btn.secondary:hover {
+  background: white;
+  color: #2c3e50;
+  text-decoration: none;
+}
+
+/* Stati di caricamento */
+.promotions-loading,
+.promotions-error {
+  text-align: center;
+  padding: 100px 20px;
+  color: #6c757d;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+
+/* Freccia torna in cima */
+.back-to-top {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 50px;
+  height: 50px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+  transition: all 0.3s ease;
+  z-index: 1000;
+  animation: slideInUp 0.3s ease;
+}
+
+.back-to-top:hover {
+  background: #0056b3;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .promotions-hero {
+    height: 50vh;
+    min-height: 380px;
+    margin-top: 70px;
+  }
+  
+  .promotions-hero-content h1 {
+    font-size: 2.5rem;
+  }
+  
+  .promotions-hero-content p {
+    font-size: 1.1rem;
+  }
+  
+  .filters-grid {
+    gap: 10px;
+  }
+  
+  .filter-btn {
+    padding: 10px 20px;
+    font-size: 13px;
+  }
+  
+  .promotions-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .promotion-features {
+    gap: 10px;
+  }
+  
+  .cta-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .cta-btn {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .back-to-top {
+    bottom: 20px;
+    right: 20px;
+    width: 45px;
+    height: 45px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .promotions-hero {
+    height: 45vh;
+    min-height: 320px;
+    margin-top: 60px;
+  }
+  
+  .promotions-hero-content h1 {
+    font-size: 2rem;
+  }
+  
+  .promotions-hero-content p {
+    font-size: 1rem;
+  }
+  
+  .promotions-filters {
+    padding: 40px 0;
+  }
+  
+  .promotions-grid-section {
+    padding: 60px 0;
+  }
+  
+  .promotion-card-content {
+    padding: 20px;
+  }
+  
+  .promotion-title {
+    font-size: 1.2rem;
+  }
+}

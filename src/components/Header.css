@@ -603,4 +603,43 @@
   .nav-wrapper {
     display: none;
   }
+}
+
+/* Link Promozioni con animazione colore */
+.nav-link[href="/promozioni"],
+.nav-link[href*="/promozioni"] {
+  color: #ff6b35 !important;
+  font-weight: 600;
+  animation: color-pulse 3s infinite;
+}
+
+.nav-link[href="/promozioni"]:hover,
+.nav-link[href*="/promozioni"]:hover {
+  color: #e55a2b !important;
+}
+
+/* Link Promozioni quando attivo (sulla pagina) */
+.nav-link.active[href="/promozioni"],
+.nav-link.active[href*="/promozioni"] {
+  color: white !important;
+  animation: none;
+}
+
+.mobile-nav-link[href="/promozioni"],
+.mobile-nav-link[href*="/promozioni"] {
+  color: #ff6b35 !important;
+  font-weight: 600;
+  animation: color-pulse 3s infinite;
+}
+
+.mobile-nav-link.active[href="/promozioni"],
+.mobile-nav-link.active[href*="/promozioni"] {
+  color: white !important;
+  animation: none;
+}
+
+@keyframes color-pulse {
+  0% { color: #ff6b35; }
+  50% { color: #ff4500; }
+  100% { color: #ff6b35; }
 } 
