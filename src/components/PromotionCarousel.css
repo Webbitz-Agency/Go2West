@@ -50,12 +50,9 @@
   opacity: 0.9;
   flex-shrink: 0;
   width: 350px;
-  pointer-events: none;
 }
 
-.promotion-horizontal-scroll.dragging .promotion-tour-card {
-  pointer-events: auto;
-}
+/* Click sempre abilitato; la gestione del drag previene i click accidentali via JS */
 
 .promotion-tour-card:hover {
   transform: translateY(-8px) scale(1.02);
