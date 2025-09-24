@@ -30,8 +30,8 @@ const Footer = () => {
           
           <div className="footer-section">
             <h4>Informazioni</h4>
-            <p><a href="/privacy-policy" className="footer-link">Privacy Policy</a></p>
-            <p><a href="/termini-condizioni" className="footer-link">Termini e condizioni</a></p>
+            <p><a href="/PrivacyPolicy2025.pdf" target="_blank" rel="noopener noreferrer" className="footer-link">Privacy Policy</a></p>
+            <p><a href="/CondizioniGenerali2025.pdf" target="_blank" rel="noopener noreferrer" className="footer-link">Termini e condizioni</a></p>
             <p><a href="/cookie-policy" className="footer-link">Cookie Policy</a></p>
             {/*<p>Assicurazione Viaggio</p>*/}
           </div>
