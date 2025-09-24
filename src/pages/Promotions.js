@@ -243,7 +243,7 @@ const Promotions = () => {
         </div>
         <div className="promotions-cta-hero-content">
           <h2>Non trovi quello che cerchi?</h2>
-          <p>Contattaci per una consulenza personalizzata e scopri le migliori offerte per te</p>
+          <p>Contattaci per una consulenza personalizzata e scopri le migliori offerte apposta per te</p>
           <div className="cta-buttons">
             <Link to="/#contact" className="cta-btn primary">
               Richiedi Consulenza
