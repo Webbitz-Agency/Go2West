@@ -10,76 +10,70 @@
   padding: 0 20px;
 }
 
-/* ===== HERO SECTION ===== */
-.tour-hero {
+/* ===== HERO SECTION - HORIZONTAL GALLERY ===== */
+.tour-hero-masonry {
   position: relative;
   height: 60vh;
   min-height: 400px;
-  display: flex;
-  align-items: center;
   overflow: hidden;
+  background: #000;
+  margin-top: clamp(75px, 7.5vw, 110px); /* Altezza esatta dell'header */
 }
 
-.hero-background {
+.masonry-container {
   position: absolute;
   inset: 0;
-  width: 100%;
+  display: flex;
+  height: 100%;
+  gap: 2px;
+}
+
+.masonry-item {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  border-radius: 0;
+  flex: 1;
   height: 100%;
 }
 
-.hero-background img {
+/* Immagine principale leggermente più grande di default */
+.masonry-item.main-image {
+  flex: 1.2;
+}
+
+.masonry-item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: brightness(0.7);
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  filter: brightness(0.8) saturate(1.1);
 }
 
-.hero-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 100%);
+/* Effetto hover: espande l'immagine e restringe le altre */
+.masonry-container:hover .masonry-item:not(:hover) {
+  flex: 0.3;
+  opacity: 0.7;
 }
 
-.hero-content {
-  position: relative;
+.masonry-item:hover {
+  flex: 2.5;
   z-index: 10;
-  width: 100%;
-  text-align: center;
-  color: white;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
-.hero-title {
-  font-size: clamp(2rem, 5vw, 3rem);
-  font-weight: 500;
-  margin-bottom: 20px;
-  font-family: 'DM Serif Text', serif;
-  line-height: 1.2;
+.masonry-item.hovered {
+  flex: 2.5;
+  z-index: 10;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
-.hero-description {
-  font-size: clamp(1rem, 2.5vw, 1.2rem);
-  max-width: 600px;
-  margin: 0 auto 30px;
-  line-height: 1.6;
-  opacity: 0.95;
+.masonry-item:hover img,
+.masonry-item.hovered img {
+  filter: brightness(1.1) saturate(1.2);
 }
 
-.hero-meta {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.meta-item {
-  background: rgba(255, 255, 255, 0.2);
-  padding: 8px 16px;
-  border-radius: 13px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
 
 /* ===== MAIN CONTENT ===== */
 .tour-content {
@@ -388,6 +382,29 @@
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
+  .tour-hero-masonry {
+    height: 55vh;
+    min-height: 350px;
+    margin-top: clamp(70px, 7vw, 100px);
+  }
+  
+  .masonry-container {
+    gap: 1px;
+  }
+  
+  .masonry-item.main-image {
+    flex: 1.1;
+  }
+  
+  .masonry-container:hover .masonry-item:not(:hover) {
+    flex: 0.2;
+  }
+  
+  .masonry-item:hover,
+  .masonry-item.hovered {
+    flex: 2.2;
+  }
+  
   .tour-content {
     gap: 30px;
     padding: 40px 0;
@@ -407,19 +424,29 @@
     padding: 0 15px;
   }
   
-  .tour-hero {
+  .tour-hero-masonry {
     height: 50vh;
     min-height: 300px;
+    margin-top: clamp(60px, 6.5vw, 90px);
   }
   
-  .hero-meta {
-    gap: 15px;
+  .masonry-container {
+    gap: 1px;
   }
   
-  .meta-item {
-    padding: 6px 12px;
-    font-size: 0.8rem;
+  .masonry-item.main-image {
+    flex: 1.1;
   }
+  
+  .masonry-container:hover .masonry-item:not(:hover) {
+    flex: 0.15;
+  }
+  
+  .masonry-item:hover,
+  .masonry-item.hovered {
+    flex: 2;
+  }
+  
   
   .tour-content {
     grid-template-columns: 1fr;
@@ -448,18 +475,29 @@
 }
 
 @media (max-width: 480px) {
-  .tour-hero {
-    height: 40vh;
+  .tour-hero-masonry {
+    height: 45vh;
     min-height: 250px;
+    margin-top: clamp(50px, 6vw, 80px);
   }
   
-  .hero-title {
-    font-size: 1.8rem;
+  .masonry-container {
+    gap: 0;
   }
   
-  .hero-description {
-    font-size: 1rem;
+  .masonry-item.main-image {
+    flex: 1.1;
   }
+  
+  .masonry-container:hover .masonry-item:not(:hover) {
+    flex: 0.1;
+  }
+  
+  .masonry-item:hover,
+  .masonry-item.hovered {
+    flex: 1.8;
+  }
+  
   
   .tour-section {
     padding: 20px;

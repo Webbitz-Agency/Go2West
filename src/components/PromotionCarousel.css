@@ -8,7 +8,7 @@
 .promotion-carousel-wrapper {
   position: relative;
   width: 100%;
-  overflow: hidden;
+  /*overflow: hidden;*/
 }
 
 .promotion-horizontal-scroll {

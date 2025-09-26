@@ -37,7 +37,7 @@ const Header = () => {
     // Funzione semplice per controllare se una hero section è visibile
     const checkHeroVisibility = () => {
       // Cerca elementi con classe 'home-hero' o 'hero-top'
-      const heroElement = document.querySelector('.home-hero, .hero-top, .promotions-hero');
+      const heroElement = document.querySelector('.home-hero, .hero-top, .promotions-hero, .about-hero');
       
       if (!heroElement) {
         setIsHeroVisible(false);

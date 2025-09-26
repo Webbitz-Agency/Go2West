@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import TourService from '../services/TourService';
+import { destinationImages } from '../config/destinations';
 import './TourDetails.css';
 
 const TourDetails = () => {
@@ -8,6 +9,37 @@ const TourDetails = () => {
   const [tour, setTour] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [hoveredImage, setHoveredImage] = useState(null);
+
+  // Funzione per ottenere le immagini del tour
+  const getTourImages = () => {
+    if (!tour) return [];
+    
+    const images = [];
+    
+    // Aggiungi l'immagine principale se esiste
+    if (tour.mainImage) {
+      images.push({
+        src: tour.mainImage,
+        alt: tour.title,
+        isMain: true
+      });
+    }
+    
+    // Aggiungi le immagini della destinazione
+    const countryKey = tour.country?.toLowerCase().replace(/\s+/g, '-');
+    if (countryKey && destinationImages[countryKey]) {
+      destinationImages[countryKey].forEach((imageName, index) => {
+        images.push({
+          src: `/images/${imageName}`,
+          alt: `${tour.title} - Immagine ${index + 1}`,
+          isMain: false
+        });
+      });
+    }
+    
+    return images;
+  };
 
   // Carica i dettagli del tour dal database
   useEffect(() => {
@@ -50,24 +82,23 @@ const TourDetails = () => {
     );
   }
 
+  const tourImages = getTourImages();
+
   return (
     <div className="tour-details">
-      {/* Hero Section */}
-      <section className="tour-hero">
-        <div className="hero-background">
-          {tour.mainImage && <img src={tour.mainImage} alt={tour.title} />}
-          <div className="hero-overlay"></div>
-        </div>
-        <div className="hero-content">
-          <div className="container">
-            <h1 className="hero-title">{tour.title}</h1>
-            <p className="hero-description">{tour.description}</p>
-            <div className="hero-meta">
-              <span className="meta-item">{tour.country}</span>
-              <span className="meta-item">{tour.type}</span>
-              {tour.duration && <span className="meta-item">{tour.duration} giorni</span>}
+      {/* Hero Section - Clean Image Gallery */}
+      <section className="tour-hero-masonry">
+        <div className="masonry-container">
+          {tourImages.map((image, index) => (
+            <div
+              key={index}
+              className={`masonry-item ${image.isMain ? 'main-image' : ''} ${hoveredImage === index ? 'hovered' : ''}`}
+              onMouseEnter={() => setHoveredImage(index)}
+              onMouseLeave={() => setHoveredImage(null)}
+            >
+              <img src={image.src} alt={image.alt} />
             </div>
-          </div>
+          ))}
         </div>
       </section>
 
