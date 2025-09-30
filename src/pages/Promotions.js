@@ -127,7 +127,7 @@ const Promotions = () => {
   return (
     <div className="promotions-page">
       {/* Hero Section */}
-      <section id="promotions-hero" className="promotions-hero" aria-label="Promozioni - Hero">
+      <section className="promotions-hero" aria-label="Promozioni - Hero">
         <div className="hero-background-image">
           {heroImages.map((image, index) => (
             <img

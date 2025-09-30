@@ -10,6 +10,7 @@ const TourDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [hoveredImage, setHoveredImage] = useState(null);
+  const [currentHighlightIndex, setCurrentHighlightIndex] = useState(0);
 
   // Funzione per ottenere le immagini del tour
   const getTourImages = () => {
@@ -40,6 +41,37 @@ const TourDetails = () => {
     
     return images;
   };
+
+  // Funzione per creare le immagini dei punti salienti
+  const getHighlightImages = () => {
+    if (!tour || !tour.highlights) return [];
+    
+    // Usa le immagini della destinazione per i punti salienti
+    const countryKey = tour.country?.toLowerCase().replace(/\s+/g, '-');
+    const destinationImagesList = countryKey && destinationImages[countryKey] 
+      ? destinationImages[countryKey] 
+      : ['usa.jpg', 'canada.jpg', 'mexico.jpg', 'sudamerica.jpg', 'caraibi.jpg'];
+    
+    return tour.highlights.map((highlight, index) => ({
+      id: index,
+      title: highlight,
+      image: `/images/${destinationImagesList[index % destinationImagesList.length]}`,
+      alt: `${highlight} - ${tour.title}`
+    }));
+  };
+
+  // Effetto per lo scorrimento automatico del carosello
+  useEffect(() => {
+    if (!tour || !tour.highlights || tour.highlights.length <= 1) return;
+    
+    const interval = setInterval(() => {
+      setCurrentHighlightIndex((prevIndex) => 
+        (prevIndex + 1) % tour.highlights.length
+      );
+    }, 4000); // Cambia immagine ogni 4 secondi
+
+    return () => clearInterval(interval);
+  }, [tour]);
 
   // Carica i dettagli del tour dal database
   useEffect(() => {
@@ -102,21 +134,86 @@ const TourDetails = () => {
         </div>
       </section>
 
-      <div className="container">
+      {/* Tour Overview Section */}
+      <section className="tour-overview-section">
+        <div className="container-overview">
+          <div className="overview-content">
+            {/* Left Column - Overview Text */}
+            <div className="overview-text">
+              <div className="overview-header">
+                <span className="overview-label">OVERVIEW</span>
+                <h1 className="overview-title">{tour.title}</h1>
+              </div>
+              <div className="overview-description">
+                <p>{tour.description}</p>
+                <p>Un'esperienza di viaggio unica che ti porterà alla scoperta di destinazioni straordinarie, combinando comfort, avventura e autenticità. I nostri tour sono progettati per offrirti momenti indimenticabili e connessioni profonde con le culture locali.</p>
+              </div>
+            </div>
+            
+            {/* Right Column - Image Carousel */}
+            <div className="overview-carousel">
+              <div className="overview-carousel-container">
+                {tourImages.slice(0, 4).map((image, index) => (
+                  <div
+                    key={index}
+                    className={`overview-slide ${index === currentHighlightIndex % 4 ? 'active' : ''}`}
+                  >
+                    <img src={image.src} alt={image.alt} />
+                  </div>
+                ))}
+              </div>
+              <div className="overview-indicators">
+                {tourImages.slice(0, 4).map((_, index) => (
+                  <button
+                    key={index}
+                    className={`overview-indicator ${index === currentHighlightIndex % 4 ? 'active' : ''}`}
+                    onClick={() => setCurrentHighlightIndex(index)}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div className="container-details">
         <div className="tour-content">
           {/* Left Column - Main Content */}
           <div className="tour-main">
-            {/* Tour Highlights */}
+            {/* Tour Highlights Carousel */}
             {tour.highlights && tour.highlights.length > 0 && (
               <section className="tour-section">
                 <h2 className="section-title">Punti Salienti</h2>
-                <div className="highlights-grid">
-                  {tour.highlights.map((highlight, index) => (
-                    <div key={index} className="highlight-item">
-                      <span className="highlight-icon">✓</span>
-                      <span className="highlight-text">{highlight}</span>
+                <div className="highlights-carousel">
+                  <div className="carousel-container">
+                    {getHighlightImages().map((highlight, index) => (
+                      <div
+                        key={highlight.id}
+                        className={`carousel-slide ${index === currentHighlightIndex ? 'active' : ''}`}
+                        /*style={{
+                          transform: `translateX(-${currentHighlightIndex * 100}%)`
+                        }}*/
+                      >
+                        <img src={highlight.image} alt={highlight.alt} />
+                        <div className="highlight-overlay">
+                          <h3 className="highlight-title">{highlight.title}</h3>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {/* Indicatori */}
+                  {tour.highlights.length > 1 && (
+                    <div className="carousel-indicators">
+                      {tour.highlights.map((_, index) => (
+                        <button
+                          key={index}
+                          className={`indicator ${index === currentHighlightIndex ? 'active' : ''}`}
+                          onClick={() => setCurrentHighlightIndex(index)}
+                        />
+                      ))}
                     </div>
-                  ))}
+                  )}
                 </div>
               </section>
             )}
@@ -168,36 +265,10 @@ const TourDetails = () => {
               </section>
             )}
 
-            {/* Notes */}
-            {tour.notes && (
-              <section className="tour-section">
-                <h2 className="section-title">Note Importanti</h2>
-                <div className="notes-content">
-                  <p>{tour.notes}</p>
-                </div>
-              </section>
-            )}
-          </div>
-
-          {/* Right Column - Sidebar */}
-          <div className="tour-sidebar">
-            {/* Pricing Card */}
-            <div className="pricing-card">
-              <div className="price-header">
-                <h3 className="price-title">Prezzo</h3>
-                <div className="price-amount">€ {tour.price}</div>
-                <div className="price-per">per persona</div>
-              </div>
-              <div className="price-note">
-                Prezzo a partire da € {tour.price} per persona. Supplemento singola disponibile.
-              </div>
-              <button className="book-button">Prenota Ora</button>
-            </div>
-
-            {/* Tour Info Card */}
-            <div className="info-card">
-              <h3 className="info-title">Informazioni Tour</h3>
-              <div className="info-list">
+            {/* Tour Information */}
+            <section className="tour-section">
+              <h2 className="section-title">Informazioni Tour</h2>
+              <div className="tour-info-grid">
                 <div className="info-item">
                   <span className="info-label">Destinazione:</span>
                   <span className="info-value">{tour.country}</span>
@@ -215,6 +286,96 @@ const TourDetails = () => {
                 <div className="info-item">
                   <span className="info-label">Codice:</span>
                   <span className="info-value">{tour.slug}</span>
+                </div>
+              </div>
+            </section>
+
+            {/* Notes */}
+            {tour.notes && (
+              <section className="tour-section">
+                <h2 className="section-title">Note Importanti</h2>
+                <div className="notes-content">
+                  <p>{tour.notes}</p>
+                </div>
+              </section>
+            )}
+          </div>
+
+          {/* Right Column - Dates & Prices */}
+          <div className="tour-sidebar">
+            <div className="dates-prices-section">
+              <h2 className="dates-prices-title">Dates & Prices</h2>
+              
+              {/* Year Selection */}
+              <div className="year-selection">
+                <button className="year-button active">2025</button>
+                <button className="year-button">2026</button>
+              </div>
+              
+              <p className="pricing-disclaimer">
+                Prezzi in EUR, inclusi voli interni, per persona, doppia occupazione.
+              </p>
+              
+              {/* Tour Dates List */}
+              <div className="tour-dates-list">
+                <div className="date-row">
+                  <div className="date-info">
+                    <span className="date-range">Gen 7 - Gen 20</span>
+                  </div>
+                  <div className="price-info">€{tour.price}</div>
+                  <button className="availability-button">
+                    PRENOTA
+                  </button>
+                </div>
+                
+                <div className="date-row">
+                  <div className="date-info">
+                    <span className="date-range">Gen 14 - Gen 27</span>
+                  </div>
+                  <div className="price-info">€{tour.price}</div>
+                  <button className="availability-button">
+                    PRENOTA
+                  </button>
+                </div>
+                
+                <div className="date-row">
+                  <div className="date-info">
+                    <span className="date-range">Gen 28 - Feb 10</span>
+                  </div>
+                  <div className="price-info">€{parseInt(tour.price) + 1305}</div>
+                  <button className="availability-button">
+                    PRENOTA
+                  </button>
+                </div>
+                
+                <div className="date-row">
+                  <div className="date-info">
+                    <span className="date-range">Feb 11 - Feb 24</span>
+                  </div>
+                  <div className="price-info">€{parseInt(tour.price) + 1305}</div>
+                  <button className="availability-button">
+                    PRENOTA
+                  </button>
+                </div>
+                
+                <div className="date-row">
+                  <div className="date-info">
+                    <span className="date-range">Feb 18 - Mar 3</span>
+                  </div>
+                  <div className="price-info">€{tour.price}</div>
+                  <button className="availability-button">
+                    PRENOTA
+                  </button>
+                </div>
+                
+                <div className="date-row">
+                  <div className="date-info">
+                    <span className="date-range">Feb 25 - Mar 10</span>
+                  </div>
+                  <div className="price-info">€{tour.price}</div>
+                  <button className="availability-button">
+                    PRENOTA
+                  </button>
                 </div>
               </div>
             </div>
