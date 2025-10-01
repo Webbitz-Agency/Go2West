@@ -11,6 +11,32 @@ const TourDetails = () => {
   const [error, setError] = useState(null);
   const [hoveredImage, setHoveredImage] = useState(null);
   const [currentHighlightIndex, setCurrentHighlightIndex] = useState(0);
+  const [selectedYear, setSelectedYear] = useState(2025);
+
+  // Dati per le date dei tour per anno
+  const tourDates = {
+    2025: [
+      { dateRange: "Gen 7 - Gen 20", price: tour?.price || 1599 },
+      { dateRange: "Gen 14 - Gen 27", price: tour?.price || 1599 },
+      { dateRange: "Gen 28 - Feb 10", price: (parseInt(tour?.price) || 1599) + 1305 },
+      { dateRange: "Feb 11 - Feb 24", price: (parseInt(tour?.price) || 1599) + 1305 },
+      { dateRange: "Feb 18 - Mar 3", price: tour?.price || 1599 },
+      { dateRange: "Feb 25 - Mar 10", price: tour?.price || 1599 }
+    ],
+    2026: [
+      { dateRange: "Gen 6 - Gen 19", price: (parseInt(tour?.price) || 1599) + 200 },
+      { dateRange: "Gen 13 - Gen 26", price: (parseInt(tour?.price) || 1599) + 200 },
+      { dateRange: "Gen 27 - Feb 9", price: (parseInt(tour?.price) || 1599) + 1505 },
+      { dateRange: "Feb 10 - Feb 23", price: (parseInt(tour?.price) || 1599) + 1505 },
+      { dateRange: "Feb 17 - Mar 2", price: (parseInt(tour?.price) || 1599) + 200 },
+      { dateRange: "Feb 24 - Mar 9", price: (parseInt(tour?.price) || 1599) + 200 }
+    ]
+  };
+
+  // Funzione per gestire il cambio di anno
+  const handleYearChange = (year) => {
+    setSelectedYear(year);
+  };
 
   // Funzione per ottenere le immagini del tour
   const getTourImages = () => {
@@ -308,8 +334,20 @@ const TourDetails = () => {
               
               {/* Year Selection */}
               <div className="year-selection">
-                <button className="year-button active">2025</button>
-                <button className="year-button">2026</button>
+                <button 
+                  className={`year-button ${selectedYear === 2025 ? 'active' : ''}`}
+                  onClick={() => handleYearChange(2025)}
+                  id="first-year"
+                >
+                  2025
+                </button>
+                <button 
+                  className={`year-button ${selectedYear === 2026 ? 'active' : ''}`}
+                  onClick={() => handleYearChange(2026)}
+                  id="second-year"
+                >
+                  2026
+                </button>
               </div>
               
               <p className="pricing-disclaimer">
@@ -318,65 +356,17 @@ const TourDetails = () => {
               
               {/* Tour Dates List */}
               <div className="tour-dates-list">
-                <div className="date-row">
-                  <div className="date-info">
-                    <span className="date-range">Gen 7 - Gen 20</span>
+                {tourDates[selectedYear]?.map((dateInfo, index) => (
+                  <div key={index} className="date-row">
+                    <div className="date-info">
+                      <span className="date-range">{dateInfo.dateRange}</span>
+                    </div>
+                    <div className="price-info">€{dateInfo.price}</div>
+                    <button className="availability-button">
+                      PRENOTA
+                    </button>
                   </div>
-                  <div className="price-info">€{tour.price}</div>
-                  <button className="availability-button">
-                    PRENOTA
-                  </button>
-                </div>
-                
-                <div className="date-row">
-                  <div className="date-info">
-                    <span className="date-range">Gen 14 - Gen 27</span>
-                  </div>
-                  <div className="price-info">€{tour.price}</div>
-                  <button className="availability-button">
-                    PRENOTA
-                  </button>
-                </div>
-                
-                <div className="date-row">
-                  <div className="date-info">
-                    <span className="date-range">Gen 28 - Feb 10</span>
-                  </div>
-                  <div className="price-info">€{parseInt(tour.price) + 1305}</div>
-                  <button className="availability-button">
-                    PRENOTA
-                  </button>
-                </div>
-                
-                <div className="date-row">
-                  <div className="date-info">
-                    <span className="date-range">Feb 11 - Feb 24</span>
-                  </div>
-                  <div className="price-info">€{parseInt(tour.price) + 1305}</div>
-                  <button className="availability-button">
-                    PRENOTA
-                  </button>
-                </div>
-                
-                <div className="date-row">
-                  <div className="date-info">
-                    <span className="date-range">Feb 18 - Mar 3</span>
-                  </div>
-                  <div className="price-info">€{tour.price}</div>
-                  <button className="availability-button">
-                    PRENOTA
-                  </button>
-                </div>
-                
-                <div className="date-row">
-                  <div className="date-info">
-                    <span className="date-range">Feb 25 - Mar 10</span>
-                  </div>
-                  <div className="price-info">€{tour.price}</div>
-                  <button className="availability-button">
-                    PRENOTA
-                  </button>
-                </div>
+                ))}
               </div>
             </div>
           </div>

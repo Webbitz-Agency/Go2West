@@ -449,53 +449,75 @@
 }
 
 .dates-prices-title {
-  font-size: clamp(1.3rem, 3vw, 2.2rem);
+  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
   font-weight: 500;
   color: #2c3e50;
-  margin-bottom: clamp(15px, 2vw, 30px);
+  margin-bottom: clamp(15px, 2.5vw, 25px);
   font-family: 'DM Serif Text', serif;
   text-align: center;
+  line-height: 1.2;
 }
 
 /* Year Selection */
 .year-selection {
   display: flex;
-  gap: 2px;
-  margin-bottom: clamp(15px, 2vw, 25px);
-  background: #f8f9fa;
+  margin-bottom: clamp(10px, 2vw, 20px);
+  /*background: #f8f9fa;*/
   border-radius: clamp(6px, 1vw, 10px);
   padding: clamp(3px, 0.5vw, 6px);
 }
 
 .year-button {
   flex: 1;
-  padding: clamp(8px, 1.5vw, 15px) clamp(12px, 2vw, 25px);
-  border: 1px solid #ddd;
+  padding: clamp(8px, 1.8vw, 12px) clamp(16px, 3vw, 25px);
+  border: 1px solid #e9ecef;
   background: white;
-  color: #666;
-  font-weight: 500;
+  color: #2c3e50;
+  font-weight: 600;
   font-size: clamp(0.8rem, 1.5vw, 1rem);
   cursor: pointer;
-  transition: all 0.3s ease;
-  border-radius: clamp(4px, 0.8vw, 8px);
+  transition: all 0.3s ease;  
 }
 
 .year-button.active {
-  background: #2c3e50;
+  background: linear-gradient(45deg, #4facfe, #4facfe);
   color: white;
-  border-color: #2c3e50;
+  border-color: #4facfe;
+  box-shadow: 0 4px 15px rgba(79, 172, 254, 0.2);
+  /*transform: translateY(-1px);*/
 }
 
 .year-button:hover:not(.active) {
-  background: #f0f0f0;
+  background: #f8f9fa;
+  border-color: #4facfe;
+  /*transform: translateY(-1px);*/
+  box-shadow: 0 4px 12px rgba(79, 172, 254, 0.2);
 }
 
+/*.year-button:active {
+  transform: translateY(0);
+}*/
+
+#first-year{
+  border-top-left-radius: clamp(20px, 4vw, 25px);
+  border-bottom-left-radius: clamp(20px, 4vw, 25px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+#second-year{
+  border-top-right-radius: clamp(20px, 4vw, 25px);
+  border-bottom-right-radius: clamp(20px, 4vw, 25px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+
 .pricing-disclaimer {
-  color: #666;
-  font-size: clamp(0.75rem, 1.2vw, 1rem);
+  color: #555;
+  font-size: clamp(0.8rem, 1.2vw, 1rem);
   text-align: center;
-  margin-bottom: clamp(15px, 2vw, 30px);
-  line-height: 1.5;
+  margin-bottom: clamp(15px, 2.5vw, 25px);
+  line-height: 1.6;
+  font-weight: 400;
 }
 
 /* Tour Dates List */
@@ -532,7 +554,7 @@
   display: grid;
   grid-template-columns: 1fr auto auto;
   align-items: center;
-  padding: clamp(12px, 2vw, 20px) 0;
+  /*padding: clamp(12px, 2vw, 20px) 0;*/
   border-bottom: 1px solid #f0f0f0;
   gap: clamp(10px, 1.5vw, 20px);
   min-height: clamp(50px, 8vw, 70px);
@@ -549,8 +571,8 @@
 }
 
 .date-range {
-  font-size: clamp(0.85rem, 1.8vw, 1.1rem);
-  font-weight: 500;
+  font-size: clamp(0.9rem, 1.2vw, 1.1rem);
+  font-weight: 600;
   color: #2c3e50;
 }
 
@@ -567,8 +589,8 @@
 }
 
 .price-info {
-  font-size: clamp(0.9rem, 2vw, 1.3rem);
-  font-weight: 600;
+  font-size: clamp(1rem, 1.4vw, 1.4rem);
+  font-weight: 700;
   color: #2c3e50;
   text-align: center;
 }
@@ -577,21 +599,26 @@
   display: flex;
   align-items: center;
   gap: clamp(4px, 1vw, 10px);
-  padding: clamp(6px, 1.2vw, 12px) clamp(10px, 1.8vw, 18px);
-  background: #f8f9fa;
-  color: #666;
-  border: 1px solid #ddd;
-  border-radius: clamp(4px, 0.8vw, 8px);
-  font-size: clamp(0.7rem, 1.3vw, 0.9rem);
-  font-weight: 500;
+  padding: clamp(5px, 1.8vw, 10px) clamp(10px, 3vw, 15px);
+  background: linear-gradient(45deg, #ff3f3f, #ee2424);
+  color: white;
+  border: none;
+  border-radius: clamp(20px, 4vw, 25px);
+  font-size: clamp(0.6rem, 1.3vw, 0.8rem);
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
   white-space: nowrap;
+  box-shadow: 0 4px 15px rgba(255, 63, 63, 0.3);
 }
 
 .availability-button:hover {
-  background: #e9ecef;
-  border-color: #bbb;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 63, 63, 0.4);
+}
+
+.availability-button:active {
+  transform: translateY(0);
 }
 
 .availability-button.waitlist {
