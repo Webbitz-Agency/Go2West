@@ -231,7 +231,7 @@
 }
 
 .section-title {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: 500;
   color: #2c3e50;
   margin-bottom: 25px;
@@ -503,20 +503,20 @@
 
 .dates-prices-section {
   background: white;
-  border-radius: clamp(8px, 1.5vw, 15px);
+  border-radius: 12px;
   padding: clamp(15px, 3vw, 35px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
   border: 1px solid #e9ecef;
-  height: calc(100vh - 200px);
+  max-height: 77vh;
   display: flex;
   flex-direction: column;
 }
 
 .dates-prices-title {
-  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+  font-size: 1.4rem;
   font-weight: 500;
   color: #2c3e50;
-  margin-bottom: clamp(15px, 2.5vw, 25px);
+  margin-bottom: 25px;
   font-family: 'DM Serif Text', serif;
   text-align: center;
   line-height: 1.2;
@@ -593,6 +593,7 @@
   overflow-y: auto;
   margin-top: 10px;
   padding-right: 5px;
+  max-height: 50vh;
 }
 
 /* Custom scrollbar */
@@ -954,7 +955,11 @@
   }
   
   .dates-prices-section {
-    height: calc(100vh - 180px);
+    max-height: 75vh;
+  }
+  
+  .tour-dates-list {
+    max-height: 40vh;
   }
   
   .date-row {
@@ -1091,7 +1096,7 @@
   }
   
   .section-title {
-    font-size: 1.3rem;
+    font-size: 1.15rem;
   }
   
   .price-amount {
@@ -1099,8 +1104,12 @@
   }
   
   .dates-prices-section {
-    height: calc(100vh - 160px);
+    max-height: 70vh;
     padding: clamp(12px, 2.5vw, 20px);
+  }
+  
+  .tour-dates-list {
+    max-height: 35vh;
   }
   
   .date-row {
@@ -1129,8 +1138,8 @@
   }
   
   .dates-prices-title {
-    font-size: clamp(1rem, 2.2vw, 1.5rem);
-    margin-bottom: clamp(12px, 2.2vw, 20px);
+    font-size: 1.15rem;
+    margin-bottom: 20px;
   }
   
   .pricing-disclaimer {
