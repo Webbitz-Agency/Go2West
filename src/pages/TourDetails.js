@@ -12,6 +12,7 @@ const TourDetails = () => {
   const [hoveredImage, setHoveredImage] = useState(null);
   const [currentHighlightIndex, setCurrentHighlightIndex] = useState(0);
   const [selectedYear, setSelectedYear] = useState(2025);
+  const [expandedDays, setExpandedDays] = useState(new Set());
 
   // Dati per le date dei tour per anno
   const tourDates = {
@@ -36,6 +37,26 @@ const TourDetails = () => {
   // Funzione per gestire il cambio di anno
   const handleYearChange = (year) => {
     setSelectedYear(year);
+  };
+
+  // Dati estesi per ogni giorno dell'itinerario
+  const itineraryDetails = {
+    1: "Arrivo all'aeroporto JFK di New York. Trasferimento in hotel nel cuore di Manhattan. Tempo libero per esplorare i dintorni. Cena di benvenuto in un ristorante tipico newyorkese. Pernottamento a New York.",
+    2: "Colazione in hotel. Tour completo di New York: Times Square, Central Park, Fifth Avenue, Empire State Building, Statua della Libertà (vista da Battery Park), Wall Street, Ground Zero Memorial. Pranzo libero. Pomeriggio dedicato allo shopping su Broadway. Cena in Little Italy. Pernottamento a New York.",
+    3: "Prima colazione e partenza per Philadelphia. Visita della città: Independence Hall, Liberty Bell, Reading Terminal Market. Pranzo tipico con cheesesteak. Proseguimento per Washington DC. Arrivo e sistemazione in hotel. Cena libera. Pernottamento a Washington DC.",
+    4: "Colazione in hotel. Giornata dedicata alla visita di Washington DC: Casa Bianca (esterno), Campidoglio, Memoriale di Lincoln, Memoriale di Washington, Memoriale di Jefferson, Museo Smithsonian. Pranzo libero. Pomeriggio: Arlington Cemetery, Georgetown. Cena in un ristorante del centro. Pernottamento a Washington DC.",
+    5: "Prima colazione e partenza per Charleston, South Carolina. Viaggio panoramico attraverso la Virginia e la Carolina del Nord. Arrivo a Charleston nel pomeriggio. Visita del centro storico: Battery Park, Rainbow Row, Charleston City Market. Cena in un ristorante tipico del Sud. Pernottamento a Charleston."
+  };
+
+  // Funzione per gestire il toggle degli elementi dell'itinerario (solo uno aperto alla volta)
+  const toggleDayExpansion = (dayNumber) => {
+    setExpandedDays(prev => {
+      const newSet = new Set();
+      if (!prev.has(dayNumber)) {
+        newSet.add(dayNumber); // Apri solo il giorno cliccato, chiudi tutti gli altri
+      }
+      return newSet;
+    });
   };
 
   // Funzione per ottenere le immagini del tour
@@ -206,8 +227,46 @@ const TourDetails = () => {
         <div className="tour-content">
           {/* Left Column - Main Content */}
           <div className="tour-main">
-            {/* Tour Highlights Carousel */}
-            {tour.highlights && tour.highlights.length > 0 && (
+            {/* Itinerary */}
+            {tour.itinerary && tour.itinerary.length > 0 && (
+              <section className="tour-section">
+                <h2 className="section-title">Itinerario</h2>
+                <div className="itinerary-list">
+                  {tour.itinerary.map((item, index) => {
+                    const dayNumber = index + 1;
+                    const isExpanded = expandedDays.has(dayNumber);
+                    return (
+                      <div key={index} className="itinerary-item">
+                        <div 
+                          className="itinerary-item-header"
+                          onClick={() => toggleDayExpansion(dayNumber)}
+                        >
+                          <div className="day-badge">Giorno {dayNumber}</div>
+                          <div className="day-content">
+                            <h3 className="day-title">{item}</h3>
+                          </div>
+                          <div className="expand-icon">
+                            <span className={`chevron ${isExpanded ? 'expanded' : ''}`}>
+                            <i class="fa-solid fa-angle-right"></i>
+                            </span>
+                          </div>
+                        </div>
+                        {isExpanded && (
+                          <div className="itinerary-details">
+                            <p className="day-description">
+                              {itineraryDetails[dayNumber] || "Descrizione dettagliata non disponibile per questo giorno."}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </section>
+            )}
+
+          {/* Tour Highlights Carousel */}
+          {tour.highlights && tour.highlights.length > 0 && (
               <section className="tour-section">
                 <h2 className="section-title">Punti Salienti</h2>
                 <div className="highlights-carousel">
@@ -240,23 +299,6 @@ const TourDetails = () => {
                       ))}
                     </div>
                   )}
-                </div>
-              </section>
-            )}
-
-            {/* Itinerary */}
-            {tour.itinerary && tour.itinerary.length > 0 && (
-              <section className="tour-section">
-                <h2 className="section-title">Itinerario</h2>
-                <div className="itinerary-list">
-                  {tour.itinerary.map((item, index) => (
-                    <div key={index} className="itinerary-item">
-                      <div className="day-badge">Giorno {index + 1}</div>
-                      <div className="day-content">
-                        <h3 className="day-title">{item}</h3>
-                      </div>
-                    </div>
-                  ))}
                 </div>
               </section>
             )}

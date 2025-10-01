@@ -338,12 +338,25 @@
 }
 
 .itinerary-item {
-  display: flex;
-  gap: 20px;
-  padding: 20px;
   background: #f8f9fa;
   border-radius: 10px;
   border-left: 4px solid #4facfe;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.itinerary-item-header {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  align-items: center;
+}
+
+.itinerary-item-header:hover {
+  background: #e9ecef;
 }
 
 .day-badge {
@@ -369,6 +382,57 @@
   font-weight: 500;
   margin-bottom: 8px;
   line-height: 1.4;
+}
+
+.expand-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+}
+
+.chevron {
+  font-size: 0.8rem;
+  color: #4facfe;
+  transition: transform 0.3s ease;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.chevron.expanded {
+  transform: rotate(90deg);
+}
+
+.itinerary-details {
+  padding: 0 20px 20px 20px;
+  background: #ffffff;
+  border-top: 1px solid #e9ecef;
+  animation: slideDown 0.3s ease-out;
+}
+
+.day-description {
+  color: #555;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0;
+  padding: 15px 0;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 200px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
 }
 
 /* Inclusions & Exclusions */
@@ -749,6 +813,78 @@
   }
 }
 
+@media (max-width: 992px) {
+  .date-row {
+    gap: clamp(8px, 1.8vw, 18px);
+    padding: clamp(10px, 2.2vw, 15px) 0;
+    min-height: clamp(48px, 7vw, 65px);
+  }
+  
+  .availability-button {
+    padding: clamp(6px, 1.6vw, 10px) clamp(10px, 2.5vw, 18px);
+    font-size: clamp(0.6rem, 1.25vw, 0.8rem);
+  }
+  
+  .date-range {
+    font-size: clamp(0.85rem, 1.15vw, 1.05rem);
+  }
+  
+  .price-info {
+    font-size: clamp(0.95rem, 1.35vw, 1.25rem);
+  }
+  
+  .itinerary-item {
+    padding: 18px;
+    gap: 18px;
+  }
+  
+  .day-badge {
+    padding: 7px 11px;
+    font-size: 0.85rem;
+    min-width: 75px;
+  }
+  
+  .day-title {
+    font-size: 1.05rem;
+    margin-bottom: 7px;
+  }
+  
+  .itinerary-item-header {
+    padding: 18px;
+    gap: 18px;
+  }
+  
+  .day-badge {
+    padding: 7px 11px;
+    font-size: 0.85rem;
+    min-width: 75px;
+  }
+  
+  .day-title {
+    font-size: 1.05rem;
+    margin-bottom: 7px;
+  }
+  
+  .expand-icon {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .chevron {
+    font-size: 0.75rem;
+    transition: transform 0.3s ease;
+  }
+  
+  .itinerary-details {
+    padding: 0 18px 18px 18px;
+  }
+  
+  .day-description {
+    font-size: 0.9rem;
+    padding: 14px 0;
+  }
+}
+
 @media (max-width: 768px) {
   .container {
     padding: 0 15px;
@@ -786,9 +922,12 @@
     gap: 30px;
   }
   
+  .overview-text {
+    order: -1; /* Metti il testo sopra il carosello su mobile */
+  }
+  
   .overview-carousel {
     height: 350px;
-    order: -1; /* Metti il carosello sopra il testo su mobile */
   }
   
   .highlights-carousel {
@@ -819,26 +958,70 @@
   }
   
   .date-row {
-    grid-template-columns: 1fr;
-    gap: 10px;
-    text-align: center;
+    grid-template-columns: 1fr auto auto;
+    gap: clamp(8px, 2vw, 15px);
+    text-align: left;
+    padding: clamp(8px, 2vw, 12px) 0;
+    min-height: clamp(45px, 6vw, 60px);
   }
   
   .date-info {
-    align-items: center;
+    align-items: flex-start;
   }
   
   .availability-button {
     justify-content: center;
+    padding: clamp(6px, 1.5vw, 8px) clamp(8px, 2vw, 12px);
+    font-size: clamp(0.5rem, 1.2vw, 0.7rem);
   }
   
-  .itinerary-item {
+  .date-range {
+    font-size: clamp(0.8rem, 1.1vw, 1rem);
+  }
+  
+  .price-info {
+    font-size: clamp(0.9rem, 1.3vw, 1.2rem);
+  }
+  
+  .itinerary-item-header {
     flex-direction: column;
-    gap: 15px;
+    gap: 12px;
+    padding: 15px;
+    align-items: flex-start;
   }
   
   .day-badge {
     align-self: flex-start;
+    padding: 6px 10px;
+    font-size: 0.8rem;
+    min-width: 70px;
+  }
+  
+  .day-title {
+    font-size: 1rem;
+    margin-bottom: 6px;
+  }
+  
+  .expand-icon {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 25px;
+    height: 25px;
+  }
+  
+  .chevron {
+    font-size: 0.7rem;
+    transition: transform 0.3s ease;
+  }
+  
+  .itinerary-details {
+    padding: 0 15px 15px 15px;
+  }
+  
+  .day-description {
+    font-size: 0.9rem;
+    padding: 12px 0;
   }
   
   .pricing-card,
@@ -873,6 +1056,10 @@
   
   .tour-overview-section {
     padding: 40px 0;
+  }
+  
+  .overview-text {
+    order: -1; /* Metti il testo sopra il carosello su mobile */
   }
   
   .overview-carousel {
@@ -913,5 +1100,159 @@
   
   .dates-prices-section {
     height: calc(100vh - 160px);
+    padding: clamp(12px, 2.5vw, 20px);
+  }
+  
+  .date-row {
+    grid-template-columns: 1fr auto auto;
+    gap: clamp(6px, 1.5vw, 12px);
+    padding: clamp(6px, 1.5vw, 10px) 0;
+    min-height: clamp(40px, 5vw, 55px);
+  }
+  
+  .availability-button {
+    padding: clamp(4px, 1.2vw, 6px) clamp(6px, 1.8vw, 10px);
+    font-size: clamp(0.45rem, 1vw, 0.65rem);
+  }
+  
+  .date-range {
+    font-size: clamp(0.75rem, 1vw, 0.9rem);
+  }
+  
+  .price-info {
+    font-size: clamp(0.8rem, 1.2vw, 1.1rem);
+  }
+  
+  .year-button {
+    padding: clamp(6px, 1.5vw, 8px) clamp(12px, 2.5vw, 18px);
+    font-size: clamp(0.7rem, 1.3vw, 0.9rem);
+  }
+  
+  .dates-prices-title {
+    font-size: clamp(1rem, 2.2vw, 1.5rem);
+    margin-bottom: clamp(12px, 2.2vw, 20px);
+  }
+  
+  .pricing-disclaimer {
+    font-size: clamp(0.7rem, 1.1vw, 0.9rem);
+    margin-bottom: clamp(12px, 2.2vw, 20px);
+  }
+  
+  .itinerary-item-header {
+    padding: 12px;
+    gap: 10px;
+  }
+  
+  .day-badge {
+    padding: 5px 8px;
+    font-size: 0.75rem;
+    min-width: 60px;
+  }
+  
+  .day-title {
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+  }
+  
+  .expand-icon {
+    top: 12px;
+    right: 12px;
+    width: 22px;
+    height: 22px;
+  }
+  
+  .chevron {
+    font-size: 0.65rem;
+    transition: transform 0.3s ease;
+  }
+  
+  .itinerary-details {
+    padding: 0 12px 12px 12px;
+  }
+  
+  .day-description {
+    font-size: 0.85rem;
+    padding: 10px 0;
+  }
+}
+
+/* Regole aggiuntive per schermi molto piccoli */
+@media (max-width: 360px) {
+  .date-row {
+    gap: 4px;
+    padding: 6px 0;
+    min-height: 45px;
+  }
+  
+  .availability-button {
+    padding: 6px 8px;
+    font-size: 0.5rem;
+    min-width: 50px;
+  }
+  
+  .date-range {
+    font-size: 0.7rem;
+  }
+  
+  .price-info {
+    font-size: 0.75rem;
+  }
+  
+  .year-button {
+    padding: 6px 10px;
+    font-size: 0.65rem;
+  }
+  
+  .itinerary-item {
+    padding: 10px;
+    gap: 8px;
+  }
+  
+  .day-badge {
+    padding: 4px 6px;
+    font-size: 0.7rem;
+    min-width: 50px;
+  }
+  
+  .day-title {
+    font-size: 0.85rem;
+    margin-bottom: 3px;
+  }
+  
+  .itinerary-item-header {
+    padding: 10px;
+    gap: 8px;
+  }
+  
+  .day-badge {
+    padding: 4px 6px;
+    font-size: 0.7rem;
+    min-width: 50px;
+  }
+  
+  .day-title {
+    font-size: 0.8rem;
+    margin-bottom: 3px;
+  }
+  
+  .expand-icon {
+    top: 10px;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+  }
+  
+  .chevron {
+    font-size: 0.6rem;
+    transition: transform 0.3s ease;
+  }
+  
+  .itinerary-details {
+    padding: 0 10px 10px 10px;
+  }
+  
+  .day-description {
+    font-size: 0.8rem;
+    padding: 8px 0;
   }
 } 
