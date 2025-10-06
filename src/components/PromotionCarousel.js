@@ -246,9 +246,8 @@ const PromotionCarousel = ({ itemsPerPage = 6 }) => {
 
       {/* Link per vedere tutte le promozioni */}
       <div className="promotions-link-container">
-        <Link to="/promozioni" className="promotions-link">
+        <Link to="/promozioni" className="options-cta">
           Vedi tutte le promozioni
-          <i className="fa-solid fa-arrow-right"></i>
         </Link>
       </div>
     </div>

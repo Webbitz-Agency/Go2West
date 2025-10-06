@@ -186,7 +186,7 @@ const Header = () => {
     <header className={`header ${isHeroVisible ? 'transparent' : 'solid'}`}>
       <div className="container-header">
         <a href="/" className="logo">
-          <img src="/logo-nobg.png" alt="go2west" className="logo-text" />
+          <img src="/Logo.svg" alt="go2west" className="logo-text" />
         </a>
         
         <div className="nav-wrapper">

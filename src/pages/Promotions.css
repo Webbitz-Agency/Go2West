@@ -178,7 +178,7 @@
 
 .promotion-card-image {
   position: relative;
-  height: 250px;
+  height: 184px; /* 350px (larghezza card) / 1.9 (aspect ratio 1200:630) ≈ 184px */
   overflow: hidden;
 }
 
@@ -505,6 +505,10 @@
   .promotions-grid {
     grid-template-columns: 1fr;
     gap: 20px;
+  }
+  
+  .promotion-card-image {
+    height: 184px; /* Mantiene la proporzione corretta anche su mobile */
   }
   
   .promotion-features {

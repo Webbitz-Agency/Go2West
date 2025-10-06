@@ -9,7 +9,7 @@
 :root {
   --section-max-width: 100%;
   --section-padding-horizontal: 2%;
-  --section-padding-vertical: 80px;
+  --section-padding-vertical: 50px;
   --container-padding: 30px 30px 15px 30px;
 }
 
@@ -190,10 +190,10 @@
 }
 
 .hero-logo-image {
-  width: clamp(300px, 70vw, 500px);
+  width: clamp(360px, 80vw, 600px);
   height: auto;
   object-fit: contain;
-  filter: drop-shadow(0 30px 20px rgba(255, 255, 255, 2));
+  filter: drop-shadow(0 15px 16px rgba(255, 255, 255, 2));
   margin-bottom: 10px;
 }
 
@@ -321,7 +321,7 @@
 .reveal-on-scroll.revealed { 
   opacity: 1;
   transform: translateY(0);
-  padding: 40px 0 75px;
+  padding: 40px 0 10px;
 }
 
 /* Padding ridotto per mobile */
@@ -3189,7 +3189,7 @@
 
 .suggestions-section {
   background: #eefdff;
-  padding: var(--section-padding-vertical) var(--section-padding-horizontal) 80px;
+  padding: var(--section-padding-vertical) var(--section-padding-horizontal) 0;
   position: relative;
 }
 
@@ -4549,7 +4549,7 @@
 
 /* Nuova Sezione Destinazioni - Layout A&K Style */
 .destinations-showcase-new {
-  padding: 80px 0;
+  padding: 40px 0;
   background: #e0f7fa;
 }
 
@@ -4599,7 +4599,7 @@
 
 .destination-card-new:hover {
   transform: translateY(-8px);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.12);
 }
 
 /* Card a larghezza massima per la prima riga (USA) - Layout orizzontale */

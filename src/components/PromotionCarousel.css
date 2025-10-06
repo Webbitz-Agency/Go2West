@@ -62,7 +62,7 @@
 .tour-card-image {
   position: relative;
   width: 100%;
-  height: 250px;
+  height: 184px; /* 350px (larghezza card) / 1.9 (aspect ratio 1200:630) ≈ 184px */
   overflow: hidden;
 }
 
@@ -271,7 +271,7 @@
   }
   
   .tour-card-image {
-    height: 150px; /* Ridotta altezza immagine */
+    height: 147px; /* 280px (larghezza card mobile) / 1.9 (aspect ratio) ≈ 147px */
   }
   
   .tour-card-content {
@@ -314,7 +314,7 @@
   }
   
   .tour-card-image {
-    height: 130px; /* Ancora più bassa immagine */
+    height: 132px; /* 250px (larghezza card mobile small) / 1.9 (aspect ratio) ≈ 132px */
   }
   
   .tour-card-content {

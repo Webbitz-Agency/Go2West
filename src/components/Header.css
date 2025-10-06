@@ -43,13 +43,12 @@
   font-size: 1.6rem;
   font-weight: 700;
   color: #4A90E2;
-  padding-top: 15px;
   filter: drop-shadow(0 1px 15px rgba(255, 255, 255, 2));
 }
 
 .logo-text {
-  width: clamp(150px, 15vw, 220px);
-  height: clamp(75px, 7.5vw, 110px);
+  width: clamp(180px, 18vw, 260px);
+  height: clamp(90px, 9vw, 130px);
   object-fit: contain;
   background: linear-gradient(45deg, #4A90E2, #7CB9E8);
   -webkit-background-clip: text;
@@ -606,6 +605,7 @@
 }
 
 /* Link Promozioni con animazione colore */
+/*
 .nav-link[href="/promozioni"],
 .nav-link[href*="/promozioni"] {
   color: #ff6b35 !important;
@@ -617,8 +617,9 @@
 .nav-link[href*="/promozioni"]:hover {
   color: #e55a2b !important;
 }
-
+*/
 /* Link Promozioni quando attivo (sulla pagina) */
+/*
 .nav-link.active[href="/promozioni"],
 .nav-link.active[href*="/promozioni"] {
   color: white !important;
@@ -637,7 +638,7 @@
   color: white !important;
   animation: none;
 }
-
+*/
 @keyframes color-pulse {
   0% { color: #ff6b35; }
   50% { color: #ff4500; }

@@ -372,7 +372,7 @@ const TourDetails = () => {
           {/* Right Column - Dates & Prices */}
           <div className="tour-sidebar">
             <div className="dates-prices-section">
-              <h2 className="dates-prices-title">Dates & Prices</h2>
+              {/*<h2 className="dates-prices-title">Dates & Prices</h2>*/}
               
               {/* Year Selection */}
               <div className="year-selection">
@@ -393,7 +393,7 @@ const TourDetails = () => {
               </div>
               
               <p className="pricing-disclaimer">
-                Prezzi in EUR, inclusi voli interni, per persona, doppia occupazione.
+                A partire da €3500 per persona.
               </p>
               
               {/* Tour Dates List */}
@@ -403,7 +403,7 @@ const TourDetails = () => {
                     <div className="date-info">
                       <span className="date-range">{dateInfo.dateRange}</span>
                     </div>
-                    <div className="price-info">€{dateInfo.price}</div>
+                    {/*<div className="price-info">€{dateInfo.price}</div>*/}
                     <button className="availability-button">
                       PRENOTA
                     </button>

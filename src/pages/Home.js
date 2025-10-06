@@ -476,7 +476,7 @@ const Home = () => {
           <div className="home-hero-text">
             {/* Logo enorme su mobile, titolo su desktop */}
             <div className="home-hero-logo-mobile">
-              <img src="/logo-nobg.png" alt="go2west" className="hero-logo-image" />
+              <img src="/Logo.svg" alt="go2west" className="hero-logo-image" />
             </div>
             <h1 className="home-hero-title">Viaggi su misura, emozioni autentiche</h1>
             <p className="home-hero-subtitle">Scopri le nostre destinazioni d'eccellenza in tutto il mondo</p>
@@ -591,7 +591,7 @@ const Home = () => {
 
       {/* Sezione Opzioni di Viaggio - layout a puzzle con reveal */}
       <section className="travel-options-section">
-        <div className="options-header reveal-on-scroll">
+        <div className="options-header reveal-on-scroll" style={{paddingTop: '10px'}}>
           <h2>Le nostre proposte</h2>
           <p>Scegli lo stile di viaggio che ti rispecchia di più.</p>
         </div>
