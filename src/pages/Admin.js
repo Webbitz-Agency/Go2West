@@ -224,6 +224,8 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
   const [expandedDays, setExpandedDays] = useState(new Set());
   const [currentHighlightIndex, setCurrentHighlightIndex] = useState(0);
   const [selectedYear, setSelectedYear] = useState(2025);
+  const [editingField, setEditingField] = useState(null);
+  const [editingValue, setEditingValue] = useState('');
 
   // Genera automaticamente il code dal title
   useEffect(() => {
@@ -433,6 +435,139 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
     onSave(formData);
   };
 
+  const startEditing = (field, value = '') => {
+    setEditingField(field);
+    setEditingValue(value);
+  };
+
+  const saveEdit = () => {
+    if (editingField) {
+      const [type, ...path] = editingField.split('.');
+      
+      if (type === 'basic') {
+        const field = path[0];
+        const value = (field === 'duration' || field === 'minPrice') ? parseInt(editingValue) || 0 : editingValue;
+        setFormData(prev => ({ ...prev, [field]: value }));
+      } else if (type === 'day') {
+        const [index, field] = path;
+        updateDay(parseInt(index), field, editingValue);
+      } else if (type === 'price') {
+        const [index, field] = path;
+        const numericValue = field === 'category' ? editingValue : parseInt(editingValue) || 0;
+        updatePriceRow(parseInt(index), field, numericValue);
+      } else if (type === 'included') {
+        const index = parseInt(path[0]);
+        handleArrayChange('included', index, editingValue);
+      } else if (type === 'notIncluded') {
+        const index = parseInt(path[0]);
+        handleArrayChange('notIncluded', index, editingValue);
+      } else if (type === 'date') {
+        const [year, index, field] = path;
+        updateDate(year, parseInt(index), field, editingValue);
+      }
+    }
+    setEditingField(null);
+    setEditingValue('');
+  };
+
+  const cancelEdit = () => {
+    setEditingField(null);
+    setEditingValue('');
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      saveEdit();
+    } else if (e.key === 'Escape') {
+      cancelEdit();
+    }
+  };
+
+  // Componente per editing inline
+  const EditableText = ({ field, value, className = '', placeholder = 'Clicca per modificare' }) => {
+    const isEditing = editingField === field;
+    
+    if (isEditing) {
+      return (
+        <input
+          type="text"
+          value={editingValue}
+          onChange={(e) => setEditingValue(e.target.value)}
+          onBlur={saveEdit}
+          onKeyDown={handleKeyPress}
+          className={`editable-input ${className}`}
+          autoFocus
+        />
+      );
+    }
+    
+    return (
+      <span 
+        className={`editable-text ${className}`}
+        onClick={() => startEditing(field, value)}
+        title="Clicca per modificare"
+      >
+        {value || placeholder}
+      </span>
+    );
+  };
+
+  const EditableTextarea = ({ field, value, className = '', placeholder = 'Clicca per modificare' }) => {
+    const isEditing = editingField === field;
+    
+    if (isEditing) {
+      return (
+        <textarea
+          value={editingValue}
+          onChange={(e) => setEditingValue(e.target.value)}
+          onBlur={saveEdit}
+          onKeyDown={handleKeyPress}
+          className={`editable-textarea ${className}`}
+          autoFocus
+          rows="3"
+        />
+      );
+    }
+    
+    return (
+      <div 
+        className={`editable-textarea-display ${className}`}
+        onClick={() => startEditing(field, value)}
+        title="Clicca per modificare"
+      >
+        {value || placeholder}
+      </div>
+    );
+  };
+
+  const EditableNumber = ({ field, value, className = '', placeholder = '0' }) => {
+    const isEditing = editingField === field;
+    
+    if (isEditing) {
+      return (
+        <input
+          type="number"
+          value={editingValue}
+          onChange={(e) => setEditingValue(e.target.value)}
+          onBlur={saveEdit}
+          onKeyDown={handleKeyPress}
+          className={`editable-input ${className}`}
+          autoFocus
+        />
+      );
+    }
+    
+    return (
+      <span 
+        className={`editable-text ${className}`}
+        onClick={() => startEditing(field, value)}
+        title="Clicca per modificare"
+      >
+        {value || placeholder}
+      </span>
+    );
+  };
+
   return (
     <div className="tour-editor-overlay">
       <div className="tour-editor">
@@ -442,260 +577,14 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
             <button type="button" onClick={onCancel} className="cancel-btn">
               Annulla
             </button>
-            <button type="submit" form="tour-form" className="save-btn">
+            <button type="button" onClick={handleSubmit} className="save-btn">
               {tour ? 'Aggiorna' : 'Crea'} Tour
             </button>
           </div>
         </div>
 
         <div className="editor-content">
-          {/* Form di editing */}
-          <div className="editor-form">
-            <form id="tour-form" onSubmit={handleSubmit}>
-              <div className="form-section">
-                <h3>Informazioni Base</h3>
-                <div className="form-row">
-                  <div className="form-group">
-                    <label>Titolo *</label>
-                    <input
-                      type="text"
-                      name="title"
-                      value={formData.title}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label>Destinazione *</label>
-                    <select name="destination" value={formData.destination} onChange={handleChange} required>
-                      <option value="USA">USA</option>
-                      <option value="Canada">Canada</option>
-                      <option value="Messico">Messico</option>
-                      <option value="America Centrale">America Centrale</option>
-                      <option value="Sud America">Sud America</option>
-                      <option value="Caraibi">Caraibi</option>
-                      <option value="Polinesia Francese">Polinesia Francese</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="form-row">
-                  <div className="form-group">
-                    <label>Tipo *</label>
-                    <select name="type" value={formData.type} onChange={handleChange} required>
-                      <option value="city breaks">City Breaks</option>
-                      <option value="fly and drive">Fly and Drive</option>
-                      <option value="ride in harley">Ride in Harley</option>
-                      <option value="tour guidato">Tour Guidato</option>
-                      <option value="luxury travel">Luxury Travel</option>
-                      <option value="camper adventure">Camper Adventure</option>
-                      <option value="extra">Extra</option>
-                    </select>
-                  </div>
-                  <div className="form-group">
-                    <label>Durata (giorni)</label>
-                    <input
-                      type="number"
-                      name="duration"
-                      value={formData.duration}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
-
-                <div className="form-row">
-                  <div className="form-group">
-                    <label>Prezzo Minimo (€)</label>
-                    <input
-                      type="number"
-                      name="minPrice"
-                      value={formData.minPrice}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label>Code (auto-generato)</label>
-                    <input
-                      type="text"
-                      value={formData.code}
-                      readOnly
-                      className="readonly"
-                    />
-                  </div>
-                </div>
-
-                <div className="form-group">
-                  <label>Descrizione</label>
-                  <textarea
-                    name="description"
-                    value={formData.description}
-                    onChange={handleChange}
-                    rows="3"
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Note</label>
-                  <textarea
-                    name="notes"
-                    value={formData.notes}
-                    onChange={handleChange}
-                    rows="2"
-                  />
-                </div>
-              </div>
-
-              <div className="form-section">
-                <h3>Programma</h3>
-                {formData.program.days.map((day, index) => (
-                  <div key={index} className="day-editor">
-                    <div className="day-header">
-                      <input
-                        type="text"
-                        value={day.title}
-                        onChange={(e) => updateDay(index, 'title', e.target.value)}
-                        className="day-title-input"
-                      />
-                      <button type="button" onClick={() => removeDay(index)} className="remove-btn">
-                        Rimuovi
-                      </button>
-                    </div>
-                    <textarea
-                      value={day.description}
-                      onChange={(e) => updateDay(index, 'description', e.target.value)}
-                      rows="2"
-                      className="day-description-input"
-                    />
-                  </div>
-                ))}
-                <button type="button" onClick={addDay} className="add-btn">
-                  + Aggiungi Giorno
-                </button>
-              </div>
-
-              <div className="form-section">
-                <h3>Prezzi</h3>
-                {formData.prices.prices.map((priceRow, index) => (
-                  <div key={index} className="price-editor">
-                    <div className="price-header">
-                      <input
-                        type="text"
-                        value={priceRow.category}
-                        onChange={(e) => updatePriceRow(index, 'category', e.target.value)}
-                        className="price-category-input"
-                      />
-                      <button type="button" onClick={() => removePriceRow(index)} className="remove-btn">
-                        Rimuovi
-                      </button>
-                    </div>
-                    <div className="price-inputs">
-                      <input
-                        type="number"
-                        placeholder="Singola"
-                        value={priceRow.single}
-                        onChange={(e) => updatePriceRow(index, 'single', parseInt(e.target.value) || 0)}
-                      />
-                      <input
-                        type="number"
-                        placeholder="Doppia"
-                        value={priceRow.double}
-                        onChange={(e) => updatePriceRow(index, 'double', parseInt(e.target.value) || 0)}
-                      />
-                      <input
-                        type="number"
-                        placeholder="Tripla"
-                        value={priceRow.triple}
-                        onChange={(e) => updatePriceRow(index, 'triple', parseInt(e.target.value) || 0)}
-                      />
-                      <input
-                        type="number"
-                        placeholder="Quadrupla"
-                        value={priceRow.quad}
-                        onChange={(e) => updatePriceRow(index, 'quad', parseInt(e.target.value) || 0)}
-                      />
-                    </div>
-                  </div>
-                ))}
-                <button type="button" onClick={addPriceRow} className="add-btn">
-                  + Aggiungi Prezzo
-                </button>
-              </div>
-
-              <div className="form-section">
-                <h3>Servizi Inclusi</h3>
-                {formData.included.map((item, index) => (
-                  <div key={index} className="array-item">
-                    <input
-                      type="text"
-                      value={item}
-                      onChange={(e) => handleArrayChange('included', index, e.target.value)}
-                    />
-                    <button type="button" onClick={() => removeArrayItem('included', index)} className="remove-btn">
-                      Rimuovi
-                    </button>
-                  </div>
-                ))}
-                <button type="button" onClick={() => addArrayItem('included')} className="add-btn">
-                  + Aggiungi Servizio
-                </button>
-              </div>
-
-              <div className="form-section">
-                <h3>Servizi Non Inclusi</h3>
-                {formData.notIncluded.map((item, index) => (
-                  <div key={index} className="array-item">
-                    <input
-                      type="text"
-                      value={item}
-                      onChange={(e) => handleArrayChange('notIncluded', index, e.target.value)}
-                    />
-                    <button type="button" onClick={() => removeArrayItem('notIncluded', index)} className="remove-btn">
-                      Rimuovi
-                    </button>
-                  </div>
-                ))}
-                <button type="button" onClick={() => addArrayItem('notIncluded')} className="add-btn">
-                  + Aggiungi Servizio
-                </button>
-              </div>
-
-              <div className="form-section">
-                <h3>Date</h3>
-                {Object.keys(formData.dates).map(year => (
-                  <div key={year} className="year-dates">
-                    <h4>{year}</h4>
-                    {formData.dates[year].map((date, index) => (
-                      <div key={index} className="date-editor">
-                        <input
-                          type="text"
-                          placeholder="Data inizio"
-                          value={date.startDate}
-                          onChange={(e) => updateDate(year, index, 'startDate', e.target.value)}
-                        />
-                        <input
-                          type="text"
-                          placeholder="Data fine"
-                          value={date.endDate}
-                          onChange={(e) => updateDate(year, index, 'endDate', e.target.value)}
-                        />
-                        <button type="button" onClick={() => removeDate(year, index)} className="remove-btn">
-                          Rimuovi
-                        </button>
-                      </div>
-                    ))}
-                    <button type="button" onClick={() => addDate(year)} className="add-btn">
-                      + Aggiungi Data
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </form>
-          </div>
-
-          {/* Preview della pagina tour */}
-          <div className="tour-preview">
-            <h3>Anteprima Tour</h3>
-            <div className="preview-container">
+          <div className="editable-tour-page">
               {/* Hero Section */}
               <section className="tour-hero-masonry">
                 <div className="masonry-container">
@@ -713,6 +602,26 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
               <div className="container-details">
                 <div className="tour-content">
                   <div className="tour-main">
+                    {/* Titolo del tour */}
+                    <section className="tour-section">
+                      <h1 className="tour-title">
+                        <EditableText 
+                          field="basic.title" 
+                          value={formData.title}
+                          className="tour-title-text"
+                          placeholder="Titolo del Tour"
+                        />
+                      </h1>
+                      <div className="tour-description">
+                        <EditableTextarea 
+                          field="basic.description" 
+                          value={formData.description}
+                          className="tour-description-text"
+                          placeholder="Descrizione del tour..."
+                        />
+                      </div>
+                    </section>
+
                     {/* Itinerary */}
                     {formData.program && formData.program.days && formData.program.days.length > 0 && (
                       <section className="tour-section">
@@ -729,7 +638,14 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
                                 >
                                   <div className="day-badge">Giorno {dayNumber}</div>
                                   <div className="day-content">
-                                    <h3 className="day-title">{day.title}</h3>
+                                    <h3 className="day-title">
+                                      <EditableText 
+                                        field={`day.${index}.title`} 
+                                        value={day.title}
+                                        className="day-title-text"
+                                        placeholder="Titolo del giorno"
+                                      />
+                                    </h3>
                                   </div>
                                   <div className="expand-icon">
                                     <span className={`chevron ${isExpanded ? 'expanded' : ''}`}>
@@ -739,14 +655,33 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
                                 </div>
                                 {isExpanded && (
                                   <div className="itinerary-details">
-                                    <p className="day-description">
-                                      {day.description || "Descrizione dettagliata non disponibile per questo giorno."}
-                                    </p>
+                                    <div className="day-description">
+                                      <EditableTextarea 
+                                        field={`day.${index}.description`} 
+                                        value={day.description}
+                                        className="day-description-text"
+                                        placeholder="Descrizione dettagliata del giorno..."
+                                      />
+                                    </div>
+                                    <div className="day-actions">
+                                      <button 
+                                        type="button" 
+                                        onClick={() => removeDay(index)} 
+                                        className="remove-day-btn"
+                                      >
+                                        Rimuovi Giorno
+                                      </button>
+                                    </div>
                                   </div>
                                 )}
                               </div>
                             );
                           })}
+                        </div>
+                        <div className="add-day-section">
+                          <button type="button" onClick={addDay} className="add-day-btn">
+                            + Aggiungi Giorno
+                          </button>
                         </div>
                       </section>
                     )}
@@ -769,23 +704,64 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
                             <tbody>
                               {formData.prices.prices.map((priceRow, index) => (
                                 <tr key={index} className="pricing-row">
-                                  <td className="pricing-label-cell">{priceRow.category}</td>
-                                  <td className="pricing-value-cell">
-                                    {priceRow.single ? `€ ${priceRow.single.toLocaleString()}` : 'n.d.'}
+                                  <td className="pricing-label-cell">
+                                    <EditableText 
+                                      field={`price.${index}.category`} 
+                                      value={priceRow.category}
+                                      className="price-category-text"
+                                      placeholder="Categoria prezzo"
+                                    />
                                   </td>
                                   <td className="pricing-value-cell">
-                                    {priceRow.double ? `€ ${priceRow.double.toLocaleString()}` : 'n.d.'}
+                                    <EditableNumber 
+                                      field={`price.${index}.single`} 
+                                      value={priceRow.single}
+                                      className="price-value-text"
+                                      placeholder="0"
+                                    />
                                   </td>
                                   <td className="pricing-value-cell">
-                                    {priceRow.triple ? `€ ${priceRow.triple.toLocaleString()}` : 'n.d.'}
+                                    <EditableNumber 
+                                      field={`price.${index}.double`} 
+                                      value={priceRow.double}
+                                      className="price-value-text"
+                                      placeholder="0"
+                                    />
                                   </td>
                                   <td className="pricing-value-cell">
-                                    {priceRow.quad ? `€ ${priceRow.quad.toLocaleString()}` : 'n.d.'}
+                                    <EditableNumber 
+                                      field={`price.${index}.triple`} 
+                                      value={priceRow.triple}
+                                      className="price-value-text"
+                                      placeholder="0"
+                                    />
+                                  </td>
+                                  <td className="pricing-value-cell">
+                                    <EditableNumber 
+                                      field={`price.${index}.quad`} 
+                                      value={priceRow.quad}
+                                      className="price-value-text"
+                                      placeholder="0"
+                                    />
+                                  </td>
+                                  <td className="pricing-actions-cell">
+                                    <button 
+                                      type="button" 
+                                      onClick={() => removePriceRow(index)} 
+                                      className="remove-price-btn"
+                                    >
+                                      ×
+                                    </button>
                                   </td>
                                 </tr>
                               ))}
                             </tbody>
                           </table>
+                          <div className="add-price-section">
+                            <button type="button" onClick={addPriceRow} className="add-price-btn">
+                              + Aggiungi Prezzo
+                            </button>
+                          </div>
                         </div>
                       </section>
                     )}
@@ -798,9 +774,26 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
                           {formData.included.map((inclusion, index) => (
                             <div key={index} className="inclusion-item">
                               <span className="inclusion-icon">✓</span>
-                              <span className="inclusion-text">{inclusion}</span>
+                              <EditableText 
+                                field={`included.${index}`} 
+                                value={inclusion}
+                                className="inclusion-text"
+                                placeholder="Servizio incluso"
+                              />
+                              <button 
+                                type="button" 
+                                onClick={() => removeArrayItem('included', index)} 
+                                className="remove-inclusion-btn"
+                              >
+                                ×
+                              </button>
                             </div>
                           ))}
+                          <div className="add-inclusion-section">
+                            <button type="button" onClick={() => addArrayItem('included')} className="add-inclusion-btn">
+                              + Aggiungi Servizio
+                            </button>
+                          </div>
                         </div>
                       </section>
                     )}
@@ -813,9 +806,26 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
                           {formData.notIncluded.map((exclusion, index) => (
                             <div key={index} className="exclusion-item">
                               <span className="exclusion-icon">✗</span>
-                              <span className="exclusion-text">{exclusion}</span>
+                              <EditableText 
+                                field={`notIncluded.${index}`} 
+                                value={exclusion}
+                                className="exclusion-text"
+                                placeholder="Servizio non incluso"
+                              />
+                              <button 
+                                type="button" 
+                                onClick={() => removeArrayItem('notIncluded', index)} 
+                                className="remove-exclusion-btn"
+                              >
+                                ×
+                              </button>
                             </div>
                           ))}
+                          <div className="add-exclusion-section">
+                            <button type="button" onClick={() => addArrayItem('notIncluded')} className="add-exclusion-btn">
+                              + Aggiungi Servizio
+                            </button>
+                          </div>
                         </div>
                       </section>
                     )}
@@ -853,33 +863,66 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
                       <div className="tour-info-grid">
                         <div className="info-item">
                           <span className="info-label">Destinazione:</span>
-                          <span className="info-value">{formData.destination}</span>
+                          <span className="info-value">
+                            <EditableText 
+                              field="basic.destination" 
+                              value={formData.destination}
+                              className="info-value-text"
+                              placeholder="Destinazione"
+                            />
+                          </span>
                         </div>
                         <div className="info-item">
                           <span className="info-label">Tipo:</span>
-                          <span className="info-value">{formData.type}</span>
+                          <span className="info-value">
+                            <EditableText 
+                              field="basic.type" 
+                              value={formData.type}
+                              className="info-value-text"
+                              placeholder="Tipo tour"
+                            />
+                          </span>
                         </div>
-                        {formData.duration && (
-                          <div className="info-item">
-                            <span className="info-label">Durata:</span>
-                            <span className="info-value">{formData.duration} giorni</span>
-                          </div>
-                        )}
+                        <div className="info-item">
+                          <span className="info-label">Durata:</span>
+                          <span className="info-value">
+                            <EditableNumber 
+                              field="basic.duration" 
+                              value={formData.duration}
+                              className="info-value-text"
+                              placeholder="0"
+                            /> giorni
+                          </span>
+                        </div>
+                        <div className="info-item">
+                          <span className="info-label">Prezzo Min:</span>
+                          <span className="info-value">
+                            €<EditableNumber 
+                              field="basic.minPrice" 
+                              value={formData.minPrice}
+                              className="info-value-text"
+                              placeholder="0"
+                            />
+                          </span>
+                        </div>
                         <div className="info-item">
                           <span className="info-label">Codice:</span>
-                          <span className="info-value">{formData.code}</span>
+                          <span className="info-value readonly">{formData.code}</span>
                         </div>
                       </div>
                     </section>
 
-                    {formData.notes && (
-                      <section className="tour-section">
-                        <h2 className="section-title">Note</h2>
-                        <div className="notes-content">
-                          <p>{formData.notes}</p>
-                        </div>
-                      </section>
-                    )}
+                    <section className="tour-section">
+                      <h2 className="section-title">Note</h2>
+                      <div className="notes-content">
+                        <EditableTextarea 
+                          field="basic.notes" 
+                          value={formData.notes}
+                          className="notes-text"
+                          placeholder="Note aggiuntive..."
+                        />
+                      </div>
+                    </section>
                   </div>
                 </div>
               </div>
@@ -887,7 +930,6 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
           </div>
         </div>
       </div>
-    </div>
   );
 };
 
