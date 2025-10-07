@@ -4,7 +4,7 @@ import TourService from '../services/TourService';
 import './DynamicTours.css';
 
 // Componente per i tour dinamici caricati dal backend
-const DynamicTours = ({ type, country, limit = 6, showFilters = false }) => {
+const DynamicTours = ({ type, destination, limit = 6, showFilters = false }) => {
   const [allTours, setAllTours] = useState([]); // Tutti i tour caricati
   const [filteredTours, setFilteredTours] = useState([]); // Tour filtrati lato client
   const [loading, setLoading] = useState(true);
@@ -89,7 +89,7 @@ const DynamicTours = ({ type, country, limit = 6, showFilters = false }) => {
       filtered = filtered.filter(tour => 
         tour.title.toLowerCase().includes(searchLower) ||
         tour.description.toLowerCase().includes(searchLower) ||
-        (tour.country && tour.country.toLowerCase().includes(searchLower))
+        (tour.destination && tour.destination.toLowerCase().includes(searchLower))
       );
     }
 
@@ -103,8 +103,8 @@ const DynamicTours = ({ type, country, limit = 6, showFilters = false }) => {
         setLoading(true);
         let data;
         
-        if (country) {
-          data = await TourService.getToursByCountry(country);
+        if (destination) {
+          data = await TourService.getToursByDestination(destination);
         } else {
           data = await TourService.getAllTours();
         }
@@ -118,7 +118,7 @@ const DynamicTours = ({ type, country, limit = 6, showFilters = false }) => {
     };
 
     fetchAllTours();
-  }, [country]);
+  }, [destination]);
 
   // Filtra i tour ogni volta che cambiano i filtri
   useEffect(() => {

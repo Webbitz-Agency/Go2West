@@ -17,8 +17,23 @@ const DestinationTours = () => {
   // Stato per il carosello hero
   const [currentHeroImage, setCurrentHeroImage] = useState(0);
 
+  // Mappa il parametro URL alla destinazione del database
+  const getDestinationFromParam = (param) => {
+    const mapping = {
+      'usa': 'USA',
+      'canada': 'Canada', 
+      'messico': 'Messico',
+      'america-centrale': 'America Centrale',
+      'sud-america': 'Sud America',
+      'caraibi': 'Caraibi',
+      'polinesia-francese': 'Polinesia Francese'
+    };
+    return mapping[param] || param;
+  };
+
   // Trova la destinazione corrente
   const currentDestination = destinations.find(d => d.country === country) || destinations[0];
+  const destinationParam = getDestinationFromParam(country);
   
   // Ottieni le immagini per la destinazione corrente
   const currentImages = destinationImages[country] || destinationImages['usa'];
@@ -108,7 +123,7 @@ const DestinationTours = () => {
         
         {/* Tours Section */}
         <section className="tours-section">
-          <DynamicTours country={country} showFilters={true} />
+          <DynamicTours destination={destinationParam} showFilters={true} />
         </section>
       </div>
     </div>
