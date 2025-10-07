@@ -13,6 +13,8 @@ const TourDetails = () => {
   const [currentHighlightIndex, setCurrentHighlightIndex] = useState(0);
   const [selectedYear, setSelectedYear] = useState(2025);
   const [expandedDays, setExpandedDays] = useState(new Set());
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState('');
 
   // Dati per le date dei tour per anno
   const tourDates = {
@@ -57,6 +59,27 @@ const TourDetails = () => {
       }
       return newSet;
     });
+  };
+
+  // Funzione per aprire il modale di prenotazione
+  const handleBookingClick = (dateRange) => {
+    setSelectedDate(dateRange);
+    setIsBookingModalOpen(true);
+    document.body.style.overflow = 'hidden'; // Blocca lo scroll della pagina
+  };
+
+  // Funzione per aprire il modale senza data pre-compilata
+  const handleQuoteRequest = () => {
+    setSelectedDate('');
+    setIsBookingModalOpen(true);
+    document.body.style.overflow = 'hidden'; // Blocca lo scroll della pagina
+  };
+
+  // Funzione per chiudere il modale
+  const closeBookingModal = () => {
+    setIsBookingModalOpen(false);
+    setSelectedDate('');
+    document.body.style.overflow = 'auto'; // Riavvia lo scroll della pagina
   };
 
   // Funzione per ottenere le immagini del tour
@@ -265,7 +288,7 @@ const TourDetails = () => {
               </section>
             )}
 
-          {/* Tour Highlights Carousel */}
+            {/* Tour Highlights Carousel */}
           {tour.highlights && tour.highlights.length > 0 && (
               <section className="tour-section">
                 <h2 className="section-title">Punti Salienti</h2>
@@ -302,6 +325,43 @@ const TourDetails = () => {
                 </div>
               </section>
             )}
+
+            {/* Pricing Section */}
+            <section className="tour-section">
+              <h2 className="section-title">Prezzi</h2>
+              <div className="pricing-table-container">
+                <table className="pricing-table">
+                  <thead>
+                    <tr>
+                      <th className="pricing-header-cell">Tipologia di camera</th>
+                      <th className="pricing-header-cell">Singola</th>
+                      <th className="pricing-header-cell">Doppia</th>
+                      <th className="pricing-header-cell">Tripla</th>
+                      <th className="pricing-header-cell">Quadrupla</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="pricing-row">
+                      <td className="pricing-label-cell">Quota di partecipazione adulto</td>
+                      <td className="pricing-value-cell">€ 3.945</td>
+                      <td className="pricing-value-cell">€ 2.425</td>
+                      <td className="pricing-value-cell">€ 2.110</td>
+                      <td className="pricing-value-cell">€ 1.865</td>
+                    </tr>
+                    <tr className="pricing-row">
+                      <td className="pricing-label-cell">Quota di partecipazione bambino under 12</td>
+                      <td className="pricing-value-cell pricing-na">n.d.</td>
+                      <td className="pricing-value-cell">€ 2.425</td>
+                      <td className="pricing-value-cell">€ 1.105</td>
+                      <td className="pricing-value-cell">€ 1.105</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div className="pricing-note">
+                  <p><strong>Nota:</strong> I prezzi sono indicativi e possono variare in base alla stagionalità e alla disponibilità. Contattaci per un preventivo personalizzato.</p>
+                </div>
+              </div>
+            </section>
 
             {/* Inclusions */}
             {tour.included && tour.included.length > 0 && (
@@ -367,6 +427,23 @@ const TourDetails = () => {
                 </div>
               </section>
             )}
+
+            {/* Quote Request CTA */}
+            <section className="tour-section quote-request-section">
+              <div className="quote-request-content">
+                <h2 className="quote-request-title">Interessato a questo viaggio?</h2>
+                <p className="quote-request-description">
+                  Richiedi un preventivo personalizzato e scopri tutte le opzioni disponibili per il tuo viaggio ideale.
+                </p>
+                <button 
+                  className="quote-request-btn"
+                  onClick={handleQuoteRequest}
+                >
+                  <i className="fa-solid fa-calculator"></i>
+                  Richiedi un Preventivo
+                </button>
+              </div>
+            </section>
           </div>
 
           {/* Right Column - Dates & Prices */}
@@ -404,7 +481,10 @@ const TourDetails = () => {
                       <span className="date-range">{dateInfo.dateRange}</span>
                     </div>
                     {/*<div className="price-info">€{dateInfo.price}</div>*/}
-                    <button className="availability-button">
+                    <button 
+                      className="availability-button"
+                      onClick={() => handleBookingClick(dateInfo.dateRange)}
+                    >
                       PRENOTA
                     </button>
                   </div>
@@ -414,6 +494,259 @@ const TourDetails = () => {
           </div>
         </div>
       </div>
+
+      {/* Booking Modal */}
+      {isBookingModalOpen && (
+        <div className="booking-modal-overlay" onClick={closeBookingModal}>
+          <div className="booking-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="booking-modal-header">
+              <h2>Richiesta di Prenotazione</h2>
+              <button className="booking-modal-close" onClick={closeBookingModal}>
+                <i className="fa-solid fa-times"></i>
+              </button>
+            </div>
+            
+            <div className="booking-modal-content">
+              <form className="booking-form">
+                {/* Sezione Dettagli Viaggio */}
+                <div className="booking-section">
+                  <h3>Dettagli Viaggio</h3>
+                  
+                  <div className="form-group">
+                    <label htmlFor="departure-date">Data di partenza *</label>
+                    {selectedDate ? (
+                      <input 
+                        type="text" 
+                        id="departure-date" 
+                        value={selectedDate} 
+                        readOnly 
+                        className="form-input"
+                      />
+                    ) : (
+                      <select id="departure-date" className="form-select" required>
+                        <option value="">Seleziona una data</option>
+                        {tourDates[selectedYear]?.map((dateInfo, index) => (
+                          <option key={index} value={dateInfo.dateRange}>
+                            {dateInfo.dateRange}
+                          </option>
+                        ))}
+                      </select>
+                    )}
+                  </div>
+                  
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label htmlFor="adults">Numero adulti *</label>
+                      <select id="adults" className="form-select" defaultValue="1">
+                        {[...Array(10)].map((_, i) => (
+                          <option key={i + 1} value={i + 1}>{i + 1}</option>
+                        ))}
+                      </select>
+                    </div>
+                    
+                    <div className="form-group">
+                      <label htmlFor="children">Numero bambini (&lt;16 anni)</label>
+                      <select id="children" className="form-select" defaultValue="0">
+                        {[...Array(6)].map((_, i) => (
+                          <option key={i} value={i}>{i}</option>
+                        ))}
+                      </select>
+                    </div>
+                    
+                    <div className="form-group">
+                      <label htmlFor="child-age">Età bambino</label>
+                      <input 
+                        type="text" 
+                        id="child-age" 
+                        className="form-input" 
+                        placeholder="Es. 8, 12"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label htmlFor="single-rooms">Numero camere singole</label>
+                      <select id="single-rooms" className="form-select" defaultValue="0">
+                        {[...Array(6)].map((_, i) => (
+                          <option key={i} value={i}>{i}</option>
+                        ))}
+                      </select>
+                    </div>
+                    
+                    <div className="form-group">
+                      <label htmlFor="double-rooms">Numero camere doppie</label>
+                      <select id="double-rooms" className="form-select" defaultValue="0">
+                        {[...Array(6)].map((_, i) => (
+                          <option key={i} value={i}>{i}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                  
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label htmlFor="triple-rooms">Numero camere triple</label>
+                      <select id="triple-rooms" className="form-select" defaultValue="0">
+                        {[...Array(6)].map((_, i) => (
+                          <option key={i} value={i}>{i}</option>
+                        ))}
+                      </select>
+                    </div>
+                    
+                    <div className="form-group">
+                      <label htmlFor="quadruple-rooms">Numero camere quadruple</label>
+                      <select id="quadruple-rooms" className="form-select" defaultValue="0">
+                        {[...Array(6)].map((_, i) => (
+                          <option key={i} value={i}>{i}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                  
+                  <div className="form-group">
+                    <label htmlFor="comments">Commenti</label>
+                    <textarea 
+                      id="comments" 
+                      className="form-textarea" 
+                      rows="4"
+                      placeholder="Note aggiuntive, richieste speciali, ecc."
+                    ></textarea>
+                  </div>
+                </div>
+                
+                {/* Sezione Dati di Contatto */}
+                <div className="booking-section">
+                  <h3>Dati di Contatto</h3>
+                  
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label htmlFor="first-name">Nome (contatto principale) *</label>
+                      <input 
+                        type="text" 
+                        id="first-name" 
+                        className="form-input" 
+                        required 
+                      />
+                    </div>
+                    
+                    <div className="form-group">
+                      <label htmlFor="last-name">Cognome (contatto principale) *</label>
+                      <input 
+                        type="text" 
+                        id="last-name" 
+                        className="form-input" 
+                        required 
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="form-group">
+                    <label htmlFor="citizenship">Cittadinanza *</label>
+                    <input 
+                      type="text" 
+                      id="citizenship" 
+                      className="form-input" 
+                      required 
+                    />
+                  </div>
+                  
+                  <div className="form-group">
+                    <label htmlFor="address">Indirizzo</label>
+                    <input 
+                      type="text" 
+                      id="address" 
+                      className="form-input" 
+                    />
+                  </div>
+                  
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label htmlFor="city">Città</label>
+                      <input 
+                        type="text" 
+                        id="city" 
+                        className="form-input" 
+                      />
+                    </div>
+                    
+                    <div className="form-group">
+                      <label htmlFor="postal-code">Codice Postale</label>
+                      <input 
+                        type="text" 
+                        id="postal-code" 
+                        className="form-input" 
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="form-group">
+                    <label htmlFor="country">Paese</label>
+                    <input 
+                      type="text" 
+                      id="country" 
+                      className="form-input" 
+                    />
+                  </div>
+                  
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label htmlFor="email">Email *</label>
+                      <input 
+                        type="email" 
+                        id="email" 
+                        className="form-input" 
+                        required 
+                      />
+                    </div>
+                    
+                    <div className="form-group">
+                      <label htmlFor="phone">Telefono *</label>
+                      <input 
+                        type="tel" 
+                        id="phone" 
+                        className="form-input" 
+                        required 
+                      />
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="privacy-checkbox-container">
+                  <label className="privacy-checkbox-label">
+                    <input 
+                      type="checkbox" 
+                      className="privacy-checkbox" 
+                      required 
+                    />
+                    <span className="privacy-checkbox-text">
+                      Ho letto e accetto l'
+                      <a 
+                        href="/privacy-policy.pdf" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="privacy-link"
+                      >
+                        informativa sulla privacy
+                      </a>
+                      *
+                    </span>
+                  </label>
+                </div>
+                
+                <div className="booking-modal-actions">
+                  <button type="button" className="btn-secondary" onClick={closeBookingModal}>
+                    Annulla
+                  </button>
+                  <button type="submit" className="btn-primary">
+                    Invia Richiesta
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
