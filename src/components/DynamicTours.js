@@ -236,7 +236,7 @@ const DynamicTours = ({ type, country, limit = 6, showFilters = false }) => {
           <div key={tour.id} className="tour-card">
             <div className="tour-card-image">
               <img 
-                src={tour.mainImage || '/images/placeholder.jpg'} 
+                src={tour.heroImage ? TourService.getTourImageUrl(tour.id, 'hero') : '/images/placeholder.jpg'} 
                 alt={tour.title} 
               />
             </div>
@@ -248,10 +248,10 @@ const DynamicTours = ({ type, country, limit = 6, showFilters = false }) => {
                 <div className="tour-duration">
                   {tour.duration ? `${tour.duration} giorni` : 'Durata variabile'}
                 </div>
-                <div className="tour-price">€ {tour.price}</div>
+                <div className="tour-price">€ {tour.minPrice || 0}</div>
               </div>
               
-              <a href={`/tour/${tour.slug}`} className="tour-card-button">
+              <a href={`/tour/${tour.code}`} className="tour-card-button">
                 Scopri Viaggio
               </a>
             </div>

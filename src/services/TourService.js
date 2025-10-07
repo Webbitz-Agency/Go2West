@@ -13,14 +13,14 @@ export class TourService {
     return await apiGet(API_CONFIG.ENDPOINTS.TOUR_BY_ID(id));
   }
 
-  // Ottieni un tour per slug
-  static async getTourBySlug(slug) {
-    return await apiGet(API_CONFIG.ENDPOINTS.TOUR_BY_SLUG(slug));
+  // Ottieni un tour per code
+  static async getTourByCode(code) {
+    return await apiGet(API_CONFIG.ENDPOINTS.TOUR_BY_CODE(code));
   }
 
-  // Ottieni tour per paese
-  static async getToursByCountry(country) {
-    return await apiGet(API_CONFIG.ENDPOINTS.TOURS_BY_COUNTRY(country));
+  // Ottieni tour per destinazione
+  static async getToursByDestination(destination) {
+    return await apiGet(API_CONFIG.ENDPOINTS.TOURS_BY_DESTINATION(destination));
   }
 
   // Ottieni tour per tipo
@@ -28,9 +28,14 @@ export class TourService {
     return await apiGet(API_CONFIG.ENDPOINTS.TOURS_BY_TYPE(type));
   }
 
-  // Ottieni tour per paese e tipo
-  static async getToursByCountryAndType(country, type) {
-    return await apiGet(API_CONFIG.ENDPOINTS.TOURS_BY_COUNTRY_AND_TYPE(country, type));
+  // Ottieni tour per destinazione e tipo
+  static async getToursByDestinationAndType(destination, type) {
+    return await apiGet(API_CONFIG.ENDPOINTS.TOURS_BY_DESTINATION_AND_TYPE(destination, type));
+  }
+
+  // Ottieni un'immagine del tour
+  static getTourImageUrl(id, imageType) {
+    return `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.TOUR_IMAGE(id, imageType)}`;
   }
 
   // Crea un nuovo tour

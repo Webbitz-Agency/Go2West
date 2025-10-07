@@ -126,12 +126,12 @@ const SwiperTours = ({ itemsPerPage = 6 }) => {
             <div className="swiper-tour-card">
               <div className="tour-card-image">
                 <img 
-                  src={tour.mainImage || '/images/placeholder.jpg'} 
+                  src={tour.heroImage ? TourService.getTourImageUrl(tour.id, 'hero') : '/images/placeholder.jpg'} 
                   alt={tour.title}
                   loading="lazy"
                 />
                 <div className="tour-card-overlay">
-                  <div className="tour-card-price">€{tour.price}</div>
+                  <div className="tour-card-price">€{tour.minPrice || 0}</div>
                   <div className="tour-card-badge">
                     {tour.type || 'Tour'}
                   </div>
@@ -154,11 +154,11 @@ const SwiperTours = ({ itemsPerPage = 6 }) => {
                   </div>
                   <div className="tour-location">
                     {/*<span className="meta-icon">📍</span>*/}
-                    {tour.country || 'Destinazione'}
+                    {tour.destination || 'Destinazione'}
                   </div>
                 </div>
                 
-                <Link to={`/tour/${tour.slug}`} className="tour-card-button">
+                <Link to={`/tour/${tour.code}`} className="tour-card-button">
                   Scopri Viaggio
                 </Link>
               </div>

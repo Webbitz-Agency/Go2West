@@ -16,25 +16,23 @@ const TourDetails = () => {
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState('');
 
-  // Dati per le date dei tour per anno
-  const tourDates = {
-    2025: [
-      { dateRange: "Gen 7 - Gen 20", price: tour?.price || 1599 },
-      { dateRange: "Gen 14 - Gen 27", price: tour?.price || 1599 },
-      { dateRange: "Gen 28 - Feb 10", price: (parseInt(tour?.price) || 1599) + 1305 },
-      { dateRange: "Feb 11 - Feb 24", price: (parseInt(tour?.price) || 1599) + 1305 },
-      { dateRange: "Feb 18 - Mar 3", price: tour?.price || 1599 },
-      { dateRange: "Feb 25 - Mar 10", price: tour?.price || 1599 }
-    ],
-    2026: [
-      { dateRange: "Gen 6 - Gen 19", price: (parseInt(tour?.price) || 1599) + 200 },
-      { dateRange: "Gen 13 - Gen 26", price: (parseInt(tour?.price) || 1599) + 200 },
-      { dateRange: "Gen 27 - Feb 9", price: (parseInt(tour?.price) || 1599) + 1505 },
-      { dateRange: "Feb 10 - Feb 23", price: (parseInt(tour?.price) || 1599) + 1505 },
-      { dateRange: "Feb 17 - Mar 2", price: (parseInt(tour?.price) || 1599) + 200 },
-      { dateRange: "Feb 24 - Mar 9", price: (parseInt(tour?.price) || 1599) + 200 }
-    ]
+  // Funzione per ottenere le date del tour dal database
+  const getTourDates = () => {
+    if (!tour || !tour.dates) return {};
+    
+    // Converte le date dal database nel formato utilizzato dal componente
+    const formattedDates = {};
+    Object.keys(tour.dates).forEach(year => {
+      formattedDates[year] = tour.dates[year].map(dateInfo => ({
+        dateRange: `${dateInfo.startDate} - ${dateInfo.endDate}`,
+        price: tour.minPrice || 0
+      }));
+    });
+    
+    return formattedDates;
   };
+
+  const tourDates = getTourDates();
 
   // Funzione per gestire il cambio di anno
   const handleYearChange = (year) => {
@@ -88,55 +86,91 @@ const TourDetails = () => {
     
     const images = [];
     
-    // Aggiungi l'immagine principale se esiste
-    if (tour.mainImage) {
+    // Aggiungi l'immagine hero se esiste
+    if (tour.heroImage) {
       images.push({
-        src: tour.mainImage,
+        src: TourService.getTourImageUrl(tour.id, 'hero'),
         alt: tour.title,
         isMain: true
       });
     }
     
-    // Aggiungi le immagini della destinazione
-    const countryKey = tour.country?.toLowerCase().replace(/\s+/g, '-');
-    if (countryKey && destinationImages[countryKey]) {
-      destinationImages[countryKey].forEach((imageName, index) => {
+    // Aggiungi le immagini carousel se esistono
+    if (tour.carouselImage1) {
+      images.push({
+        src: TourService.getTourImageUrl(tour.id, 'carousel1'),
+        alt: `${tour.title} - Carousel 1`,
+        isMain: false
+      });
+    }
+    if (tour.carouselImage2) {
+      images.push({
+        src: TourService.getTourImageUrl(tour.id, 'carousel2'),
+        alt: `${tour.title} - Carousel 2`,
+        isMain: false
+      });
+    }
+    if (tour.carouselImage3) {
+      images.push({
+        src: TourService.getTourImageUrl(tour.id, 'carousel3'),
+        alt: `${tour.title} - Carousel 3`,
+        isMain: false
+      });
+    }
+    
+    // Aggiungi le immagini aggiuntive se esistono
+    for (let i = 1; i <= 5; i++) {
+      if (tour[`image${i}`]) {
         images.push({
-          src: `/images/${imageName}`,
-          alt: `${tour.title} - Immagine ${index + 1}`,
+          src: TourService.getTourImageUrl(tour.id, `image${i}`),
+          alt: `${tour.title} - Immagine ${i}`,
           isMain: false
         });
-      });
+      }
+    }
+    
+    // Se non ci sono immagini dal database, usa le immagini di fallback della destinazione
+    if (images.length === 0) {
+      const destinationKey = tour.destination?.toLowerCase().replace(/\s+/g, '-');
+      if (destinationKey && destinationImages[destinationKey]) {
+        destinationImages[destinationKey].forEach((imageName, index) => {
+          images.push({
+            src: `/images/${imageName}`,
+            alt: `${tour.title} - Immagine ${index + 1}`,
+            isMain: false
+          });
+        });
+      }
     }
     
     return images;
   };
 
-  // Funzione per creare le immagini dei punti salienti
+  // Funzione per creare le immagini dei servizi inclusi
   const getHighlightImages = () => {
-    if (!tour || !tour.highlights) return [];
+    if (!tour || !tour.included) return [];
     
-    // Usa le immagini della destinazione per i punti salienti
-    const countryKey = tour.country?.toLowerCase().replace(/\s+/g, '-');
-    const destinationImagesList = countryKey && destinationImages[countryKey] 
-      ? destinationImages[countryKey] 
+    // Usa le immagini della destinazione per i servizi inclusi
+    const destinationKey = tour.destination?.toLowerCase().replace(/\s+/g, '-');
+    const destinationImagesList = destinationKey && destinationImages[destinationKey] 
+      ? destinationImages[destinationKey] 
       : ['usa.jpg', 'canada.jpg', 'mexico.jpg', 'sudamerica.jpg', 'caraibi.jpg'];
     
-    return tour.highlights.map((highlight, index) => ({
+    return tour.included.map((service, index) => ({
       id: index,
-      title: highlight,
+      title: service,
       image: `/images/${destinationImagesList[index % destinationImagesList.length]}`,
-      alt: `${highlight} - ${tour.title}`
+      alt: `${service} - ${tour.title}`
     }));
   };
 
   // Effetto per lo scorrimento automatico del carosello
   useEffect(() => {
-    if (!tour || !tour.highlights || tour.highlights.length <= 1) return;
+    if (!tour || !tour.included || tour.included.length <= 1) return;
     
     const interval = setInterval(() => {
       setCurrentHighlightIndex((prevIndex) => 
-        (prevIndex + 1) % tour.highlights.length
+        (prevIndex + 1) % tour.included.length
       );
     }, 4000); // Cambia immagine ogni 4 secondi
 
@@ -148,7 +182,14 @@ const TourDetails = () => {
     const fetchTour = async () => {
       try {
         setLoading(true);
-        const data = await TourService.getTourBySlug(tourId);
+        // Prova prima con getTourByCode, poi con getTourById come fallback
+        let data;
+        try {
+          data = await TourService.getTourByCode(tourId);
+        } catch (codeError) {
+          // Se non trova per code, prova con ID
+          data = await TourService.getTourById(tourId);
+        }
         setTour(data);
       } catch (err) {
         setError('Errore nel caricamento del tour: ' + err.message);
@@ -251,12 +292,12 @@ const TourDetails = () => {
           {/* Left Column - Main Content */}
           <div className="tour-main">
             {/* Itinerary */}
-            {tour.itinerary && tour.itinerary.length > 0 && (
+            {tour.program && tour.program.days && tour.program.days.length > 0 && (
               <section className="tour-section">
                 <h2 className="section-title">Itinerario</h2>
                 <div className="itinerary-list">
-                  {tour.itinerary.map((item, index) => {
-                    const dayNumber = index + 1;
+                  {tour.program.days.map((day, index) => {
+                    const dayNumber = day.day;
                     const isExpanded = expandedDays.has(dayNumber);
                     return (
                       <div key={index} className="itinerary-item">
@@ -266,7 +307,7 @@ const TourDetails = () => {
                         >
                           <div className="day-badge">Giorno {dayNumber}</div>
                           <div className="day-content">
-                            <h3 className="day-title">{item}</h3>
+                            <h3 className="day-title">{day.title}</h3>
                           </div>
                           <div className="expand-icon">
                             <span className={`chevron ${isExpanded ? 'expanded' : ''}`}>
@@ -277,7 +318,7 @@ const TourDetails = () => {
                         {isExpanded && (
                           <div className="itinerary-details">
                             <p className="day-description">
-                              {itineraryDetails[dayNumber] || "Descrizione dettagliata non disponibile per questo giorno."}
+                              {day.description || "Descrizione dettagliata non disponibile per questo giorno."}
                             </p>
                           </div>
                         )}
@@ -289,9 +330,9 @@ const TourDetails = () => {
             )}
 
             {/* Tour Highlights Carousel */}
-          {tour.highlights && tour.highlights.length > 0 && (
+          {tour.included && tour.included.length > 0 && (
               <section className="tour-section">
-                <h2 className="section-title">Punti Salienti</h2>
+                <h2 className="section-title">Servizi Inclusi</h2>
                 <div className="highlights-carousel">
                   <div className="carousel-container">
                     {getHighlightImages().map((highlight, index) => (
@@ -327,41 +368,46 @@ const TourDetails = () => {
             )}
 
             {/* Pricing Section */}
-            <section className="tour-section">
-              <h2 className="section-title">Prezzi</h2>
-              <div className="pricing-table-container">
-                <table className="pricing-table">
-                  <thead>
-                    <tr>
-                      <th className="pricing-header-cell">Tipologia di camera</th>
-                      <th className="pricing-header-cell">Singola</th>
-                      <th className="pricing-header-cell">Doppia</th>
-                      <th className="pricing-header-cell">Tripla</th>
-                      <th className="pricing-header-cell">Quadrupla</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr className="pricing-row">
-                      <td className="pricing-label-cell">Quota di partecipazione adulto</td>
-                      <td className="pricing-value-cell">€ 3.945</td>
-                      <td className="pricing-value-cell">€ 2.425</td>
-                      <td className="pricing-value-cell">€ 2.110</td>
-                      <td className="pricing-value-cell">€ 1.865</td>
-                    </tr>
-                    <tr className="pricing-row">
-                      <td className="pricing-label-cell">Quota di partecipazione bambino under 12</td>
-                      <td className="pricing-value-cell pricing-na">n.d.</td>
-                      <td className="pricing-value-cell">€ 2.425</td>
-                      <td className="pricing-value-cell">€ 1.105</td>
-                      <td className="pricing-value-cell">€ 1.105</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <div className="pricing-note">
-                  <p><strong>Nota:</strong> I prezzi sono indicativi e possono variare in base alla stagionalità e alla disponibilità. Contattaci per un preventivo personalizzato.</p>
+            {tour.prices && tour.prices.prices && tour.prices.prices.length > 0 && (
+              <section className="tour-section">
+                <h2 className="section-title">Prezzi</h2>
+                <div className="pricing-table-container">
+                  <table className="pricing-table">
+                    <thead>
+                      <tr>
+                        <th className="pricing-header-cell">Tipologia di camera</th>
+                        <th className="pricing-header-cell">Singola</th>
+                        <th className="pricing-header-cell">Doppia</th>
+                        <th className="pricing-header-cell">Tripla</th>
+                        <th className="pricing-header-cell">Quadrupla</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {tour.prices.prices.map((priceRow, index) => (
+                        <tr key={index} className="pricing-row">
+                          <td className="pricing-label-cell">{priceRow.category}</td>
+                          <td className="pricing-value-cell">
+                            {priceRow.single ? `€ ${priceRow.single.toLocaleString()}` : 'n.d.'}
+                          </td>
+                          <td className="pricing-value-cell">
+                            {priceRow.double ? `€ ${priceRow.double.toLocaleString()}` : 'n.d.'}
+                          </td>
+                          <td className="pricing-value-cell">
+                            {priceRow.triple ? `€ ${priceRow.triple.toLocaleString()}` : 'n.d.'}
+                          </td>
+                          <td className="pricing-value-cell">
+                            {priceRow.quad ? `€ ${priceRow.quad.toLocaleString()}` : 'n.d.'}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <div className="pricing-note">
+                    <p><strong>Nota:</strong> I prezzi sono indicativi e possono variare in base alla stagionalità e alla disponibilità. Contattaci per un preventivo personalizzato.</p>
+                  </div>
                 </div>
-              </div>
-            </section>
+              </section>
+            )}
 
             {/* Inclusions */}
             {tour.included && tour.included.length > 0 && (

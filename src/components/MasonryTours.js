@@ -190,12 +190,12 @@ const MasonryTours = ({ itemsPerPage = 6 }) => {
           <div key={`${tour.id}-${currentPage}-${index}`} className="masonry-tour-card">
             <div className="tour-card-image">
               <img 
-                src={tour.mainImage || '/images/placeholder.jpg'} 
+                src={tour.heroImage ? TourService.getTourImageUrl(tour.id, 'hero') : '/images/placeholder.jpg'} 
                 alt={tour.title}
                 loading="lazy"
               />
               <div className="tour-card-overlay">
-                <div className="tour-card-price">€{tour.price}</div>
+                <div className="tour-card-price">€{tour.minPrice || 0}</div>
               </div>
             </div>
             
@@ -219,7 +219,7 @@ const MasonryTours = ({ itemsPerPage = 6 }) => {
                 </div>
               </div>
               
-              <a href={`/tour/${tour.slug}`} className="tour-card-button">
+              <a href={`/tour/${tour.code}`} className="tour-card-button">
                 Scopri Viaggio
               </a>
             </div>

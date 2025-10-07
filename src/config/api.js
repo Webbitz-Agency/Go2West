@@ -3,25 +3,15 @@ const API_CONFIG = {
   // URL del backend su Render
   BASE_URL: 'https://go2west-backend.onrender.com',
   
-  // Mapping dei parametri URL ai nomi dei paesi nel database
-  COUNTRY_MAPPING: {
-    'usa': 'Stati Uniti',
-    'messico': 'Messico',
-    'polinesia-francese': 'Polinesia Francese',
-    'kenya': 'Kenya',
-    'australia': 'Australia',
-    'argentina': 'Argentina',
-    'giappone': 'Giappone'
-  },
-  
   // Endpoints
   ENDPOINTS: {
     TOURS: '/api/tours',
     TOUR_BY_ID: (id) => `/api/tours/${id}`,
-    TOUR_BY_SLUG: (slug) => `/api/tours/slug/${slug}`,
-    TOURS_BY_COUNTRY: (country) => `/api/tours/country/${country}`,
+    TOUR_BY_CODE: (code) => `/api/tours/code/${code}`,
+    TOURS_BY_DESTINATION: (destination) => `/api/tours/destination/${destination}`,
     TOURS_BY_TYPE: (type) => `/api/tours/type/${type}`,
-    TOURS_BY_COUNTRY_AND_TYPE: (country, type) => `/api/tours/country/${country}/type/${type}`,
+    TOURS_BY_DESTINATION_AND_TYPE: (destination, type) => `/api/tours/destination/${destination}/type/${type}`,
+    TOUR_IMAGE: (id, imageType) => `/api/tours/${id}/image/${imageType}`,
     HEALTH: '/health'
   },
   
