@@ -251,9 +251,9 @@ const DynamicTours = ({ type, country, limit = 6, showFilters = false }) => {
                 <div className="tour-price">€ {tour.price}</div>
               </div>
               
-              <Link to={`/tour/${tour.slug}`} className="tour-card-button">
+              <a href={`/tour/${tour.slug}`} className="tour-card-button">
                 Scopri Viaggio
-              </Link>
+              </a>
             </div>
           </div>
         ))}

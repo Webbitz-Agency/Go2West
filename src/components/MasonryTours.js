@@ -219,9 +219,9 @@ const MasonryTours = ({ itemsPerPage = 6 }) => {
                 </div>
               </div>
               
-              <Link to={`/tour/${tour.slug}`} className="tour-card-button">
+              <a href={`/tour/${tour.slug}`} className="tour-card-button">
                 Scopri Viaggio
-              </Link>
+              </a>
             </div>
           </div>
         ))}

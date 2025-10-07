@@ -369,12 +369,26 @@ const About = () => {
       </section>
 
       {/* CTA Finale */}
-      <section className="about-cta-section">
+      {/*<section className="about-cta-section">
         <div className="about-cta-container">
           <h2>Pronto per la tua prossima avventura?</h2>
           <p>Scopri le nostre destinazioni e inizia a pianificare il viaggio dei tuoi sogni</p>
           <div className="about-cta-buttons">
-            <Link to="/" className="primary-cta">
+            
+            
+          </div>
+        </div>
+      </section>*/}
+
+      <section className="promotions-cta">
+      <div className="promotions-cta-hero-image">
+          <img src="/images/plane.jpg" alt="Aereo" />
+        </div>
+        <div className="promotions-cta-hero-content">
+        <h2>Pronto per la tua prossima avventura?</h2>
+        <p>Scopri le nostre destinazioni e inizia a pianificare il viaggio dei tuoi sogni</p>
+          <div className="cta-buttons">
+          <Link to="/#destinations-showcase-new" className="primary-cta">
               Scopri Destinazioni
             </Link>
             <button className="secondary-cta" onClick={scrollToContact}>

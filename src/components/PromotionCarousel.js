@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+/*import { Link } from 'react-router-dom';*/
 import TourService from '../services/TourService';
 import './PromotionCarousel.css';
 
@@ -223,9 +223,9 @@ const PromotionCarousel = ({ itemsPerPage = 6 }) => {
                   </div>
                 </div>
                 
-                <Link to={`/tour/${tour.slug}`} className="tour-card-button">
+                <a href={`/tour/${tour.slug}`} className="tour-card-button">
                   Scopri Viaggio
-                </Link>
+                </a>
               </div>
             </div>
           ))}
@@ -246,9 +246,9 @@ const PromotionCarousel = ({ itemsPerPage = 6 }) => {
 
       {/* Link per vedere tutte le promozioni */}
       <div className="promotions-link-container">
-        <Link to="/promozioni" className="options-cta">
+        <a href="/promozioni" className="options-cta">
           Vedi tutte le promozioni
-        </Link>
+        </a>
       </div>
     </div>
   );

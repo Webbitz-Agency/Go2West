@@ -721,12 +721,7 @@ const TourDetails = () => {
                     />
                     <span className="privacy-checkbox-text">
                       Ho letto e accetto l'
-                      <a 
-                        href="/privacy-policy.pdf" 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="privacy-link"
-                      >
+                      <a href="/PrivacyPolicy2025.pdf" target="_blank" rel="noopener noreferrer" className="privacy-link">
                         informativa sulla privacy
                       </a>
                       *

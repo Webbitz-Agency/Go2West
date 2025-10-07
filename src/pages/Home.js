@@ -752,9 +752,9 @@ const Home = () => {
                 </div>
               </div>
               <div className="destination-btn-container">
-                <Link to={`/destination/${destinations[0].country}`} className="explore-btn">
+                <a href={`/destination/${destinations[0].country}`} className="explore-btn">
                   Scopri di più
-                </Link>
+                </a>
               </div>
             </div>
           </div>
@@ -793,9 +793,9 @@ const Home = () => {
                     </div>
                   </div>
                   <div className="destination-btn-container">
-                    <Link to={`/destination/${destination.country}`} className="explore-btn">
+                    <a href={`/destination/${destination.country}`} className="explore-btn">
                       Scopri di più
-                    </Link>
+                    </a>
                   </div>
                 </div>
               </div>

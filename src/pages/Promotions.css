@@ -178,8 +178,9 @@
 
 .promotion-card-image {
   position: relative;
-  height: 184px; /* 350px (larghezza card) / 1.9 (aspect ratio 1200:630) ≈ 184px */
+  aspect-ratio: 1200 / 630; /* Aspect ratio esatto dell'immagine 1200x630 */
   overflow: hidden;
+  background: #f8f9fa;
 }
 
 .promotion-card-image img {
@@ -508,7 +509,7 @@
   }
   
   .promotion-card-image {
-    height: 184px; /* Mantiene la proporzione corretta anche su mobile */
+    aspect-ratio: 1200 / 630; /* Mantiene la proporzione corretta anche su mobile */
   }
   
   .promotion-features {
