@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import TourService from '../services/TourService';
 import { destinationImages } from '../config/destinations';
 import './Admin.css';
@@ -186,6 +186,52 @@ const Admin = () => {
   );
 };
 
+// Componente per l'upload delle immagini
+const ImageUploader = ({ imageType, currentImage, label, onImageUpload }) => {
+  const fileInputRef = useRef(null);
+  
+  return (
+    <div className="image-uploader">
+      <label className="image-upload-label">{label}</label>
+      <div className="image-upload-container">
+        {currentImage ? (
+          <div className="current-image">
+            <img src={currentImage} alt="Current" />
+            <button 
+              type="button" 
+              onClick={() => fileInputRef.current?.click()}
+              className="change-image-btn"
+            >
+              Cambia Immagine
+            </button>
+          </div>
+        ) : (
+          <div className="no-image">
+            <button 
+              type="button" 
+              onClick={() => fileInputRef.current?.click()}
+              className="upload-image-btn"
+            >
+              + Carica Immagine
+            </button>
+          </div>
+        )}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          style={{ display: 'none' }}
+          onChange={(e) => {
+            if (e.target.files[0]) {
+              onImageUpload(imageType, e.target.files[0]);
+            }
+          }}
+        />
+      </div>
+    </div>
+  );
+};
+
 // Componente per l'editor tour con preview in tempo reale
 const TourEditor = ({ tour, onSave, onCancel }) => {
   const [formData, setFormData] = useState({
@@ -197,6 +243,10 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
     duration: tour?.duration || 7,
     minPrice: tour?.minPrice || 1000,
     notes: tour?.notes || '',
+    heroImage: tour?.heroImage || '',
+    carouselImage1: tour?.carouselImage1 || '',
+    carouselImage2: tour?.carouselImage2 || '',
+    carouselImage3: tour?.carouselImage3 || '',
     program: tour?.program || {
       days: [
         { day: 1, title: 'GIORNO 1 - Arrivo', description: 'Descrizione del primo giorno...' },
@@ -226,6 +276,8 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
   const [selectedYear, setSelectedYear] = useState(2025);
   const [editingField, setEditingField] = useState(null);
   const [editingValue, setEditingValue] = useState('');
+  const [hoveredImage, setHoveredImage] = useState(null);
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
 
   // Genera automaticamente il code dal title
   useEffect(() => {
@@ -377,6 +429,36 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
     }));
   };
 
+  const addYear = () => {
+    const newYear = Math.max(...Object.keys(formData.dates).map(Number)) + 1;
+    setFormData(prev => ({
+      ...prev,
+      dates: {
+        ...prev.dates,
+        [newYear]: [{ startDate: 'Gen 1', endDate: 'Gen 7' }]
+      }
+    }));
+  };
+
+  const removeYear = (year) => {
+    if (Object.keys(formData.dates).length > 1) {
+      setFormData(prev => {
+        const newDates = { ...prev.dates };
+        delete newDates[year];
+        return { ...prev, dates: newDates };
+      });
+    }
+  };
+
+  const handleImageUpload = (imageType, file) => {
+    // Per ora simuliamo l'upload, in futuro si può implementare il vero upload
+    const imageUrl = URL.createObjectURL(file);
+    setFormData(prev => ({
+      ...prev,
+      [imageType]: imageUrl
+    }));
+  };
+
   const toggleDayExpansion = (dayNumber) => {
     setExpandedDays(prev => {
       const newSet = new Set();
@@ -390,16 +472,50 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
   const getTourImages = () => {
     const images = [];
     
-    // Usa le immagini di fallback della destinazione
-    const destinationKey = formData.destination?.toLowerCase().replace(/\s+/g, '-');
-    if (destinationKey && destinationImages[destinationKey]) {
-      destinationImages[destinationKey].forEach((imageName, index) => {
-        images.push({
-          src: `/images/${imageName}`,
-          alt: `${formData.title} - Immagine ${index + 1}`,
-          isMain: index === 0
-        });
+    // Aggiungi l'immagine hero se esiste
+    if (formData.heroImage) {
+      images.push({
+        src: formData.heroImage,
+        alt: formData.title,
+        isMain: true
       });
+    }
+    
+    // Aggiungi le immagini carousel se esistono
+    if (formData.carouselImage1) {
+      images.push({
+        src: formData.carouselImage1,
+        alt: `${formData.title} - Carousel 1`,
+        isMain: false
+      });
+    }
+    if (formData.carouselImage2) {
+      images.push({
+        src: formData.carouselImage2,
+        alt: `${formData.title} - Carousel 2`,
+        isMain: false
+      });
+    }
+    if (formData.carouselImage3) {
+      images.push({
+        src: formData.carouselImage3,
+        alt: `${formData.title} - Carousel 3`,
+        isMain: false
+      });
+    }
+    
+    // Se non ci sono immagini dal formData, usa le immagini di fallback della destinazione
+    if (images.length === 0) {
+      const destinationKey = formData.destination?.toLowerCase().replace(/\s+/g, '-');
+      if (destinationKey && destinationImages[destinationKey]) {
+        destinationImages[destinationKey].forEach((imageName, index) => {
+          images.push({
+            src: `/images/${imageName}`,
+            alt: `${formData.title} - Immagine ${index + 1}`,
+            isMain: index === 0
+          });
+        });
+      }
     }
     
     return images;
@@ -433,6 +549,8 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     onSave(formData);
+    setShowSuccessToast(true);
+    setTimeout(() => setShowSuccessToast(false), 3000);
   };
 
   const startEditing = (field, value = '') => {
@@ -573,54 +691,83 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
       <div className="tour-editor">
         <div className="editor-header">
           <h2>{tour ? 'Modifica Tour' : 'Nuovo Tour'}</h2>
-          <div className="editor-actions">
-            <button type="button" onClick={onCancel} className="cancel-btn">
-              Annulla
-            </button>
-            <button type="button" onClick={handleSubmit} className="save-btn">
-              {tour ? 'Aggiorna' : 'Crea'} Tour
-            </button>
-          </div>
         </div>
-
         <div className="editor-content">
           <div className="editable-tour-page">
-              {/* Hero Section */}
-              <section className="tour-hero-masonry">
-                <div className="masonry-container">
-                  {tourImages.map((image, index) => (
-                    <div
-                      key={index}
-                      className={`masonry-item ${image.isMain ? 'main-image' : ''}`}
-                    >
-                      <img src={image.src} alt={image.alt} />
-                    </div>
-                  ))}
-                </div>
-              </section>
+            {/* Hero Section - Clean Image Gallery */}
+            <section className="tour-hero-masonry">
+              <div className="masonry-container">
+                {tourImages.map((image, index) => (
+                  <div
+                    key={index}
+                    className={`masonry-item ${image.isMain ? 'main-image' : ''} ${hoveredImage === index ? 'hovered' : ''}`}
+                    onMouseEnter={() => setHoveredImage(index)}
+                    onMouseLeave={() => setHoveredImage(null)}
+                  >
+                    <img src={image.src} alt={image.alt} />
+                  </div>
+                ))}
+              </div>
+            </section>
 
-              <div className="container-details">
-                <div className="tour-content">
-                  <div className="tour-main">
-                    {/* Titolo del tour */}
-                    <section className="tour-section">
-                      <h1 className="tour-title">
+            {/* Tour Overview Section */}
+            <section className="tour-overview-section">
+              <div className="container-overview">
+                <div className="overview-content">
+                  {/* Left Column - Overview Text */}
+                  <div className="overview-text">
+                    <div className="overview-header">
+                      <span className="overview-label">OVERVIEW</span>
+                      <h1 className="overview-title">
                         <EditableText 
                           field="basic.title" 
                           value={formData.title}
-                          className="tour-title-text"
+                          className="overview-title-text"
                           placeholder="Titolo del Tour"
                         />
                       </h1>
-                      <div className="tour-description">
-                        <EditableTextarea 
-                          field="basic.description" 
-                          value={formData.description}
-                          className="tour-description-text"
-                          placeholder="Descrizione del tour..."
+                    </div>
+                    <div className="overview-description">
+                      <EditableTextarea 
+                        field="basic.description" 
+                        value={formData.description}
+                        className="overview-description-text"
+                        placeholder="Descrizione del tour..."
+                      />
+                      <p>Un'esperienza di viaggio unica che ti porterà alla scoperta di destinazioni straordinarie, combinando comfort, avventura e autenticità. I nostri tour sono progettati per offrirti momenti indimenticabili e connessioni profonde con le culture locali.</p>
+                    </div>
+                  </div>
+                  
+                  {/* Right Column - Image Carousel */}
+                  <div className="overview-carousel">
+                    <div className="overview-carousel-container">
+                      {tourImages.slice(0, 4).map((image, index) => (
+                        <div
+                          key={index}
+                          className={`overview-slide ${index === currentHighlightIndex % 4 ? 'active' : ''}`}
+                        >
+                          <img src={image.src} alt={image.alt} />
+                        </div>
+                      ))}
+                    </div>
+                    <div className="overview-indicators">
+                      {tourImages.slice(0, 4).map((_, index) => (
+                        <button
+                          key={index}
+                          className={`overview-indicator ${index === currentHighlightIndex % 4 ? 'active' : ''}`}
+                          onClick={() => setCurrentHighlightIndex(index)}
                         />
-                      </div>
-                    </section>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <div className="container-details">
+              <div className="tour-content">
+                {/* Left Column - Main Content */}
+                <div className="tour-main">
 
                     {/* Itinerary */}
                     {formData.program && formData.program.days && formData.program.days.length > 0 && (
@@ -682,6 +829,41 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
                           <button type="button" onClick={addDay} className="add-day-btn">
                             + Aggiungi Giorno
                           </button>
+                        </div>
+                      </section>
+                    )}
+
+                    {/* Tour Highlights Carousel */}
+                    {formData.included && formData.included.length > 0 && (
+                      <section className="tour-section">
+                        <h2 className="section-title">Servizi Inclusi</h2>
+                        <div className="highlights-carousel">
+                          <div className="carousel-container">
+                            {getHighlightImages().map((highlight, index) => (
+                              <div
+                                key={highlight.id}
+                                className={`carousel-slide ${index === currentHighlightIndex ? 'active' : ''}`}
+                              >
+                                <img src={highlight.image} alt={highlight.alt} />
+                                <div className="highlight-overlay">
+                                  <h3 className="highlight-title">{highlight.title}</h3>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                          
+                          {/* Indicatori */}
+                          {formData.included && formData.included.length > 1 && (
+                            <div className="carousel-indicators">
+                              {formData.included.map((_, index) => (
+                                <button
+                                  key={index}
+                                  className={`indicator ${index === currentHighlightIndex ? 'active' : ''}`}
+                                  onClick={() => setCurrentHighlightIndex(index)}
+                                />
+                              ))}
+                            </div>
+                          )}
                         </div>
                       </section>
                     )}
@@ -766,6 +948,20 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
                       </section>
                     )}
 
+                    {/* Quote Request CTA */}
+                    <section className="tour-section quote-request-section">
+                      <div className="quote-request-content">
+                        <h2 className="quote-request-title">Interessato a questo viaggio?</h2>
+                        <p className="quote-request-description">
+                          Richiedi un preventivo personalizzato e scopri tutte le opzioni disponibili per il tuo viaggio ideale.
+                        </p>
+                        <button className="quote-request-btn">
+                          <i className="fa-solid fa-calculator"></i>
+                          Richiedi un Preventivo
+                        </button>
+                      </div>
+                    </section>
+
                     {/* Inclusions */}
                     {formData.included && formData.included.length > 0 && (
                       <section className="tour-section">
@@ -831,9 +1027,10 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
                     )}
                   </div>
 
-                  {/* Sidebar */}
+                  {/* Right Column - Dates & Prices */}
                   <div className="tour-sidebar">
                     <div className="dates-prices-section">
+                      {/* Year Selection */}
                       <div className="year-selection">
                         {Object.keys(tourDates).map(year => (
                           <button 
@@ -844,16 +1041,74 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
                             {year}
                           </button>
                         ))}
+                        <button 
+                          type="button" 
+                          onClick={addYear} 
+                          className="add-year-btn"
+                          title="Aggiungi Anno"
+                        >
+                          +
+                        </button>
                       </div>
                       
-                      <div className="dates-list">
-                        {tourDates[selectedYear] && tourDates[selectedYear].map((dateInfo, index) => (
-                          <div key={index} className="date-item">
+                      <p className="pricing-disclaimer">
+                        A partire da €<EditableNumber 
+                          field="basic.minPrice" 
+                          value={formData.minPrice}
+                          className="min-price-text"
+                          placeholder="0"
+                        /> per persona.
+                      </p>
+                      
+                      {/* Tour Dates List */}
+                      <div className="tour-dates-list">
+                        {tourDates[selectedYear]?.map((dateInfo, index) => (
+                          <div key={index} className="date-row">
                             <div className="date-info">
-                              <span className="date-range">{dateInfo.dateRange}</span>
+                              <span className="date-range">
+                                <EditableText 
+                                  field={`date.${selectedYear}.${index}.startDate`} 
+                                  value={formData.dates[selectedYear]?.[index]?.startDate}
+                                  className="date-start-text"
+                                  placeholder="Gen 1"
+                                /> - <EditableText 
+                                  field={`date.${selectedYear}.${index}.endDate`} 
+                                  value={formData.dates[selectedYear]?.[index]?.endDate}
+                                  className="date-end-text"
+                                  placeholder="Gen 7"
+                                />
+                              </span>
                             </div>
+                            <button 
+                              type="button"
+                              onClick={() => removeDate(selectedYear, index)}
+                              className="remove-date-btn"
+                              title="Rimuovi Data"
+                            >
+                              ×
+                            </button>
                           </div>
                         ))}
+                        <div className="add-date-section">
+                          <button 
+                            type="button" 
+                            onClick={() => addDate(selectedYear)} 
+                            className="add-date-btn"
+                          >
+                            + Aggiungi Data
+                          </button>
+                        </div>
+                        {Object.keys(tourDates).length > 1 && (
+                          <div className="remove-year-section">
+                            <button 
+                              type="button" 
+                              onClick={() => removeYear(selectedYear)} 
+                              className="remove-year-btn"
+                            >
+                              - Rimuovi Anno {selectedYear}
+                            </button>
+                          </div>
+                        )}
                       </div>
                     </div>
 
@@ -927,10 +1182,60 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
                 </div>
               </div>
             </div>
+
+            {/* Image Management Section */}
+            <section className="image-management-section">
+              <h2 className="section-title">Gestione Immagini</h2>
+              <div className="image-management-grid">
+                <ImageUploader 
+                  imageType="heroImage" 
+                  currentImage={formData.heroImage} 
+                  label="Hero Image"
+                  onImageUpload={handleImageUpload}
+                />
+                <ImageUploader 
+                  imageType="carouselImage1" 
+                  currentImage={formData.carouselImage1} 
+                  label="Carousel Image 1"
+                  onImageUpload={handleImageUpload}
+                />
+                <ImageUploader 
+                  imageType="carouselImage2" 
+                  currentImage={formData.carouselImage2} 
+                  label="Carousel Image 2"
+                  onImageUpload={handleImageUpload}
+                />
+                <ImageUploader 
+                  imageType="carouselImage3" 
+                  currentImage={formData.carouselImage3} 
+                  label="Carousel Image 3"
+                  onImageUpload={handleImageUpload}
+                />
+              </div>
+            </section>
+
+            {/* Save Button */}
+            <div className="save-section">
+              <button type="button" onClick={onCancel} className="cancel-btn">
+                Annulla
+              </button>
+              <button type="button" onClick={handleSubmit} className="save-btn">
+                {tour ? 'Aggiorna' : 'Crea'} Tour
+              </button>
+            </div>
+
+            {/* Success Toast */}
+            {showSuccessToast && (
+              <div className="success-toast">
+                <i className="fa-solid fa-check-circle"></i>
+                Tour aggiornato correttamente!
+              </div>
+            )}
           </div>
         </div>
       </div>
+    </div>
   );
-};
+}
 
 export default Admin;
