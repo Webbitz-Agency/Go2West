@@ -23,10 +23,12 @@ const TourDetails = () => {
     // Converte le date dal database nel formato utilizzato dal componente
     const formattedDates = {};
     Object.keys(tour.dates).forEach(year => {
-      formattedDates[year] = tour.dates[year].map(dateInfo => ({
-        dateRange: `${dateInfo.startDate} - ${dateInfo.endDate}`,
-        price: tour.minPrice || 0
-      }));
+      if (Array.isArray(tour.dates[year])) {
+        formattedDates[year] = tour.dates[year].map(dateInfo => ({
+          dateRange: `${dateInfo.startDate} - ${dateInfo.endDate}`,
+          price: tour.minPrice || 0
+        }));
+      }
     });
     
     return formattedDates;
@@ -352,9 +354,9 @@ const TourDetails = () => {
                   </div>
                   
                   {/* Indicatori */}
-                  {tour.highlights.length > 1 && (
+                  {tour.included && tour.included.length > 1 && (
                     <div className="carousel-indicators">
-                      {tour.highlights.map((_, index) => (
+                      {tour.included.map((_, index) => (
                         <button
                           key={index}
                           className={`indicator ${index === currentHighlightIndex ? 'active' : ''}`}
@@ -445,7 +447,7 @@ const TourDetails = () => {
               <div className="tour-info-grid">
                 <div className="info-item">
                   <span className="info-label">Destinazione:</span>
-                  <span className="info-value">{tour.country}</span>
+                  <span className="info-value">{tour.destination}</span>
                 </div>
                 <div className="info-item">
                   <span className="info-label">Tipo:</span>
@@ -459,7 +461,7 @@ const TourDetails = () => {
                 )}
                 <div className="info-item">
                   <span className="info-label">Codice:</span>
-                  <span className="info-value">{tour.slug}</span>
+                  <span className="info-value">{tour.code}</span>
                 </div>
               </div>
             </section>
