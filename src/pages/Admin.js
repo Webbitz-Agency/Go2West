@@ -891,7 +891,7 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
                       <div className="info-item">
                         <span className="info-label">Prezzo Min:</span>
                         <span className="info-value">
-                          €<EditableNumber field="basic.minPrice" value={formData.minPrice} className="info-value-text" placeholder="0" />
+                          €<EditableNumber field="basic.minPrice" value={formData.minPrice} className="min-price-text" placeholder="0" />
                         </span>
                       </div>
                       <div className="info-item">
@@ -1034,6 +1034,15 @@ const Admin = () => {
     }
   };
 
+  const handleDuplicateTour = async (tour) => {
+    try {
+      await TourService.duplicateTour(tour);
+      fetchTours();
+    } catch (err) {
+      setError('Errore nella duplicazione del tour: ' + err.message);
+    }
+  };
+
   const handleSaveTour = async (tourData, localImages = null) => {
     try {
       if (editingTour?.id) {
@@ -1170,6 +1179,12 @@ const Admin = () => {
                     className="edit-btn"
                   >
                     Modifica
+                  </button>
+                  <button
+                    onClick={() => handleDuplicateTour(tour)}
+                    className="duplicate-btn"
+                  >
+                    Duplica
                   </button>
                   <button
                     onClick={() => handleDeleteTour(tour.id)}

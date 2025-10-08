@@ -133,6 +133,7 @@
 
 .actions-bar {
   margin-bottom: 30px;
+  margin-top: 20px;
 }
 
 .add-btn {
@@ -652,6 +653,9 @@
   font-size: 0.95rem;
   line-height: 1.5;
   color: #666;
+  max-width: 300px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .overview-description-text {
@@ -666,6 +670,68 @@
 .min-price-text {
   font-weight: 600;
   color: #27ae60;
+}
+
+/* ===== TOUR SIDEBAR LAYOUT ===== */
+.tour-sidebar {
+  position: sticky;
+  top: 150px;
+  height: fit-content;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.dates-prices-section {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  border: 1px solid #e9ecef;
+  max-height: 77vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.tour-info-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 20px;
+}
+
+.tour-info-grid .info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7.5px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.tour-info-grid .info-item:last-child {
+  border-bottom: none;
+}
+
+.tour-info-grid .info-label {
+  color: #666;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.tour-info-grid .info-value {
+  color: #2c3e50;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.notes-content {
+  color: #666;
+  line-height: 1.6;
+  font-size: 0.95rem;
+  max-width: 300px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 /* Action buttons */
