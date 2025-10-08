@@ -5,15 +5,34 @@ import { destinationImages } from '../config/destinations';
 import './Admin.css';
 
 // Componente per l'upload delle immagini
-const ImageUploader = ({ imageType, currentImage, label, onImageUpload }) => {
+const ImageUploader = ({ imageType, currentImage, label, onImageUpload, tour }) => {
   const fileInputRef = useRef(null);
+  
+  // Determina se mostrare l'immagine corrente
+  const showCurrentImage = currentImage && currentImage !== 'exists' && !currentImage.startsWith('blob:');
+  const hasExistingImage = currentImage === 'exists';
+  
   return (
     <div className="image-uploader">
       <label className="image-upload-label">{label}</label>
       <div className="image-upload-container">
-        {currentImage ? (
+        {showCurrentImage ? (
           <div className="current-image">
             <img src={currentImage} alt="Current" />
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="change-image-btn"
+            >
+              Cambia Immagine
+            </button>
+          </div>
+        ) : hasExistingImage ? (
+          <div className="existing-image">
+            <div className="image-placeholder">
+              <i className="fa-solid fa-image"></i>
+              <span>Immagine esistente</span>
+            </div>
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
@@ -60,10 +79,15 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
     duration: tour?.duration || 7,
     minPrice: tour?.minPrice || 1000,
     notes: tour?.notes || '',
-    heroImage: tour?.heroImage || '',
-    carouselImage1: tour?.carouselImage1 || '',
-    carouselImage2: tour?.carouselImage2 || '',
-    carouselImage3: tour?.carouselImage3 || '',
+    heroImage: tour?.heroImage ? 'exists' : '',
+    carouselImage1: tour?.carouselImage1 ? 'exists' : '',
+    carouselImage2: tour?.carouselImage2 ? 'exists' : '',
+    carouselImage3: tour?.carouselImage3 ? 'exists' : '',
+    image1: tour?.image1 ? 'exists' : '',
+    image2: tour?.image2 ? 'exists' : '',
+    image3: tour?.image3 ? 'exists' : '',
+    image4: tour?.image4 ? 'exists' : '',
+    image5: tour?.image5 ? 'exists' : '',
     program: tour?.program || {
       days: [
         { day: 1, title: 'GIORNO 1 - Arrivo', description: 'Descrizione del primo giorno...' },
@@ -225,9 +249,41 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
     }
   };
 
-  const handleImageUpload = (imageType, file) => {
-    const imageUrl = URL.createObjectURL(file);
-    setFormData(prev => ({ ...prev, [imageType]: imageUrl }));
+  const handleImageUpload = async (imageType, file) => {
+    // Se è un tour esistente, carica l'immagine sul server
+    if (tour?.id) {
+      try {
+        // Mappa i tipi di immagine ai tipi del backend
+        const imageTypeMap = {
+          'heroImage': 'hero',
+          'carouselImage1': 'carousel1',
+          'carouselImage2': 'carousel2',
+          'carouselImage3': 'carousel3',
+          'image1': 'image1',
+          'image2': 'image2',
+          'image3': 'image3',
+          'image4': 'image4',
+          'image5': 'image5'
+        };
+        
+        const backendImageType = imageTypeMap[imageType];
+        if (backendImageType) {
+          await TourService.uploadTourImage(tour.id, backendImageType, file);
+          // Aggiorna l'URL per puntare al server
+          const serverImageUrl = TourService.getTourImageUrl(tour.id, backendImageType);
+          setFormData(prev => ({ ...prev, [imageType]: serverImageUrl }));
+        }
+      } catch (error) {
+        console.error('Errore nel caricamento dell\'immagine:', error);
+        // Fallback: usa l'URL locale per la preview
+        const imageUrl = URL.createObjectURL(file);
+        setFormData(prev => ({ ...prev, [imageType]: imageUrl }));
+      }
+    } else {
+      // Per i nuovi tour, usa l'URL locale per la preview
+      const imageUrl = URL.createObjectURL(file);
+      setFormData(prev => ({ ...prev, [imageType]: imageUrl }));
+    }
   };
 
   const toggleDayExpansion = (dayNumber) => {
@@ -242,26 +298,49 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
 
   const getTourImages = () => {
     const images = [];
-    if (formData.heroImage) {
-      images.push({ src: formData.heroImage, alt: formData.title, isMain: true });
-    }
-    if (formData.carouselImage1) {
-      images.push({ src: formData.carouselImage1, alt: `${formData.title} - Carousel 1`, isMain: false });
-    }
-    if (formData.carouselImage2) {
-      images.push({ src: formData.carouselImage2, alt: `${formData.title} - Carousel 2`, isMain: false });
-    }
-    if (formData.carouselImage3) {
-      images.push({ src: formData.carouselImage3, alt: `${formData.title} - Carousel 3`, isMain: false });
-    }
-    if (images.length === 0) {
-      const destinationKey = formData.destination?.toLowerCase().replace(/\s+/g, '-');
-      if (destinationKey && destinationImages[destinationKey]) {
-        destinationImages[destinationKey].forEach((imageName, index) => {
-          images.push({ src: `/images/${imageName}`, alt: `${formData.title} - Immagine ${index + 1}`, isMain: index === 0 });
-        });
+    
+    // Funzione helper per aggiungere un'immagine se esiste
+    const addImageIfExists = (imageField, altText, isMain = false) => {
+      if (formData[imageField]) {
+        let imageSrc = formData[imageField];
+        
+        // Se è un tour esistente e l'immagine non è un blob URL, usa l'URL del server
+        if (tour?.id && !imageSrc.startsWith('blob:')) {
+          const imageTypeMap = {
+            'heroImage': 'hero',
+            'carouselImage1': 'carousel1',
+            'carouselImage2': 'carousel2',
+            'carouselImage3': 'carousel3',
+            'image1': 'image1',
+            'image2': 'image2',
+            'image3': 'image3',
+            'image4': 'image4',
+            'image5': 'image5'
+          };
+          
+          const backendImageType = imageTypeMap[imageField];
+          if (backendImageType) {
+            imageSrc = TourService.getTourImageUrl(tour.id, backendImageType);
+          }
+        }
+        
+        // Solo aggiungi l'immagine se non è il valore 'exists' (che indica che esiste ma non è caricata)
+        if (imageSrc !== 'exists') {
+          images.push({ src: imageSrc, alt: altText, isMain });
+        }
       }
-    }
+    };
+    
+    addImageIfExists('heroImage', formData.title, true);
+    addImageIfExists('carouselImage1', `${formData.title} - Carousel 1`);
+    addImageIfExists('carouselImage2', `${formData.title} - Carousel 2`);
+    addImageIfExists('carouselImage3', `${formData.title} - Carousel 3`);
+    addImageIfExists('image1', `${formData.title} - Immagine 1`);
+    addImageIfExists('image2', `${formData.title} - Immagine 2`);
+    addImageIfExists('image3', `${formData.title} - Immagine 3`);
+    addImageIfExists('image4', `${formData.title} - Immagine 4`);
+    addImageIfExists('image5', `${formData.title} - Immagine 5`);
+    
     return images;
   };
 
@@ -269,7 +348,7 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
     return formData.included.map((service, index) => ({
       id: index,
       title: service,
-      image: `/images/placeholder.jpg`,
+      image: null, // Non mostrare immagini placeholder
       alt: `${service} - ${formData.title}`
     }));
   };
@@ -290,9 +369,34 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
   const tourImages = getTourImages();
   const tourDates = getTourDates();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSave(formData);
+    
+    // Se è un nuovo tour, devo gestire le immagini diversamente
+    if (!tour?.id) {
+      // Salva le immagini locali temporaneamente
+      const localImages = {};
+      const imageFields = ['heroImage', 'carouselImage1', 'carouselImage2', 'carouselImage3', 'image1', 'image2', 'image3', 'image4', 'image5'];
+      
+      imageFields.forEach(field => {
+        if (formData[field] && formData[field].startsWith('blob:')) {
+          localImages[field] = formData[field];
+        }
+      });
+      
+      // Rimuovi le immagini dal formData per la creazione del tour
+      const tourDataWithoutImages = { ...formData };
+      imageFields.forEach(field => {
+        delete tourDataWithoutImages[field];
+      });
+      
+      // Crea il tour senza immagini
+      onSave(tourDataWithoutImages, localImages);
+    } else {
+      // Per i tour esistenti, salva normalmente
+      onSave(formData);
+    }
+    
     setShowSuccessToast(true);
     setTimeout(() => setShowSuccessToast(false), 3000);
   };
@@ -418,20 +522,22 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
         </div>
         <div className="editor-content">
           <div className="editable-tour-page">
-            <section className="tour-hero-masonry">
-              <div className="masonry-container">
-                {tourImages.map((image, index) => (
-                  <div
-                    key={index}
-                    className={`masonry-item ${image.isMain ? 'main-image' : ''} ${hoveredImage === index ? 'hovered' : ''}`}
-                    onMouseEnter={() => setHoveredImage(index)}
-                    onMouseLeave={() => setHoveredImage(null)}
-                  >
-                    <img src={image.src} alt={image.alt} />
-                  </div>
-                ))}
-              </div>
-            </section>
+            {tourImages.length > 0 && (
+              <section className="tour-hero-masonry">
+                <div className="masonry-container">
+                  {tourImages.map((image, index) => (
+                    <div
+                      key={index}
+                      className={`masonry-item ${image.isMain ? 'main-image' : ''} ${hoveredImage === index ? 'hovered' : ''}`}
+                      onMouseEnter={() => setHoveredImage(index)}
+                      onMouseLeave={() => setHoveredImage(null)}
+                    >
+                      <img src={image.src} alt={image.alt} />
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
 
             <section className="tour-overview-section">
               <div className="container-overview">
@@ -445,28 +551,29 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
                     </div>
                     <div className="overview-description">
                       <EditableTextarea field="basic.description" value={formData.description} className="overview-description-text" placeholder="Descrizione del tour..." />
-                      <p>Un'esperienza di viaggio unica che ti porterà alla scoperta di destinazioni straordinarie, combinando comfort, avventura e autenticità.</p>
                     </div>
                   </div>
 
-                  <div className="overview-carousel">
-                    <div className="overview-carousel-container">
-                      {tourImages.slice(0, 4).map((image, index) => (
-                        <div key={index} className={`overview-slide ${index === currentHighlightIndex % 4 ? 'active' : ''}`}>
-                          <img src={image.src} alt={image.alt} />
-                        </div>
-                      ))}
+                  {tourImages.length > 0 && (
+                    <div className="overview-carousel">
+                      <div className="overview-carousel-container">
+                        {tourImages.slice(0, 4).map((image, index) => (
+                          <div key={index} className={`overview-slide ${index === currentHighlightIndex % 4 ? 'active' : ''}`}>
+                            <img src={image.src} alt={image.alt} />
+                          </div>
+                        ))}
+                      </div>
+                      <div className="overview-indicators">
+                        {tourImages.slice(0, 4).map((_, index) => (
+                          <button
+                            key={index}
+                            className={`overview-indicator ${index === currentHighlightIndex % 4 ? 'active' : ''}`}
+                            onClick={() => setCurrentHighlightIndex(index)}
+                          />
+                        ))}
+                      </div>
                     </div>
-                    <div className="overview-indicators">
-                      {tourImages.slice(0, 4).map((_, index) => (
-                        <button
-                          key={index}
-                          className={`overview-indicator ${index === currentHighlightIndex % 4 ? 'active' : ''}`}
-                          onClick={() => setCurrentHighlightIndex(index)}
-                        />
-                      ))}
-                    </div>
-                  </div>
+                  )}
                 </div>
               </div>
             </section>
@@ -527,7 +634,7 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
                         <div className="carousel-container">
                           {getHighlightImages().map((highlight, index) => (
                             <div key={highlight.id} className={`carousel-slide ${index === currentHighlightIndex ? 'active' : ''}`}>
-                              <img src={highlight.image} alt={highlight.alt} />
+                              {highlight.image && <img src={highlight.image} alt={highlight.alt} />}
                               <div className="highlight-overlay">
                                 <h3 className="highlight-title">{highlight.title}</h3>
                               </div>
@@ -765,24 +872,63 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
                 currentImage={formData.heroImage}
                 label="Hero Image"
                 onImageUpload={handleImageUpload}
+                tour={tour}
               />
               <ImageUploader
                 imageType="carouselImage1"
                 currentImage={formData.carouselImage1}
                 label="Carousel Image 1"
                 onImageUpload={handleImageUpload}
+                tour={tour}
               />
               <ImageUploader
                 imageType="carouselImage2"
                 currentImage={formData.carouselImage2}
                 label="Carousel Image 2"
                 onImageUpload={handleImageUpload}
+                tour={tour}
               />
               <ImageUploader
                 imageType="carouselImage3"
                 currentImage={formData.carouselImage3}
                 label="Carousel Image 3"
                 onImageUpload={handleImageUpload}
+                tour={tour}
+              />
+              <ImageUploader
+                imageType="image1"
+                currentImage={formData.image1}
+                label="Immagine 1"
+                onImageUpload={handleImageUpload}
+                tour={tour}
+              />
+              <ImageUploader
+                imageType="image2"
+                currentImage={formData.image2}
+                label="Immagine 2"
+                onImageUpload={handleImageUpload}
+                tour={tour}
+              />
+              <ImageUploader
+                imageType="image3"
+                currentImage={formData.image3}
+                label="Immagine 3"
+                onImageUpload={handleImageUpload}
+                tour={tour}
+              />
+              <ImageUploader
+                imageType="image4"
+                currentImage={formData.image4}
+                label="Immagine 4"
+                onImageUpload={handleImageUpload}
+                tour={tour}
+              />
+              <ImageUploader
+                imageType="image5"
+                currentImage={formData.image5}
+                label="Immagine 5"
+                onImageUpload={handleImageUpload}
+                tour={tour}
               />
             </div>
           </section>
@@ -865,12 +1011,47 @@ const Admin = () => {
     }
   };
 
-  const handleSaveTour = async (tourData) => {
+  const handleSaveTour = async (tourData, localImages = null) => {
     try {
       if (editingTour?.id) {
         await TourService.updateTour(editingTour.id, tourData);
       } else {
-        await TourService.createTour(tourData);
+        // Crea il tour
+        const newTour = await TourService.createTour(tourData);
+        
+        // Se ci sono immagini locali, caricale sul server
+        if (localImages && newTour.id) {
+          const imageTypeMap = {
+            'heroImage': 'hero',
+            'carouselImage1': 'carousel1',
+            'carouselImage2': 'carousel2',
+            'carouselImage3': 'carousel3',
+            'image1': 'image1',
+            'image2': 'image2',
+            'image3': 'image3',
+            'image4': 'image4',
+            'image5': 'image5'
+          };
+          
+          // Carica ogni immagine
+          for (const [field, imageUrl] of Object.entries(localImages)) {
+            if (imageUrl && imageUrl.startsWith('blob:')) {
+              try {
+                // Converti l'URL blob in file
+                const response = await fetch(imageUrl);
+                const blob = await response.blob();
+                const file = new File([blob], `${field}.jpg`, { type: blob.type });
+                
+                const backendImageType = imageTypeMap[field];
+                if (backendImageType) {
+                  await TourService.uploadTourImage(newTour.id, backendImageType, file);
+                }
+              } catch (imageError) {
+                console.error(`Errore nel caricamento dell'immagine ${field}:`, imageError);
+              }
+            }
+          }
+        }
       }
       fetchTours();
       setShowForm(false);

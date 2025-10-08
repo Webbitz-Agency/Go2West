@@ -64,6 +64,29 @@ export class TourService {
     return await this.createTour(duplicatedData);
   }
 
+  // Carica un'immagine per un tour
+  static async uploadTourImage(tourId, imageType, imageFile) {
+    const formData = new FormData();
+    formData.append('image', imageFile);
+    
+    try {
+      const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.TOUR_IMAGE(tourId, imageType)}`, {
+        method: 'POST',
+        body: formData
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('API Image Upload Error:', error);
+      throw error;
+    }
+  }
+
   // Health check del backend
   static async healthCheck() {
     return await apiGet(API_CONFIG.ENDPOINTS.HEALTH);
