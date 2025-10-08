@@ -97,31 +97,8 @@ const TourDetails = () => {
       });
     }
     
-    // Aggiungi le immagini carousel se esistono
-    if (tour.carouselImage1) {
-      images.push({
-        src: TourService.getTourImageUrl(tour.id, 'carousel1'),
-        alt: `${tour.title} - Carousel 1`,
-        isMain: false
-      });
-    }
-    if (tour.carouselImage2) {
-      images.push({
-        src: TourService.getTourImageUrl(tour.id, 'carousel2'),
-        alt: `${tour.title} - Carousel 2`,
-        isMain: false
-      });
-    }
-    if (tour.carouselImage3) {
-      images.push({
-        src: TourService.getTourImageUrl(tour.id, 'carousel3'),
-        alt: `${tour.title} - Carousel 3`,
-        isMain: false
-      });
-    }
-    
-    // Aggiungi le immagini aggiuntive se esistono
-    for (let i = 1; i <= 5; i++) {
+    // Aggiungi le immagini image1,2,3 se esistono (per i caroselli)
+    for (let i = 1; i <= 3; i++) {
       if (tour[`image${i}`]) {
         images.push({
           src: TourService.getTourImageUrl(tour.id, `image${i}`),
@@ -139,7 +116,7 @@ const TourDetails = () => {
           images.push({
             src: `/images/${imageName}`,
             alt: `${tour.title} - Immagine ${index + 1}`,
-            isMain: false
+            isMain: index === 0
           });
         });
       }
@@ -152,27 +129,34 @@ const TourDetails = () => {
   const getHighlightImages = () => {
     if (!tour || !tour.included) return [];
     
-    // Usa le immagini della destinazione per i servizi inclusi
-    const destinationKey = tour.destination?.toLowerCase().replace(/\s+/g, '-');
-    const destinationImagesList = destinationKey && destinationImages[destinationKey] 
-      ? destinationImages[destinationKey] 
-      : ['usa.jpg', 'canada.jpg', 'mexico.jpg', 'sudamerica.jpg', 'caraibi.jpg'];
-    
-    return tour.included.map((service, index) => ({
-      id: index,
-      title: service,
-      image: `/images/${destinationImagesList[index % destinationImagesList.length]}`,
-      alt: `${service} - ${tour.title}`
-    }));
+    return tour.included.slice(0, 5).map((service, index) => {
+      const imageField = `image${index + 1}`;
+      let imageSrc = null;
+      
+      // Se esiste l'immagine caricata per questo servizio, usala
+      if (tour[imageField]) {
+        imageSrc = TourService.getTourImageUrl(tour.id, imageField);
+      }
+      
+      return {
+        id: index,
+        title: service,
+        image: imageSrc,
+        alt: `${service} - ${tour.title}`
+      };
+    });
   };
 
   // Effetto per lo scorrimento automatico del carosello
   useEffect(() => {
-    if (!tour || !tour.included || tour.included.length <= 1) return;
+    if (!tour || !tour.included) return;
+    
+    const highlightImages = getHighlightImages().filter(highlight => highlight.image);
+    if (highlightImages.length <= 1) return;
     
     const interval = setInterval(() => {
       setCurrentHighlightIndex((prevIndex) => 
-        (prevIndex + 1) % tour.included.length
+        (prevIndex + 1) % highlightImages.length
       );
     }, 4000); // Cambia immagine ogni 4 secondi
 
@@ -264,27 +248,31 @@ const TourDetails = () => {
             </div>
             
             {/* Right Column - Image Carousel */}
-            <div className="overview-carousel">
-              <div className="overview-carousel-container">
-                {tourImages.slice(0, 4).map((image, index) => (
-                  <div
-                    key={index}
-                    className={`overview-slide ${index === currentHighlightIndex % 4 ? 'active' : ''}`}
-                  >
-                    <img src={image.src} alt={image.alt} />
+            {tourImages.length > 0 && (
+              <div className="overview-carousel">
+                <div className="overview-carousel-container">
+                  {tourImages.map((image, index) => (
+                    <div
+                      key={index}
+                      className={`overview-slide ${index === currentHighlightIndex % tourImages.length ? 'active' : ''}`}
+                    >
+                      <img src={image.src} alt={image.alt} />
+                    </div>
+                  ))}
+                </div>
+                {tourImages.length > 1 && (
+                  <div className="overview-indicators">
+                    {tourImages.map((_, index) => (
+                      <button
+                        key={index}
+                        className={`overview-indicator ${index === currentHighlightIndex % tourImages.length ? 'active' : ''}`}
+                        onClick={() => setCurrentHighlightIndex(index)}
+                      />
+                    ))}
                   </div>
-                ))}
+                )}
               </div>
-              <div className="overview-indicators">
-                {tourImages.slice(0, 4).map((_, index) => (
-                  <button
-                    key={index}
-                    className={`overview-indicator ${index === currentHighlightIndex % 4 ? 'active' : ''}`}
-                    onClick={() => setCurrentHighlightIndex(index)}
-                  />
-                ))}
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </section>
@@ -337,7 +325,7 @@ const TourDetails = () => {
                 <h2 className="section-title">Servizi Inclusi</h2>
                 <div className="highlights-carousel">
                   <div className="carousel-container">
-                    {getHighlightImages().map((highlight, index) => (
+                    {getHighlightImages().filter(highlight => highlight.image).map((highlight, index) => (
                       <div
                         key={highlight.id}
                         className={`carousel-slide ${index === currentHighlightIndex ? 'active' : ''}`}
@@ -353,10 +341,10 @@ const TourDetails = () => {
                     ))}
                   </div>
                   
-                  {/* Indicatori */}
-                  {tour.included && tour.included.length > 1 && (
+                  {/* Indicatori - solo se ci sono immagini */}
+                  {getHighlightImages().filter(highlight => highlight.image).length > 1 && (
                     <div className="carousel-indicators">
-                      {tour.included.map((_, index) => (
+                      {getHighlightImages().filter(highlight => highlight.image).map((_, index) => (
                         <button
                           key={index}
                           className={`indicator ${index === currentHighlightIndex ? 'active' : ''}`}

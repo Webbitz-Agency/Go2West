@@ -58,6 +58,7 @@ export class TourService {
     const duplicatedData = {
       ...tour,
       title: `${tour.title} (Copia)`,
+      code: `${tour.code} (Copia)`,
       slug: `${tour.slug}-copia-${Date.now()}`
     };
     delete duplicatedData.id; // Rimuovi l'ID per creare un nuovo record

@@ -418,7 +418,22 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
       if (type === 'basic') {
         const field = path[0];
         const value = (field === 'duration' || field === 'minPrice') ? parseInt(editingValue) || 0 : editingValue;
-        setFormData(prev => ({ ...prev, [field]: value }));
+        setFormData(prev => {
+          const newData = { ...prev, [field]: value };
+          
+          // Se il campo modificato è 'title', aggiorna automaticamente anche il 'code'
+          if (field === 'title') {
+            // Genera un codice basato sul titolo: rimuovi spazi, caratteri speciali e converti in maiuscolo
+            const generatedCode = value
+              .toUpperCase()
+              .replace(/[^A-Z0-9\s]/g, '') // Rimuovi caratteri speciali
+              .replace(/\s+/g, '') // Rimuovi spazi
+              .substring(0, 20); // Limita a 20 caratteri
+            newData.code = generatedCode;
+          }
+          
+          return newData;
+        });
       } else if (type === 'day') {
         const [index, field] = path;
         updateDay(parseInt(index), field, editingValue);
