@@ -331,26 +331,32 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
       }
     };
     
+    // Per i caroselli: heroimage + image1,2,3
     addImageIfExists('heroImage', formData.title, true);
-    addImageIfExists('carouselImage1', `${formData.title} - Carousel 1`);
-    addImageIfExists('carouselImage2', `${formData.title} - Carousel 2`);
-    addImageIfExists('carouselImage3', `${formData.title} - Carousel 3`);
     addImageIfExists('image1', `${formData.title} - Immagine 1`);
     addImageIfExists('image2', `${formData.title} - Immagine 2`);
     addImageIfExists('image3', `${formData.title} - Immagine 3`);
-    addImageIfExists('image4', `${formData.title} - Immagine 4`);
-    addImageIfExists('image5', `${formData.title} - Immagine 5`);
     
     return images;
   };
 
   const getHighlightImages = () => {
-    return formData.included.map((service, index) => ({
-      id: index,
-      title: service,
-      image: null, // Non mostrare immagini placeholder
-      alt: `${service} - ${formData.title}`
-    }));
+    return formData.included.slice(0, 5).map((service, index) => {
+      const imageField = `image${index + 1}`;
+      let imageSrc = formData[imageField];
+      
+      // Se è un tour esistente e l'immagine non è un blob URL, usa l'URL del server
+      if (tour?.id && imageSrc && imageSrc !== 'exists' && !imageSrc.startsWith('blob:')) {
+        imageSrc = TourService.getTourImageUrl(tour.id, imageField);
+      }
+      
+      return {
+        id: index,
+        title: service,
+        image: (imageSrc && imageSrc !== 'exists') ? imageSrc : null,
+        alt: `${service} - ${formData.title}`
+      };
+    });
   };
 
   const getTourDates = () => {
@@ -510,6 +516,32 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
     return (
       <span className={`editable-text ${className}`} onClick={() => startEditing(field, value)} title="Clicca per modificare">
         {value || placeholder}
+      </span>
+    );
+  };
+
+  const EditableSelect = ({ field, value, className = '', options = [] }) => {
+    const isEditing = editingField === field;
+    if (isEditing) {
+      return (
+        <select
+          value={editingValue}
+          onChange={(e) => setEditingValue(e.target.value)}
+          onBlur={saveEdit}
+          className={`editable-input ${className}`}
+          autoFocus
+        >
+          {options.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+      );
+    }
+    return (
+      <span className={`editable-text ${className}`} onClick={() => startEditing(field, value)} title="Clicca per modificare">
+        {value || 'Seleziona...'}
       </span>
     );
   };
@@ -825,13 +857,29 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
                       <div className="info-item">
                         <span className="info-label">Destinazione:</span>
                         <span className="info-value">
-                          <EditableText field="basic.destination" value={formData.destination} className="info-value-text" placeholder="Destinazione" />
+                          <EditableSelect 
+                            field="basic.destination" 
+                            value={formData.destination} 
+                            className="info-value-text" 
+                            options={[
+                              'USA', 'Canada', 'Messico', 'America Centrale', 
+                              'Sud America', 'Caraibi', 'Polinesia Francese'
+                            ]}
+                          />
                         </span>
                       </div>
                       <div className="info-item">
                         <span className="info-label">Tipo:</span>
                         <span className="info-value">
-                          <EditableText field="basic.type" value={formData.type} className="info-value-text" placeholder="Tipo tour" />
+                          <EditableSelect 
+                            field="basic.type" 
+                            value={formData.type} 
+                            className="info-value-text" 
+                            options={[
+                              'city breaks', 'fly and drive', 'ride in harley', 
+                              'tour guidato', 'luxury travel', 'camper adventure', 'extra'
+                            ]}
+                          />
                         </span>
                       </div>
                       <div className="info-item">
@@ -870,66 +918,41 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
               <ImageUploader
                 imageType="heroImage"
                 currentImage={formData.heroImage}
-                label="Hero Image"
+                label="Copertina"
                 onImageUpload={handleImageUpload}
                 tour={tour}
               />
               <ImageUploader
                 imageType="carouselImage1"
                 currentImage={formData.carouselImage1}
-                label="Carousel Image 1"
+                label="Foto Carosello 1"
                 onImageUpload={handleImageUpload}
                 tour={tour}
               />
               <ImageUploader
                 imageType="carouselImage2"
                 currentImage={formData.carouselImage2}
-                label="Carousel Image 2"
+                label="Foto Carosello 2"
                 onImageUpload={handleImageUpload}
                 tour={tour}
               />
               <ImageUploader
                 imageType="carouselImage3"
                 currentImage={formData.carouselImage3}
-                label="Carousel Image 3"
+                label="Foto Carosello 3"
                 onImageUpload={handleImageUpload}
                 tour={tour}
               />
-              <ImageUploader
-                imageType="image1"
-                currentImage={formData.image1}
-                label="Immagine 1"
-                onImageUpload={handleImageUpload}
-                tour={tour}
-              />
-              <ImageUploader
-                imageType="image2"
-                currentImage={formData.image2}
-                label="Immagine 2"
-                onImageUpload={handleImageUpload}
-                tour={tour}
-              />
-              <ImageUploader
-                imageType="image3"
-                currentImage={formData.image3}
-                label="Immagine 3"
-                onImageUpload={handleImageUpload}
-                tour={tour}
-              />
-              <ImageUploader
-                imageType="image4"
-                currentImage={formData.image4}
-                label="Immagine 4"
-                onImageUpload={handleImageUpload}
-                tour={tour}
-              />
-              <ImageUploader
-                imageType="image5"
-                currentImage={formData.image5}
-                label="Immagine 5"
-                onImageUpload={handleImageUpload}
-                tour={tour}
-              />
+              {formData.included && formData.included.slice(0, 5).map((service, index) => (
+                <ImageUploader
+                  key={`image${index + 1}`}
+                  imageType={`image${index + 1}`}
+                  currentImage={formData[`image${index + 1}`]}
+                  label={`Immagine ${service}`}
+                  onImageUpload={handleImageUpload}
+                  tour={tour}
+                />
+              ))}
             </div>
           </section>
 
