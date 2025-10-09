@@ -153,7 +153,7 @@ const Admin = () => {
         <div className="login-container">
           <h2>Accesso Admin</h2>
           <form onSubmit={handleLogin}>
-            <div className="form-group">
+            <div className="form-group-access">
               <label>Username:</label>
               <input
                 type="text"
@@ -162,7 +162,7 @@ const Admin = () => {
                 required
               />
             </div>
-            <div className="form-group">
+            <div className="form-group-access">
               <label>Password:</label>
               <input
                 type="password"
@@ -175,6 +175,7 @@ const Admin = () => {
             <button type="submit">Accedi</button>
           </form>
         </div>
+        <button onClick={() => navigate('/')} className="indietro-sito" style={{ width: '100%', maxWidth: '420px', borderRadius: '50px' }}>Torna al sito</button>
       </div>
     );
   }

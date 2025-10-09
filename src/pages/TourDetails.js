@@ -41,13 +41,18 @@ const TourDetails = () => {
     setSelectedYear(year);
   };
 
-  // Dati estesi per ogni giorno dell'itinerario
-  const itineraryDetails = {
-    1: "Arrivo all'aeroporto JFK di New York. Trasferimento in hotel nel cuore di Manhattan. Tempo libero per esplorare i dintorni. Cena di benvenuto in un ristorante tipico newyorkese. Pernottamento a New York.",
-    2: "Colazione in hotel. Tour completo di New York: Times Square, Central Park, Fifth Avenue, Empire State Building, Statua della Libertà (vista da Battery Park), Wall Street, Ground Zero Memorial. Pranzo libero. Pomeriggio dedicato allo shopping su Broadway. Cena in Little Italy. Pernottamento a New York.",
-    3: "Prima colazione e partenza per Philadelphia. Visita della città: Independence Hall, Liberty Bell, Reading Terminal Market. Pranzo tipico con cheesesteak. Proseguimento per Washington DC. Arrivo e sistemazione in hotel. Cena libera. Pernottamento a Washington DC.",
-    4: "Colazione in hotel. Giornata dedicata alla visita di Washington DC: Casa Bianca (esterno), Campidoglio, Memoriale di Lincoln, Memoriale di Washington, Memoriale di Jefferson, Museo Smithsonian. Pranzo libero. Pomeriggio: Arlington Cemetery, Georgetown. Cena in un ristorante del centro. Pernottamento a Washington DC.",
-    5: "Prima colazione e partenza per Charleston, South Carolina. Viaggio panoramico attraverso la Virginia e la Carolina del Nord. Arrivo a Charleston nel pomeriggio. Visita del centro storico: Battery Park, Rainbow Row, Charleston City Market. Cena in un ristorante tipico del Sud. Pernottamento a Charleston."
+  // Funzione per ottenere gli anni disponibili dal tour
+  const getAvailableYears = () => {
+    if (!tour || !tour.dates) return [];
+    return Object.keys(tour.dates)
+      .map(year => parseInt(year))
+      .sort((a, b) => a - b);
+  };
+
+  // Funzione per ottenere il prezzo minimo del tour
+  const getMinPrice = () => {
+    if (!tour) return 0;
+    return tour.minPrice || 0;
   };
 
   // Funzione per gestire il toggle degli elementi dell'itinerario (solo uno aperto alla volta)
@@ -177,6 +182,16 @@ const TourDetails = () => {
           data = await TourService.getTourById(tourId);
         }
         setTour(data);
+        
+        // Imposta l'anno selezionato al primo anno disponibile
+        if (data && data.dates) {
+          const availableYears = Object.keys(data.dates)
+            .map(year => parseInt(year))
+            .sort((a, b) => a - b);
+          if (availableYears.length > 0) {
+            setSelectedYear(availableYears[0]);
+          }
+        }
       } catch (err) {
         setError('Errore nel caricamento del tour: ' + err.message);
       } finally {
@@ -242,8 +257,7 @@ const TourDetails = () => {
                 <h1 className="overview-title">{tour.title}</h1>
               </div>
               <div className="overview-description">
-                <p>{tour.description}</p>
-                <p>Un'esperienza di viaggio unica che ti porterà alla scoperta di destinazioni straordinarie, combinando comfort, avventura e autenticità. I nostri tour sono progettati per offrirti momenti indimenticabili e connessioni profonde con le culture locali.</p>
+                <p>{tour.description}</p>                
               </div>
             </div>
             
@@ -488,25 +502,23 @@ const TourDetails = () => {
               {/*<h2 className="dates-prices-title">Dates & Prices</h2>*/}
               
               {/* Year Selection */}
-              <div className="year-selection">
-                <button 
-                  className={`year-button ${selectedYear === 2025 ? 'active' : ''}`}
-                  onClick={() => handleYearChange(2025)}
-                  id="first-year"
-                >
-                  2025
-                </button>
-                <button 
-                  className={`year-button ${selectedYear === 2026 ? 'active' : ''}`}
-                  onClick={() => handleYearChange(2026)}
-                  id="second-year"
-                >
-                  2026
-                </button>
-              </div>
+              {getAvailableYears().length > 0 && (
+                <div className="year-selection">
+                  {getAvailableYears().map((year, index) => (
+                    <button 
+                      key={year}
+                      className={`year-button ${selectedYear === year ? 'active' : ''}`}
+                      onClick={() => handleYearChange(year)}
+                      id={index === 0 ? 'first-year' : index === getAvailableYears().length - 1 ? 'last-year' : `year-${year}`}
+                    >
+                      {year}
+                    </button>
+                  ))}
+                </div>
+              )}
               
               <p className="pricing-disclaimer">
-                A partire da €3500 per persona.
+                A partire da €{getMinPrice().toLocaleString()} per persona.
               </p>
               
               {/* Tour Dates List */}

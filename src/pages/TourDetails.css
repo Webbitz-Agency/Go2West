@@ -985,9 +985,15 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-#second-year{
+#last-year{
   border-top-right-radius: clamp(20px, 4vw, 25px);
   border-bottom-right-radius: clamp(20px, 4vw, 25px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Per pulsanti singoli (quando c'è solo un anno) */
+.year-button:only-child {
+  border-radius: clamp(20px, 4vw, 25px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
