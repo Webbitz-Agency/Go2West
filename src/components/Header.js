@@ -182,6 +182,11 @@ const Header = () => {
     }
   }, [location.pathname, location.hash]);
 
+  // Nascondi l'header nella pagina admin
+  if (location.pathname === '/admin') {
+    return null;
+  }
+
   return (
     <header className={`header ${isHeroVisible ? 'transparent' : 'solid'}`}>
       <div className="container-header">

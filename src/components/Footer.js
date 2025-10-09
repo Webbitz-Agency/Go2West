@@ -1,7 +1,15 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import './Footer.css';
 
 const Footer = () => {
+  const location = useLocation();
+  
+  // Nascondi il footer nella pagina admin
+  if (location.pathname === '/admin') {
+    return null;
+  }
+
   return (
     <footer className="footer">
       <div className="footer-container">

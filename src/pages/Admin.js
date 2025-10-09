@@ -70,6 +70,9 @@ const ImageUploader = ({ imageType, currentImage, label, onImageUpload, tour }) 
 
 // Componente per l'editor tour con preview in tempo reale
 const TourEditor = ({ tour, onSave, onCancel }) => {
+  const FORM_DATA_KEY = 'admin_form_data';
+  const FORM_STATE_KEY = 'admin_form_state';
+  
   const [formData, setFormData] = useState({
     title: tour?.title || 'Titolo del Tour',
     destination: tour?.destination || 'USA',
@@ -119,6 +122,70 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
   const [editingValue, setEditingValue] = useState('');
   const [hoveredImage, setHoveredImage] = useState(null);
   const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const [isAutoSaving, setIsAutoSaving] = useState(false);
+
+  // Funzioni per gestire il salvataggio automatico del form
+  const saveFormData = (data) => {
+    try {
+      localStorage.setItem(FORM_DATA_KEY, JSON.stringify(data));
+      localStorage.setItem(FORM_STATE_KEY, JSON.stringify({
+        isEditing: !!tour?.id,
+        tourId: tour?.id || null,
+        timestamp: Date.now()
+      }));
+    } catch (error) {
+      console.error('Errore nel salvataggio del form:', error);
+    }
+  };
+
+  const loadFormData = () => {
+    try {
+      const savedData = localStorage.getItem(FORM_DATA_KEY);
+      const savedState = localStorage.getItem(FORM_STATE_KEY);
+      
+      if (savedData && savedState) {
+        const parsedData = JSON.parse(savedData);
+        const parsedState = JSON.parse(savedState);
+        
+        // Controlla se i dati salvati sono per lo stesso tour o per un nuovo tour
+        const isSameTour = (!tour?.id && !parsedState.tourId) || (tour?.id === parsedState.tourId);
+        
+        if (isSameTour) {
+          return parsedData;
+        }
+      }
+    } catch (error) {
+      console.error('Errore nel caricamento del form:', error);
+    }
+    return null;
+  };
+
+  const clearFormData = () => {
+    localStorage.removeItem(FORM_DATA_KEY);
+    localStorage.removeItem(FORM_STATE_KEY);
+  };
+
+  // Carica i dati salvati all'inizializzazione
+  useEffect(() => {
+    const savedData = loadFormData();
+    if (savedData) {
+      setFormData(savedData);
+    }
+  }, []);
+
+  // Salva automaticamente i dati del form ogni volta che cambiano
+  useEffect(() => {
+    setIsAutoSaving(true);
+    const timeoutId = setTimeout(() => {
+      saveFormData(formData);
+      setIsAutoSaving(false);
+    }, 1000); // Salva dopo 1 secondo di inattività
+
+    return () => {
+      clearTimeout(timeoutId);
+      setIsAutoSaving(false);
+    };
+  }, [formData]);
 
   useEffect(() => {
     if (!tour?.id && formData.title) {
@@ -403,6 +470,9 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
       onSave(formData);
     }
     
+    // Pulisci i dati salvati dopo il salvataggio riuscito
+    clearFormData();
+    
     setShowSuccessToast(true);
     setTimeout(() => setShowSuccessToast(false), 3000);
   };
@@ -565,7 +635,31 @@ const TourEditor = ({ tour, onSave, onCancel }) => {
     <div className="tour-editor-overlay">
       <div className="tour-editor">
         <div className="editor-header">
-          <h2>{tour ? 'Modifica Tour' : 'Nuovo Tour'}</h2>
+          <div className="editor-header-left">
+            <h2>{tour ? 'Modifica Tour' : 'Nuovo Tour'}</h2>
+            {isAutoSaving && (
+              <div className="auto-save-indicator">
+                <i className="fa-solid fa-spinner fa-spin"></i>
+                <span>Salvataggio automatico...</span>
+              </div>
+            )}
+          </div>
+          <div className="editor-header-right">
+            <button
+              type="button"
+              onClick={() => {
+                if (window.confirm('Sei sicuro di voler cancellare tutti i dati salvati?')) {
+                  clearFormData();
+                  window.location.reload();
+                }
+              }}
+              className="clear-saved-data-btn"
+              title="Cancella dati salvati"
+            >
+              <i className="fa-solid fa-trash"></i>
+              Cancella Dati Salvati
+            </button>
+          </div>
         </div>
         <div className="editor-content">
           <div className="editable-tour-page">
@@ -998,6 +1092,8 @@ const Admin = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [tours, setTours] = useState([]);
+  const [filteredTours, setFilteredTours] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [editingTour, setEditingTour] = useState(null);
@@ -1006,11 +1102,61 @@ const Admin = () => {
   const ADMIN_USERNAME = 'ADMIN';
   const ADMIN_PASSWORD = 'admin123!';
 
+  // Chiavi per localStorage
+  const SESSION_KEY = 'admin_session';
+  const FORM_DATA_KEY = 'admin_form_data';
+  const FORM_STATE_KEY = 'admin_form_state';
+
+  // Funzioni per gestire la persistenza della sessione
+  const saveSession = () => {
+    const sessionData = {
+      isAuthenticated: true,
+      timestamp: Date.now(),
+      expiresAt: Date.now() + (24 * 60 * 60 * 1000) // 24 ore
+    };
+    localStorage.setItem(SESSION_KEY, JSON.stringify(sessionData));
+  };
+
+  const loadSession = () => {
+    try {
+      const sessionData = localStorage.getItem(SESSION_KEY);
+      if (sessionData) {
+        const parsed = JSON.parse(sessionData);
+        // Controlla se la sessione è ancora valida (non scaduta)
+        if (parsed.expiresAt > Date.now()) {
+          return parsed.isAuthenticated;
+        } else {
+          // Sessione scaduta, rimuovi
+          localStorage.removeItem(SESSION_KEY);
+        }
+      }
+    } catch (error) {
+      console.error('Errore nel caricamento della sessione:', error);
+    }
+    return false;
+  };
+
+  const clearSession = () => {
+    localStorage.removeItem(SESSION_KEY);
+    localStorage.removeItem(FORM_DATA_KEY);
+    localStorage.removeItem(FORM_STATE_KEY);
+  };
+
+  // Controlla la sessione al caricamento del componente
+  useEffect(() => {
+    const savedSession = loadSession();
+    if (savedSession) {
+      setIsAuthenticated(true);
+      fetchTours();
+    }
+  }, []);
+
   const handleLogin = (e) => {
     e.preventDefault();
     if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
       setIsAuthenticated(true);
       setError('');
+      saveSession(); // Salva la sessione
       fetchTours();
     } else {
       setError('Credenziali non valide');
@@ -1024,6 +1170,7 @@ const Admin = () => {
     setTours([]);
     setEditingTour(null);
     setShowForm(false);
+    clearSession(); // Pulisce la sessione e i dati del form
   };
 
   const fetchTours = async () => {
@@ -1031,11 +1178,39 @@ const Admin = () => {
     try {
       const data = await TourService.getAllTours();
       setTours(data);
+      setFilteredTours(data);
     } catch (err) {
       setError('Errore nel caricamento dei tour: ' + err.message);
     } finally {
       setLoading(false);
     }
+  };
+
+  // Funzione per filtrare i tour
+  const filterTours = (searchValue) => {
+    if (!searchValue.trim()) {
+      setFilteredTours(tours);
+      return;
+    }
+
+    const filtered = tours.filter(tour => {
+      const searchLower = searchValue.toLowerCase();
+      return (
+        tour.title?.toLowerCase().includes(searchLower) ||
+        tour.destination?.toLowerCase().includes(searchLower) ||
+        tour.type?.toLowerCase().includes(searchLower) ||
+        tour.code?.toLowerCase().includes(searchLower) ||
+        tour.minPrice?.toString().includes(searchLower)
+      );
+    });
+    setFilteredTours(filtered);
+  };
+
+  // Gestisce il cambio del termine di ricerca
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    filterTours(value);
   };
 
   const handleDeleteTour = async (tourId) => {
@@ -1144,20 +1319,44 @@ const Admin = () => {
     <div className="admin-panel">
       <div className="admin-header">
         <h1>Pannello di Amministrazione</h1>
+        <a href="/" className="indietro-sito">Torna al sito</a>
         <button onClick={handleLogout} className="logout-btn">Logout</button>
       </div>
 
       {error && <div className="error-message">{error}</div>}
 
       <div className="admin-content">
-        <div className="actions-bar">
+        <div className="search-bar">
+          <div className="search-input-container">
+            <i className="fa-solid fa-search search-icon"></i>
+            <input
+              type="text"
+              placeholder="Cerca per nome, destinazione, tipo, codice o prezzo..."
+              value={searchTerm}
+              onChange={handleSearchChange}
+              className="search-input"
+            />
+            {searchTerm && (
+              <button
+                onClick={() => {
+                  setSearchTerm('');
+                  setFilteredTours(tours);
+                }}
+                className="clear-search-btn"
+                title="Cancella ricerca"
+              >
+                <i className="fa-solid fa-times"></i>
+              </button>
+            )}
+          </div>
           <button
             onClick={() => {
               setEditingTour(null);
               setShowForm(true);
             }}
-            className="add-btn"
+            className="new-tour-btn"
           >
+            <i className="fa-solid fa-plus"></i>
             Nuovo Tour
           </button>
         </div>
@@ -1166,7 +1365,7 @@ const Admin = () => {
           <div className="loading">Caricamento...</div>
         ) : (
           <div className="tours-grid">
-            {tours.map((tour) => (
+            {filteredTours.map((tour) => (
               <div key={tour.id} className="tour-card">
                 <div className="tour-image">
                   {tour.heroImage ? (
