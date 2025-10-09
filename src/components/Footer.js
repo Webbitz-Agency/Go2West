@@ -5,8 +5,8 @@ import './Footer.css';
 const Footer = () => {
   const location = useLocation();
   
-  // Nascondi il footer nella pagina admin
-  if (location.pathname === '/admin') {
+  // Nascondi il footer nella pagina admin e tour-editor
+  if (location.pathname === '/admin' || location.pathname.startsWith('/admin/tour-editor')) {
     return null;
   }
 

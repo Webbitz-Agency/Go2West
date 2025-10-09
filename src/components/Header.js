@@ -182,8 +182,8 @@ const Header = () => {
     }
   }, [location.pathname, location.hash]);
 
-  // Nascondi l'header nella pagina admin
-  if (location.pathname === '/admin') {
+  // Nascondi l'header nella pagina admin e tour-editor
+  if (location.pathname === '/admin' || location.pathname.startsWith('/admin/tour-editor')) {
     return null;
   }
 
