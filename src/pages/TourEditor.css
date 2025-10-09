@@ -409,6 +409,34 @@
   color: #27ae60;
 }
 
+.min-price-input {
+  border: 2px solid transparent;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: inherit;
+  font-family: inherit;
+  background: white;
+  transition: all 0.2s ease;
+  width: 80px;
+  text-align: center;
+  font-weight: 600;
+  color: #27ae60;
+  direction: ltr;
+  text-align: left;
+  unicode-bidi: normal;
+}
+
+.min-price-input:hover {
+  border-color: #3498db;
+  background-color: #f8f9fa;
+}
+
+.min-price-input:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
 /* ===== TOUR SIDEBAR LAYOUT ===== */
 .tour-sidebar {
   position: sticky;
@@ -503,7 +531,7 @@
   opacity: 0.8;
 }
 
-.remove-price-btn, .remove-inclusion-btn, .remove-exclusion-btn {
+.remove-price-btn, .remove-inclusion-btn, .remove-exclusion-btn, .remove-date-btn {
   background: #e74c3c;
   color: white;
   border: none;
@@ -518,6 +546,108 @@
 
 .remove-price-btn:hover, .remove-inclusion-btn:hover, .remove-exclusion-btn:hover {
   background: #c0392b;
+}
+
+/* Year and Date Management Buttons */
+.add-year-btn {
+  background: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(39, 174, 96, 0.3);
+}
+
+.add-year-btn:hover {
+  background: #229954;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(39, 174, 96, 0.4);
+}
+
+.add-date-btn {
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.add-date-btn:hover {
+  background: #2980b9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+}
+
+.remove-year-btn {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.remove-year-btn:hover {
+  background: #c0392b;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+}
+
+/* Button sections styling */
+.add-date-section, .remove-year-section {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.add-date-section {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+.remove-year-section {
+  border-top: 1px solid #fecaca;
+  padding-top: 15px;
+  margin-top: 10px;
+}
+
+/* Combined button section for side-by-side layout */
+.add-date-section + .remove-year-section {
+  border-top: none;
+  padding-top: 0;
+  margin-top: 0;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+.add-date-section + .remove-year-section .remove-year-btn {
+  margin: 0;
 }
 
 .pricing-actions-cell {

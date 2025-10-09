@@ -945,6 +945,7 @@
   /*background: #f8f9fa;*/
   border-radius: clamp(6px, 1vw, 10px);
   padding: clamp(3px, 0.5vw, 6px);
+  align-items: center;
 }
 
 .year-button {

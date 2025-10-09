@@ -247,25 +247,37 @@ const TourEditor = () => {
   };
 
   const addDay = () => {
-    const newDayNumber = formData.program.days.length + 1;
-    setFormData(prev => ({
-      ...prev,
-      program: {
-        ...prev.program,
-        days: [...prev.program.days, {
-          day: newDayNumber,
-          title: `GIORNO ${newDayNumber} - Nuovo giorno`,
-          description: 'Descrizione del nuovo giorno...'
-        }]
-      }
-    }));
+    setFormData(prev => {
+      const newDayNumber = prev.program.days.length + 1;
+      return {
+        ...prev,
+        program: {
+          ...prev.program,
+          days: [...prev.program.days, {
+            day: newDayNumber,
+            title: `GIORNO ${newDayNumber} - Nuovo giorno`,
+            description: 'Descrizione del nuovo giorno...'
+          }]
+        }
+      };
+    });
   };
 
   const removeDay = (index) => {
-    setFormData(prev => ({
-      ...prev,
-      program: { ...prev.program, days: prev.program.days.filter((_, i) => i !== index) }
-    }));
+    setFormData(prev => {
+      const newDays = prev.program.days.filter((_, i) => i !== index);
+      
+      // Rinumera i giorni rimanenti
+      const renumberedDays = newDays.map((day, i) => ({
+        ...day,
+        day: i + 1
+      }));
+      
+      return {
+        ...prev,
+        program: { ...prev.program, days: renumberedDays }
+      };
+    });
   };
 
   const updateDay = (index, field, value) => {
@@ -273,7 +285,20 @@ const TourEditor = () => {
       ...prev,
       program: {
         ...prev.program,
-        days: prev.program.days.map((day, i) => i === index ? { ...day, [field]: value } : day)
+        days: prev.program.days.map((day, i) => {
+          if (i === index) {
+            const updatedDay = { ...day, [field]: value };
+            
+            // Se si sta modificando il titolo, aggiorna anche il numero del giorno nel titolo
+            if (field === 'title' && value.includes('GIORNO')) {
+              const dayNumber = day.day;
+              updatedDay.title = value.replace(/GIORNO \d+/, `GIORNO ${dayNumber}`);
+            }
+            
+            return updatedDay;
+          }
+          return day;
+        })
       }
     }));
   };
@@ -963,7 +988,7 @@ const TourEditor = () => {
                   </section>
                 )}
 
-                <section className="tour-section quote-request-section">
+                {/*<section className="tour-section quote-request-section">
                   <div className="quote-request-content">
                     <h2 className="quote-request-title">Interessato a questo viaggio?</h2>
                     <p className="quote-request-description">
@@ -973,7 +998,7 @@ const TourEditor = () => {
                       <i className="fa-solid fa-calculator"></i> Richiedi un Preventivo
                     </button>
                   </div>
-                </section>
+                </section>*/}
 
                 {formData.included && formData.included.length > 0 && (
                   <section className="tour-section">
@@ -1037,7 +1062,15 @@ const TourEditor = () => {
                     </button>
                   </div>
                   <p className="pricing-disclaimer">
-                    A partire da €<EditableNumber field="basic.minPrice" value={formData.minPrice} className="min-price-text" placeholder="0" /> per persona.
+                    A partire da €<input 
+                      type="number" 
+                      value={formData.minPrice || ''} 
+                      onChange={(e) => setFormData(prev => ({ ...prev, minPrice: parseInt(e.target.value) || 0 }))}
+                      className="min-price-input"
+                      placeholder="0"
+                      dir="ltr"
+                      style={{ direction: 'ltr', textAlign: 'left' }}
+                    /> per persona.
                   </p>
 
                   <div className="tour-dates-list">
@@ -1069,14 +1102,13 @@ const TourEditor = () => {
                       <button type="button" onClick={() => addDate(selectedYear)} className="add-date-btn">
                         + Aggiungi Data
                       </button>
-                    </div>
-                    {Object.keys(tourDates).length > 1 && (
-                      <div className="remove-year-section">
-                        <button type="button" onClick={() => removeYear(selectedYear)} className="remove-year-btn">
+                      {Object.keys(tourDates).length > 1 && (                     
+                      <button type="button" onClick={() => removeYear(selectedYear)} className="remove-year-btn">
                           - Rimuovi Anno {selectedYear}
                         </button>
-                      </div>
                     )}
+                    </div>
+                    
                   </div>
                 </div>
 
@@ -1120,7 +1152,15 @@ const TourEditor = () => {
                     <div className="info-item">
                       <span className="info-label">Prezzo Min:</span>
                       <span className="info-value">
-                        €<EditableNumber field="basic.minPrice" value={formData.minPrice} className="min-price-text" placeholder="0" />
+                        €<input 
+                          type="number" 
+                          value={formData.minPrice || ''} 
+                          onChange={(e) => setFormData(prev => ({ ...prev, minPrice: parseInt(e.target.value) || 0 }))}
+                          className="min-price-input"
+                          placeholder="0"
+                          dir="ltr"
+                          style={{ direction: 'ltr', textAlign: 'left' }}
+                        />
                       </span>
                     </div>
                     <div className="info-item">
