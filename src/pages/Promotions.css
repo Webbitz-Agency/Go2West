@@ -1,7 +1,7 @@
 /* Promotions Page Styles */
 .promotions-page {
   min-height: 100vh;
-  background: #f8f9fa;
+  background: #eefdff;
 }
 
 /* Hero Section - usando la stessa struttura delle destinazioni */
@@ -158,8 +158,9 @@
 
 .promotions-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(350px, 450px));
   gap: 30px;
+  justify-content: center;
 }
 
 .promotion-card {
@@ -194,39 +195,47 @@
   transform: scale(1.05);
 }
 
+/* Stili per le nuove posizioni delle label */
+.promotion-type-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .promotion-badge {
-  position: absolute;
-  top: 15px;
-  left: 15px;
   background: #dc3545;
   color: white;
-  padding: 6px 12px;
-  border-radius: 15px;
-  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 10px;
   font-weight: bold;
   text-transform: uppercase;
 }
 
-.promotion-price {
-  position: absolute;
-  bottom: 15px;
-  right: 15px;
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 10px 15px;
+/*.promotion-price {
+  background: #f8f9fa;
+  border: 2px solid #e9ecef;
+  color: #2c3e50;
+  padding: 8px 12px;
   border-radius: 20px;
   text-align: center;
-}
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 80px;
+  flex-shrink: 0;
+}*/
 
 .price-label {
-  display: block;
   font-size: 12px;
-  opacity: 0.8;
+  opacity: 0.7;
+  margin-right: 4px;
 }
 
 .price-amount {
-  font-size: 18px;
-  font-weight: bold;
+  font-size: 15px;
+  /*font-weight: light;*/
+  color: #007bff;
 }
 
 .promotion-card-content {
@@ -265,11 +274,19 @@
   margin-bottom: 20px;
 }
 
+.promotion-features-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 25px;
+  gap: 20px;
+}
+
 .promotion-features {
   display: flex;
   gap: 15px;
-  margin-bottom: 25px;
   flex-wrap: wrap;
+  flex: 1;
 }
 
 .feature {
@@ -504,16 +521,28 @@
   }
   
   .promotions-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 400px));
     gap: 20px;
+    justify-content: center;
   }
   
   .promotion-card-image {
     aspect-ratio: 1200 / 630; /* Mantiene la proporzione corretta anche su mobile */
   }
   
+  .promotion-features-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+  }
+  
   .promotion-features {
     gap: 10px;
+  }
+  
+  .promotion-price {
+    align-self: center;
+    min-width: auto;
   }
   
   .cta-buttons {

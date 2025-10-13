@@ -405,7 +405,7 @@
 
 .why-card {
   text-align: center;
-  padding: 40px 30px;
+  padding: 40px 30px !important;
   border-radius: 15px;
   background: white;
   transition: all 0.3s ease;

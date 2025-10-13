@@ -83,7 +83,9 @@ const Promotions = () => {
     { value: 'all', label: 'Tutte le promozioni' },
     { value: 'city-breaks', label: 'City Breaks' },
     { value: 'fly-drive', label: 'Fly & Drive' },
-    { value: 'safari', label: 'Safari' },
+    { value: 'ride', label: 'Ride in Harley' },
+    { value: 'luxury', label: 'Luxury Travel' },
+    { value: 'camper', label: 'Camper Adventures' },
     { value: 'tour', label: 'Tour Guidati' }
   ];
 
@@ -142,7 +144,7 @@ const Promotions = () => {
         <div className="hero-content">
           <div className="hero-text">
             <h1 className="destination-hero-title">Viaggi in Promozione</h1>
-            <p className="hero-subtitle">Scopri le nostre offerte speciali e last minute per vivere esperienze indimenticabili</p>
+            <p className="hero-subtitle">Scopri le nostre offerte speciali per vivere esperienze indimenticabili</p>
           </div>
         </div>
       </section>
@@ -177,18 +179,14 @@ const Promotions = () => {
                     alt={tour.title}
                     loading="lazy"
                   />
-                  <div className="promotion-badge">
-                    <span>PROMO</span>
-                  </div>
-                  <div className="promotion-price">
-                    <span className="price-label">da</span>
-                    <span className="price-amount">€{tour.price}</span>
-                  </div>
                 </div>
                 
                 <div className="promotion-card-content">
                   <div className="promotion-meta">
-                    <span className="promotion-type">{tour.type || 'Tour'}</span>
+                    <div className="promotion-type-container">
+                      <span className="promotion-type">{tour.type || 'Tour'}</span>
+                      <span className="promotion-badge">PROMO</span>
+                    </div>
                     <span className="promotion-duration">
                       {tour.duration ? `${tour.duration} giorni` : 'Durata variabile'}
                     </span>
@@ -203,18 +201,25 @@ const Promotions = () => {
                     }
                   </p>
                   
-                  <div className="promotion-features">
-                    <div className="feature">
-                      <i className="fa-solid fa-plane"></i>
-                      <span>Volo incluso</span>
+                  <div className="promotion-features-container">
+                    <div className="promotion-features">
+                      <div className="feature">
+                        <i className="fa-solid fa-plane"></i>
+                        <span>{tour.flightIncluded ? 'Volo incluso' : 'Volo non incluso'}</span>
+                      </div>
+                      <div className="feature">
+                        <i className="fa-solid fa-hotel"></i>
+                        <span>{tour.hotelCategory || 'Hotel 4*'}</span>
+                      </div>
+                      <div className="feature">
+                        <i className="fa-solid fa-utensils"></i>
+                        <span>{tour.mealPlan || 'Colazione'}</span>
+                      </div>
                     </div>
-                    <div className="feature">
-                      <i className="fa-solid fa-hotel"></i>
-                      <span>Hotel 4*</span>
-                    </div>
-                    <div className="feature">
-                      <i className="fa-solid fa-utensils"></i>
-                      <span>Colazione</span>
+                    
+                    <div className="promotion-price">
+                      <span className="price-label">da</span>
+                      <span className="price-amount">€{tour.price}</span>
                     </div>
                   </div>
                   
