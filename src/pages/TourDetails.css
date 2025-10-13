@@ -338,38 +338,42 @@
 }
 
 .itinerary-item {
-  background: #f8f9fa;
-  border-radius: 10px;
+  background: white;
+  border-radius: 12px;
   border-left: 4px solid #4facfe;
   overflow: hidden;
   transition: all 0.3s ease;
   position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e9ecef;
 }
+
+/*.itinerary-item:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}*/
 
 .itinerary-item-header {
   display: flex;
   gap: 20px;
   padding: 20px;
-  cursor: pointer;
   transition: all 0.3s ease;
   align-items: center;
-}
-
-.itinerary-item-header:hover {
-  background: #e9ecef;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
 }
 
 .day-badge {
-  background: #4facfe;
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
   color: white;
-  padding: 8px 12px;
-  border-radius: 6px;
-  font-weight: 500;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-weight: 600;
   font-size: 0.9rem;
-  min-width: 80px;
+  min-width: 85px;
   text-align: center;
   height: fit-content;
   flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(79, 172, 254, 0.3);
 }
 
 .day-content {
@@ -377,11 +381,12 @@
 }
 
 .day-title {
-  color: #2c3e50;
-  font-size: 1.1rem;
+  color: #000000;
+  font-size: 1.3rem;
   font-weight: 500;
   margin-bottom: 8px;
   line-height: 1.4;
+  font-family: 'DM Serif Text', serif;
 }
 
 .expand-icon {
@@ -406,18 +411,21 @@
 }
 
 .itinerary-details {
-  padding: 0 20px 20px 20px;
+  padding: 20px;
   background: #ffffff;
   border-top: 1px solid #e9ecef;
-  animation: slideDown 0.3s ease-out;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin: 0 10px 10px 10px;
+  border-radius: 8px;
+  border: 1px solid #f0f0f0;
 }
 
 .day-description {
   color: #555;
-  font-size: 0.95rem;
-  line-height: 1.6;
+  font-size: 1rem;
+  line-height: 1.7;
   margin: 0;
-  padding: 15px 0;
+  padding: 0;
 }
 
 @keyframes slideDown {
@@ -1128,12 +1136,20 @@
   transform: translateY(1px);
 }
 
+/* Tour Info Container */
+.tour-info-container {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 30px;
+  align-items: start;
+  margin-top: 20px;
+}
+
 /* Tour Info Grid (moved to main content) */
 .tour-info-grid {
   display: flex;
   flex-direction: column;
   gap: 0;
-  margin-top: 20px;
 }
 
 .tour-info-grid .info-item {
@@ -1158,6 +1174,52 @@
   color: #2c3e50;
   font-size: 0.95rem;
   font-weight: 500;
+}
+
+/* Tour PDF Section */
+.tour-pdf-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.pdf-download-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #dc3545, #c82333);
+  color: white;
+  border: none;
+  padding: 20px 15px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+  min-width: 120px;
+  text-decoration: none;
+}
+
+.pdf-download-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4);
+  background: linear-gradient(135deg, #c82333, #bd2130);
+}
+
+.pdf-download-btn:active {
+  transform: translateY(0);
+}
+
+.pdf-download-btn i {
+  font-size: 2rem;
+  margin-bottom: 5px;
+}
+
+.pdf-download-btn span {
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: center;
 }
 
 /* ===== STATI SPECIALI ===== */
@@ -1369,6 +1431,29 @@
   
   .form-row.three-columns {
     grid-template-columns: 1fr;
+  }
+  
+  /* Tour Info responsive */
+  .tour-info-container {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .tour-pdf-section {
+    justify-content: center;
+  }
+  
+  .pdf-download-btn {
+    min-width: 100px;
+    padding: 15px 12px;
+  }
+  
+  .pdf-download-btn i {
+    font-size: 1.5rem;
+  }
+  
+  .pdf-download-btn span {
+    font-size: 0.8rem;
   }
   
   .privacy-checkbox-container {

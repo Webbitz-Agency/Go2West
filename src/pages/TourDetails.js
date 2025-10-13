@@ -12,7 +12,6 @@ const TourDetails = () => {
   const [hoveredImage, setHoveredImage] = useState(null);
   const [currentHighlightIndex, setCurrentHighlightIndex] = useState(0);
   const [selectedYear, setSelectedYear] = useState(2025);
-  const [expandedDays, setExpandedDays] = useState(new Set());
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState('');
 
@@ -55,16 +54,6 @@ const TourDetails = () => {
     return tour.minPrice || 0;
   };
 
-  // Funzione per gestire il toggle degli elementi dell'itinerario (solo uno aperto alla volta)
-  const toggleDayExpansion = (dayNumber) => {
-    setExpandedDays(prev => {
-      const newSet = new Set();
-      if (!prev.has(dayNumber)) {
-        newSet.add(dayNumber); // Apri solo il giorno cliccato, chiudi tutti gli altri
-      }
-      return newSet;
-    });
-  };
 
   // Funzione per aprire il modale di prenotazione
   const handleBookingClick = (dateRange) => {
@@ -295,6 +284,38 @@ const TourDetails = () => {
         <div className="tour-content">
           {/* Left Column - Main Content */}
           <div className="tour-main">
+            {/* Tour Information */}
+            <section className="tour-section">
+              <h2 className="section-title">Informazioni Tour</h2>
+              <div className="tour-info-container">
+                <div className="tour-info-grid">
+                  <div className="info-item">
+                    <span className="info-label">Destinazione:</span>
+                    <span className="info-value">{tour.destination}</span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">Tipo:</span>
+                    <span className="info-value">{tour.type}</span>
+                  </div>
+                  {tour.duration && (
+                    <div className="info-item">
+                      <span className="info-label">Durata:</span>
+                      <span className="info-value">{tour.duration} giorni</span>
+                    </div>
+                  )}
+                  <div className="info-item">
+                    <span className="info-label">Codice:</span>
+                    <span className="info-value">{tour.code}</span>
+                  </div>
+                </div>
+                <div className="tour-pdf-section">
+                  <button className="pdf-download-btn" onClick={() => window.open(tour.pdfUrl || '#', '_blank')}>
+                    <i className="fa-solid fa-file-pdf"></i>
+                    <span>Scarica PDF</span>
+                  </button>
+                </div>
+              </div>
+            </section>
             {/* Itinerary */}
             {tour.program && tour.program.days && tour.program.days.length > 0 && (
               <section className="tour-section">
@@ -302,30 +323,19 @@ const TourDetails = () => {
                 <div className="itinerary-list">
                   {tour.program.days.map((day, index) => {
                     const dayNumber = day.day;
-                    const isExpanded = expandedDays.has(dayNumber);
                     return (
                       <div key={index} className="itinerary-item">
-                        <div 
-                          className="itinerary-item-header"
-                          onClick={() => toggleDayExpansion(dayNumber)}
-                        >
+                        <div className="itinerary-item-header">
                           <div className="day-badge">Giorno {dayNumber}</div>
                           <div className="day-content">
                             <h3 className="day-title">{day.title}</h3>
                           </div>
-                          <div className="expand-icon">
-                            <span className={`chevron ${isExpanded ? 'expanded' : ''}`}>
-                            <i class="fa-solid fa-angle-right"></i>
-                            </span>
-                          </div>
                         </div>
-                        {isExpanded && (
-                          <div className="itinerary-details">
-                            <p className="day-description">
-                              {day.description || "Descrizione dettagliata non disponibile per questo giorno."}
-                            </p>
-                          </div>
-                        )}
+                        <div className="itinerary-details">
+                          <p className="day-description">
+                            {day.description || "Descrizione dettagliata non disponibile per questo giorno."}
+                          </p>
+                        </div>
                       </div>
                     );
                   })}
@@ -443,31 +453,6 @@ const TourDetails = () => {
               </section>
             )}
 
-            {/* Tour Information */}
-            <section className="tour-section">
-              <h2 className="section-title">Informazioni Tour</h2>
-              <div className="tour-info-grid">
-                <div className="info-item">
-                  <span className="info-label">Destinazione:</span>
-                  <span className="info-value">{tour.destination}</span>
-                </div>
-                <div className="info-item">
-                  <span className="info-label">Tipo:</span>
-                  <span className="info-value">{tour.type}</span>
-                </div>
-                {tour.duration && (
-                  <div className="info-item">
-                    <span className="info-label">Durata:</span>
-                    <span className="info-value">{tour.duration} giorni</span>
-                  </div>
-                )}
-                <div className="info-item">
-                  <span className="info-label">Codice:</span>
-                  <span className="info-value">{tour.code}</span>
-                </div>
-              </div>
-            </section>
-
             {/* Notes */}
             {tour.notes && (
               <section className="tour-section">
@@ -533,7 +518,7 @@ const TourDetails = () => {
                       className="availability-button"
                       onClick={() => handleBookingClick(dateInfo.dateRange)}
                     >
-                      PRENOTA
+                      RICHIEDI
                     </button>
                   </div>
                 ))}

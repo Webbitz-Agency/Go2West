@@ -17,7 +17,9 @@ const Footer = () => {
           <div className="footer-section">
             <h4>Chi Siamo</h4>
             <p><a href="/about" className="footer-link">About Us</a></p>
-            <p style={{marginBottom: "10px"}}><strong>Sede legale:</strong> EKO Ltd srl - via Damiano Chiesa 7D - 58100 Grosseto (GR) ITALIA</p>
+            <p style={{marginBottom: "10px"}}><strong>Sede legale:</strong> EKO Ltd srl 
+            <br />via Damiano Chiesa 7D 
+            <br />58100 Grosseto ITALIA</p>
           </div>
           
           <div className="footer-section">
