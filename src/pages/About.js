@@ -70,7 +70,7 @@ const About = () => {
         <div className="about-hero-content">
           <h1 className="about-hero-title">Chi Siamo</h1>
           <p className="about-hero-subtitle">
-            La passione per i viaggi che ci guida ogni giorno nel creare esperienze indimenticabili
+            Benvenuti in Go2West – La vostra porta d'accesso a esperienze di viaggio indimenticabili
           </p>
         </div>
       </section>
@@ -80,7 +80,7 @@ const About = () => {
         <div className="story-container">
           <div className="story-image">
             <div className="story-carousel">
-              <div className="carousel-container">
+              <div className="story-carousel-container">
                 {storyImages.map((image, index) => (
                   <img
                     key={index}
@@ -106,62 +106,25 @@ const About = () => {
           <div className="story-content">
             <h2 className="story-title">La Nostra Storia</h2>
             <p className="story-text">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+              Noi di Go2West crediamo che viaggiare sia molto più che visitare posti nuovi: significa creare ricordi
+              indelebili, entrare in contatto con culture diverse e vivere il mondo in modi che ispirano e trasformano.
             </p>
             <p className="story-text">
-              Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-              Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+              Estensione dell'esperienza 25ennale di EKO Srl, siamo un team appassionato di esperti di viaggi provenienti
+              da compagnie aeree (United Airlines, KLM) e business e leisure travel (American Express, Thomas Cook)
+              dedicato alla creazione di viaggi eccezionali per ogni tipo di viaggiatore.
             </p>
             <p className="story-text">
-              Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, 
-              totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+              Dal tour organizzato e guidato con partenze garantite, alle esperienze più autentiche in ranch, glamping, 
+              campi tendati, dai soggiorni culturali in città ai tour in auto indipendenti per circuiti all'insegna della 
+              natura, delle visite di musei, di percorsi enogastronomici alla scoperta delle ricchezze naturali e culturali 
+              del Nord, Centro e Sud America, progettiamo tour personalizzati che riflettono i tuoi interessi, i tuoi ritmi 
+              e i tuoi sogni di viaggio.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Sezione I Nostri Valori */}
-      <section className="values-section">
-        <div className="values-header reveal-on-scroll">
-          <h2>I Nostri Valori</h2>
-          <p>I principi che guidano ogni nostra scelta e ogni viaggio che proponiamo</p>
-        </div>
-        
-        <div className="values-grid">
-          <div className="value-card reveal-on-scroll">
-            <div className="value-icon">
-              <i className="fa-solid fa-heart"></i>
-            </div>
-            <h3>Passione</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-          </div>
-          
-          <div className="value-card reveal-on-scroll">
-            <div className="value-icon">
-              <i className="fa-solid fa-star"></i>
-            </div>
-            <h3>Qualità</h3>
-            <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-          </div>
-          
-          <div className="value-card reveal-on-scroll">
-            <div className="value-icon">
-              <i className="fa-solid fa-handshake"></i>
-            </div>
-            <h3>Fiducia</h3>
-            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-          </div>
-          
-          <div className="value-card reveal-on-scroll">
-            <div className="value-icon">
-              <i className="fa-solid fa-compass"></i>
-            </div>
-            <h3>Esperienza</h3>
-            <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-          </div>
-        </div>
-      </section>
 
       {/* Sezione Il Nostro Team */}
       <section className="team-section">
@@ -169,12 +132,14 @@ const About = () => {
           <div className="team-content">
             <h2 className="team-title">Il Nostro Team</h2>
             <p className="team-text">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+              Il nostro team è composto da esperti di viaggi con un background consolidato nelle principali compagnie aeree 
+              e nel settore del business e leisure travel. Proveniamo da realtà come United Airlines, KLM, American Express 
+              e Thomas Cook, portando con noi un'esperienza unica nel settore.
             </p>
             <p className="team-text">
-              Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-              Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+              La nostra passione per i viaggi e la profonda conoscenza delle destinazioni che proponiamo ci permettono 
+              di creare esperienze autentiche e memorabili. Ogni membro del team condivide la stessa visione: trasformare 
+              ogni viaggio in un'avventura straordinaria che superi le aspettative dei nostri clienti.
             </p>
             <div className="team-stats">
               <div className="stat-item">
@@ -182,19 +147,19 @@ const About = () => {
                 <p>Anni di Esperienza</p>
               </div>
               <div className="stat-item">
-                <h3>150+</h3>
-                <p>Destinazioni</p>
+                <h3>3</h3>
+                <p>Continenti</p>
               </div>
               <div className="stat-item">
-                <h3>1000+</h3>
-                <p>Clienti Soddisfatti</p>
+                <h3>100%</h3>
+                <p>Dedizione</p>
               </div>
             </div>
           </div>
           
           <div className="team-image">
             <div className="team-carousel">
-              <div className="carousel-container">
+              <div className="team-carousel-container">
                 {teamImages.map((image, index) => (
                   <img
                     key={index}
@@ -224,7 +189,7 @@ const About = () => {
         <div className="mission-container">
           <div className="mission-image">
             <div className="mission-carousel">
-              <div className="carousel-container">
+              <div className="mission-carousel-container">
                 {valuesImages.map((image, index) => (
                   <img
                     key={index}
@@ -250,12 +215,13 @@ const About = () => {
           <div className="mission-content">
             <h2 className="mission-title">La Nostra Missione</h2>
             <p className="mission-text">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+              Ispirare e mettere in contatto le persone attraverso i viaggi, offrendo esperienze arricchenti, sicure e
+              significative che vanno oltre l'ordinario.
             </p>
             <p className="mission-text">
-              Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-              Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+              Ogni viaggio che progettiamo è pensato per creare connessioni autentiche: con le culture locali, con la natura, 
+              con se stessi. Crediamo che viaggiare sia un'opportunità di crescita personale e di scoperta, e ci impegniamo 
+              ogni giorno per rendere questa esperienza accessibile e memorabile per tutti i nostri clienti.
             </p>
             <div className="mission-cta">
               <button className="mission-btn" onClick={scrollToContact}>
@@ -278,32 +244,32 @@ const About = () => {
             <div className="why-icon">
               <i className="fa-solid fa-map-marked-alt"></i>
             </div>
-            <h3>Itinerari Personalizzati</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            <h3>Competenza Locale</h3>
+            <p>Grazie alla profonda conoscenza di ogni destinazione che offriamo, le nostre guide e il nostro staff locale vi assicurano di scoprire le gemme nascoste e le esperienze autentiche.</p>
           </div>
           
           <div className="why-card reveal-on-scroll">
             <div className="why-icon">
-              <i className="fa-solid fa-shield-alt"></i>
+              <i className="fa-solid fa-cogs"></i>
             </div>
-            <h3>Assistenza 24/7</h3>
-            <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <h3>Itinerari Su Misura</h3>
+            <p>Non esistono due viaggiatori uguali. Ecco perché creiamo tour personalizzati in base alle vostre preferenze e al vostro stile di viaggio.</p>
           </div>
           
           <div className="why-card reveal-on-scroll">
             <div className="why-icon">
-              <i className="fa-solid fa-dollar-sign"></i>
+              <i className="fa-solid fa-calendar-check"></i>
             </div>
-            <h3>Prezzi Trasparenti</h3>
-            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+            <h3>Pianificazione Perfetta</h3>
+            <p>Dalla tua prima richiesta al tuo ritorno a casa, ci occupiamo di ogni dettaglio, così tu puoi concentrarti sul goderti il viaggio.</p>
           </div>
           
           <div className="why-card reveal-on-scroll">
             <div className="why-icon">
-              <i className="fa-solid fa-users"></i>
+              <i className="fa-solid fa-leaf"></i>
             </div>
-            <h3>Guide Esperte</h3>
-            <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <h3>Viaggi Responsabili</h3>
+            <p>Abbiamo molto a cuore le comunità che visitiamo e l'ambiente che esploriamo. I nostri tour sono progettati per essere rispettosi e sostenibili.</p>
           </div>
         </div>
       </section>
