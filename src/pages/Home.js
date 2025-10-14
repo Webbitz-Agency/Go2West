@@ -4,6 +4,7 @@ import DynamicTours from '../components/DynamicTours';
 import MasonryTours from '../components/MasonryTours';
 import PromotionCarousel from '../components/PromotionCarousel';
 import { destinations, destinationImages } from '../config/destinations';
+import TourService from '../services/TourService';
 import './Home.css';
 
 const Home = () => {
@@ -49,6 +50,9 @@ const Home = () => {
   const [currentSudAmericaImage, setCurrentSudAmericaImage] = useState(0);
   const [currentCaraibiImage, setCurrentCaraibiImage] = useState(0);
   const [currentPolinesiaImage, setCurrentPolinesiaImage] = useState(0);
+
+  // Stato per i conteggi dei tour per destinazione
+  const [toursCount, setToursCount] = useState({});
 
   const openTravelModal = (travelTypeSlug) => {
     setPendingTravelType(travelTypeSlug);
@@ -200,6 +204,25 @@ const Home = () => {
     };
   }, [polynesiaImages.length]);
 
+  // Recupera il numero reale di tour per ogni destinazione
+  useEffect(() => {
+    const fetchToursCount = async () => {
+      const counts = {};
+      for (const dest of destinations) {
+        try {
+          const tours = await TourService.getToursByDestination(dest.country);
+          counts[dest.country] = Array.isArray(tours) ? tours.length : 0;
+        } catch (error) {
+          console.warn(`Errore nel recupero dei tour per ${dest.country}:`, error);
+          counts[dest.country] = 0; // Fallback a 0 in caso di errore
+        }
+      }
+      setToursCount(counts);
+    };
+
+    fetchToursCount();
+  }, []);
+
   // Destinazioni ora dalla configurazione condivisa - aggiungiamo le proprietà mancanti
   const destinationsWithImages = destinations.map(dest => ({
     ...dest,
@@ -210,7 +233,8 @@ const Home = () => {
                dest.name === 'America Centrale' ? 'Avventura tra giungle e oceani' :
                dest.name === 'Sud America' ? 'Grandi spazi e culture intense' :
                dest.name === 'Caraibi' ? 'Isole da sogno e acque turchesi' :
-               'Paradiso tropicale esclusivo'
+               'Paradiso tropicale esclusivo',
+    toursCount: toursCount[dest.country] || 0
   }));
 
   // Auto-scroll per i caroselli delle destinazioni showcase (metodo Polinesia)
@@ -746,7 +770,10 @@ const Home = () => {
             <div className="destination-content-new" style={{ background: '#eefdff' }}>
               <div className="destination-text-content">
                 <h3 className="destination-title-new">{destinations[0].name}</h3>
-                <p className="destination-description-new">{destinations[0].description}</p>
+                <span className="destination-badge-popular">La più gettonata</span>
+                <div className="destination-description-container">
+                  <p className="destination-description-new">{destinations[0].description}</p>
+                </div>
                 <div className="destination-short-new">
                   {/*<span>{destinations[0].shortDesc}</span>*/}
                 </div>
@@ -755,6 +782,7 @@ const Home = () => {
                 <a href={`/destination/${destinations[0].country}`} className="explore-btn">
                   Scopri di più
                 </a>
+                <span className="destination-tours-count">{destinationsWithImages[0].toursCount} viaggi disponibili</span>
               </div>
             </div>
           </div>
@@ -787,7 +815,9 @@ const Home = () => {
                 <div className="destination-content-new" style={{ background: '#eefdff' }}>
                   <div className="destination-text-content">
                     <h3 className="destination-title-new">{destination.name}</h3>
-                    <p className="destination-description-new">{destination.description}</p>
+                    <div className="destination-description-container">
+                      <p className="destination-description-new">{destination.description}</p>
+                    </div>
                     <div className="destination-short-new">
                       {/*<span>{destination.shortDesc}</span>*/}
                     </div>
@@ -796,6 +826,7 @@ const Home = () => {
                     <a href={`/destination/${destination.country}`} className="explore-btn">
                       Scopri di più
                     </a>
+                    <span className="destination-tours-count">{destination.toursCount} viaggi disponibili</span>
                   </div>
                 </div>
               </div>
