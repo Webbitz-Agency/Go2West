@@ -303,13 +303,13 @@ const Header = () => {
           {/* Menu principale */}
           {mobileMenuLevel === 'main' && (
             <>
-              <Link to="/" className={`mobile-nav-link ${isActiveSection('home') ? 'active' : ''}`} onClick={closeMobileMenu}>
+              <a href="/" className={`mobile-nav-link ${isActiveSection('home') ? 'active' : ''}`} onClick={closeMobileMenu}>
                 Home
-              </Link>
+              </a>
               
-              <Link to="/promozioni" className={`mobile-nav-link ${location.pathname === '/promozioni' ? 'active' : ''}`} onClick={closeMobileMenu}>
+              <a href="/promozioni" className={`mobile-nav-link ${location.pathname === '/promozioni' ? 'active' : ''}`} onClick={closeMobileMenu}>
                 Promozioni
-              </Link>
+              </a>
                          
               
               <button className="mobile-nav-link" onClick={goToDestinations}>
@@ -321,9 +321,9 @@ const Header = () => {
                 Viaggi
                 <span className="mobile-arrow"><i className="fa-solid fa-angle-right"></i></span>
               </button>
-              <Link to="/about" className={`mobile-nav-link ${isActiveSection('about') ? 'active' : ''}`} onClick={closeMobileMenu}>
+              <a href="/about" className={`mobile-nav-link ${isActiveSection('about') ? 'active' : ''}`} onClick={closeMobileMenu}>
                 About
-              </Link>
+              </a>
               {/* CTA nel menu mobile principale */}
               <button className="mobile-cta" onClick={scrollToContact}>
                 Richiedi Info

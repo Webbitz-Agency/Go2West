@@ -133,7 +133,7 @@
   padding: 80px 0 40px;
   position: relative;
   z-index: 20;
-  background: linear-gradient(135deg, #f8f9ff 0%, #fff8f8 100%);
+  background: white;
 }
 
 .destination-intro {
@@ -155,7 +155,7 @@
 
 /* Tours Section */
 .tours-section {
-  padding: 60px 0;
+  padding: 60px 30px;
   position: relative;
   z-index: 20;
   /*background: linear-gradient(135deg, #f8f9ff 0%, #fff8f8 100%);*/
@@ -166,7 +166,8 @@
 .container-tours {
   /*max-width: 1400px;*/
   margin: 0 auto;
-  padding: 0 30px;
+  /*padding: 0 30px;*/
+  background: #eefdff;
 }
 
 /* Responsive per la sezione tours e introduzione */

@@ -4,21 +4,15 @@ import './About.css';
 
 const About = () => {
   // Stati per i caroselli delle immagini
-  const [currentTeamImage, setCurrentTeamImage] = useState(0);
   const [currentStoryImage, setCurrentStoryImage] = useState(0);
   const [currentValuesImage, setCurrentValuesImage] = useState(0);
 
   // Array delle immagini per i caroselli
-  const teamImages = ['ny1.jpg', 'ny2.jpg', 'ny3.jpg', 'ny4.jpg'];
   const storyImages = ['drive.jpg', 'drive2.jpg', 'drive3.jpg', 'drive4.jpg'];
   const valuesImages = ['city.jpg', 'tour.jpg', 'ride_in_harley.jpg', 'kenya.jpg'];
 
   // Auto-scroll per i caroselli
   useEffect(() => {
-    const teamInterval = setInterval(() => {
-      setCurrentTeamImage(prev => (prev + 1) % teamImages.length);
-    }, 4000);
-
     const storyInterval = setInterval(() => {
       setCurrentStoryImage(prev => (prev + 1) % storyImages.length);
     }, 5000);
@@ -28,11 +22,10 @@ const About = () => {
     }, 6000);
 
     return () => {
-      clearInterval(teamInterval);
       clearInterval(storyInterval);
       clearInterval(valuesInterval);
     };
-  }, [teamImages.length, storyImages.length, valuesImages.length]);
+  }, [storyImages.length, valuesImages.length]);
 
   // IntersectionObserver per reveal delle sezioni
   useEffect(() => {
@@ -105,22 +98,22 @@ const About = () => {
           
           <div className="story-content">
             <h2 className="story-title">La Nostra Storia</h2>
-            <p className="story-text">
-              Noi di Go2West crediamo che viaggiare sia molto più che visitare posti nuovi: significa creare ricordi
-              indelebili, entrare in contatto con culture diverse e vivere il mondo in modi che ispirano e trasformano.
-            </p>
-            <p className="story-text">
-              Estensione dell'esperienza 25ennale di EKO Srl, siamo un team appassionato di esperti di viaggi provenienti
-              da compagnie aeree (United Airlines, KLM) e business e leisure travel (American Express, Thomas Cook)
-              dedicato alla creazione di viaggi eccezionali per ogni tipo di viaggiatore.
-            </p>
-            <p className="story-text">
-              Dal tour organizzato e guidato con partenze garantite, alle esperienze più autentiche in ranch, glamping, 
-              campi tendati, dai soggiorni culturali in città ai tour in auto indipendenti per circuiti all'insegna della 
-              natura, delle visite di musei, di percorsi enogastronomici alla scoperta delle ricchezze naturali e culturali 
-              del Nord, Centro e Sud America, progettiamo tour personalizzati che riflettono i tuoi interessi, i tuoi ritmi 
-              e i tuoi sogni di viaggio.
-            </p>
+             <p className="story-text">
+               Noi di <strong>Go2West</strong> crediamo che viaggiare sia molto più che visitare posti nuovi: significa creare <strong>ricordi
+               indelebili</strong>, entrare in contatto con culture diverse e vivere il mondo in modi che ispirano e trasformano.
+             </p>
+             <p className="story-text">
+               Estensione dell'<strong>esperienza 25ennale</strong> di <strong>EKO Srl</strong>, siamo un team appassionato di esperti di viaggi provenienti
+               da compagnie aeree (United Airlines, KLM) e business e leisure travel (American Express, Thomas Cook)
+               dedicato alla creazione di <strong>viaggi eccezionali</strong> per ogni tipo di viaggiatore.
+             </p>
+             <p className="story-text">
+               Dal tour organizzato e guidato con <strong>partenze garantite</strong>, alle esperienze più <strong>autentiche</strong> in ranch, glamping, 
+               campi tendati, dai soggiorni culturali in città ai tour in auto indipendenti per circuiti all'insegna della 
+               natura, delle visite di musei, di percorsi enogastronomici alla scoperta delle ricchezze naturali e culturali 
+               del <strong>Nord, Centro e Sud America</strong>, progettiamo <strong>tour personalizzati</strong> che riflettono i tuoi interessi, i tuoi ritmi 
+               e i tuoi sogni di viaggio.
+             </p>
           </div>
         </div>
       </section>
@@ -132,52 +125,48 @@ const About = () => {
           <div className="team-content">
             <h2 className="team-title">Il Nostro Team</h2>
             <p className="team-text">
-              Il nostro team è composto da esperti di viaggi con un background consolidato nelle principali compagnie aeree 
-              e nel settore del business e leisure travel. Proveniamo da realtà come United Airlines, KLM, American Express 
-              e Thomas Cook, portando con noi un'esperienza unica nel settore.
+              Il nostro team è composto da <strong>esperti di viaggi</strong> con un background consolidato nelle principali compagnie aeree 
+              e nel settore del business e leisure travel. Proveniamo da realtà come <strong>United Airlines</strong>, <strong>KLM</strong>, <strong>American Express </strong> 
+              e <strong>Thomas Cook</strong>, portando con noi un'esperienza unica nel settore.
             </p>
             <p className="team-text">
-              La nostra passione per i viaggi e la profonda conoscenza delle destinazioni che proponiamo ci permettono 
-              di creare esperienze autentiche e memorabili. Ogni membro del team condivide la stessa visione: trasformare 
-              ogni viaggio in un'avventura straordinaria che superi le aspettative dei nostri clienti.
+              La nostra <strong>passione per i viaggi</strong> e la profonda conoscenza delle destinazioni che proponiamo ci permettono 
+              di creare esperienze <strong>autentiche e memorabili</strong>. Ogni membro del team condivide la stessa visione: trasformare 
+              ogni viaggio in <strong>un'avventura straordinaria</strong> che superi le aspettative dei nostri clienti.
             </p>
-            <div className="team-stats">
-              <div className="stat-item">
-                <h3>25+</h3>
-                <p>Anni di Esperienza</p>
-              </div>
-              <div className="stat-item">
-                <h3>3</h3>
-                <p>Continenti</p>
-              </div>
-              <div className="stat-item">
-                <h3>100%</h3>
-                <p>Dedizione</p>
-              </div>
-            </div>
           </div>
           
-          <div className="team-image">
-            <div className="team-carousel">
-              <div className="team-carousel-container">
-                {teamImages.map((image, index) => (
-                  <img
-                    key={index}
-                    src={`/images/${image}`}
-                    alt={`Il nostro team - Immagine ${index + 1}`}
-                    className={`carousel-image ${index === currentTeamImage ? 'active' : ''}`}
-                  />
-                ))}
+          <div className="team-stats-container">
+            <div className="team-stat-item experience-stat">
+              <div className="stat-icon">
+                <i className="fa-solid fa-calendar-days"></i>
               </div>
-              
-              <div className="carousel-indicators">
-                {teamImages.map((_, index) => (
-                  <span
-                    key={index}
-                    className={`indicator ${index === currentTeamImage ? 'active' : ''}`}
-                    onClick={() => setCurrentTeamImage(index)}
-                  />
-                ))}
+              <div className="stat-content">
+                <h3>25+</h3>
+                <h4>Anni di Esperienza</h4>
+                <p>Un quarto di secolo dedicato alla creazione di viaggi indimenticabili, con competenze acquisite nelle principali compagnie aeree e nel settore del business travel.</p>
+              </div>
+            </div>
+            
+            <div className="team-stat-item continents-stat">
+              <div className="stat-icon">
+                <i className="fa-solid fa-globe-americas"></i>
+              </div>
+              <div className="stat-content">
+                <h3>3</h3>
+                <h4>Continenti</h4>
+                <p>Nord America, Centro America e Sud America: la nostra specializzazione copre tutto il continente americano con tour personalizzati e esperienze autentiche.</p>
+              </div>
+            </div>
+            
+            <div className="team-stat-item dedication-stat">
+              <div className="stat-icon">
+                <i className="fa-solid fa-heart"></i>
+              </div>
+              <div className="stat-content">
+                <h3>100%</h3>
+                <h4>Dedizione</h4>
+                <p>Ogni viaggio è progettato con passione e attenzione ai dettagli, garantendo esperienze che superano le aspettative e creano ricordi indelebili.</p>
               </div>
             </div>
           </div>
@@ -214,15 +203,15 @@ const About = () => {
           
           <div className="mission-content">
             <h2 className="mission-title">La Nostra Missione</h2>
-            <p className="mission-text">
-              Ispirare e mettere in contatto le persone attraverso i viaggi, offrendo esperienze arricchenti, sicure e
-              significative che vanno oltre l'ordinario.
-            </p>
-            <p className="mission-text">
-              Ogni viaggio che progettiamo è pensato per creare connessioni autentiche: con le culture locali, con la natura, 
-              con se stessi. Crediamo che viaggiare sia un'opportunità di crescita personale e di scoperta, e ci impegniamo 
-              ogni giorno per rendere questa esperienza accessibile e memorabile per tutti i nostri clienti.
-            </p>
+             <p className="mission-text">
+               <strong>Ispirare</strong> e mettere in contatto le persone attraverso i viaggi, offrendo <strong>esperienze arricchenti</strong>, sicure e
+               significative che vanno oltre l'ordinario.
+             </p>
+             <p className="mission-text">
+               Ogni viaggio che progettiamo è pensato per creare <strong>connessioni autentiche</strong>: con le culture locali, con la natura, 
+               con se stessi. Crediamo che viaggiare sia un'opportunità di crescita personale e di scoperta, e ci impegniamo 
+               ogni giorno per rendere questa <strong>esperienza accessibile e memorabile</strong> per tutti i nostri clienti.
+             </p>
             <div className="mission-cta">
               <button className="mission-btn" onClick={scrollToContact}>
                 Contattaci
@@ -244,24 +233,24 @@ const About = () => {
             <div className="why-icon">
               <i className="fa-solid fa-map-marked-alt"></i>
             </div>
-            <h3>Competenza Locale</h3>
-            <p>Grazie alla profonda conoscenza di ogni destinazione che offriamo, le nostre guide e il nostro staff locale vi assicurano di scoprire le gemme nascoste e le esperienze autentiche.</p>
+             <h3>Competenza Locale</h3>
+             <p>Grazie alla profonda conoscenza di ogni destinazione che offriamo, le nostre guide e il nostro staff locale vi assicurano di scoprire le gemme nascoste e le esperienze autentiche.</p>
           </div>
           
           <div className="why-card reveal-on-scroll">
             <div className="why-icon">
               <i className="fa-solid fa-cogs"></i>
             </div>
-            <h3>Itinerari Su Misura</h3>
-            <p>Non esistono due viaggiatori uguali. Ecco perché creiamo tour personalizzati in base alle vostre preferenze e al vostro stile di viaggio.</p>
+             <h3>Itinerari Su Misura</h3>
+             <p>Non esistono due viaggiatori uguali. Ecco perché creiamo tour personalizzati in base alle vostre preferenze e al vostro stile di viaggio.</p>
           </div>
           
           <div className="why-card reveal-on-scroll">
             <div className="why-icon">
               <i className="fa-solid fa-calendar-check"></i>
             </div>
-            <h3>Pianificazione Perfetta</h3>
-            <p>Dalla tua prima richiesta al tuo ritorno a casa, ci occupiamo di ogni dettaglio, così tu puoi concentrarti sul goderti il viaggio.</p>
+             <h3>Pianificazione Perfetta</h3>
+             <p>Dalla tua prima richiesta al tuo ritorno a casa, ci occupiamo di ogni dettaglio, così tu puoi concentrarti sul goderti il viaggio.</p>
           </div>
           
           <div className="why-card reveal-on-scroll">

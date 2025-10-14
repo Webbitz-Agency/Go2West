@@ -175,7 +175,7 @@ const Admin = () => {
             <button type="submit">Accedi</button>
           </form>
         </div>
-        <button onClick={() => navigate('/')} className="indietro-sito" style={{ width: '100%', maxWidth: '420px', borderRadius: '50px' }}>Torna al sito</button>
+        <button onClick={() => navigate('/')} className="indietro-sito" style={{ width: '100%', maxWidth: '420px', borderRadius: '50px', margin:0 }}>Torna al sito</button>
       </div>
     );
   }

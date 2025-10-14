@@ -85,6 +85,7 @@ const TourEditor = () => {
     duration: tour?.duration || 7,
     minPrice: tour?.minPrice || 1000,
     notes: tour?.notes || '',
+    pdfUrl: tour?.pdfUrl || '',
     heroImage: tour?.heroImage ? 'exists' : '',
     carouselImage1: tour?.carouselImage1 ? 'exists' : '',
     carouselImage2: tour?.carouselImage2 ? 'exists' : '',
@@ -118,7 +119,6 @@ const TourEditor = () => {
     }
   });
 
-  const [expandedDays, setExpandedDays] = useState(new Set());
   const [currentHighlightIndex, setCurrentHighlightIndex] = useState(0);
   const [selectedYear, setSelectedYear] = useState(2025);
   const [editingField, setEditingField] = useState(null);
@@ -409,15 +409,6 @@ const TourEditor = () => {
     }
   };
 
-  const toggleDayExpansion = (dayNumber) => {
-    setExpandedDays(prev => {
-      const newSet = new Set();
-      if (!prev.has(dayNumber)) {
-        newSet.add(dayNumber);
-      }
-      return newSet;
-    });
-  };
 
   const getTourImages = () => {
     const images = [];
@@ -867,40 +858,137 @@ const TourEditor = () => {
           <div className="container-details">
             <div className="tour-content">
               <div className="tour-main">
+              <section className="tour-section">
+                  <h2 className="section-title">Informazioni Tour</h2>
+                  <div className="tour-info-container">
+                    <div className="tour-info-grid">
+                      <div className="info-item">
+                        <span className="info-label">Destinazione:</span>
+                        <span className="info-value">
+                          <EditableSelect 
+                            field="basic.destination" 
+                            value={formData.destination} 
+                            className="info-value-text" 
+                            options={[
+                              'USA', 'Canada', 'Messico', 'America Centrale', 
+                              'Sud America', 'Caraibi', 'Polinesia Francese'
+                            ]}
+                          />
+                        </span>
+                      </div>
+                      <div className="info-item">
+                        <span className="info-label">Tipo:</span>
+                        <span className="info-value">
+                          <EditableSelect 
+                            field="basic.type" 
+                            value={formData.type} 
+                            className="info-value-text" 
+                            options={[
+                              'city breaks', 'fly and drive', 'ride in harley', 
+                              'tour guidato', 'luxury travel', 'camper adventure', 'extra'
+                            ]}
+                          />
+                        </span>
+                      </div>
+                      <div className="info-item">
+                        <span className="info-label">Durata:</span>
+                        <span className="info-value">
+                          <EditableNumber field="basic.duration" value={formData.duration} className="info-value-text" placeholder="0" /> giorni
+                        </span>
+                      </div>
+                      <div className="info-item">
+                        <span className="info-label">Prezzo Min:</span>
+                        <span className="info-value">
+                          €<input 
+                            type="number" 
+                            value={formData.minPrice || ''} 
+                            onChange={(e) => setFormData(prev => ({ ...prev, minPrice: parseInt(e.target.value) || 0 }))}
+                            className="min-price-input"
+                            placeholder="0"
+                            dir="ltr"
+                            style={{ direction: 'ltr', textAlign: 'left' }}
+                          />
+                        </span>
+                      </div>
+                      <div className="info-item">
+                        <span className="info-label">Codice:</span>
+                        <span className="info-value readonly">{formData.code}</span>
+                      </div>
+                    </div>
+                    <div className="tour-pdf-section">
+                      <div className="pdf-upload-container">
+                        <label className="pdf-upload-label">PDF del Tour</label>
+                        <div className="pdf-upload-area">
+                          {formData.pdfUrl ? (
+                            <div className="current-pdf">
+                              <i className="fa-solid fa-file-pdf"></i>
+                              <span>PDF caricato</span>
+                              <button
+                                type="button"
+                                onClick={() => document.getElementById('pdf-upload').click()}
+                                className="change-pdf-btn"
+                              >
+                                Cambia PDF
+                              </button>
+                            </div>
+                          ) : (
+                            <div className="no-pdf">
+                              <button
+                                type="button"
+                                onClick={() => document.getElementById('pdf-upload').click()}
+                                className="upload-pdf-btn"
+                              >
+                                <i className="fa-solid fa-upload"></i>
+                                Carica PDF
+                              </button>
+                            </div>
+                          )}
+                          <input
+                            id="pdf-upload"
+                            type="file"
+                            accept=".pdf"
+                            style={{ display: 'none' }}
+                            onChange={(e) => {
+                              if (e.target.files[0]) {
+                                // Qui puoi gestire l'upload del PDF
+                                const file = e.target.files[0];
+                                const fileUrl = URL.createObjectURL(file);
+                                setFormData(prev => ({ ...prev, pdfUrl: fileUrl }));
+                              }
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
                 {formData.program && formData.program.days && formData.program.days.length > 0 && (
                   <section className="tour-section">
                     <h2 className="section-title">Itinerario</h2>
                     <div className="itinerary-list">
                       {formData.program.days.map((day, index) => {
                         const dayNumber = day.day;
-                        const isExpanded = expandedDays.has(dayNumber);
                         return (
                           <div key={index} className="itinerary-item">
-                            <div className="itinerary-item-header" onClick={() => toggleDayExpansion(dayNumber)}>
+                            <div className="itinerary-item-header">
                               <div className="day-badge">Giorno {dayNumber}</div>
                               <div className="day-content">
                                 <h3 className="day-title">
                                   <EditableText field={`day.${index}.title`} value={day.title} className="day-title-text" placeholder="Titolo del giorno" />
                                 </h3>
                               </div>
-                              <div className="expand-icon">
-                                <span className={`chevron ${isExpanded ? 'expanded' : ''}`}>
-                                  <i className="fa-solid fa-angle-right"></i>
-                                </span>
+                              <div className="day-actions">
+                                <button type="button" onClick={() => removeDay(index)} className="remove-day-btn">
+                                  ×
+                                </button>
                               </div>
                             </div>
-                            {isExpanded && (
-                              <div className="itinerary-details">
-                                <div className="day-description">
-                                  <EditableTextarea field={`day.${index}.description`} value={day.description} className="day-description-text" placeholder="Descrizione dettagliata del giorno..." />
-                                </div>
-                                <div className="day-actions">
-                                  <button type="button" onClick={() => removeDay(index)} className="remove-day-btn">
-                                    Rimuovi Giorno
-                                  </button>
-                                </div>
+                            <div className="itinerary-details">
+                              <div className="day-description">
+                                <EditableTextarea field={`day.${index}.description`} value={day.description} className="day-description-text" placeholder="Descrizione dettagliata del giorno..." />
                               </div>
-                            )}
+                            </div>
                           </div>
                         );
                       })}
@@ -1043,6 +1131,13 @@ const TourEditor = () => {
                     </div>
                   </section>
                 )}
+                
+                <section className="tour-section">
+                  <h2 className="section-title">Note</h2>
+                  <div className="notes-content">
+                    <EditableTextarea field="basic.notes" value={formData.notes} className="notes-text" placeholder="Note aggiuntive..." />
+                  </div>
+                </section>
               </div>
 
               <div className="tour-sidebar">
@@ -1112,70 +1207,6 @@ const TourEditor = () => {
                   </div>
                 </div>
 
-                <section className="tour-section">
-                  <h2 className="section-title">Informazioni Tour</h2>
-                  <div className="tour-info-grid">
-                    <div className="info-item">
-                      <span className="info-label">Destinazione:</span>
-                      <span className="info-value">
-                        <EditableSelect 
-                          field="basic.destination" 
-                          value={formData.destination} 
-                          className="info-value-text" 
-                          options={[
-                            'USA', 'Canada', 'Messico', 'America Centrale', 
-                            'Sud America', 'Caraibi', 'Polinesia Francese'
-                          ]}
-                        />
-                      </span>
-                    </div>
-                    <div className="info-item">
-                      <span className="info-label">Tipo:</span>
-                      <span className="info-value">
-                        <EditableSelect 
-                          field="basic.type" 
-                          value={formData.type} 
-                          className="info-value-text" 
-                          options={[
-                            'city breaks', 'fly and drive', 'ride in harley', 
-                            'tour guidato', 'luxury travel', 'camper adventure', 'extra'
-                          ]}
-                        />
-                      </span>
-                    </div>
-                    <div className="info-item">
-                      <span className="info-label">Durata:</span>
-                      <span className="info-value">
-                        <EditableNumber field="basic.duration" value={formData.duration} className="info-value-text" placeholder="0" /> giorni
-                      </span>
-                    </div>
-                    <div className="info-item">
-                      <span className="info-label">Prezzo Min:</span>
-                      <span className="info-value">
-                        €<input 
-                          type="number" 
-                          value={formData.minPrice || ''} 
-                          onChange={(e) => setFormData(prev => ({ ...prev, minPrice: parseInt(e.target.value) || 0 }))}
-                          className="min-price-input"
-                          placeholder="0"
-                          dir="ltr"
-                          style={{ direction: 'ltr', textAlign: 'left' }}
-                        />
-                      </span>
-                    </div>
-                    <div className="info-item">
-                      <span className="info-label">Codice:</span>
-                      <span className="info-value readonly">{formData.code}</span>
-                    </div>
-                  </div>
-                </section>
-
-                <section className="tour-section">
-                  <h2 className="section-title">Note</h2>
-                  <div className="notes-content">
-                    <EditableTextarea field="basic.notes" value={formData.notes} className="notes-text" placeholder="Note aggiuntive..." />
-                  </div>
-                </section>
               </div>
             </div>
           </div>

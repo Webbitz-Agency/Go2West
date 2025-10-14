@@ -506,7 +506,7 @@
   text-align: center;
 }
 
-.remove-day-btn, .add-day-btn, .add-price-btn, 
+.add-day-btn, .add-price-btn, 
 .add-inclusion-btn, .add-exclusion-btn {
   background: #3498db;
   color: white;
@@ -518,15 +518,11 @@
   margin: 0 5px;
 }
 
-.remove-day-btn {
-  background: #e74c3c;
-}
-
 .add-day-btn, .add-price-btn, .add-inclusion-btn, .add-exclusion-btn {
   background: #27ae60;
 }
 
-.remove-day-btn:hover, .add-day-btn:hover, .add-price-btn:hover, 
+.add-day-btn:hover, .add-price-btn:hover, 
 .add-inclusion-btn:hover, .add-exclusion-btn:hover {
   opacity: 0.8;
 }
@@ -904,5 +900,216 @@
   .save-section {
     margin: 10px;
     padding: 20px;
+  }
+}
+
+/* Tour Info Container - Layout a 2 colonne */
+.tour-info-container {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 30px;
+  align-items: start;
+  margin-top: 20px;
+}
+
+/* Tour Info Grid (moved to main content) */
+.tour-info-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.tour-info-grid .info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7.5px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.tour-info-grid .info-item:last-child {
+  border-bottom: none;
+}
+
+.tour-info-grid .info-label {
+  color: #666;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.tour-info-grid .info-value {
+  color: #2c3e50;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.tour-info-grid .info-value.readonly {
+  color: #6c757d;
+  font-style: italic;
+}
+
+/* Tour PDF Section */
+.tour-pdf-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.pdf-upload-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+}
+
+.pdf-upload-label {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.pdf-upload-area {
+  width: 100%;
+  max-width: 150px;
+}
+
+.current-pdf,
+.no-pdf {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 15px;
+  border: 2px dashed #e9ecef;
+  border-radius: 12px;
+  background: #f8f9fa;
+  transition: all 0.3s ease;
+}
+
+.current-pdf:hover,
+.no-pdf:hover {
+  border-color: #4facfe;
+  background: #f0f8ff;
+}
+
+.current-pdf i {
+  font-size: 2rem;
+  color: #dc3545;
+  margin-bottom: 5px;
+}
+
+.current-pdf span {
+  font-size: 0.8rem;
+  color: #666;
+  text-align: center;
+}
+
+.change-pdf-btn,
+.upload-pdf-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: linear-gradient(135deg, #dc3545, #c82333);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.change-pdf-btn:hover,
+.upload-pdf-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(79, 172, 254, 0.3);
+}
+
+.upload-pdf-btn i {
+  font-size: 0.9rem;
+}
+
+/* Itinerary Header Layout */
+.itinerary-item-header {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  transition: all 0.3s ease;
+  align-items: center;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  position: relative;
+}
+
+.day-actions {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.remove-day-btn {
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(220, 53, 69, 0.3);
+}
+
+.remove-day-btn:hover {
+  background: #c82333;
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(220, 53, 69, 0.4);
+}
+
+/* Responsive per la sezione PDF */
+@media (max-width: 992px) {
+  .tour-info-container {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .tour-pdf-section {
+    justify-content: center;
+  }
+  
+  .pdf-upload-area {
+    max-width: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .pdf-upload-area {
+    max-width: 150px;
+  }
+  
+  .current-pdf,
+  .no-pdf {
+    padding: 15px 12px;
+  }
+  
+  .current-pdf i {
+    font-size: 1.5rem;
+  }
+  
+  .change-pdf-btn,
+  .upload-pdf-btn {
+    padding: 6px 10px;
+    font-size: 0.75rem;
   }
 }

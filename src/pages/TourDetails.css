@@ -12,6 +12,27 @@
   background: #e0f7fa;
 }
 
+/* Responsive per i container */
+@media (max-width: 768px) {
+  .container-details {
+    padding: 0 15px;
+  }
+  
+  .container-overview {
+    padding: 0 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container-details {
+    padding: 0 10px;
+  }
+  
+  .container-overview {
+    padding: 0 10px;
+  }
+}
+
 /* ===== HERO SECTION - HORIZONTAL GALLERY ===== */
 .tour-hero-masonry {
   position: relative;
@@ -215,10 +236,36 @@
   padding: 60px 0;
 }
 
+/* Responsive per il layout principale */
+@media (max-width: 992px) {
+  .tour-content {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    padding: 40px 0;
+  }
+  
+  .tour-sidebar {
+    order: -1; /* Metti la sidebar sopra il contenuto principale su tablet */
+  }
+}
+
 .tour-main {
   display: flex;
   flex-direction: column;
   gap: 40px;
+}
+
+/* Responsive per tour-main */
+@media (max-width: 768px) {
+  .tour-main {
+    gap: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tour-main {
+    gap: 25px;
+  }
 }
 
 /* Sezioni del tour */
@@ -230,6 +277,21 @@
   border: 1px solid #e9ecef;
 }
 
+/* Responsive per le sezioni del tour */
+@media (max-width: 768px) {
+  .tour-section {
+    padding: 20px;
+    border-radius: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tour-section {
+    padding: 15px;
+    border-radius: 6px;
+  }
+}
+
 .section-title {
   font-size: 1.4rem;
   font-weight: 500;
@@ -238,6 +300,23 @@
   font-family: 'DM Serif Text', serif;
   padding-bottom: 15px;
   border-bottom: 2px solid #4facfe;
+}
+
+/* Responsive per i titoli delle sezioni */
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-title {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+  }
 }
 
 /* Highlights Carousel */
@@ -459,6 +538,50 @@
   padding: 10px 0;
 }
 
+/* Responsive per inclusions e exclusions */
+@media (max-width: 768px) {
+  .inclusions-list,
+  .exclusions-list {
+    gap: 10px;
+  }
+  
+  .inclusion-item,
+  .exclusion-item {
+    gap: 10px;
+    padding: 8px 0;
+  }
+  
+  .inclusion-text,
+  .exclusion-text {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .inclusions-list,
+  .exclusions-list {
+    gap: 8px;
+  }
+  
+  .inclusion-item,
+  .exclusion-item {
+    gap: 8px;
+    padding: 6px 0;
+  }
+  
+  .inclusion-icon,
+  .exclusion-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 0.65rem;
+  }
+  
+  .inclusion-text,
+  .exclusion-text {
+    font-size: 0.85rem;
+  }
+}
+
 .inclusion-icon {
   background: #28a745;
   color: white;
@@ -499,6 +622,21 @@
   color: #666;
   line-height: 1.6;
   font-size: 0.95rem;
+}
+
+/* Responsive per le note */
+@media (max-width: 768px) {
+  .notes-content {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+}
+
+@media (max-width: 480px) {
+  .notes-content {
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
 }
 
 /* Pricing Table */
@@ -871,6 +1009,45 @@
   gap: 20px;
 }
 
+/* Responsive per la sezione Quote Request */
+@media (max-width: 768px) {
+  .quote-request-content {
+    gap: 15px;
+  }
+  
+  .quote-request-title {
+    font-size: 1.5rem;
+  }
+  
+  .quote-request-description {
+    font-size: 1rem;
+  }
+  
+  .quote-request-btn {
+    padding: 12px 25px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .quote-request-content {
+    gap: 12px;
+  }
+  
+  .quote-request-title {
+    font-size: 1.3rem;
+  }
+  
+  .quote-request-description {
+    font-size: 0.95rem;
+  }
+  
+  .quote-request-btn {
+    padding: 10px 20px;
+    font-size: 0.95rem;
+  }
+}
+
 .quote-request-title {
   margin: 0;
   color: #2c3e50;
@@ -1145,6 +1322,18 @@
   margin-top: 20px;
 }
 
+/* Responsive per Tour Info Container */
+@media (max-width: 992px) {
+  .tour-info-container {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .tour-pdf-section {
+    justify-content: center;
+  }
+}
+
 /* Tour Info Grid (moved to main content) */
 .tour-info-grid {
   display: flex;
@@ -1174,6 +1363,29 @@
   color: #2c3e50;
   font-size: 0.95rem;
   font-weight: 500;
+}
+
+/* Responsive per Tour Info Grid */
+@media (max-width: 768px) {
+  .tour-info-grid .info-item {
+    padding: 6px 0;
+  }
+  
+  .tour-info-grid .info-label,
+  .tour-info-grid .info-value {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .tour-info-grid .info-item {
+    padding: 5px 0;
+  }
+  
+  .tour-info-grid .info-label,
+  .tour-info-grid .info-value {
+    font-size: 0.85rem;
+  }
 }
 
 /* Tour PDF Section */
@@ -1220,6 +1432,37 @@
   font-size: 0.9rem;
   font-weight: 600;
   text-align: center;
+}
+
+/* Responsive per PDF Download Button */
+@media (max-width: 768px) {
+  .pdf-download-btn {
+    min-width: 100px;
+    padding: 15px 12px;
+  }
+  
+  .pdf-download-btn i {
+    font-size: 1.5rem;
+  }
+  
+  .pdf-download-btn span {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .pdf-download-btn {
+    min-width: 80px;
+    padding: 12px 10px;
+  }
+  
+  .pdf-download-btn i {
+    font-size: 1.2rem;
+  }
+  
+  .pdf-download-btn span {
+    font-size: 0.75rem;
+  }
 }
 
 /* ===== STATI SPECIALI ===== */

@@ -833,7 +833,7 @@ const Home = () => {
       <section id="all-destinations" className="suggestions-section">
         <div className="section-header">
           <h2>Viaggi in promozione</h2>
-          <p>Offerte last minute per esperienze indimenticabili</p>
+          <p>Offerte speciali per esperienze indimenticabili</p>
         </div>
 
         <div className="suggestions-container">
