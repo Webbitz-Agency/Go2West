@@ -344,7 +344,7 @@
   color: #495057;
 }
 
-/* CTA delle promozioni */
+/* CTA delle promozioni - stili generali (non per promotions-cta) */
 .cta-buttons {
   display: flex;
   gap: 20px;
@@ -431,21 +431,22 @@
   box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
 }
 
-/* Promotions Hero */
-.promotions-cta{
+/* Promotions CTA Section */
+.promotions-cta {
   position: relative;
-  width: 100%;
   height: 50vh;
-  /*min-height: 500px;*/
-  max-height: 700px;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
-  margin: 0;
-  background: #2c3e50;
+  margin-top: 40px;
 }
 
 .promotions-cta-hero-image {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   z-index: 1;
@@ -455,33 +456,91 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: brightness(0.7);
+}
+
+.promotions-cta::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.5) 100%);
+  z-index: 2;
 }
 
 .promotions-cta-hero-content {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 0 40px;
-  gap: 20px;
+  position: relative;
   z-index: 3;
+  text-align: center;
+  color: white;
+  max-width: 800px;
+  padding: 0 20px;
 }
 
 .promotions-cta-hero-content h2 {
-  color: #fff;
-  font-size: 2.5rem;
-  margin-bottom: 20px;
+  font-size: clamp(1.8rem, 4.5vw, 2.8rem);
   font-weight: 500;
+  margin-bottom: 15px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  line-height: 1.2;
 }
 
 .promotions-cta-hero-content p {
+  font-size: clamp(0.95rem, 2.2vw, 1.15rem);
+  line-height: 1.5;
+  opacity: 0.95;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  margin-bottom: 30px;
+  max-width: 550px;
+  margin-left: auto;
+  margin-right: auto;
   color: #fff;
-  font-size: 1.2rem;
-  margin-bottom: 40px;
+}
+
+.promotions-cta .cta-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.promotions-cta .cta-btn {
+  padding: 12px 25px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-block;
+  cursor: pointer;
+  border: none;
+  min-width: 180px;
+}
+
+.promotions-cta .cta-btn.primary {
+  background: linear-gradient(135deg, #4A90E2, #357ABD);
+  color: white;
+  box-shadow: 0 10px 30px rgba(74, 144, 226, 0.3);
+}
+
+.promotions-cta .cta-btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 40px rgba(74, 144, 226, 0.4);
+}
+
+.promotions-cta .cta-btn.secondary {
+  background: transparent;
+  color: white;
+  border: 2px solid white;
+  box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+}
+
+.promotions-cta .cta-btn.secondary:hover {
+  background: white;
+  color: #2c3e50;
+  transform: translateY(-2px);
+  box-shadow: 0 15px 40px rgba(255, 255, 255, 0.2);
 }
 
 @keyframes slideInUp {
@@ -555,6 +614,41 @@
     max-width: 300px;
   }
   
+  /* Promotions CTA responsive */
+  .promotions-cta {
+    height: 45vh;
+    min-height: 350px;
+    margin-top: 30px;
+  }
+  
+  .promotions-cta-hero-content {
+    padding: 0 15px;
+  }
+  
+  .promotions-cta-hero-content h2 {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    margin-bottom: 12px;
+  }
+  
+  .promotions-cta-hero-content p {
+    font-size: clamp(0.85rem, 2vw, 1rem);
+    margin-bottom: 25px;
+  }
+  
+  .promotions-cta .cta-buttons {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .promotions-cta .cta-btn {
+    padding: 10px 22px;
+    font-size: 0.95rem;
+    min-width: 160px;
+    width: 100%;
+    max-width: 220px;
+  }
+  
   .back-to-top {
     bottom: 20px;
     right: 20px;
@@ -593,5 +687,37 @@
   
   .promotion-title {
     font-size: 1.2rem;
+  }
+  
+  /* Promotions CTA responsive per schermi piccoli */
+  .promotions-cta {
+    height: 40vh;
+    min-height: 300px;
+    margin-top: 25px;
+  }
+  
+  .promotions-cta-hero-content {
+    padding: 0 10px;
+  }
+  
+  .promotions-cta-hero-content h2 {
+    font-size: clamp(1.3rem, 3.5vw, 1.7rem);
+    margin-bottom: 10px;
+  }
+  
+  .promotions-cta-hero-content p {
+    font-size: clamp(0.8rem, 1.8vw, 0.9rem);
+    margin-bottom: 20px;
+  }
+  
+  .promotions-cta .cta-buttons {
+    gap: 10px;
+  }
+  
+  .promotions-cta .cta-btn {
+    padding: 8px 18px;
+    font-size: 0.85rem;
+    min-width: 140px;
+    max-width: 200px;
   }
 }

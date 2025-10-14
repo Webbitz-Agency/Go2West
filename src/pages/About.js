@@ -339,7 +339,7 @@ const About = () => {
       <div className="promotions-cta-hero-image">
           <img src="/images/plane.jpg" alt="Aereo" />
         </div>
-        <div className="promotions-cta-hero-content">
+        <div className="about-cta-hero-content">
         <h2>Pronto per la tua prossima avventura?</h2>
         <p>Scopri le nostre destinazioni e inizia a pianificare il viaggio dei tuoi sogni</p>
           <div className="cta-buttons">

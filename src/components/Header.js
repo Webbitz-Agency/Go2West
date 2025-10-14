@@ -279,7 +279,8 @@ const Header = () => {
             </div>
             {/* About */}
             <a href="/about" className={`nav-link ${isActiveSection('about') ? 'active' : ''}`}>
-              About us
+              <span className="about-text-full">About us</span>
+              <span className="about-text-short">About</span>
             </a>
           </nav>
         </div>

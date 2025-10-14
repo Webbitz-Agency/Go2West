@@ -1328,7 +1328,7 @@
 /* Sezione Contatti - Bacheca da Viaggio */
 .contact-section {
   background: #ffffff;
-  padding: 60px var(--section-padding-horizontal) 80px;
+  padding: 40px var(--section-padding-horizontal) 40px;
   position: relative;
   scroll-margin-top: 96px;
 }
@@ -4733,12 +4733,12 @@
 
 .destination-btn-container {
   margin-top: auto;
-  padding-top: 20px;
+  /*padding-top: 20px;*/
 }
 
 /* Titoli delle destinazioni più grandi */
 .destination-title-new {
-  font-size: 2.8rem !important;
+  font-size: clamp(1.8rem, 2.8vw, 2.4rem) !important;
   margin-bottom: 8px;
 }
 
@@ -4775,7 +4775,7 @@
 /* Container pulsante e conteggio viaggi */
 .destination-btn-container {
   margin-top: auto;
-  padding-top: 20px;
+  /*padding-top: 20px;*/
   display: flex;
   align-items: center;
   gap: 15px;
@@ -4798,6 +4798,7 @@
   padding: 20px;
   margin: 15px 0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  height: 70%;
 }
 
 /* Nascondi etichette a 992px */
@@ -4881,7 +4882,8 @@
   }
   
   .destination-card-new.full-width-card .destination-image-new {
-    height: 400px;
+    height: 300px;
+    flex: 0 0 300px;
   }
   
   .destination-image-new {

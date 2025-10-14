@@ -691,6 +691,124 @@ strong {
   transform: translateY(0);
 }
 
+/* Promotions CTA Section */
+.about-cta {
+  position: relative;
+  height: 50vh;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-top: 40px;
+}
+
+.about-cta-hero-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.about-cta-hero-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.about-cta::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.5) 100%);
+  z-index: 2;
+}
+
+.about-cta-hero-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 40px;
+  gap: 20px;
+  z-index: 3;
+  color: white;
+}
+
+.about-cta-hero-content h2 {
+  font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+  font-weight: 500;
+  margin-bottom: 15px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  line-height: 1.2;
+}
+
+.about-cta-hero-content p {
+  font-size: clamp(0.95rem, 2.2vw, 1.15rem);
+  line-height: 1.5;
+  opacity: 0.95;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  margin-bottom: 30px;
+  max-width: 550px;
+  margin-left: auto;
+  margin-right: auto;
+  color: #fff;
+}
+
+.about-cta .cta-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.about-cta .primary-cta,
+.about-cta .secondary-cta {
+  padding: 12px 25px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-block;
+  cursor: pointer;
+  border: none;
+  min-width: 180px;
+}
+
+.about-cta .primary-cta {
+  background: linear-gradient(135deg, #4A90E2, #357ABD);
+  color: white;
+  box-shadow: 0 10px 30px rgba(74, 144, 226, 0.3);
+}
+
+.about-cta .primary-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 40px rgba(74, 144, 226, 0.4);
+}
+
+.about-cta .secondary-cta {
+  background: transparent;
+  color: white;
+  border: 2px solid white;
+  box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+}
+
+.about-cta .secondary-cta:hover {
+  background: white;
+  color: #2c3e50;
+  transform: translateY(-2px);
+  box-shadow: 0 15px 40px rgba(255, 255, 255, 0.2);
+}
+
 /* CTA Section */
 .about-cta-section {
   padding: 80px 0;
@@ -907,6 +1025,42 @@ strong {
     font-size: 1.1rem;
   }
   
+  /* Promotions CTA responsive */
+  .about-cta {
+    height: 45vh;
+    min-height: 350px;
+    margin-top: 30px;
+  }
+  
+  .about-cta-hero-content {
+    padding: 0 15px;
+  }
+  
+  .about-cta-hero-content h2 {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    margin-bottom: 12px;
+  }
+  
+  .about-cta-hero-content p {
+    font-size: clamp(0.85rem, 2vw, 1rem);
+    margin-bottom: 25px;
+  }
+  
+  .about-cta .cta-buttons {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .about-cta .primary-cta,
+  .about-cta .secondary-cta {
+    padding: 10px 22px;
+    font-size: 0.95rem;
+    min-width: 160px;
+    width: 100%;
+    max-width: 220px;
+  }
+  
   
   .why-choose-section{
     padding: 50px 0 50px 0;
@@ -985,6 +1139,39 @@ strong {
   
   .mission-section {
     padding: 20px 0;
+  }
+  
+  /* Promotions CTA responsive per schermi piccoli */
+  .about-cta {
+    height: 40vh;
+    min-height: 300px;
+    margin-top: 25px;
+  }
+  
+  .about-cta-hero-content {
+    padding: 0 10px;
+  }
+  
+  .about-cta-hero-content h2 {
+    font-size: clamp(1.3rem, 3.5vw, 1.7rem);
+    margin-bottom: 10px;
+  }
+  
+  .about-cta-hero-content p {
+    font-size: clamp(0.8rem, 1.8vw, 0.9rem);
+    margin-bottom: 20px;
+  }
+  
+  .about-cta .cta-buttons {
+    gap: 10px;
+  }
+  
+  .about-cta .primary-cta,
+  .about-cta .secondary-cta {
+    padding: 8px 18px;
+    font-size: 0.85rem;
+    min-width: 140px;
+    max-width: 200px;
   }
 
 
