@@ -7,7 +7,7 @@
 
 .footer-content {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr auto;
+  grid-template-columns: 1fr 1fr 1fr 1fr auto;
   gap: 30px;
   margin-bottom: 30px;
   align-items: start;
@@ -50,7 +50,7 @@
 /* Footer tablet */
 @media (max-width: 1024px) {
   .footer-content {
-    grid-template-columns: 1fr 1fr 1fr auto;
+    grid-template-columns: 1fr 1fr 1fr 1fr auto;
     gap: 20px;
   }
   
@@ -100,7 +100,7 @@
 /* Footer tablet verticale - mantieni tutto sulla stessa riga */
 @media (max-width: 900px) {
   .footer-content {
-    grid-template-columns: 1fr 1fr 1fr auto;
+    grid-template-columns: 1fr 1fr 1fr 1fr auto;
     gap: 12px;
   }
   
@@ -149,7 +149,7 @@
 /* Footer tablet piccolo - ancora tutto sulla stessa riga */
 @media (max-width: 850px) {
   .footer-content {
-    grid-template-columns: 1fr 1fr 1fr auto;
+    grid-template-columns: 1fr 1fr 1fr 1fr auto;
     gap: 10px;
   }
   

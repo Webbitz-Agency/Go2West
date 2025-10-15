@@ -8,8 +8,8 @@ const About = () => {
   const [currentValuesImage, setCurrentValuesImage] = useState(0);
 
   // Array delle immagini per i caroselli
-  const storyImages = ['drive.jpg', 'drive2.jpg', 'drive3.jpg', 'drive4.jpg'];
-  const valuesImages = ['city.jpg', 'tour.jpg', 'ride_in_harley.jpg', 'kenya.jpg'];
+  const storyImages = ['story1.jpg', 'story2.jpg', 'story3.jpg', 'story4.jpg', 'story5.jpg'];
+  const valuesImages = ['values1.jpg', 'values2.jpg', 'values3.jpg', 'values4.jpg', 'values5.jpg'];
 
   // Auto-scroll per i caroselli
   useEffect(() => {
@@ -142,9 +142,11 @@ const About = () => {
                 <i className="fa-solid fa-calendar-days"></i>
               </div>
               <div className="stat-content">
-                <h3>25+</h3>
-                <h4>Anni di Esperienza</h4>
-                <p>Un quarto di secolo dedicato alla creazione di viaggi indimenticabili, con competenze acquisite nelle principali compagnie aeree e nel settore del business travel.</p>
+              <div className="stat-title-container">
+                <h3>25+</h3>                
+                  <h4>Anni di Esperienza</h4>
+                  </div>
+                  <p>Un quarto di secolo dedicato alla creazione di viaggi indimenticabili, con competenze acquisite nelle principali compagnie aeree e nel settore del business travel.</p>
               </div>
             </div>
             
@@ -153,9 +155,11 @@ const About = () => {
                 <i className="fa-solid fa-globe-americas"></i>
               </div>
               <div className="stat-content">
+              <div className="stat-title-container">
                 <h3>3</h3>
-                <h4>Continenti</h4>
-                <p>Nord America, Centro America e Sud America: la nostra specializzazione copre tutto il continente americano con tour personalizzati e esperienze autentiche.</p>
+                  <h4>Continenti</h4>
+                  </div>
+                  <p>Nord America, Centro America e Sud America: la nostra specializzazione copre tutto il continente americano con tour personalizzati e esperienze autentiche.</p>
               </div>
             </div>
             
@@ -164,9 +168,11 @@ const About = () => {
                 <i className="fa-solid fa-heart"></i>
               </div>
               <div className="stat-content">
+              <div className="stat-title-container">
                 <h3>100%</h3>
-                <h4>Dedizione</h4>
-                <p>Ogni viaggio è progettato con passione e attenzione ai dettagli, garantendo esperienze che superano le aspettative e creano ricordi indelebili.</p>
+                  <h4>Dedizione</h4>
+                  </div>
+                  <p>Ogni viaggio è progettato con passione e attenzione ai dettagli, garantendo esperienze che superano le aspettative e creano ricordi indelebili.</p>
               </div>
             </div>
           </div>

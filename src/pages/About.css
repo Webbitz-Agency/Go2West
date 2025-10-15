@@ -85,6 +85,7 @@ strong {
 
 .story-image {
   position: relative;
+  height: 90%;
 }
 
 .story-carousel {
@@ -92,12 +93,13 @@ strong {
   border-radius: 15px;
   overflow: hidden;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  height: 100%;
 }
 
 .story-carousel-container, .team-carousel-container, .mission-carousel-container {
   position: relative;
   width: 100%;
-  height: clamp(400px, 50vh, 600px);
+  height: 100%;
   display: flex;
   transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
@@ -273,13 +275,14 @@ strong {
   flex-direction: column;
   gap: 25px;
   width: 100%;
+  height: 87%;
 }
 
 .team-stat-item {
   display: flex;
   align-items: center;
-  gap: 25px;
-  padding: 30px;
+  gap: 20px;
+  padding: 20px 30px;
   background: white;
   border-radius: 20px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
@@ -336,7 +339,7 @@ strong {
 }
 
 .stat-content h3 {
-  font-size: 3rem;
+  font-size: clamp(2rem, 3vw, 3rem);
   font-weight: 700;
   color: #4A90E2;
   margin: 0 0 8px 0;
@@ -347,7 +350,8 @@ strong {
   font-size: 1.3rem;
   font-weight: 600;
   color: #2c3e50;
-  margin: 0 0 12px 0;
+  margin: 0;
+  margin-right: 15px;
 }
 
 .stat-content p {
@@ -355,6 +359,16 @@ strong {
   line-height: 1.6;
   color: #666;
   margin: 0;
+  flex: 1;
+}
+
+/* Contenitore flex per titolo e sottotitolo */
+.stat-title-container {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 15px;
 }
 
 .team-image {
@@ -386,6 +400,7 @@ strong {
 
 .mission-image {
   position: relative;
+  height: 100%;
 }
 
 .mission-carousel {
@@ -393,6 +408,7 @@ strong {
   border-radius: 15px;
   overflow: hidden;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  height: 100%;
 }
 
 .mission-content {
@@ -438,7 +454,7 @@ strong {
 
 /* Why Choose Section */
 .why-choose-section {
-  padding: 0 0 80px 0;
+  padding: 0 0 25px 0;
   background: #e0f7fa;
 }
 
@@ -572,7 +588,9 @@ strong {
 .contact-info {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  /*gap: 50px;*/
+  height: 100%;
+  justify-content: space-between;
 }
 
 .contact-item {
@@ -1002,6 +1020,10 @@ strong {
     font-size: 0.95rem;
   }
   
+  .stat-title-container {
+    gap: 12px;
+  }
+  
   /* Layout 2x2 per le card Why Choose tra 1024px e 768px */
   .why-choose-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -1013,6 +1035,10 @@ strong {
     width: 70px;
     height: 70px;
     font-size: 1.8rem;
+  }
+
+  .contact-info{
+    gap: 20px;
   }
 }
 
@@ -1112,6 +1138,10 @@ strong {
   
   .stat-content p {
     font-size: 0.9rem;
+  }
+  
+  .stat-title-container {
+    gap: 10px;
   }
   
   .about-cta-buttons {
@@ -1218,5 +1248,9 @@ strong {
   
   .stat-content p {
     font-size: 0.85rem;
+  }
+  
+  .stat-title-container {
+    gap: 8px;
   }
 }

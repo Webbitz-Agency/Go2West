@@ -863,8 +863,8 @@ const Home = () => {
       {/* Sezione Viaggi in promozione - Carosello */}
       <section id="all-destinations" className="suggestions-section">
         <div className="section-header">
-          <h2>Viaggi in promozione</h2>
-          <p>Offerte speciali per esperienze indimenticabili</p>
+          <h2>Viaggi in Primo Piano</h2>
+          <p>Scopri le nostre offerte speciali e del momento per vivere espaerienze indimenticabili</p>
         </div>
 
         <div className="suggestions-container">

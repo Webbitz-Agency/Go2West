@@ -202,8 +202,8 @@ const Header = () => {
             </a>
 
             {/* Promozioni */}
-            <a href="/promozioni" className={`nav-link ${location.pathname === '/promozioni' ? 'active' : ''}`}>
-              Promozioni
+            <a href="/promozioni" id="promozioni-link" className={`nav-link ${location.pathname === '/promozioni' ? 'active' : ''}`}>
+              Specials
             </a>
 
             

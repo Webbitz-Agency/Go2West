@@ -130,10 +130,10 @@
 
 /* Sezione introduzione destinazione */
 .destination-intro-section {
-  padding: 80px 0 40px;
+  padding: 40px 0 40px;
   position: relative;
   z-index: 20;
-  background: white;
+  background: #eefdff;
 }
 
 .destination-intro {
@@ -167,7 +167,7 @@
   /*max-width: 1400px;*/
   margin: 0 auto;
   /*padding: 0 30px;*/
-  background: #eefdff;
+  background: #e0f7fa;
 }
 
 /* Responsive per la sezione tours e introduzione */

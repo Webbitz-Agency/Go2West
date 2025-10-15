@@ -27,8 +27,7 @@ const Footer = () => {
             <h4>Contatti</h4>
             <p><strong>Email:</strong> <a href="mailto:info@go2west.org" className="footer-contact-link">info@go2west.org</a></p>
             <p><strong>Richiedi preventivo:</strong> <a href="mailto:preventivi@go2west.org" className="footer-contact-link">preventivi@go2west.org</a></p>
-            <p><strong>Telefono:</strong> <a href="tel:+39056428595" className="footer-contact-link">+39 0564 28595</a></p>
-            <a href="https://www.facebook.com/share/1EdVxEcxH2/?mibextid=wwXIfr" id="facebook-link" target="_blank" aria-label="Facebook"><FaFacebook /></a>
+            <p><strong>Telefono:</strong> <a href="tel:+39056428595" className="footer-contact-link">+39 0564 28595</a></p>            
           </div>
           
           {/*<div className="footer-section">
@@ -47,7 +46,11 @@ const Footer = () => {
             <p><a href="/cookie-policy" className="footer-link">Cookie Policy</a></p>
             {/*<p>Assicurazione Viaggio</p>*/}
           </div>
-          
+
+          <div className="footer-section">
+            <h4>Social</h4>
+            <a href="https://www.facebook.com/share/1EdVxEcxH2/?mibextid=wwXIfr" id="facebook-link" target="_blank" aria-label="Facebook"><FaFacebook /></a>
+          </div>
           <div className="footer-section">
             <img src="/logo-nobg.png" alt="go2west" className="footer-logo-img" />
           </div>

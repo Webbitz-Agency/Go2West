@@ -80,7 +80,7 @@ const Promotions = () => {
 
   // Filtri disponibili
   const filters = [
-    { value: 'all', label: 'Tutte le promozioni' },
+    { value: 'all', label: 'Tutti i viaggi' },
     { value: 'city-breaks', label: 'City Breaks' },
     { value: 'fly-drive', label: 'Fly & Drive' },
     { value: 'ride', label: 'Ride in Harley' },
@@ -109,7 +109,7 @@ const Promotions = () => {
       <div className="promotions-page">
         <div className="promotions-loading">
           <div className="loading-spinner"></div>
-          <p>Caricamento promozioni...</p>
+          <p>Caricamento viaggi...</p>
         </div>
       </div>
     );
@@ -143,8 +143,8 @@ const Promotions = () => {
         <div className="hero-overlay" />
         <div className="hero-content">
           <div className="hero-text">
-            <h1 className="destination-hero-title">Viaggi in Promozione</h1>
-            <p className="hero-subtitle">Scopri le nostre offerte speciali per vivere esperienze indimenticabili</p>
+            <h1 className="destination-hero-title">Viaggi in Primo Piano</h1>
+            <p className="hero-subtitle">Scopri le nostre offerte speciali e del momentoper vivere esperienze indimenticabili</p>
           </div>
         </div>
       </section>
@@ -234,7 +234,7 @@ const Promotions = () => {
           
           {filteredTours.length === 0 && (
             <div className="no-promotions">
-              <h3>Nessuna promozione trovata</h3>
+              <h3>Nessun viaggio trovato</h3>
               <p>Prova a cambiare filtro o torna più tardi per nuove offerte.</p>
             </div>
           )}

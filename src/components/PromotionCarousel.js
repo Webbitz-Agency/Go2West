@@ -247,7 +247,7 @@ const PromotionCarousel = ({ itemsPerPage = 6 }) => {
       {/* Link per vedere tutte le promozioni */}
       <div className="promotions-link-container">
         <a href="/promozioni" className="options-cta">
-          Vedi tutte le promozioni
+          Vedi tutti i Viaggi in Primo Piano
         </a>
       </div>
     </div>

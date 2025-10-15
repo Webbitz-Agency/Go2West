@@ -795,7 +795,7 @@ const TourDetails = () => {
         onClick={openDatesModal}
       >
         <i className="fa-solid fa-calendar-days"></i>
-        Date & Prezzi
+        Date disponibili
       </button>
 
       {/* Modale delle Date */}
@@ -803,7 +803,7 @@ const TourDetails = () => {
         <div className="dates-modal-overlay" onClick={closeDatesModal}>
           <div className="dates-modal" onClick={(e) => e.stopPropagation()}>
             <div className="dates-modal-header">
-              <h2>Date & Prezzi</h2>
+              <h2>Date disponibili</h2>
               <button className="dates-modal-close" onClick={closeDatesModal}>
                 <i className="fa-solid fa-times"></i>
               </button>
