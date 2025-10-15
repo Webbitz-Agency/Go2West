@@ -1140,8 +1140,8 @@ const TourEditor = () => {
                 </section>
               </div>
 
-              <div className="tour-sidebar">
-                <div className="dates-prices-section">
+              <div className="tour-editor-sidebar">
+                <div className="tour-editor-dates-prices-section">
                   <div className="year-selection">
                     {Object.keys(tourDates).map(year => (
                       <button
@@ -1152,7 +1152,7 @@ const TourEditor = () => {
                         {year}
                       </button>
                     ))}
-                    <button type="button" onClick={addYear} className="add-year-btn" title="Aggiungi Anno">
+                    <button type="button" onClick={addYear} className="tour-editor-add-year-btn" title="Aggiungi Anno">
                       +
                     </button>
                   </div>
@@ -1188,17 +1188,17 @@ const TourEditor = () => {
                             />
                           </span>
                         </div>
-                        <button type="button" onClick={() => removeDate(selectedYear, index)} className="remove-date-btn" title="Rimuovi Data">
+                        <button type="button" onClick={() => removeDate(selectedYear, index)} className="tour-editor-remove-date-btn" title="Rimuovi Data">
                           ×
                         </button>
                       </div>
                     ))}
-                    <div className="add-date-section">
-                      <button type="button" onClick={() => addDate(selectedYear)} className="add-date-btn">
+                    <div className="tour-editor-add-date-section">
+                      <button type="button" onClick={() => addDate(selectedYear)} className="tour-editor-add-date-btn">
                         + Aggiungi Data
                       </button>
                       {Object.keys(tourDates).length > 1 && (                     
-                      <button type="button" onClick={() => removeYear(selectedYear)} className="remove-year-btn">
+                      <button type="button" onClick={() => removeYear(selectedYear)} className="tour-editor-remove-year-btn">
                           - Rimuovi Anno {selectedYear}
                         </button>
                     )}

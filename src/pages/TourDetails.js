@@ -14,6 +14,7 @@ const TourDetails = () => {
   const [selectedYear, setSelectedYear] = useState(2025);
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState('');
+  const [isDatesModalOpen, setIsDatesModalOpen] = useState(false);
 
   // Funzione per ottenere le date del tour dal database
   const getTourDates = () => {
@@ -73,6 +74,18 @@ const TourDetails = () => {
   const closeBookingModal = () => {
     setIsBookingModalOpen(false);
     setSelectedDate('');
+    document.body.style.overflow = 'auto'; // Riavvia lo scroll della pagina
+  };
+
+  // Funzione per aprire il modale delle date
+  const openDatesModal = () => {
+    setIsDatesModalOpen(true);
+    document.body.style.overflow = 'hidden'; // Blocca lo scroll della pagina
+  };
+
+  // Funzione per chiudere il modale delle date
+  const closeDatesModal = () => {
+    setIsDatesModalOpen(false);
     document.body.style.overflow = 'auto'; // Riavvia lo scroll della pagina
   };
 
@@ -771,6 +784,71 @@ const TourDetails = () => {
                   </button>
                 </div>
               </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Floating Button per Date */}
+      <button 
+        className="floating-dates-button"
+        onClick={openDatesModal}
+      >
+        <i className="fa-solid fa-calendar-days"></i>
+        Date & Prezzi
+      </button>
+
+      {/* Modale delle Date */}
+      {isDatesModalOpen && (
+        <div className="dates-modal-overlay" onClick={closeDatesModal}>
+          <div className="dates-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="dates-modal-header">
+              <h2>Date & Prezzi</h2>
+              <button className="dates-modal-close" onClick={closeDatesModal}>
+                <i className="fa-solid fa-times"></i>
+              </button>
+            </div>
+            
+            <div className="dates-modal-content">
+              {/* Year Selection */}
+              {getAvailableYears().length > 0 && (
+                <div className="year-selection">
+                  {getAvailableYears().map((year, index) => (
+                    <button 
+                      key={year}
+                      className={`year-button ${selectedYear === year ? 'active' : ''}`}
+                      onClick={() => handleYearChange(year)}
+                      id={index === 0 ? 'first-year' : index === getAvailableYears().length - 1 ? 'last-year' : `year-${year}`}
+                    >
+                      {year}
+                    </button>
+                  ))}
+                </div>
+              )}
+              
+              <p className="pricing-disclaimer">
+                A partire da €{getMinPrice().toLocaleString()} per persona.
+              </p>
+              
+              {/* Tour Dates List */}
+              <div className="tour-dates-list">
+                {tourDates[selectedYear]?.map((dateInfo, index) => (
+                  <div key={index} className="date-row">
+                    <div className="date-info">
+                      <span className="date-range">{dateInfo.dateRange}</span>
+                    </div>
+                    <button 
+                      className="availability-button"
+                      onClick={() => {
+                        handleBookingClick(dateInfo.dateRange);
+                        closeDatesModal();
+                      }}
+                    >
+                      RICHIEDI
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>

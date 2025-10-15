@@ -437,8 +437,8 @@
   box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
 }
 
-/* ===== TOUR SIDEBAR LAYOUT ===== */
-.tour-sidebar {
+/* ===== TOUR EDITOR SIDEBAR LAYOUT ===== */
+.tour-editor-sidebar {
   position: sticky;
   top: 150px;
   height: fit-content;
@@ -448,7 +448,7 @@
   gap: 20px;
 }
 
-.dates-prices-section {
+.tour-editor-dates-prices-section {
   background: white;
   border-radius: 12px;
   padding: 25px;
@@ -527,7 +527,7 @@
   opacity: 0.8;
 }
 
-.remove-price-btn, .remove-inclusion-btn, .remove-exclusion-btn, .remove-date-btn {
+.remove-price-btn, .remove-inclusion-btn, .remove-exclusion-btn, .tour-editor-remove-date-btn {
   background: #e74c3c;
   color: white;
   border: none;
@@ -540,12 +540,12 @@
   margin-left: 8px;
 }
 
-.remove-price-btn:hover, .remove-inclusion-btn:hover, .remove-exclusion-btn:hover {
+.remove-price-btn:hover, .remove-inclusion-btn:hover, .remove-exclusion-btn:hover, .tour-editor-remove-date-btn:hover {
   background: #c0392b;
 }
 
-/* Year and Date Management Buttons */
-.add-year-btn {
+/* Year and Date Management Buttons - Tour Editor */
+.tour-editor-add-year-btn {
   background: #27ae60;
   color: white;
   border: none;
@@ -562,13 +562,13 @@
   box-shadow: 0 2px 8px rgba(39, 174, 96, 0.3);
 }
 
-.add-year-btn:hover {
+.tour-editor-add-year-btn:hover {
   background: #229954;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(39, 174, 96, 0.4);
 }
 
-.add-date-btn {
+.tour-editor-add-date-btn {
   background: #3498db;
   color: white;
   border: none;
@@ -584,13 +584,13 @@
   gap: 6px;
 }
 
-.add-date-btn:hover {
+.tour-editor-add-date-btn:hover {
   background: #2980b9;
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
 }
 
-.remove-year-btn {
+.tour-editor-remove-year-btn {
   background: #e74c3c;
   color: white;
   border: none;
@@ -606,33 +606,33 @@
   gap: 6px;
 }
 
-.remove-year-btn:hover {
+.tour-editor-remove-year-btn:hover {
   background: #c0392b;
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
 }
 
-/* Button sections styling */
-.add-date-section, .remove-year-section {
+/* Button sections styling - Tour Editor */
+.tour-editor-add-date-section, .tour-editor-remove-year-section {
   margin-top: 15px;
   text-align: center;
 }
 
-.add-date-section {
+.tour-editor-add-date-section {
   display: flex;
   gap: 10px;
   justify-content: center;
   align-items: center;
 }
 
-.remove-year-section {
+.tour-editor-remove-year-section {
   border-top: 1px solid #fecaca;
   padding-top: 15px;
   margin-top: 10px;
 }
 
 /* Combined button section for side-by-side layout */
-.add-date-section + .remove-year-section {
+.tour-editor-add-date-section + .tour-editor-remove-year-section {
   border-top: none;
   padding-top: 0;
   margin-top: 0;
@@ -642,7 +642,7 @@
   align-items: center;
 }
 
-.add-date-section + .remove-year-section .remove-year-btn {
+.tour-editor-add-date-section + .tour-editor-remove-year-section .tour-editor-remove-year-btn {
   margin: 0;
 }
 
@@ -1043,6 +1043,7 @@
   align-items: center;
   background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
   position: relative;
+  flex-direction: row;
 }
 
 .day-actions {
@@ -1090,6 +1091,15 @@
   
   .pdf-upload-area {
     max-width: 200px;
+  }
+  
+  /* Assicurati che la sidebar delle date in TourEditor sia sempre visibile */
+  .tour-editor-sidebar {
+    display: flex !important;
+  }
+  
+  .tour-editor-dates-prices-section {
+    display: flex !important;
   }
 }
 
