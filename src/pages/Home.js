@@ -619,7 +619,7 @@ const Home = () => {
       <section className="travel-options-section">
         <div className="options-header reveal-on-scroll" style={{paddingTop: '10px'}}>
           <h2>Le nostre proposte</h2>
-          <p>Scegli lo stile di viaggio che ti rispecchia di più</p>
+          <p>Scegli lo stile di viaggio che ti rispecchia di più.</p>
         </div>
         <div className="options-grid two-by-two">
           {/* Card cliccabili come grandi pulsanti */}
@@ -749,7 +749,7 @@ const Home = () => {
       <section id="destinations-showcase-new" className="destinations-showcase-new">
         <div className="showcase-header-new">
           <h2>Le nostre destinazioni</h2>
-          <p>Scopri i nostri itinerari esclusivi in tutto il mondo</p>
+          <p>Scopri i nostri itinerari esclusivi in tutto il mondo.</p>
         </div>
         
         <div className="destinations-grid-new">
@@ -866,7 +866,7 @@ const Home = () => {
       <section id="all-destinations" className="suggestions-section">
         <div className="section-header">
           <h2>Viaggi in Primo Piano</h2>
-          <p>Scopri le nostre offerte speciali e del momento, per vivere esperienze indimenticabili</p>
+          <p>Scopri le nostre offerte speciali e del momento, per vivere esperienze indimenticabili.</p>
         </div>
 
         <div className="suggestions-container">
@@ -880,7 +880,7 @@ const Home = () => {
           <img src="/images/pin.png" alt="" aria-hidden="true" className="contact-pin" />
           <div className="contact-header">
             <h2>Richiedi Informazioni</h2>
-            <p>Compila il form per ricevere informazioni e/o essere ricontattati dal nostro team</p>
+            <p>Compila il form per ricevere informazioni e/o essere ricontattati dal nostro team.</p>
           </div>
           
           <div className="contact-bulletin-board">

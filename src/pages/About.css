@@ -530,7 +530,7 @@ strong {
 /* Contact Section */
 .about-contact-section {
   background: #ffffff;
-  padding: 60px var(--section-padding-horizontal) 80px;
+  padding: 40px var(--section-padding-horizontal) 0;
   position: relative;
   scroll-margin-top: 96px;
 }
