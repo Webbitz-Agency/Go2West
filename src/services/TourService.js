@@ -90,7 +90,13 @@ export class TourService {
 
   // Attiva/disattiva promozione per un tour
   static async toggleTourPromotion(tourId, isPromotion) {
-    return await apiPut(API_CONFIG.ENDPOINTS.TOUR_BY_ID(tourId), { isPromotion });
+    // Prima otteniamo i dati completi del tour
+    const tour = await this.getTourById(tourId);
+    // Poi aggiorniamo solo il campo isPromotion mantenendo tutti gli altri dati
+    return await apiPut(API_CONFIG.ENDPOINTS.TOUR_BY_ID(tourId), { 
+      ...tour, 
+      isPromotion 
+    });
   }
 
   // Ottieni solo i tour in promozione
