@@ -140,8 +140,8 @@
 /* ===== META INFO ===== */
 .tour-card-meta {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  gap: 8px;
   margin-bottom: 25px;
   padding: 18px 0;
   border-top: 1px solid #f0f0f0;
@@ -156,6 +156,26 @@
   color: #666;
   font-size: 0.9rem;
   font-weight: 500;
+}
+
+.tour-meals,
+.tour-itinerary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: #495057;
+}
+
+.tour-meals .meta-icon,
+.tour-itinerary .meta-icon {
+  font-size: 1rem;
+}
+
+.tour-meals strong,
+.tour-itinerary strong {
+  color: #2c3e50;
+  font-weight: 600;
 }
 
 .meta-icon {

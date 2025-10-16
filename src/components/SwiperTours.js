@@ -156,6 +156,18 @@ const SwiperTours = ({ itemsPerPage = 6 }) => {
                     {/*<span className="meta-icon">📍</span>*/}
                     {tour.destination || 'Destinazione'}
                   </div>
+                  {tour.pasti && (
+                    <div className="tour-meals">
+                      <span className="meta-icon">🍽️</span>
+                      <strong>Pasti:</strong> {tour.pasti}
+                    </div>
+                  )}
+                  {tour.itinerario && (
+                    <div className="tour-itinerary">
+                      <span className="meta-icon">🗺️</span>
+                      <strong>Itinerario:</strong> {tour.itinerario}
+                    </div>
+                  )}
                 </div>
                 
                 <Link to={`/tour/${tour.code}`} className="tour-card-button">

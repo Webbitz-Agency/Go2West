@@ -322,6 +322,18 @@ const TourDetails = () => {
                     <span className="info-label">Codice:</span>
                     <span className="info-value">{tour.code}</span>
                   </div>
+                  {tour.pasti && (
+                    <div className="info-item">
+                      <span className="info-label">Pasti:</span>
+                      <span className="info-value">{tour.pasti}</span>
+                    </div>
+                  )}
+                  {tour.itinerario && (
+                    <div className="info-item">
+                      <span className="info-label">Itinerario:</span>
+                      <span className="info-value">{tour.itinerario}</span>
+                    </div>
+                  )}
                 </div>
                 <div className="tour-pdf-section">
                   <button className="pdf-download-btn" onClick={() => window.open(tour.pdfUrl || '#', '_blank')}>

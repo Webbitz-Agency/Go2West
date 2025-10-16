@@ -186,8 +186,8 @@
 /* Dettagli tour */
 .tour-card-details {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  gap: 8px;
   margin-bottom: 20px;
   padding: 12px 0;
   border-top: 1px solid #f0f0f0;
@@ -203,6 +203,26 @@
   font-weight: 600;
   color: #4facfe;
   font-size: 1.1rem;
+}
+
+.tour-meals,
+.tour-itinerary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: #495057;
+}
+
+.tour-meals .meta-icon,
+.tour-itinerary .meta-icon {
+  font-size: 1rem;
+}
+
+.tour-meals strong,
+.tour-itinerary strong {
+  color: #2c3e50;
+  font-weight: 600;
 }
 
 /* Pulsante tour */

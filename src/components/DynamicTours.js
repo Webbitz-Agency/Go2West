@@ -249,6 +249,18 @@ const DynamicTours = ({ type, destination, limit = 6, showFilters = false }) => 
                   {tour.duration ? `${tour.duration} giorni` : 'Durata variabile'}
                 </div>
                 <div className="tour-price">€ {tour.minPrice || 0}</div>
+                {tour.pasti && (
+                  <div className="tour-meals">
+                    <span className="meta-icon">🍽️</span>
+                    <strong>Pasti:</strong> {tour.pasti}
+                  </div>
+                )}
+                {tour.itinerario && (
+                  <div className="tour-itinerary">
+                    <span className="meta-icon">🗺️</span>
+                    <strong>Itinerario:</strong> {tour.itinerario}
+                  </div>
+                )}
               </div>
               
               <a href={`/tour/${tour.code}`} className="tour-card-button">
