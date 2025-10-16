@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import PageTitle from '../components/PageTitle';
 import './About.css';
 
 const About = () => {
@@ -54,6 +55,7 @@ const About = () => {
 
   return (
     <div className="about">
+      <PageTitle title="About" />
       {/* Hero Section */}
       <section className="about-hero">
         <div className="about-hero-image">

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import PageTitle from '../components/PageTitle';
 import TourService from '../services/TourService';
 import './TourEditor.css';
 
@@ -759,6 +760,7 @@ const TourEditor = () => {
 
   return (
     <div className="tour-editor-page">
+      <PageTitle title="Editor Tour" />
       <div className="editor-header">
         <div className="editor-header-left">
           <h2>{tour ? 'Modifica Tour' : 'Nuovo Tour'}</h2>

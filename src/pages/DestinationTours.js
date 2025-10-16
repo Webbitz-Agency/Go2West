@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import PageTitle from '../components/PageTitle';
 import TourService from '../services/TourService';
 import DynamicTours from '../components/DynamicTours';
 import { destinations, destinationImages } from '../config/destinations';
@@ -92,6 +93,7 @@ const DestinationTours = () => {
 
   return (
     <div className="destination-tours">
+      <PageTitle title={currentDestination.name} />
       {/* Hero Section con Carosello */}
       <section ref={heroSectionRef} id="destination-hero" className="hero-top" aria-label={`${currentDestination.name} - Hero`}>
         <div className="hero-background-image">

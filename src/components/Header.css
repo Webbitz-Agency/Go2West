@@ -404,6 +404,8 @@
   align-items: center;
   justify-content: space-between;
 }
+
+#promozioni-link,
 #promozioni-link:hover,
 #promozioni-link.active{
   color: #fff;

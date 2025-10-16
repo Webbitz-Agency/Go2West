@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import PageTitle from '../components/PageTitle';
 import TourService from '../services/TourService';
 import './Admin.css';
 
@@ -182,6 +183,7 @@ const Admin = () => {
 
   return (
     <div className="admin-panel">
+      <PageTitle title="Admin" />
       <div className="admin-header">
         <h1>Pannello di Amministrazione</h1>
         <div className="admin-header-buttons">

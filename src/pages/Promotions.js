@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import PageTitle from '../components/PageTitle';
 import TourService from '../services/TourService';
 import './Promotions.css';
 
@@ -128,6 +129,7 @@ const Promotions = () => {
 
   return (
     <div className="promotions-page">
+      <PageTitle title="Promozioni" />
       {/* Hero Section */}
       <section className="promotions-hero" aria-label="Promozioni - Hero">
         <div className="hero-background-image">
@@ -144,7 +146,7 @@ const Promotions = () => {
         <div className="hero-content">
           <div className="hero-text">
             <h1 className="destination-hero-title">Viaggi in Primo Piano</h1>
-            <p className="hero-subtitle">Scopri le nostre offerte speciali e del momentoper vivere esperienze indimenticabili</p>
+            <p className="hero-subtitle">Scopri le nostre offerte speciali e del momento, per vivere esperienze indimenticabili.</p>
           </div>
         </div>
       </section>

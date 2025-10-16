@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import DynamicTours from '../components/DynamicTours';
 import MasonryTours from '../components/MasonryTours';
 import PromotionCarousel from '../components/PromotionCarousel';
+import PageTitle from '../components/PageTitle';
 import { destinations, destinationImages } from '../config/destinations';
 import TourService from '../services/TourService';
 import './Home.css';
@@ -480,6 +481,7 @@ const Home = () => {
 
   return (
     <div className="home">
+      <PageTitle title="Home" />
       {/* Sezione Hero Video */}
       <section ref={heroSectionRef} id="hero-videos" className="home-hero" aria-label="Video introduttivi">
         {heroVideos.map((video, index) => (
@@ -503,7 +505,7 @@ const Home = () => {
               <img src="/Logo.svg" alt="go2west" className="hero-logo-image" />
             </div>
             <h1 className="home-hero-title">Viaggi su misura, emozioni autentiche</h1>
-            <p className="home-hero-subtitle">Scopri le nostre destinazioni d'eccellenza in tutto il mondo</p>
+            <p className="home-hero-subtitle">Scopri le nostre destinazioni d'eccellenza in tutto il mondo.</p>
           </div>
           <div ref={heroActionsRef} className="home-hero-actions">
             <button className="home-hero-cta" onClick={scrollToDestinations}>
@@ -617,7 +619,7 @@ const Home = () => {
       <section className="travel-options-section">
         <div className="options-header reveal-on-scroll" style={{paddingTop: '10px'}}>
           <h2>Le nostre proposte</h2>
-          <p>Scegli lo stile di viaggio che ti rispecchia di più.</p>
+          <p>Scegli lo stile di viaggio che ti rispecchia di più</p>
         </div>
         <div className="options-grid two-by-two">
           {/* Card cliccabili come grandi pulsanti */}
@@ -674,7 +676,7 @@ const Home = () => {
         <div className="polynesia-hero-overlay" />
         <div className="polynesia-hero-content">
           <h2 className="polynesia-hero-title">Dove i sogni diventano realtà</h2>
-          <p className="polynesia-hero-subtitle">Scopri la magia della Polinesia Francese, dove ogni atollo racconta una storia di bellezza infinita</p>
+          <p className="polynesia-hero-subtitle">Scopri la magia della Polinesia Francese, dove ogni atollo racconta una storia di bellezza infinita.</p>
           <button className="polynesia-hero-cta" onClick={scrollToJourneys}>
             Scopri viaggi
           </button>
@@ -864,7 +866,7 @@ const Home = () => {
       <section id="all-destinations" className="suggestions-section">
         <div className="section-header">
           <h2>Viaggi in Primo Piano</h2>
-          <p>Scopri le nostre offerte speciali e del momento per vivere espaerienze indimenticabili</p>
+          <p>Scopri le nostre offerte speciali e del momento, per vivere esperienze indimenticabili</p>
         </div>
 
         <div className="suggestions-container">

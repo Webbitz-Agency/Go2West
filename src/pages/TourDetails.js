@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import PageTitle from '../components/PageTitle';
 import TourService from '../services/TourService';
 import { destinationImages } from '../config/destinations';
 import './TourDetails.css';
@@ -232,6 +233,7 @@ const TourDetails = () => {
 
   return (
     <div className="tour-details">
+      <PageTitle title={tour.title} />
       {/* Hero Section - Clean Image Gallery */}
       <section className="tour-hero-masonry">
         <div className="masonry-container">
