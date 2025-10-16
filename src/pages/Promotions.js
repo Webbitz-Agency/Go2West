@@ -34,7 +34,7 @@ const Promotions = () => {
     const fetchTours = async () => {
       try {
         setLoading(true);
-        const data = await TourService.getAllTours();
+        const data = await TourService.getPromotionTours();
         setTours(data);
         setFilteredTours(data);
       } catch (err) {
