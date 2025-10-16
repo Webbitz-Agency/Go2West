@@ -3209,7 +3209,7 @@
 .suggestions-section .section-header p {
   font-size: 1.2rem;
   color: #0f7ae5;
-  max-width: 600px;
+  /*max-width: 600px;*/
   margin: 0 auto;
 }
 

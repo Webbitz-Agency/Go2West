@@ -878,7 +878,7 @@ const Home = () => {
           <img src="/images/pin.png" alt="" aria-hidden="true" className="contact-pin" />
           <div className="contact-header">
             <h2>Richiedi Informazioni</h2>
-            <p>Compila il form per RICEVERE INFORMAZIONI e/O essere ricontattati dal nostro team</p>
+            <p>Compila il form per ricevere informazioni e/o essere ricontattati dal nostro team</p>
           </div>
           
           <div className="contact-bulletin-board">
