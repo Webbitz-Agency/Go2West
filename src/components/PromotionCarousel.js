@@ -23,7 +23,7 @@ const PromotionCarousel = ({ itemsPerPage = 6 }) => {
     const fetchTours = async () => {
       try {
         setLoading(true);
-        const data = await TourService.getAllTours();
+        const data = await TourService.getPromotionTours();
         setTours(data);
       } catch (err) {
         setError('Errore nel caricamento dei tour: ' + err.message);
