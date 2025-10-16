@@ -87,6 +87,8 @@ const TourEditor = () => {
     minPrice: tour?.minPrice || 1000,
     notes: tour?.notes || '',
     pdfUrl: tour?.pdfUrl || '',
+    pasti: tour?.pasti || '',
+    itinerario: tour?.itinerario || '',
     isPromotion: tour?.isPromotion || false,
     heroImage: tour?.heroImage ? 'exists' : '',
     carouselImage1: tour?.carouselImage1 ? 'exists' : '',
@@ -916,6 +918,18 @@ const TourEditor = () => {
                       <div className="info-item">
                         <span className="info-label">Codice:</span>
                         <span className="info-value readonly">{formData.code}</span>
+                      </div>
+                      <div className="info-item">
+                        <span className="info-label">Pasti:</span>
+                        <span className="info-value">
+                          <EditableText field="basic.pasti" value={formData.pasti} className="info-value-text" placeholder="es. 9 cene incluse" />
+                        </span>
+                      </div>
+                      <div className="info-item">
+                        <span className="info-label">Itinerario:</span>
+                        <span className="info-value">
+                          <EditableText field="basic.itinerario" value={formData.itinerario} className="info-value-text" placeholder="es. New York, Boston, Washington" />
+                        </span>
                       </div>
                       <div className="info-item promotion-toggle-item">
                         <span className="info-label">In Promozione:</span>

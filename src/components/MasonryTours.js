@@ -210,9 +210,25 @@ const MasonryTours = ({ itemsPerPage = 6 }) => {
               
               <div className="tour-card-meta">
                 <div className="tour-duration">
-                  {/*<span className="meta-icon"></span>*/}
-                  {tour.duration ? `${tour.duration} giorni` : 'Durata variabile'}
+                  <span className="meta-icon">⏱️</span>
+                  <strong>Durata:</strong> {tour.duration ? `${tour.duration} giorni` : 'Variabile'}
                 </div>
+                <div className="tour-price">
+                  <span className="meta-icon">💰</span>
+                  <strong>A partire da:</strong> €{tour.minPrice || 0}
+                </div>
+                {tour.pasti && (
+                  <div className="tour-meals">
+                    <span className="meta-icon">🍽️</span>
+                    <strong>Pasti:</strong> {tour.pasti}
+                  </div>
+                )}
+                {tour.itinerario && (
+                  <div className="tour-itinerary">
+                    <span className="meta-icon">🗺️</span>
+                    <strong>Itinerario:</strong> {tour.itinerario}
+                  </div>
+                )}
                 <div className="tour-type">
                   <span className="meta-icon">🏷️</span>
                   {tour.type || 'Tour'}
