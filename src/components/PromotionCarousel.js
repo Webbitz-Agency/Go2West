@@ -194,13 +194,21 @@ const PromotionCarousel = ({ itemsPerPage = 6 }) => {
           {duplicatedTours.map((tour, index) => (
             <div key={`${tour.id}-${index}`} className="promotion-tour-card">
               <div className="tour-card-image">
-                <img 
-                  src="/images/copertina.jpeg" 
-                  alt={tour.title}
-                  loading="lazy"
-                />
+                {tour.heroImage ? (
+                  <img 
+                    src={TourService.getTourImageUrl(tour.id, 'hero')}
+                    alt={tour.title}
+                    loading="lazy"
+                  />
+                ) : (
+                  <img 
+                    src="/images/copertina.jpeg" 
+                    alt={tour.title}
+                    loading="lazy"
+                  />
+                )}
                 <div className="tour-card-overlay">
-                  <div className="tour-card-price">€{tour.price}</div>
+                  <div className="tour-card-price">€{tour.minPrice || 0}</div>
                 </div>
               </div>
               
@@ -223,7 +231,7 @@ const PromotionCarousel = ({ itemsPerPage = 6 }) => {
                   </div>
                 </div>
                 
-                <a href={`/tour/${tour.slug}`} className="tour-card-button">
+                <a href={`/tour/${tour.code}`} className="tour-card-button">
                   Scopri Viaggio
                 </a>
               </div>

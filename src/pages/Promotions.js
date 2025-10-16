@@ -176,11 +176,19 @@ const Promotions = () => {
             {filteredTours.map((tour) => (
               <div key={tour.id} className="promotion-card">
                 <div className="promotion-card-image">
-                  <img 
-                    src="/images/copertina.jpeg" 
-                    alt={tour.title}
-                    loading="lazy"
-                  />
+                  {tour.heroImage ? (
+                    <img 
+                      src={TourService.getTourImageUrl(tour.id, 'hero')}
+                      alt={tour.title}
+                      loading="lazy"
+                    />
+                  ) : (
+                    <img 
+                      src="/images/copertina.jpeg" 
+                      alt={tour.title}
+                      loading="lazy"
+                    />
+                  )}
                 </div>
                 
                 <div className="promotion-card-content">
@@ -206,26 +214,26 @@ const Promotions = () => {
                   <div className="promotion-features-container">
                     <div className="promotion-features">
                       <div className="feature">
-                        <i className="fa-solid fa-plane"></i>
-                        <span>{tour.flightIncluded ? 'Volo incluso' : 'Volo non incluso'}</span>
+                        <i className="fa-solid fa-map-marker-alt"></i>
+                        <span>{tour.destination}</span>
                       </div>
                       <div className="feature">
-                        <i className="fa-solid fa-hotel"></i>
-                        <span>{tour.hotelCategory || 'Hotel 4*'}</span>
+                        <i className="fa-solid fa-clock"></i>
+                        <span>{tour.duration ? `${tour.duration} giorni` : 'Durata variabile'}</span>
                       </div>
                       <div className="feature">
-                        <i className="fa-solid fa-utensils"></i>
-                        <span>{tour.mealPlan || 'Colazione'}</span>
+                        <i className="fa-solid fa-tag"></i>
+                        <span>{tour.type}</span>
                       </div>
                     </div>
                     
                     <div className="promotion-price">
                       <span className="price-label">da</span>
-                      <span className="price-amount">€{tour.price}</span>
+                      <span className="price-amount">€{tour.minPrice || 0}</span>
                     </div>
                   </div>
                   
-                  <a href={`/tour/${tour.slug}`} className="promotion-btn">
+                  <a href={`/tour/${tour.code}`} className="promotion-btn">
                     Scopri Offerta
                     <i className="fa-solid fa-arrow-right"></i>
                   </a>
