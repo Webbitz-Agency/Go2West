@@ -1123,3 +1123,83 @@
     font-size: 0.75rem;
   }
 }
+
+/* Promotion Toggle Styles */
+.promotion-toggle-item {
+  align-items: center !important;
+}
+
+.promotion-toggle-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.promotion-toggle {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+}
+
+.promotion-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 24px;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+.promotion-toggle input:checked + .toggle-slider {
+  background-color: #f39c12;
+}
+
+.promotion-toggle input:focus + .toggle-slider {
+  box-shadow: 0 0 1px #f39c12;
+}
+
+.promotion-toggle input:checked + .toggle-slider:before {
+  transform: translateX(26px);
+}
+
+.promotion-status {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.promotion-status i {
+  font-size: 14px;
+}
+
+.promotion-status i.fa-solid {
+  color: #f39c12;
+}
+
+.promotion-status i.fa-regular {
+  color: #ccc;
+}

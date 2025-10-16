@@ -87,6 +87,7 @@ const TourEditor = () => {
     minPrice: tour?.minPrice || 1000,
     notes: tour?.notes || '',
     pdfUrl: tour?.pdfUrl || '',
+    isPromotion: tour?.isPromotion || false,
     heroImage: tour?.heroImage ? 'exists' : '',
     carouselImage1: tour?.carouselImage1 ? 'exists' : '',
     carouselImage2: tour?.carouselImage2 ? 'exists' : '',
@@ -915,6 +916,26 @@ const TourEditor = () => {
                       <div className="info-item">
                         <span className="info-label">Codice:</span>
                         <span className="info-value readonly">{formData.code}</span>
+                      </div>
+                      <div className="info-item promotion-toggle-item">
+                        <span className="info-label">In Promozione:</span>
+                        <div className="promotion-toggle-container">
+                          <label className="promotion-toggle">
+                            <input
+                              type="checkbox"
+                              checked={formData.isPromotion}
+                              onChange={(e) => setFormData(prev => ({ ...prev, isPromotion: e.target.checked }))}
+                            />
+                            <span className="toggle-slider"></span>
+                          </label>
+                          <span className="promotion-status">
+                            {formData.isPromotion ? (
+                              <><i className="fa-solid fa-star"></i> Sì</>
+                            ) : (
+                              <><i className="fa-regular fa-star"></i> No</>
+                            )}
+                          </span>
+                        </div>
                       </div>
                     </div>
                     <div className="tour-pdf-section">

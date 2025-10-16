@@ -445,6 +445,7 @@
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s, box-shadow 0.3s;
+  position: relative;
 }
 
 .tour-card:hover {
@@ -497,10 +498,11 @@
 .tour-actions {
   padding: 0 20px 20px;
   display: flex;
-  gap: 10px;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
-.edit-btn, .duplicate-btn, .delete-btn {
+.edit-btn, .duplicate-btn, .delete-btn, .promotion-btn {
   flex: 1;
   padding: 8px 12px;
   border: none;
@@ -509,6 +511,10 @@
   font-weight: 600;
   font-size: 14px;
   transition: background 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
 }
 
 .edit-btn {
@@ -536,6 +542,57 @@
 
 .delete-btn:hover {
   background: #c0392b;
+}
+
+.promotion-btn {
+  background: #f39c12;
+  color: white;
+}
+
+.promotion-btn:hover {
+  background: #e67e22;
+}
+
+.promotion-btn.active {
+  background: #e74c3c;
+}
+
+.promotion-btn.active:hover {
+  background: #c0392b;
+}
+
+.promotion-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: linear-gradient(135deg, #f39c12, #e67e22);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 2px 8px rgba(243, 156, 18, 0.3);
+  z-index: 2;
+  animation: pulse-promotion 2s infinite;
+}
+
+.promotion-badge i {
+  font-size: 10px;
+}
+
+@keyframes pulse-promotion {
+  0% {
+    box-shadow: 0 2px 8px rgba(243, 156, 18, 0.3);
+  }
+  50% {
+    box-shadow: 0 4px 16px rgba(243, 156, 18, 0.5);
+  }
+  100% {
+    box-shadow: 0 2px 8px rgba(243, 156, 18, 0.3);
+  }
 }
 
 /* Tour Form */
@@ -1153,6 +1210,11 @@
   
   .tour-actions {
     flex-direction: column;
+  }
+  
+  .edit-btn, .duplicate-btn, .delete-btn, .promotion-btn {
+    flex: none;
+    width: 100%;
   }
   
   .form-actions {

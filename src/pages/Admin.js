@@ -147,6 +147,15 @@ const Admin = () => {
     }
   };
 
+  const handleTogglePromotion = async (tourId, currentPromotionStatus) => {
+    try {
+      await TourService.toggleTourPromotion(tourId, !currentPromotionStatus);
+      fetchTours();
+    } catch (err) {
+      setError('Errore nell\'aggiornamento dello stato promozione: ' + err.message);
+    }
+  };
+
 
   if (!isAuthenticated) {
     return (
@@ -233,6 +242,12 @@ const Admin = () => {
           <div className="tours-grid">
             {filteredTours.map((tour) => (
               <div key={tour.id} className="tour-card">
+                {tour.isPromotion && (
+                  <div className="promotion-badge">
+                    <i className="fa-solid fa-star"></i>
+                    IN PROMOZIONE
+                  </div>
+                )}
                 <div className="tour-image">
                   {tour.heroImage ? (
                     <img
@@ -262,6 +277,14 @@ const Admin = () => {
                     className="duplicate-btn"
                   >
                     Duplica
+                  </button>
+                  <button
+                    onClick={() => handleTogglePromotion(tour.id, tour.isPromotion)}
+                    className={`promotion-btn ${tour.isPromotion ? 'active' : ''}`}
+                    title={tour.isPromotion ? 'Rimuovi da promozioni' : 'Aggiungi a promozioni'}
+                  >
+                    <i className="fa-solid fa-star"></i>
+                    {tour.isPromotion ? 'Rimuovi Promo' : 'Aggiungi Promo'}
                   </button>
                   <button
                     onClick={() => handleDeleteTour(tour.id)}

@@ -88,6 +88,16 @@ export class TourService {
     }
   }
 
+  // Attiva/disattiva promozione per un tour
+  static async toggleTourPromotion(tourId, isPromotion) {
+    return await apiPut(API_CONFIG.ENDPOINTS.TOUR_BY_ID(tourId), { isPromotion });
+  }
+
+  // Ottieni solo i tour in promozione
+  static async getPromotionTours() {
+    return await apiGet(`${API_CONFIG.ENDPOINTS.TOURS}?promotion=true`);
+  }
+
   // Health check del backend
   static async healthCheck() {
     return await apiGet(API_CONFIG.ENDPOINTS.HEALTH);
