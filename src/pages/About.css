@@ -434,7 +434,7 @@ strong {
 }
 
 .mission-btn {
-  background: linear-gradient(135deg, #4A90E2, #357ABD);
+  background: linear-gradient(135deg, #4A90E2, #007bff);
   color: white;
   border: none;
   padding: 15px 40px;
@@ -472,7 +472,7 @@ strong {
 
 .why-choose-header p {
   font-size: 1.2rem;
-  color: #666;
+  color: #0f7ae5;
   max-width: 600px;
   margin: 0 auto 20px;
 }
@@ -573,7 +573,7 @@ strong {
 
 .about-contact-header p {
   font-size: 1.2rem;
-  color: #666;
+  color: #0f7ae5;
   max-width: 600px;
   margin: 0 auto;
 }
@@ -673,7 +673,7 @@ strong {
 }
 
 .submit-btn {
-  background: linear-gradient(135deg, #4A90E2, #357ABD);
+  background: linear-gradient(135deg, #4A90E2, #007bff);
   color: white;
   border: none;
   padding: 15px 40px;
@@ -803,7 +803,7 @@ strong {
 }
 
 .about-cta .primary-cta {
-  background: linear-gradient(135deg, #4A90E2, #357ABD);
+  background: linear-gradient(135deg, #4A90E2, #007bff);
   color: white;
   box-shadow: 0 10px 30px rgba(74, 144, 226, 0.3);
 }
@@ -876,7 +876,7 @@ strong {
 }
 
 .primary-cta {
-  background: linear-gradient(135deg, #4A90E2, #357ABD);
+  background: linear-gradient(135deg, #4A90E2, #007bff);
   color: white;
 }
 

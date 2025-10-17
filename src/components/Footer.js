@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import './Footer.css';
-import { FaFacebook } from 'react-icons/fa';
+import { FaFacebook, FaInstagram } from 'react-icons/fa';
 
 const Footer = () => {
   const location = useLocation();
@@ -49,7 +49,10 @@ const Footer = () => {
 
           <div className="footer-section">
             <h4>Social</h4>
-            <a href="https://www.facebook.com/share/1EdVxEcxH2/?mibextid=wwXIfr" id="facebook-link" target="_blank" aria-label="Facebook"><FaFacebook /></a>
+            <div className="Social-links">
+            <a href="https://www.facebook.com/share/1EdVxEcxH2/?mibextid=wwXIfr" className="Social-link" target="_blank" aria-label="Facebook"><FaFacebook /></a>
+            <a href="https://www.instagram.com/go2_west?igsh=MW5pYnZhY2R4ZDN0OA==" className="Social-link" target="_blank" aria-label="Instagram"><FaInstagram /></a>
+            </div>
           </div>
           <div className="footer-section">
             <img src="/logo-nobg.png" alt="go2west" className="footer-logo-img" />

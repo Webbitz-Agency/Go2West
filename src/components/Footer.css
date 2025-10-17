@@ -386,7 +386,12 @@
   display: inline-block;
 }
 
-#facebook-link {
+.Social-links {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.Social-link {
   color: #ffffff;
   font-size: 1.5rem;
   transition: all 0.3s ease;
@@ -395,7 +400,7 @@
 
 /* Centra l'icona Facebook nel footer mobile */
 @media (max-width: 768px) {
-  #facebook-link {
+  .Social-link {
     display: block;
     text-align: center;
     margin-top: 8px;
