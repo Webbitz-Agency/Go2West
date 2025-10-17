@@ -254,7 +254,7 @@ const Promotions = () => {
       {/* CTA delle promozioni */}
       <section className="promotions-cta">
       <div className="promotions-cta-hero-image">
-          <img src="/images/map2.jpg" alt="Cartina città" />
+          <img src="/images/map4.jpg" alt="Cartina città" />
         </div>
         <div className="promotions-cta-hero-content">
           <h2>Non trovi quello che cerchi?</h2>
