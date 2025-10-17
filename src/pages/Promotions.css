@@ -1,7 +1,7 @@
 /* Promotions Page Styles */
 .promotions-page {
   min-height: 100vh;
-  background: #eefdff;
+  background: #e0f7fa;
 }
 
 /* Hero Section - usando la stessa struttura delle destinazioni */
@@ -94,7 +94,7 @@
 
 /* Filtri */
 .promotions-filters {
-  background: white;
+  background: #eefdff;
   padding: 60px 0;
   border-bottom: 1px solid #e9ecef;
 }
@@ -121,7 +121,7 @@
 }
 
 .filter-btn {
-  background: #f8f9fa;
+  background: white;
   border: 2px solid #e9ecef;
   color: #6c757d;
   padding: 12px 24px;

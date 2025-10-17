@@ -131,7 +131,7 @@ const Promotions = () => {
     <div className="promotions-page">
       <PageTitle title="Promozioni" />
       {/* Hero Section */}
-      <section className="promotions-hero" aria-label="Promozioni - Hero">
+      <section className="promotions-hero">
         <div className="hero-background-image">
           {heroImages.map((image, index) => (
             <img
@@ -254,7 +254,7 @@ const Promotions = () => {
       {/* CTA delle promozioni */}
       <section className="promotions-cta">
       <div className="promotions-cta-hero-image">
-          <img src="/images/map3.jpg" alt="Cartina città" />
+          <img src="/images/map2.jpg" alt="Cartina città" />
         </div>
         <div className="promotions-cta-hero-content">
           <h2>Non trovi quello che cerchi?</h2>

@@ -37,13 +37,15 @@ const Header = () => {
     // Funzione semplice per controllare se una hero section è visibile
     const checkHeroVisibility = () => {
       // Cerca elementi con classe 'home-hero' o 'hero-top'
-      const heroElement = document.querySelector('.home-hero, .hero-top, .promotions-hero, .about-hero');
+      const heroElement = document.querySelector('.home-hero, .promotions-hero, .hero-top, .about-hero');
       
       if (!heroElement) {
+        //console.log('Hero element not found');
         setIsHeroVisible(false);
         return;
       }
       
+      //console.log('Hero element found:', heroElement.className);
       // Controlla se la hero è visibile nel viewport
       const rect = heroElement.getBoundingClientRect();
       // La hero è considerata "attiva" quando:
@@ -51,19 +53,34 @@ const Header = () => {
       // 2. È parzialmente scrollata (top <= 0) ma ancora visibile (bottom > 100)
       const isVisible = (rect.top >= 0) || (rect.top <= 0 && rect.bottom > 100);
       
+      //console.log('Hero visibility:', isVisible, 'rect:', rect);
       setIsHeroVisible(isVisible);
     };
 
     // Controlla immediatamente
     checkHeroVisibility();
     
-    // Aggiungi listener per scroll e resize
+    // Controlla quando il DOM è completamente caricato
+    const handleDOMContentLoaded = () => {
+      checkHeroVisibility();
+    };
+    
+    // Controlla anche quando la pagina è completamente caricata (immagini, CSS, etc.)
+    const handleLoad = () => {
+      checkHeroVisibility();
+    };
+    
+    // Aggiungi listener per scroll, resize, DOMContentLoaded e load
     window.addEventListener('scroll', checkHeroVisibility, { passive: true });
     window.addEventListener('resize', checkHeroVisibility);
+    document.addEventListener('DOMContentLoaded', handleDOMContentLoaded);
+    window.addEventListener('load', handleLoad);
     
     return () => {
       window.removeEventListener('scroll', checkHeroVisibility);
       window.removeEventListener('resize', checkHeroVisibility);
+      document.removeEventListener('DOMContentLoaded', handleDOMContentLoaded);
+      window.removeEventListener('load', handleLoad);
     };
   }, [location.pathname]);
 
@@ -309,7 +326,7 @@ const Header = () => {
               </a>
               
               <a href="/promozioni" className={`mobile-nav-link ${location.pathname === '/promozioni' ? 'active' : ''}`} onClick={closeMobileMenu}>
-                Promozioni
+                Specials
               </a>
                          
               
