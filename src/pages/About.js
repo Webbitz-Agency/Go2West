@@ -66,7 +66,7 @@ const About = () => {
           <h1 className="about-hero-title">Chi Siamo</h1>
           <p className="about-hero-subtitle">
             Benvenuti in Go2West,
-            <br />la vostra porta d'accesso a esperienze di viaggio indimenticabili
+            <br />la vostra porta d'accesso a esperienze di viaggio indimenticabili.
           </p>
         </div>
       </section>
