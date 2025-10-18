@@ -104,10 +104,17 @@ Response:
 OPENAI_API_KEY=sk-your-openai-api-key
 ```
 
+**IMPORTANTE**: Il server funziona anche senza questa variabile, ma il chatbot sarà disabilitato.
+
 ### Dipendenze Backend
 ```
-openai==1.54.3
+openai==1.51.0
 ```
+
+### Gestione Errori
+- **Senza OPENAI_API_KEY**: Il server si avvia normalmente, chatbot disabilitato
+- **Errori OpenAI**: Fallback graceful, funzionalità base mantenute
+- **Conflitti versioni**: Versione OpenAI testata e compatibile
 
 ### Vector Store OpenAI
 - ID: `vs_68f350c542d88191a4026139f8bae406`
@@ -163,9 +170,15 @@ curl -X POST https://your-backend-url/api/sync-vector-store
 - Monitora l'utilizzo del vector store
 
 ### Troubleshooting
-1. **Chat non risponde**: Verifica chiave API OpenAI
-2. **Risposte incomplete**: Controlla sincronizzazione vector store
-3. **Errori di rete**: Verifica connessione a OpenAI API
+1. **Server non si avvia**: 
+   - Errore `OpenAIError`: Configura `OPENAI_API_KEY` su Render
+   - Errore `TypeError: Client.__init__()`: Versione OpenAI incompatibile (usa 1.51.0)
+2. **Chat non risponde**: 
+   - Verifica chiave API OpenAI nelle variabili d'ambiente
+   - Controlla i log per errori di inizializzazione
+3. **Risposte incomplete**: Controlla sincronizzazione vector store
+4. **Errori di rete**: Verifica connessione a OpenAI API
+5. **Chatbot disabilitato**: Normale se OPENAI_API_KEY non è configurata
 
 ## Sicurezza
 

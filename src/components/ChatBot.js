@@ -7,7 +7,7 @@ const ChatBot = () => {
   const [messages, setMessages] = useState([
     {
       id: 1,
-      text: "Ciao! Sono l'assistente virtuale di Go2West. Come posso aiutarti con i nostri tour?",
+      text: "Ciao! Sono l'assistente virtuale di Go2West. Posso aiutarti con informazioni sui nostri tour negli USA, Canada, Messico, America Centrale, Sud America, Caraibi e Polinesia Francese. Cosa vorresti sapere?",
       sender: 'bot',
       timestamp: new Date()
     }
@@ -67,7 +67,7 @@ const ChatBot = () => {
       } else {
         const errorMessage = {
           id: Date.now() + 1,
-          text: "Mi dispiace, si è verificato un errore. Riprova più tardi o contatta direttamente l'agenzia.",
+          text: data.error || "Mi dispiace, si è verificato un errore. Riprova più tardi o contatta direttamente l'agenzia.",
           sender: 'bot',
           timestamp: new Date()
         };
@@ -75,9 +75,17 @@ const ChatBot = () => {
       }
     } catch (error) {
       console.error('Errore nella chat:', error);
+      
+      let errorText = "Mi dispiace, non riesco a connettermi al servizio. Riprova più tardi.";
+      
+      // Se l'errore contiene informazioni specifiche, usale
+      if (error.message && error.message.includes('503')) {
+        errorText = "Il servizio chatbot non è attualmente disponibile. Per informazioni sui tour, contatta direttamente l'agenzia.";
+      }
+      
       const errorMessage = {
         id: Date.now() + 1,
-        text: "Mi dispiace, non riesco a connettermi al servizio. Riprova più tardi.",
+        text: errorText,
         sender: 'bot',
         timestamp: new Date()
       };
