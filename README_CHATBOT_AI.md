@@ -108,7 +108,7 @@ OPENAI_API_KEY=sk-your-openai-api-key
 
 ### Dipendenze Backend
 ```
-openai==1.51.0
+openai==1.35.0
 ```
 
 ### Gestione Errori
@@ -173,7 +173,7 @@ curl -X POST https://your-backend-url/api/sync-vector-store
 ### Troubleshooting
 1. **Server non si avvia**: 
    - Errore `OpenAIError`: Configura `OPENAI_API_KEY` su Render
-   - Errore `TypeError: Client.__init__()`: Versione OpenAI incompatibile (usa 1.51.0)
+   - Errore `TypeError: Client.__init__()`: Versione OpenAI incompatibile (usa 1.35.0)
 2. **Chat non risponde**: 
    - Verifica chiave API OpenAI nelle variabili d'ambiente
    - Controlla i log per errori di inizializzazione
