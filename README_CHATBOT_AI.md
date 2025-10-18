@@ -108,13 +108,19 @@ OPENAI_API_KEY=sk-your-openai-api-key
 
 ### Dipendenze Backend
 ```
-openai==1.35.0
+openai==1.55.3
+httpx==0.27.2
 ```
 
 ### Gestione Errori
 - **Senza OPENAI_API_KEY**: Il server si avvia normalmente, chatbot disabilitato
 - **Errori OpenAI**: Fallback graceful, funzionalità base mantenute
-- **Conflitti versioni**: Versione OpenAI testata e compatibile
+- **Conflitti versioni**: Versioni OpenAI + httpx testate e compatibili
+
+### Fix Errore "proxies" 
+Il problema `Client.__init__() got an unexpected keyword argument 'proxies'` è causato da incompatibilità tra `openai` e `httpx`. La soluzione è usare versioni specifiche compatibili:
+- `openai==1.55.3`
+- `httpx==0.27.2`
 
 ### OpenAI Resources
 - **Vector Store ID**: `vs_68f350c542d88191a4026139f8bae406`
@@ -173,7 +179,7 @@ curl -X POST https://your-backend-url/api/sync-vector-store
 ### Troubleshooting
 1. **Server non si avvia**: 
    - Errore `OpenAIError`: Configura `OPENAI_API_KEY` su Render
-   - Errore `TypeError: Client.__init__()`: Versione OpenAI incompatibile (usa 1.35.0)
+   - Errore `TypeError: Client.__init__()`: Conflitto versioni OpenAI/httpx (usa openai==1.55.3 + httpx==0.27.2)
 2. **Chat non risponde**: 
    - Verifica chiave API OpenAI nelle variabili d'ambiente
    - Controlla i log per errori di inizializzazione
