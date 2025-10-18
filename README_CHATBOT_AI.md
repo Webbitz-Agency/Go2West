@@ -92,10 +92,10 @@ Response:
 
 ### Conversazione Chat
 1. Utente scrive messaggio nella chat
-2. Sistema crea assistant temporaneo OpenAI
-3. Assistant utilizza vector store per cercare informazioni
-4. Sistema restituisce risposta personalizzata
-5. Assistant temporaneo viene eliminato
+2. Sistema utilizza assistant esistente (`asst_cxykjx2GVPkdYqmHXhRrD6D5`)
+3. Crea nuovo thread per la conversazione
+4. Assistant utilizza vector store per cercare informazioni
+5. Sistema restituisce risposta personalizzata
 
 ## Configurazione Richiesta
 
@@ -116,10 +116,11 @@ openai==1.51.0
 - **Errori OpenAI**: Fallback graceful, funzionalità base mantenute
 - **Conflitti versioni**: Versione OpenAI testata e compatibile
 
-### Vector Store OpenAI
-- ID: `vs_68f350c542d88191a4026139f8bae406`
-- Tipo: File Search
-- Contenuto: File .txt dei tour
+### OpenAI Resources
+- **Vector Store ID**: `vs_68f350c542d88191a4026139f8bae406`
+- **Assistant ID**: `asst_cxykjx2GVPkdYqmHXhRrD6D5`
+- **Tipo**: File Search
+- **Contenuto**: File .txt dei tour
 
 ## Caratteristiche dell'AI Assistant
 
@@ -195,16 +196,15 @@ curl -X POST https://your-backend-url/api/sync-vector-store
 ## Performance
 
 ### Ottimizzazioni
-- Assistant temporanei (no persistenza)
+- Assistant persistente (no creazione/eliminazione)
+- Thread temporanei per conversazioni
 - File .txt leggeri e ben formattati
-- Cleanup automatico risorse OpenAI
 - Cache locale messaggi chat
 
 ### Tempi di Risposta
-- Creazione assistant: ~1-2 secondi
+- Creazione thread: ~0.5 secondi
 - Elaborazione messaggio: ~2-5 secondi
-- Cleanup: ~0.5 secondi
-- Totale conversazione: ~3-7 secondi
+- Totale conversazione: ~2.5-5.5 secondi (migliorato!)
 
 ## Estensioni Future
 
