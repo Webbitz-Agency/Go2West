@@ -1,0 +1,198 @@
+import React, { useState, useRef, useEffect } from 'react';
+import TourService from '../services/TourService';
+import './ChatBot.css';
+
+const ChatBot = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState([
+    {
+      id: 1,
+      text: "Ciao! Sono l'assistente virtuale di Go2West. Come posso aiutarti con i nostri tour?",
+      sender: 'bot',
+      timestamp: new Date()
+    }
+  ]);
+  const [inputMessage, setInputMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const messagesEndRef = useRef(null);
+  const inputRef = useRef(null);
+
+  // Scroll automatico ai nuovi messaggi
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  // Focus sull'input quando si apre la chat
+  useEffect(() => {
+    if (isOpen && inputRef.current) {
+      setTimeout(() => {
+        inputRef.current.focus();
+      }, 100);
+    }
+  }, [isOpen]);
+
+  const toggleChat = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const sendMessage = async () => {
+    if (!inputMessage.trim() || isLoading) return;
+
+    const userMessage = {
+      id: Date.now(),
+      text: inputMessage,
+      sender: 'user',
+      timestamp: new Date()
+    };
+
+    setMessages(prev => [...prev, userMessage]);
+    setInputMessage('');
+    setIsLoading(true);
+
+    try {
+      const data = await TourService.sendChatMessage(inputMessage);
+
+      if (data.status === 'success') {
+        const botMessage = {
+          id: Date.now() + 1,
+          text: data.response,
+          sender: 'bot',
+          timestamp: new Date()
+        };
+        setMessages(prev => [...prev, botMessage]);
+      } else {
+        const errorMessage = {
+          id: Date.now() + 1,
+          text: "Mi dispiace, si è verificato un errore. Riprova più tardi o contatta direttamente l'agenzia.",
+          sender: 'bot',
+          timestamp: new Date()
+        };
+        setMessages(prev => [...prev, errorMessage]);
+      }
+    } catch (error) {
+      console.error('Errore nella chat:', error);
+      const errorMessage = {
+        id: Date.now() + 1,
+        text: "Mi dispiace, non riesco a connettermi al servizio. Riprova più tardi.",
+        sender: 'bot',
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  };
+
+  const formatTime = (timestamp) => {
+    return timestamp.toLocaleTimeString('it-IT', { 
+      hour: '2-digit', 
+      minute: '2-digit' 
+    });
+  };
+
+  return (
+    <div className="chatbot-container">
+      {/* Chat Bubble */}
+      <div 
+        className={`chat-bubble ${isOpen ? 'open' : ''}`}
+        onClick={toggleChat}
+      >
+        {isOpen ? (
+          <i className="fa-solid fa-times"></i>
+        ) : (
+          <i className="fa-solid fa-comments"></i>
+        )}
+      </div>
+
+      {/* Chat Window */}
+      {isOpen && (
+        <div className="chat-window">
+          <div className="chat-header">
+            <div className="chat-header-info">
+              <div className="chat-avatar">
+                <i className="fa-solid fa-robot"></i>
+              </div>
+              <div className="chat-header-text">
+                <h4>Assistente Go2West</h4>
+                <span className="chat-status">Online</span>
+              </div>
+            </div>
+            <button className="chat-close" onClick={toggleChat}>
+              <i className="fa-solid fa-times"></i>
+            </button>
+          </div>
+
+          <div className="chat-messages">
+            {messages.map((message) => (
+              <div 
+                key={message.id} 
+                className={`message ${message.sender === 'user' ? 'user-message' : 'bot-message'}`}
+              >
+                <div className="message-content">
+                  <div className="message-text">
+                    {message.text}
+                  </div>
+                  <div className="message-time">
+                    {formatTime(message.timestamp)}
+                  </div>
+                </div>
+              </div>
+            ))}
+            
+            {isLoading && (
+              <div className="message bot-message">
+                <div className="message-content">
+                  <div className="typing-indicator">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            <div ref={messagesEndRef} />
+          </div>
+
+          <div className="chat-input-container">
+            <div className="chat-input-wrapper">
+              <textarea
+                ref={inputRef}
+                value={inputMessage}
+                onChange={(e) => setInputMessage(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder="Scrivi un messaggio..."
+                className="chat-input"
+                rows="1"
+                disabled={isLoading}
+              />
+              <button 
+                onClick={sendMessage}
+                className="chat-send-button"
+                disabled={!inputMessage.trim() || isLoading}
+              >
+                <i className="fa-solid fa-paper-plane"></i>
+              </button>
+            </div>
+            <div className="chat-footer-text">
+              Powered by Go2West AI Assistant
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default ChatBot;

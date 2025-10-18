@@ -104,6 +104,16 @@ export class TourService {
   static async healthCheck() {
     return await apiGet(API_CONFIG.ENDPOINTS.HEALTH);
   }
+
+  // Chatbot AI
+  static async sendChatMessage(message) {
+    return await apiPost('/api/chat', { message });
+  }
+
+  // Sincronizza tutti i tour con il vector store
+  static async syncVectorStore() {
+    return await apiPost('/api/sync-vector-store', {});
+  }
 }
 
 export default TourService;
