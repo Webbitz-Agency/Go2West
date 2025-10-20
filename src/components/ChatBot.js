@@ -20,6 +20,7 @@ const ChatBot = () => {
   const typingTimerRef = useRef(null);
   const [isHovering, setIsHovering] = useState(false);
   const isHoveringRef = useRef(false);
+  const [isSpeechVisible, setIsSpeechVisible] = useState(false);
   const bubbleText = "Chatta con me!";
 
   // Scroll automatico ai nuovi messaggi
@@ -66,12 +67,14 @@ const ChatBot = () => {
 
     setIsHovering(true);
     isHoveringRef.current = true;
+    setIsSpeechVisible(true);
     type();
   };
 
   const stopTypewriter = () => {
     setIsHovering(false);
     isHoveringRef.current = false;
+    setIsSpeechVisible(false);
     if (typingTimerRef.current) {
       clearTimeout(typingTimerRef.current);
       typingTimerRef.current = null;
@@ -80,6 +83,39 @@ const ChatBot = () => {
       speechRef.current.innerHTML = '';
     }
   };
+
+  // Teaser mobile periodico: 5s on, 1s off
+  useEffect(() => {
+    const mql = window.matchMedia('(max-width: 768px)');
+    let showTimer = null;
+    let hideTimer = null;
+
+    const runCycle = () => {
+      if (!mql.matches || isOpen) return;
+      startTypewriter();
+      showTimer = setTimeout(() => {
+        stopTypewriter();
+        hideTimer = setTimeout(runCycle, 1000);
+      }, 5000);
+    };
+
+    if (mql.matches && !isOpen) runCycle();
+
+    const onChange = () => {
+      stopTypewriter();
+      if (showTimer) clearTimeout(showTimer);
+      if (hideTimer) clearTimeout(hideTimer);
+      if (mql.matches && !isOpen) runCycle();
+    };
+    mql.addEventListener('change', onChange);
+
+    return () => {
+      stopTypewriter();
+      if (showTimer) clearTimeout(showTimer);
+      if (hideTimer) clearTimeout(hideTimer);
+      mql.removeEventListener('change', onChange);
+    };
+  }, [isOpen]);
 
   const sendMessage = async () => {
     if (!inputMessage.trim() || isLoading) return;
@@ -161,7 +197,11 @@ const ChatBot = () => {
         onMouseLeave={stopTypewriter}
       >
         {isOpen ? (
-          <i className="fa-solid fa-times"></i>
+          <img 
+            src="/images/chatbot/statue-of-liberty.png" 
+            alt="Assistente Chat - Statua della Libertà"
+            className="statue-icon"
+          />
         ) : (
           <img 
             src="/images/chatbot/statue-of-liberty.gif" 
@@ -169,7 +209,7 @@ const ChatBot = () => {
             className="statue-icon"
           />
         )}
-        <div className="chat-speech-bubble" role="status" aria-live="polite">
+        <div className={`chat-speech-bubble${isSpeechVisible ? ' show' : ''}`} role="status" aria-live="polite">
           <span className="chat-speech-text" ref={speechRef}></span>
         </div>
       </div>

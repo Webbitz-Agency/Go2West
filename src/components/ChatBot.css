@@ -27,8 +27,8 @@
 .chat-speech-bubble {
   position: absolute;
   bottom: 100px; /* più alta rispetto alla statua */
-  left: 50%; /* centrata sopra la bubble */
-  transform: translateX(-50%);
+  left: 20%; /* centrata sopra la bubble */
+  transform: translate(-50%, 0);
   background: #ffffff;
   border: 2px solid #006fcf;
   border-radius: 14px;
@@ -67,9 +67,10 @@
   border-top: 7px solid #ffffff;
 }
 
-.chat-bubble:hover:not(.open) .chat-speech-bubble {
+.chat-bubble:hover:not(.open) .chat-speech-bubble,
+.chat-speech-bubble.show {
   opacity: 1;
-  transform: translate(-70%, 0);
+  transform: translate(-50%, 0);
 }
 
 /* Typewriter effect for the bubble text */
@@ -113,8 +114,10 @@
 }
 
 .chat-bubble.open {
-  background: linear-gradient(45deg, #ff3f3f, #ee2424);
-  border-radius: 50%;
+  background: transparent; /* niente quadrato rosso */
+  border-radius: 0;
+  height: 65px;
+  width: 65px;
 }
 
 /* Chat Window */
@@ -324,7 +327,7 @@
 
 .chat-input-wrapper {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   gap: 10px;
   background: #f8f9fa;
   border-radius: 25px;
@@ -393,8 +396,17 @@
   }
 
   .chat-bubble {
-    width: 55px;
-    height: 55px;
+    width: 58px;
+    height: 58px;
+  }
+
+  .chat-speech-bubble {
+    bottom: 82px;
+    min-width: 120px;
+    max-width: 180px;
+    padding: 8px 12px;
+    border-radius: 12px;
+    left: 10%;
   }
 
   .chat-bubble i {
@@ -402,9 +414,10 @@
   }
 
   .chat-window {
-    width: 320px;
-    height: 450px;
-    bottom: 75px;
+    width: calc(100vw - 20px);
+    height: 85vh;
+    right: -10px;
+    bottom: 70px;
   }
 
   .chat-header {
@@ -421,11 +434,11 @@
 }
 
 @media (max-width: 480px) {
-  .chat-window {
+  /*.chat-window {
     width: calc(100vw - 30px);
     right: -15px;
     height: 400px;
-  }
+  }*/
 
   .message {
     max-width: 85%;
