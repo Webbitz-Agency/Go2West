@@ -16,6 +16,11 @@ const ChatBot = () => {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
+  const speechRef = useRef(null);
+  const typingTimerRef = useRef(null);
+  const [isHovering, setIsHovering] = useState(false);
+  const isHoveringRef = useRef(false);
+  const bubbleText = "Chatta con me!";
 
   // Scroll automatico ai nuovi messaggi
   const scrollToBottom = () => {
@@ -37,6 +42,43 @@ const ChatBot = () => {
 
   const toggleChat = () => {
     setIsOpen(!isOpen);
+  };
+
+  // Typewriter effetto su hover
+  const startTypewriter = () => {
+    if (!speechRef.current) return;
+    // reset contenuto
+    speechRef.current.innerHTML = '';
+    let i = 0;
+
+    const type = () => {
+      if (!isHoveringRef.current) return; // interrompi se uscito hover
+      if (i < bubbleText.length) {
+        const partial = bubbleText.substring(0, i + 1);
+        speechRef.current.innerHTML = `${partial}<span class="chat-caret" aria-hidden="true"></span>`;
+        i += 1;
+        typingTimerRef.current = setTimeout(type, 60);
+      } else {
+        // mantiene il caret che lampeggia al termine
+        speechRef.current.innerHTML = `${bubbleText}<span class="chat-caret" aria-hidden="true"></span>`;
+      }
+    };
+
+    setIsHovering(true);
+    isHoveringRef.current = true;
+    type();
+  };
+
+  const stopTypewriter = () => {
+    setIsHovering(false);
+    isHoveringRef.current = false;
+    if (typingTimerRef.current) {
+      clearTimeout(typingTimerRef.current);
+      typingTimerRef.current = null;
+    }
+    if (speechRef.current) {
+      speechRef.current.innerHTML = '';
+    }
   };
 
   const sendMessage = async () => {
@@ -115,12 +157,21 @@ const ChatBot = () => {
       <div 
         className={`chat-bubble ${isOpen ? 'open' : ''}`}
         onClick={toggleChat}
+        onMouseEnter={startTypewriter}
+        onMouseLeave={stopTypewriter}
       >
         {isOpen ? (
           <i className="fa-solid fa-times"></i>
         ) : (
-          <i className="fa-solid fa-comments"></i>
+          <img 
+            src="/images/chatbot/statue-of-liberty.gif" 
+            alt="Statua della Libertà - Assistente Chat"
+            className="statue-icon"
+          />
         )}
+        <div className="chat-speech-bubble" role="status" aria-live="polite">
+          <span className="chat-speech-text" ref={speechRef}></span>
+        </div>
       </div>
 
       {/* Chat Window */}

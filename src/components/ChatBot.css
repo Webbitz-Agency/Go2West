@@ -9,22 +9,93 @@
 
 /* Chat Bubble */
 .chat-bubble {
-  width: 60px;
-  height: 60px;
-  background: linear-gradient(135deg, #D4AF37, #B8941F);
-  border-radius: 50%;
+  width: 75px;
+  height: 75px;
+  /*background: linear-gradient(135deg, #D4AF37, #B8941F);*/
+  /*border-radius: 50%;*/
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+  /*box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);*/
   transition: all 0.3s ease;
   position: relative;
 }
 
-.chat-bubble:hover {
-  transform: scale(1.1);
-  box-shadow: 0 6px 25px rgba(212, 175, 55, 0.4);
+
+/* Speech Bubble (vignetta) */
+.chat-speech-bubble {
+  position: absolute;
+  bottom: 100px; /* più alta rispetto alla statua */
+  left: 50%; /* centrata sopra la bubble */
+  transform: translateX(-50%);
+  background: #ffffff;
+  border: 2px solid #006fcf;
+  border-radius: 14px;
+  padding: 10px 14px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  /* la trasformazione Y è assorbita da quella sopra */
+  transition: all 0.25s ease;
+  pointer-events: none;
+  min-width: 130px;
+  max-width: 220px;
+  z-index: 2;
+}
+
+.chat-speech-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: calc(70% - 8px);
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid #006fcf;
+}
+
+.chat-speech-bubble::before {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: calc(70% - 7px);
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 7px solid #ffffff;
+}
+
+.chat-bubble:hover:not(.open) .chat-speech-bubble {
+  opacity: 1;
+  transform: translate(-70%, 0);
+}
+
+/* Typewriter effect for the bubble text */
+.chat-speech-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+  white-space: nowrap;
+}
+
+/* caret gestito via span dedicato inserito da JS */
+.chat-caret {
+  display: inline-block;
+  width: 0.15em;
+  margin-left: 2px;
+  border-right: 0.15em solid #006fcf;
+  animation: caret-blink 0.9s steps(1) infinite;
+}
+
+@keyframes caret-blink {
+  50% { border-color: transparent; }
+}
+
+.chat-bubble:hover .statue-icon {
+  transform: scale(1.15);
+  filter: brightness(1.1);
 }
 
 .chat-bubble i {
@@ -33,8 +104,17 @@
   transition: all 0.3s ease;
 }
 
+.chat-bubble .statue-icon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: all 0.3s ease;
+  box-shadow: #004cfe;
+}
+
 .chat-bubble.open {
-  background: linear-gradient(135deg, #8B4513, #A0522D);
+  background: linear-gradient(45deg, #ff3f3f, #ee2424);
+  border-radius: 50%;
 }
 
 /* Chat Window */
@@ -66,7 +146,7 @@
 
 /* Chat Header */
 .chat-header {
-  background: linear-gradient(135deg, #D4AF37, #B8941F);
+  background: linear-gradient(45deg, #006fcf, #004cfe);
   color: white;
   padding: 15px 20px;
   display: flex;
@@ -81,10 +161,10 @@
 }
 
 .chat-avatar {
-  width: 40px;
-  height: 40px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
+  /*width: 40px;
+  height: 40px;*/
+  /*background: rgba(255, 255, 255, 0.2);*/
+  /*border-radius: 50%;*/
   display: flex;
   align-items: center;
   justify-content: center;
@@ -97,7 +177,8 @@
 .chat-header-text h4 {
   margin: 0;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 500;
+  letter-spacing: 0.6px;
 }
 
 .chat-status {
@@ -106,6 +187,8 @@
 }
 
 .chat-close {
+  height: 30px;
+  width: 30px;
   background: none;
   border: none;
   color: white;
@@ -140,7 +223,7 @@
 }
 
 .chat-messages::-webkit-scrollbar-thumb {
-  background: #D4AF37;
+  background: linear-gradient(45deg, #ff3f3f, #ee2424);
   border-radius: 2px;
 }
 
@@ -166,7 +249,7 @@
 }
 
 .user-message .message-content {
-  background: linear-gradient(135deg, #D4AF37, #B8941F);
+  background: linear-gradient(45deg, #006fcf, #004cfe);
   color: white;
   border-bottom-right-radius: 4px;
 }
@@ -208,7 +291,7 @@
 .typing-indicator span {
   width: 8px;
   height: 8px;
-  background: #D4AF37;
+  background: linear-gradient(45deg, #ff3f3f, #ee2424);
   border-radius: 50%;
   animation: typing 1.4s infinite ease-in-out;
 }
@@ -267,7 +350,7 @@
 }
 
 .chat-send-button {
-  background: linear-gradient(135deg, #D4AF37, #B8941F);
+  background: linear-gradient(45deg, #006fcf, #004cfe);
   border: none;
   color: white;
   width: 35px;
@@ -283,7 +366,7 @@
 
 .chat-send-button:hover:not(:disabled) {
   transform: scale(1.1);
-  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 111, 207, 0.3);
 }
 
 .chat-send-button:disabled {
