@@ -227,7 +227,7 @@
   max-width: 85vw;
   margin: 0 auto;
   line-height: 1.6;
-  font-family: 'DM Serif Text', serif;
+  /*font-family: 'DM Serif Text', serif;*/
   letter-spacing: 0.7px;
 }
 
@@ -1653,13 +1653,12 @@
     grid-template-columns: 1.2fr 0.8fr;
     grid-template-rows: 
       clamp(130px, 22vw, 160px)   /* Riga 1: più alta */
-      clamp(250px, 42vw, 300px)   /* Riga 2: molto alta */
-      clamp(130px, 22vw, 150px);  /* Riga 3: per Tour Guidati (più compatta) */
+      clamp(250px, 42vw, 300px);   /* Riga 2: molto alta */
     gap: clamp(8px, 1.5vw, 10px);
     max-width: 95vw;
     margin: 0 auto;
     /* Elimina spazio extra in basso */
-    margin-bottom: 0;
+    margin-bottom: 30px;
   }
   
   /* Layout puzzle compatto a 2 righe con 3 card visibili */
@@ -3516,7 +3515,7 @@
 
 @media (max-width: 768px) {
   .suggestions-section {
-    padding: 60px 5% 60px;
+    padding: 30px 5% 20px;
   }
   
   .suggestion-card:not(.featured),
@@ -3574,8 +3573,8 @@
 
 .horizontal-section {
   background: #eefdff;
-  padding: 0;
-  margin-bottom: 80px;
+  padding: 0 0 50px;
+  margin-bottom: 0px;
   position: relative;
 }
 
@@ -3887,55 +3886,78 @@
 
 @media (max-width: 992px) {
   .horizontal-section {
-    padding: 50px var(--section-padding-horizontal);
+    padding: 0 0 30px;
   }
   
   .horizontal-container {
     flex-direction: row;
     height: auto;
-    gap: 20px;
+    gap: 15px;
     align-items: stretch;
   }
   
-  /* Layout a due colonne per tablet: testo a sinistra, immagini a destra */
-  .horizontal-text-container {
-    flex: 1;
+  /* Mantieni layout a tre colonne: carosello sinistra, testo centro, carosello destra */
+  .horizontal-image-left {
+    flex: 0 0 30%;
     order: 1;
-    padding: 40px 30px;
-    border-radius: 15px 0 0 15px;
+    height: auto;
+    /*border-radius: 15px 0 0 15px;*/
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
   }
   
-  .horizontal-title {
-    font-size: 2rem;
-    margin-bottom: 18px;
-  }
-  
-  .horizontal-text {
-    font-size: 1.1rem;
-    margin-bottom: 18px;
-  }
-  
-  .horizontal-text-secondary {
-    font-size: 1rem;
-    margin-bottom: 25px;
-  }
-  
-  /* Container per le immagini a destra */
-  .horizontal-image-left {
-    flex: 1;
+  .horizontal-text-container {
+    flex: 0 0 40%;
     order: 2;
-    height: 400px;
+    padding: 30px 20px;
     border-radius: 0;
     box-shadow: none;
   }
   
+  .horizontal-title {
+    font-size: 1.7rem;
+    margin-bottom: 14px;
+  }
+  
+  .horizontal-text {
+    font-size: 0.95rem;
+    margin-bottom: 14px;
+  }
+  
+  .horizontal-text-secondary {
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+  }
+  
+  .horizontal-cta-btn {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+  
   .horizontal-image-right {
-    flex: 1;
+    flex: 0 0 30%;
     order: 3;
-    height: 400px;
-    border-radius: 0 15px 15px 0;
+    height: auto;
+    /*border-radius: 0 15px 15px 0;*/
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Riduci dimensioni caroselli */
+  /*.horizontal-carousel .carousel-image {
+    height: 350px;
+  }*/
+  
+  .horizontal-carousel .carousel-btn {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .horizontal-carousel .carousel-indicators {
+    bottom: 8px;
+  }
+  
+  .horizontal-carousel .indicator {
+    width: 8px;
+    height: 8px;
   }
 }
 
@@ -3994,6 +4016,10 @@
     height: 280px;
     border-radius: 0 0 15px 15px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .reveal-on-scroll.revealed{
+    padding: 0;
   }
 }
 
@@ -4988,23 +5014,37 @@
   
   .destination-description-new {
     font-size: 0.8rem;
-    margin-bottom: 20px;
+    margin-bottom: 0;
+    line-height: 1.4;
   }
   
   .destination-btn-new {
-    padding: 12px 25px;
-    font-size: 0.9rem;
+    padding: 6px 12px;
+    font-size: 0.7rem;
   }
   
-  /* Fissa il bottone in basso a sinistra su mobile */
+  /* Container descrizione con padding ridotto e altezza adattiva */
+  .destination-description-container {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 12px;
+    margin: 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    height: auto;
+    min-height: 60px;
+    max-height: 80px;
+    overflow: hidden;
+  }
+  
+  /* Bottone posizionato normalmente, non assoluto */
   .destination-btn-container {
-    position: absolute;
-    bottom: 15px;
-    left: 20px;
-    margin-top: 0;
+    position: static;
+    margin-top: 10px;
     padding-top: 0;
-    display: block;
-    gap: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
   
 }
@@ -5094,9 +5134,9 @@
   }
   
   .destination-description-new {
-    font-size: 0.9rem;
-    margin-bottom: 15px;
-    line-height: 20px;
+    font-size: 0.75rem;
+    margin-bottom: 12px;
+    line-height: 1.3;
   }
   
   .destination-short-new span {
@@ -5105,19 +5145,32 @@
   }
   
   .destination-btn-new {
-    padding: 10px 20px;
-    font-size: 0.85rem;
+    padding: 5px 10px;
+    font-size: 0.65rem;
   }
   
-  /* Fissa il bottone in basso a sinistra su mobile piccolo */
+  /* Container descrizione ancora più compatto su mobile piccolo */
+  .destination-description-container {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 0 0 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    height: auto;
+    min-height: 50px;
+    max-height: 80px;
+    overflow: hidden;
+  }
+  
+  /* Bottone posizionato normalmente anche su mobile piccolo */
   .destination-btn-container {
-    position: absolute;
-    bottom: 12px;
-    left: 15px;
+    position: static;
     margin-top: 0;
     padding-top: 0;
-    display: block;
-    gap: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
   
 }
