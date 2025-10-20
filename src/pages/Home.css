@@ -3169,12 +3169,21 @@
   color: #0f7ae5;
 }
 
+.suggestions-section .section-header h2 {
+  font-size: 2.5rem;
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-weight: 500;
+  font-family: 'DM Serif Text', serif;
+}
+
 /* Responsive per sezioni descrittive */
 @media (max-width: 768px) {
   .descriptive-section {
     padding: 40px 5%;
   }
-  
+  .contact-header h2,
+  .suggestions-section .section-header h2,
   .descriptive-section h2 {
     font-size: 1.8rem;
   }
@@ -3195,14 +3204,6 @@
 .suggestions-section .section-header {
   text-align: center;
   margin-bottom: 60px;
-}
-
-.suggestions-section .section-header h2 {
-  font-size: 2.5rem;
-  color: #2c3e50;
-  margin-bottom: 15px;
-  font-weight: 500;
-  font-family: 'DM Serif Text', serif;
 }
 
 .suggestions-section .section-header p {
