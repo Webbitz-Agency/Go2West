@@ -120,7 +120,9 @@
 .tour-duration {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 5px;
+  width: -webkit-fill-available
 }
 
 .tour-type {
@@ -318,7 +320,7 @@
   }
   
   .tour-card-content {
-    padding: 12px; /* Ancora meno padding */
+    padding: 8px; /* Ancora meno padding */
   }
   
   .tour-card-title {
@@ -329,11 +331,12 @@
   .tour-card-description {
     font-size: 11px; /* Ancora più piccola descrizione */
     margin-bottom: 10px;
+    line-height: 1.3;
   }
   
   .tour-card-meta {
     margin-bottom: 10px;
-    font-size: 10px;
+    font-size: 10px !important;
   }
   
   .tour-card-button {

@@ -5090,7 +5090,7 @@
   
   
   .destination-content-new {
-    padding: 15px 12px 55px 12px;
+    padding: 15px 12px 15px 12px;
     min-height: 140px;
     justify-content: space-between;
     position: relative;
@@ -5160,7 +5160,7 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     height: auto;
     min-height: 50px;
-    max-height: 80px;
+    max-height: 100px;
     overflow: hidden;
   }
   
