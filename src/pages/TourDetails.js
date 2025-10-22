@@ -16,6 +16,31 @@ const TourDetails = () => {
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState('');
   const [isDatesModalOpen, setIsDatesModalOpen] = useState(false);
+  const [currentWizardStep, setCurrentWizardStep] = useState(1);
+  const [wizardData, setWizardData] = useState({
+    // Step 1: Dettagli Viaggio
+    departureDate: '',
+    adults: 1,
+    children: 0,
+    childAge: '',
+    singleRooms: 0,
+    doubleRooms: 0,
+    tripleRooms: 0,
+    quadrupleRooms: 0,
+    comments: '',
+    // Step 2: Dati di Contatto
+    firstName: '',
+    lastName: '',
+    citizenship: '',
+    address: '',
+    city: '',
+    postalCode: '',
+    country: '',
+    email: '',
+    phone: '',
+    // Step 3: Privacy
+    privacyAccepted: false
+  });
 
   // Funzione per ottenere le date del tour dal database
   const getTourDates = () => {
@@ -60,6 +85,10 @@ const TourDetails = () => {
   // Funzione per aprire il modale di prenotazione
   const handleBookingClick = (dateRange) => {
     setSelectedDate(dateRange);
+    setWizardData(prev => ({
+      ...prev,
+      departureDate: dateRange
+    }));
     setIsBookingModalOpen(true);
     document.body.style.overflow = 'hidden'; // Blocca lo scroll della pagina
   };
@@ -75,7 +104,105 @@ const TourDetails = () => {
   const closeBookingModal = () => {
     setIsBookingModalOpen(false);
     setSelectedDate('');
+    setCurrentWizardStep(1);
+    setWizardData({
+      departureDate: '',
+      adults: 1,
+      children: 0,
+      childAge: '',
+      singleRooms: 0,
+      doubleRooms: 0,
+      tripleRooms: 0,
+      quadrupleRooms: 0,
+      comments: '',
+      firstName: '',
+      lastName: '',
+      citizenship: '',
+      address: '',
+      city: '',
+      postalCode: '',
+      country: '',
+      email: '',
+      phone: '',
+      privacyAccepted: false
+    });
     document.body.style.overflow = 'auto'; // Riavvia lo scroll della pagina
+  };
+
+  // Funzioni per gestire il wizard
+  const handleWizardDataChange = (field, value) => {
+    setWizardData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const nextWizardStep = () => {
+    // Validazione per Step 1: Dettagli Viaggio
+    if (currentWizardStep === 1) {
+      if (!wizardData.departureDate) {
+        alert('Seleziona una data di partenza');
+        return;
+      }
+      if (wizardData.adults < 1) {
+        alert('Inserisci almeno 1 adulto');
+        return;
+      }
+    }
+    
+    // Validazione per Step 2: Dati di Contatto
+    if (currentWizardStep === 2) {
+      if (!wizardData.firstName.trim()) {
+        alert('Inserisci il nome');
+        return;
+      }
+      if (!wizardData.lastName.trim()) {
+        alert('Inserisci il cognome');
+        return;
+      }
+      if (!wizardData.citizenship.trim()) {
+        alert('Inserisci la cittadinanza');
+        return;
+      }
+      if (!wizardData.email.trim()) {
+        alert('Inserisci l\'email');
+        return;
+      }
+      if (!wizardData.phone.trim()) {
+        alert('Inserisci il telefono');
+        return;
+      }
+      
+      // Validazione email
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(wizardData.email)) {
+        alert('Inserisci un\'email valida');
+        return;
+      }
+    }
+    
+    if (currentWizardStep < 3) {
+      setCurrentWizardStep(prev => prev + 1);
+    }
+  };
+
+  const prevWizardStep = () => {
+    if (currentWizardStep > 1) {
+      setCurrentWizardStep(prev => prev - 1);
+    }
+  };
+
+  const submitWizard = () => {
+    // Validazione finale
+    if (!wizardData.privacyAccepted) {
+      alert('Devi accettare l\'informativa sulla privacy per procedere');
+      return;
+    }
+    
+    // Qui implementeresti la logica per inviare i dati
+    console.log('Dati del wizard:', wizardData);
+    alert('Richiesta inviata con successo!');
+    closeBookingModal();
   };
 
   // Funzione per aprire il modale delle date
@@ -576,237 +703,364 @@ const TourDetails = () => {
             </div>
             
             <div className="booking-modal-content">
-              <form className="booking-form">
-                {/* Sezione Dettagli Viaggio */}
-                <div className="booking-section">
-                  <h3>Dettagli Viaggio</h3>
-                  
-                  <div className="form-group">
-                    <label htmlFor="departure-date">Data di partenza *</label>
-                    {selectedDate ? (
-                      <input 
-                        type="text" 
-                        id="departure-date" 
-                        value={selectedDate} 
-                        readOnly 
-                        className="form-input"
-                      />
-                    ) : (
-                      <select id="departure-date" className="form-select" required>
-                        <option value="">Seleziona una data</option>
-                        {tourDates[selectedYear]?.map((dateInfo, index) => (
-                          <option key={index} value={dateInfo.dateRange}>
-                            {dateInfo.dateRange}
-                          </option>
-                        ))}
-                      </select>
+              {/* Wizard Progress Bar */}
+              <div className="wizard-progress">
+                <div className="wizard-steps">
+                  <div className={`wizard-step ${currentWizardStep >= 1 ? 'active' : ''}`}>
+                    <span className="step-number">1</span>
+                    <span className="step-label">Dettagli Viaggio</span>
+                  </div>
+                  <div className={`wizard-step ${currentWizardStep >= 2 ? 'active' : ''}`}>
+                    <span className="step-number">2</span>
+                    <span className="step-label">Dati di Contatto</span>
+                  </div>
+                  <div className={`wizard-step ${currentWizardStep >= 3 ? 'active' : ''}`}>
+                    <span className="step-number">3</span>
+                    <span className="step-label">Conferma</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Wizard Content */}
+              <div className="wizard-content">
+                {/* Step 1: Dettagli Viaggio */}
+                {currentWizardStep === 1 && (
+                  <div className="wizard-step-content">
+                    <h3>Dettagli Viaggio</h3>
+                    
+                    <div className="form-group">
+                      <label htmlFor="departure-date">Data di partenza *</label>
+                      {selectedDate ? (
+                        <input 
+                          type="text" 
+                          id="departure-date" 
+                          value={wizardData.departureDate} 
+                          readOnly 
+                          className="form-input"
+                        />
+                      ) : (
+                        <select 
+                          id="departure-date" 
+                          className="form-select" 
+                          value={wizardData.departureDate}
+                          onChange={(e) => handleWizardDataChange('departureDate', e.target.value)}
+                          required
+                        >
+                          <option value="">Seleziona una data</option>
+                          {tourDates[selectedYear]?.map((dateInfo, index) => (
+                            <option key={index} value={dateInfo.dateRange}>
+                              {dateInfo.dateRange}
+                            </option>
+                          ))}
+                        </select>
+                      )}
+                    </div>
+                    
+                    <div className="form-row-preventivo">
+                      <div className="form-group">
+                        <label htmlFor="adults">Numero adulti *</label>
+                        <select 
+                          id="adults" 
+                          className="form-select" 
+                          value={wizardData.adults}
+                          onChange={(e) => handleWizardDataChange('adults', parseInt(e.target.value))}
+                        >
+                          {[...Array(10)].map((_, i) => (
+                            <option key={i + 1} value={i + 1}>{i + 1}</option>
+                          ))}
+                        </select>
+                      </div>
+                      
+                      <div className="form-group">
+                        <label htmlFor="children">Numero bambini (&lt;16 anni)</label>
+                        <select 
+                          id="children" 
+                          className="form-select" 
+                          value={wizardData.children}
+                          onChange={(e) => handleWizardDataChange('children', parseInt(e.target.value))}
+                        >
+                          {[...Array(6)].map((_, i) => (
+                            <option key={i} value={i}>{i}</option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                    
+                    {wizardData.children > 0 && (
+                      <div className="form-group">
+                        <label htmlFor="child-age">Età bambini</label>
+                        <input 
+                          type="text" 
+                          id="child-age" 
+                          className="form-input" 
+                          placeholder="Es. 8, 12"
+                          value={wizardData.childAge}
+                          onChange={(e) => handleWizardDataChange('childAge', e.target.value)}
+                        />
+                      </div>
                     )}
+                    
+                    <div className="form-row-preventivo">
+                      <div className="form-group">
+                        <label htmlFor="single-rooms">Camere singole</label>
+                        <select 
+                          id="single-rooms" 
+                          className="form-select" 
+                          value={wizardData.singleRooms}
+                          onChange={(e) => handleWizardDataChange('singleRooms', parseInt(e.target.value))}
+                        >
+                          {[...Array(6)].map((_, i) => (
+                            <option key={i} value={i}>{i}</option>
+                          ))}
+                        </select>
+                      </div>
+                      
+                      <div className="form-group">
+                        <label htmlFor="double-rooms">Camere doppie</label>
+                        <select 
+                          id="double-rooms" 
+                          className="form-select" 
+                          value={wizardData.doubleRooms}
+                          onChange={(e) => handleWizardDataChange('doubleRooms', parseInt(e.target.value))}
+                        >
+                          {[...Array(6)].map((_, i) => (
+                            <option key={i} value={i}>{i}</option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                    
+                    <div className="form-row-preventivo">
+                      <div className="form-group">
+                        <label htmlFor="triple-rooms">Camere triple</label>
+                        <select 
+                          id="triple-rooms" 
+                          className="form-select" 
+                          value={wizardData.tripleRooms}
+                          onChange={(e) => handleWizardDataChange('tripleRooms', parseInt(e.target.value))}
+                        >
+                          {[...Array(6)].map((_, i) => (
+                            <option key={i} value={i}>{i}</option>
+                          ))}
+                        </select>
+                      </div>
+                      
+                      <div className="form-group">
+                        <label htmlFor="quadruple-rooms">Camere quadruple</label>
+                        <select 
+                          id="quadruple-rooms" 
+                          className="form-select" 
+                          value={wizardData.quadrupleRooms}
+                          onChange={(e) => handleWizardDataChange('quadrupleRooms', parseInt(e.target.value))}
+                        >
+                          {[...Array(6)].map((_, i) => (
+                            <option key={i} value={i}>{i}</option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                    
+                    <div className="form-group">
+                      <label htmlFor="comments">Note aggiuntive</label>
+                      <textarea 
+                        id="comments" 
+                        className="form-textarea" 
+                        rows="3"
+                        placeholder="Richieste speciali, preferenze alimentari, ecc."
+                        value={wizardData.comments}
+                        onChange={(e) => handleWizardDataChange('comments', e.target.value)}
+                      ></textarea>
+                    </div>
                   </div>
-                  
-                  <div className="form-row">
-                    <div className="form-group">
-                      <label htmlFor="adults">Numero adulti *</label>
-                      <select id="adults" className="form-select" defaultValue="1">
-                        {[...Array(10)].map((_, i) => (
-                          <option key={i + 1} value={i + 1}>{i + 1}</option>
-                        ))}
-                      </select>
+                )}
+
+                {/* Step 2: Dati di Contatto */}
+                {currentWizardStep === 2 && (
+                  <div className="wizard-step-content">
+                    <h3>Dati di Contatto</h3>
+                    
+                    <div className="form-row-preventivo">
+                      <div className="form-group">
+                        <label htmlFor="first-name">Nome *</label>
+                        <input 
+                          type="text" 
+                          id="first-name" 
+                          className="form-input" 
+                          value={wizardData.firstName}
+                          onChange={(e) => handleWizardDataChange('firstName', e.target.value)}
+                          required 
+                        />
+                      </div>
+                      
+                      <div className="form-group">
+                        <label htmlFor="last-name">Cognome *</label>
+                        <input 
+                          type="text" 
+                          id="last-name" 
+                          className="form-input" 
+                          value={wizardData.lastName}
+                          onChange={(e) => handleWizardDataChange('lastName', e.target.value)}
+                          required 
+                        />
+                      </div>
                     </div>
                     
                     <div className="form-group">
-                      <label htmlFor="children">Numero bambini (&lt;16 anni)</label>
-                      <select id="children" className="form-select" defaultValue="0">
-                        {[...Array(6)].map((_, i) => (
-                          <option key={i} value={i}>{i}</option>
-                        ))}
-                      </select>
-                    </div>
-                    
-                    <div className="form-group">
-                      <label htmlFor="child-age">Età bambino</label>
+                      <label htmlFor="citizenship">Cittadinanza *</label>
                       <input 
                         type="text" 
-                        id="child-age" 
+                        id="citizenship" 
                         className="form-input" 
-                        placeholder="Es. 8, 12"
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="form-row">
-                    <div className="form-group">
-                      <label htmlFor="single-rooms">Numero camere singole</label>
-                      <select id="single-rooms" className="form-select" defaultValue="0">
-                        {[...Array(6)].map((_, i) => (
-                          <option key={i} value={i}>{i}</option>
-                        ))}
-                      </select>
-                    </div>
-                    
-                    <div className="form-group">
-                      <label htmlFor="double-rooms">Numero camere doppie</label>
-                      <select id="double-rooms" className="form-select" defaultValue="0">
-                        {[...Array(6)].map((_, i) => (
-                          <option key={i} value={i}>{i}</option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-                  
-                  <div className="form-row">
-                    <div className="form-group">
-                      <label htmlFor="triple-rooms">Numero camere triple</label>
-                      <select id="triple-rooms" className="form-select" defaultValue="0">
-                        {[...Array(6)].map((_, i) => (
-                          <option key={i} value={i}>{i}</option>
-                        ))}
-                      </select>
-                    </div>
-                    
-                    <div className="form-group">
-                      <label htmlFor="quadruple-rooms">Numero camere quadruple</label>
-                      <select id="quadruple-rooms" className="form-select" defaultValue="0">
-                        {[...Array(6)].map((_, i) => (
-                          <option key={i} value={i}>{i}</option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-                  
-                  <div className="form-group">
-                    <label htmlFor="comments">Commenti</label>
-                    <textarea 
-                      id="comments" 
-                      className="form-textarea" 
-                      rows="4"
-                      placeholder="Note aggiuntive, richieste speciali, ecc."
-                    ></textarea>
-                  </div>
-                </div>
-                
-                {/* Sezione Dati di Contatto */}
-                <div className="booking-section">
-                  <h3>Dati di Contatto</h3>
-                  
-                  <div className="form-row">
-                    <div className="form-group">
-                      <label htmlFor="first-name">Nome (contatto principale) *</label>
-                      <input 
-                        type="text" 
-                        id="first-name" 
-                        className="form-input" 
+                        value={wizardData.citizenship}
+                        onChange={(e) => handleWizardDataChange('citizenship', e.target.value)}
                         required 
                       />
                     </div>
                     
                     <div className="form-group">
-                      <label htmlFor="last-name">Cognome (contatto principale) *</label>
+                      <label htmlFor="address">Indirizzo</label>
                       <input 
                         type="text" 
-                        id="last-name" 
+                        id="address" 
                         className="form-input" 
-                        required 
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="form-group">
-                    <label htmlFor="citizenship">Cittadinanza *</label>
-                    <input 
-                      type="text" 
-                      id="citizenship" 
-                      className="form-input" 
-                      required 
-                    />
-                  </div>
-                  
-                  <div className="form-group">
-                    <label htmlFor="address">Indirizzo</label>
-                    <input 
-                      type="text" 
-                      id="address" 
-                      className="form-input" 
-                    />
-                  </div>
-                  
-                  <div className="form-row">
-                    <div className="form-group">
-                      <label htmlFor="city">Città</label>
-                      <input 
-                        type="text" 
-                        id="city" 
-                        className="form-input" 
+                        value={wizardData.address}
+                        onChange={(e) => handleWizardDataChange('address', e.target.value)}
                       />
                     </div>
                     
-                    <div className="form-group">
-                      <label htmlFor="postal-code">Codice Postale</label>
-                      <input 
-                        type="text" 
-                        id="postal-code" 
-                        className="form-input" 
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="form-group">
-                    <label htmlFor="country">Paese</label>
-                    <input 
-                      type="text" 
-                      id="country" 
-                      className="form-input" 
-                    />
-                  </div>
-                  
-                  <div className="form-row">
-                    <div className="form-group">
-                      <label htmlFor="email">Email *</label>
-                      <input 
-                        type="email" 
-                        id="email" 
-                        className="form-input" 
-                        required 
-                      />
+                    <div className="form-row-preventivo">
+                      <div className="form-group">
+                        <label htmlFor="city">Città</label>
+                        <input 
+                          type="text" 
+                          id="city" 
+                          className="form-input" 
+                          value={wizardData.city}
+                          onChange={(e) => handleWizardDataChange('city', e.target.value)}
+                        />
+                      </div>
+                      
+                      <div className="form-group">
+                        <label htmlFor="postal-code">Codice Postale</label>
+                        <input 
+                          type="text" 
+                          id="postal-code" 
+                          className="form-input" 
+                          value={wizardData.postalCode}
+                          onChange={(e) => handleWizardDataChange('postalCode', e.target.value)}
+                        />
+                      </div>
                     </div>
                     
                     <div className="form-group">
-                      <label htmlFor="phone">Telefono *</label>
+                      <label htmlFor="country">Paese</label>
                       <input 
-                        type="tel" 
-                        id="phone" 
+                        type="text" 
+                        id="country" 
                         className="form-input" 
-                        required 
+                        value={wizardData.country}
+                        onChange={(e) => handleWizardDataChange('country', e.target.value)}
                       />
                     </div>
+                    
+                    <div className="form-row-preventivo">
+                      <div className="form-group">
+                        <label htmlFor="email">Email *</label>
+                        <input 
+                          type="email" 
+                          id="email" 
+                          className="form-input" 
+                          value={wizardData.email}
+                          onChange={(e) => handleWizardDataChange('email', e.target.value)}
+                          required 
+                        />
+                      </div>
+                      
+                      <div className="form-group">
+                        <label htmlFor="phone">Telefono *</label>
+                        <input 
+                          type="tel" 
+                          id="phone" 
+                          className="form-input" 
+                          value={wizardData.phone}
+                          onChange={(e) => handleWizardDataChange('phone', e.target.value)}
+                          required 
+                        />
+                      </div>
+                    </div>
                   </div>
-                </div>
-                
-                <div className="privacy-checkbox-container">
-                  <label className="privacy-checkbox-label">
-                    <input 
-                      type="checkbox" 
-                      className="privacy-checkbox" 
-                      required 
-                    />
-                    <span className="privacy-checkbox-text">
-                      Ho letto e accetto l'
-                      <a href="/PrivacyPolicy2025.pdf" target="_blank" rel="noopener noreferrer" className="privacy-link">
-                        informativa sulla privacy
-                      </a>
-                      *
-                    </span>
-                  </label>
-                </div>
-                
-                <div className="booking-modal-actions">
-                  <button type="button" className="btn-secondary" onClick={closeBookingModal}>
-                    Annulla
+                )}
+
+                {/* Step 3: Conferma */}
+                {currentWizardStep === 3 && (
+                  <div className="wizard-step-content">
+                    <h3>Conferma e Privacy</h3>
+                    
+                    <div className="confirmation-summary">
+                      <h4>Riepilogo Richiesta</h4>
+                      <div className="summary-item">
+                        <strong>Data:</strong> {wizardData.departureDate || 'Non specificata'}
+                      </div>
+                      <div className="summary-item">
+                        <strong>Partecipanti:</strong> {wizardData.adults} adulti
+                        {wizardData.children > 0 && `, ${wizardData.children} bambini`}
+                      </div>
+                      <div className="summary-item">
+                        <strong>Contatto:</strong> {wizardData.firstName} {wizardData.lastName}
+                      </div>
+                      <div className="summary-item">
+                        <strong>Email:</strong> {wizardData.email}
+                      </div>
+                    </div>
+                    
+                    <div className="privacy-checkbox-container">
+                      <label className="privacy-checkbox-label">
+                        <input 
+                          type="checkbox" 
+                          className="privacy-checkbox" 
+                          checked={wizardData.privacyAccepted}
+                          onChange={(e) => handleWizardDataChange('privacyAccepted', e.target.checked)}
+                          required 
+                        />
+                        <span className="privacy-checkbox-text">
+                          Ho letto e accetto l'
+                          <a href="/PrivacyPolicy2025.pdf" target="_blank" rel="noopener noreferrer" className="privacy-link">
+                            informativa sulla privacy
+                          </a>
+                          *
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Wizard Actions */}
+              <div className="wizard-actions">
+                {currentWizardStep > 1 && (
+                  <button type="button" className="btn-secondary" onClick={prevWizardStep}>
+                    <i className="fa-solid fa-arrow-left"></i>
+                    Indietro
                   </button>
-                  <button type="submit" className="btn-primary">
+                )}
+                
+                {currentWizardStep < 3 ? (
+                  <button type="button" className="btn-primary" onClick={nextWizardStep}>
+                    Avanti
+                    <i className="fa-solid fa-arrow-right"></i>
+                  </button>
+                ) : (
+                  <button 
+                    type="button" 
+                    className="btn-primary" 
+                    onClick={submitWizard}
+                    disabled={!wizardData.privacyAccepted}
+                  >
+                    <i className="fa-solid fa-paper-plane"></i>
                     Invia Richiesta
                   </button>
-                </div>
-              </form>
+                )}
+              </div>
             </div>
           </div>
         </div>

@@ -790,6 +790,163 @@
   backdrop-filter: blur(4px);
 }
 
+/* Wizard Progress Bar */
+.wizard-progress {
+  margin-bottom: 10px;
+  padding: 20px;
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 100;
+  border-bottom: 1px solid #e9ecef;
+  padding-bottom: 20px;
+}
+
+.wizard-steps {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  position: relative;
+}
+
+.wizard-steps::before {
+  content: '';
+  position: absolute;
+  top: 20px;
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background: #e9ecef;
+  z-index: 1;
+}
+
+.wizard-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  z-index: 2;
+  background: white;
+  padding: 0 10px;
+}
+
+.step-number {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #e9ecef;
+  color: #6c757d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.step-label {
+  font-size: 0.8rem;
+  color: #6c757d;
+  text-align: center;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.wizard-step.active .step-number {
+  background: linear-gradient(45deg, #006fcf, #004cfe);
+  color: white;
+  transform: scale(1.1);
+}
+
+.wizard-step.active .step-label {
+  color: #006fcf;
+  font-weight: 600;
+}
+
+/* Wizard Content */
+.wizard-content {
+  /*min-height: 400px;*/
+  display: flex;
+  flex-direction: column;
+}
+
+.wizard-step-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.wizard-step-content h3 {
+  /*margin: 0 0 20px 0;*/
+  color: #2c3e50;
+  font-size: 1.3rem;
+  font-weight: 500;
+  font-family: 'DM Serif Text', serif;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #4facfe;
+}
+
+/* Confirmation Summary */
+.confirmation-summary {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #e9ecef;
+  margin-bottom: 20px;
+}
+
+.confirmation-summary h4 {
+  margin: 0 0 15px 0;
+  color: #2c3e50;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.summary-item {
+  margin-bottom: 8px;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+.summary-item:last-child {
+  margin-bottom: 0;
+}
+
+/* Wizard Actions */
+.wizard-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  border-top: 1px solid #e9ecef;
+  margin-top: 20px;
+}
+
+.wizard-actions .btn-primary,
+.wizard-actions .btn-secondary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  font-size: 0.9rem;
+  min-width: 120px;
+  justify-content: center;
+}
+
+.wizard-actions .btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.wizard-actions .btn-primary:disabled:hover {
+  transform: none;
+  box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
+}
+
 .booking-modal {
   background: white;
   border-radius: 16px;
@@ -856,7 +1013,7 @@
 }
 
 .booking-modal-content {
-  padding: 30px;
+  padding: 0 30px;
   overflow-y: auto;
   flex: 1;
   border-radius: 0 0 16px 16px;
@@ -896,10 +1053,10 @@
   margin-bottom: 0;
 }
 
-.form-row {
+.form-row-preventivo {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 15px;
 }
 
 .form-row.three-columns {
@@ -1838,6 +1995,41 @@
   .form-row.three-columns {
     grid-template-columns: 1fr;
   }
+
+  .form-row-preventivo {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  /* Wizard responsive */
+  .wizard-steps {
+    gap: 15px;
+  }
+  
+  .step-number {
+    width: 35px;
+    height: 35px;
+    font-size: 0.8rem;
+  }
+  
+  .step-label {
+    font-size: 0.7rem;
+  }
+  
+  .wizard-step-content h3 {
+    font-size: 1.2rem;
+  }
+  
+  .wizard-actions {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .wizard-actions .btn-primary,
+  .wizard-actions .btn-secondary {
+    width: 100%;
+    min-width: auto;
+  }
   
   /* Tour Info responsive */
   .tour-info-container {
@@ -2133,6 +2325,47 @@
   .btn-secondary {
     width: 100%;
     padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+
+  /* Wizard mobile responsive */
+  .wizard-progress {
+    margin-bottom: 20px;
+    padding: 0 10px;
+  }
+  
+  .wizard-steps {
+    gap: 10px;
+  }
+  
+  .step-number {
+    width: 30px;
+    height: 30px;
+    font-size: 0.7rem;
+  }
+  
+  .step-label {
+    font-size: 0.65rem;
+  }
+  
+  .wizard-step-content h3 {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+  }
+  
+  .wizard-content {
+    min-height: 300px;
+  }
+  
+  .confirmation-summary {
+    padding: 15px;
+  }
+  
+  .confirmation-summary h4 {
+    font-size: 1rem;
+  }
+  
+  .summary-item {
     font-size: 0.9rem;
   }
   
