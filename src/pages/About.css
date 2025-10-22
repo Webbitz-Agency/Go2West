@@ -931,34 +931,53 @@ strong {
     grid-template-areas: 
       "content"
       "image";
+    gap: 20px;
   }
   
   .story-content {
     grid-area: content;
+    padding: 0;
   }
   
   .story-image {
     grid-area: image;
+    height: 200px;
   }
   
   .team-container {
     grid-template-areas: 
       "content"
       "image";
+    gap: 0;
   }
   
   .team-content {
     grid-area: content;
+    padding: 20px 0 0 0;
   }
   
   .team-image {
     grid-area: image;
+    height: 200px;
   }
   
+  .mission-section {
+    padding: 20px 0 ;
+  }
+
+ .why-choose-section {
+  padding: 20px 0;
+ }
+
+ .reveal-on-scroll.revealed{
+  padding: 0;
+ }
+
   .mission-container {
     grid-template-areas: 
       "content"
       "image";
+    gap: 0;
   }
   
   .mission-content {
@@ -967,6 +986,7 @@ strong {
   
   .mission-image {
     grid-area: image;
+    height: 200px;
   }
   
   /* Centra tutto il testo su mobile */
@@ -1037,6 +1057,10 @@ strong {
     font-size: 1.8rem;
   }
 
+  .why-card {
+    padding: 10px 20px !important;
+  }
+
   .contact-info{
     gap: 20px;
   }
@@ -1088,9 +1112,9 @@ strong {
   }
   
   
-  .why-choose-section{
+  /*.why-choose-section{
     padding: 50px 0 50px 0;
-  }
+  }*/
   .story-title,
   .team-title,
   .mission-title,
@@ -1163,7 +1187,7 @@ strong {
   .values-section,
   .about-contact-section,
   .about-cta-section {
-    padding: 0 0 60px 0;
+    padding: 40px 0 20px 0;
   }
   
   .mission-section {

@@ -506,6 +506,15 @@ const TourDetails = () => {
                 </button>
               </div>
             </section>
+
+            {/* Floating Button per Date - Posizionato qui per il sticky behavior */}
+            <button 
+              className="floating-dates-button"
+              onClick={openDatesModal}
+            >
+              <i className="fa-solid fa-calendar-days"></i>
+              Date disponibili
+            </button>
           </div>
 
           {/* Right Column - Dates & Prices */}
@@ -803,14 +812,6 @@ const TourDetails = () => {
         </div>
       )}
 
-      {/* Floating Button per Date */}
-      <button 
-        className="floating-dates-button"
-        onClick={openDatesModal}
-      >
-        <i className="fa-solid fa-calendar-days"></i>
-        Date disponibili
-      </button>
 
       {/* Modale delle Date */}
       {isDatesModalOpen && (
