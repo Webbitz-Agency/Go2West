@@ -5,6 +5,14 @@
   right: 20px;
   z-index: 9999;
   font-family: 'Poppins', sans-serif;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Nascondi il chatbot quando un modale è aperto */
+body.body-modal-open .chatbot-container {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(20px);
 }
 
 /* Chat Bubble */

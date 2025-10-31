@@ -334,6 +334,20 @@ const TourDetails = () => {
     }
   }, [tourId]);
 
+  // Gestisce la classe body-modal-open per nascondere il chatbot
+  useEffect(() => {
+    if (isBookingModalOpen || isDatesModalOpen) {
+      document.body.classList.add('body-modal-open');
+    } else {
+      document.body.classList.remove('body-modal-open');
+    }
+
+    // Cleanup: rimuovi la classe quando il componente si smonta
+    return () => {
+      document.body.classList.remove('body-modal-open');
+    };
+  }, [isBookingModalOpen, isDatesModalOpen]);
+
   // Mostra loading
   if (loading) {
     return (
@@ -728,7 +742,7 @@ const TourDetails = () => {
                   <div className="wizard-step-content">
                     <h3>Dettagli Viaggio</h3>
                     
-                    <div className="form-group">
+                    <div className="booking-form-group">
                       <label htmlFor="departure-date">Data di partenza *</label>
                       {selectedDate ? (
                         <input 
@@ -736,12 +750,12 @@ const TourDetails = () => {
                           id="departure-date" 
                           value={wizardData.departureDate} 
                           readOnly 
-                          className="form-input"
+                          className="booking-form-input"
                         />
                       ) : (
                         <select 
                           id="departure-date" 
-                          className="form-select" 
+                          className="booking-form-select" 
                           value={wizardData.departureDate}
                           onChange={(e) => handleWizardDataChange('departureDate', e.target.value)}
                           required
@@ -756,12 +770,12 @@ const TourDetails = () => {
                       )}
                     </div>
                     
-                    <div className="form-row-preventivo">
-                      <div className="form-group">
+                    <div className="booking-form-row-preventivo">
+                      <div className="booking-form-group">
                         <label htmlFor="adults">Numero adulti *</label>
                         <select 
                           id="adults" 
-                          className="form-select" 
+                          className="booking-form-select" 
                           value={wizardData.adults}
                           onChange={(e) => handleWizardDataChange('adults', parseInt(e.target.value))}
                         >
@@ -771,11 +785,11 @@ const TourDetails = () => {
                         </select>
                       </div>
                       
-                      <div className="form-group">
+                      <div className="booking-form-group">
                         <label htmlFor="children">Numero bambini (&lt;16 anni)</label>
                         <select 
                           id="children" 
-                          className="form-select" 
+                          className="booking-form-select" 
                           value={wizardData.children}
                           onChange={(e) => handleWizardDataChange('children', parseInt(e.target.value))}
                         >
@@ -787,12 +801,12 @@ const TourDetails = () => {
                     </div>
                     
                     {wizardData.children > 0 && (
-                      <div className="form-group">
+                      <div className="booking-form-group">
                         <label htmlFor="child-age">Età bambini</label>
                         <input 
                           type="text" 
                           id="child-age" 
-                          className="form-input" 
+                          className="booking-form-input" 
                           placeholder="Es. 8, 12"
                           value={wizardData.childAge}
                           onChange={(e) => handleWizardDataChange('childAge', e.target.value)}
@@ -800,12 +814,12 @@ const TourDetails = () => {
                       </div>
                     )}
                     
-                    <div className="form-row-preventivo">
-                      <div className="form-group">
+                    <div className="booking-form-row-preventivo">
+                      <div className="booking-form-group">
                         <label htmlFor="single-rooms">Camere singole</label>
                         <select 
                           id="single-rooms" 
-                          className="form-select" 
+                          className="booking-form-select" 
                           value={wizardData.singleRooms}
                           onChange={(e) => handleWizardDataChange('singleRooms', parseInt(e.target.value))}
                         >
@@ -815,11 +829,11 @@ const TourDetails = () => {
                         </select>
                       </div>
                       
-                      <div className="form-group">
+                      <div className="booking-form-group">
                         <label htmlFor="double-rooms">Camere doppie</label>
                         <select 
                           id="double-rooms" 
-                          className="form-select" 
+                          className="booking-form-select" 
                           value={wizardData.doubleRooms}
                           onChange={(e) => handleWizardDataChange('doubleRooms', parseInt(e.target.value))}
                         >
@@ -830,12 +844,12 @@ const TourDetails = () => {
                       </div>
                     </div>
                     
-                    <div className="form-row-preventivo">
-                      <div className="form-group">
+                    <div className="booking-form-row-preventivo">
+                      <div className="booking-form-group">
                         <label htmlFor="triple-rooms">Camere triple</label>
                         <select 
                           id="triple-rooms" 
-                          className="form-select" 
+                          className="booking-form-select" 
                           value={wizardData.tripleRooms}
                           onChange={(e) => handleWizardDataChange('tripleRooms', parseInt(e.target.value))}
                         >
@@ -845,11 +859,11 @@ const TourDetails = () => {
                         </select>
                       </div>
                       
-                      <div className="form-group">
+                      <div className="booking-form-group">
                         <label htmlFor="quadruple-rooms">Camere quadruple</label>
                         <select 
                           id="quadruple-rooms" 
-                          className="form-select" 
+                          className="booking-form-select" 
                           value={wizardData.quadrupleRooms}
                           onChange={(e) => handleWizardDataChange('quadrupleRooms', parseInt(e.target.value))}
                         >
@@ -860,11 +874,11 @@ const TourDetails = () => {
                       </div>
                     </div>
                     
-                    <div className="form-group">
+                    <div className="booking-form-group">
                       <label htmlFor="comments">Note aggiuntive</label>
                       <textarea 
                         id="comments" 
-                        className="form-textarea" 
+                        className="booking-form-textarea" 
                         rows="3"
                         placeholder="Richieste speciali, preferenze alimentari, ecc."
                         value={wizardData.comments}
@@ -879,25 +893,25 @@ const TourDetails = () => {
                   <div className="wizard-step-content">
                     <h3>Dati di Contatto</h3>
                     
-                    <div className="form-row-preventivo">
-                      <div className="form-group">
+                    <div className="booking-form-row-preventivo">
+                      <div className="booking-form-group">
                         <label htmlFor="first-name">Nome *</label>
                         <input 
                           type="text" 
                           id="first-name" 
-                          className="form-input" 
+                          className="booking-form-input" 
                           value={wizardData.firstName}
                           onChange={(e) => handleWizardDataChange('firstName', e.target.value)}
                           required 
                         />
                       </div>
                       
-                      <div className="form-group">
+                      <div className="booking-form-group">
                         <label htmlFor="last-name">Cognome *</label>
                         <input 
                           type="text" 
                           id="last-name" 
-                          className="form-input" 
+                          className="booking-form-input" 
                           value={wizardData.lastName}
                           onChange={(e) => handleWizardDataChange('lastName', e.target.value)}
                           required 
@@ -905,83 +919,83 @@ const TourDetails = () => {
                       </div>
                     </div>
                     
-                    <div className="form-group">
+                    <div className="booking-form-group">
                       <label htmlFor="citizenship">Cittadinanza *</label>
                       <input 
                         type="text" 
                         id="citizenship" 
-                        className="form-input" 
+                        className="booking-form-input" 
                         value={wizardData.citizenship}
                         onChange={(e) => handleWizardDataChange('citizenship', e.target.value)}
                         required 
                       />
                     </div>
                     
-                    <div className="form-group">
+                    <div className="booking-form-group">
                       <label htmlFor="address">Indirizzo</label>
                       <input 
                         type="text" 
                         id="address" 
-                        className="form-input" 
+                        className="booking-form-input" 
                         value={wizardData.address}
                         onChange={(e) => handleWizardDataChange('address', e.target.value)}
                       />
                     </div>
                     
-                    <div className="form-row-preventivo">
-                      <div className="form-group">
+                    <div className="booking-form-row-preventivo">
+                      <div className="booking-form-group">
                         <label htmlFor="city">Città</label>
                         <input 
                           type="text" 
                           id="city" 
-                          className="form-input" 
+                          className="booking-form-input" 
                           value={wizardData.city}
                           onChange={(e) => handleWizardDataChange('city', e.target.value)}
                         />
                       </div>
                       
-                      <div className="form-group">
+                      <div className="booking-form-group">
                         <label htmlFor="postal-code">Codice Postale</label>
                         <input 
                           type="text" 
                           id="postal-code" 
-                          className="form-input" 
+                          className="booking-form-input" 
                           value={wizardData.postalCode}
                           onChange={(e) => handleWizardDataChange('postalCode', e.target.value)}
                         />
                       </div>
                     </div>
                     
-                    <div className="form-group">
+                    <div className="booking-form-group">
                       <label htmlFor="country">Paese</label>
                       <input 
                         type="text" 
                         id="country" 
-                        className="form-input" 
+                        className="booking-form-input" 
                         value={wizardData.country}
                         onChange={(e) => handleWizardDataChange('country', e.target.value)}
                       />
                     </div>
                     
-                    <div className="form-row-preventivo">
-                      <div className="form-group">
+                    <div className="booking-form-row-preventivo">
+                      <div className="booking-form-group">
                         <label htmlFor="email">Email *</label>
                         <input 
                           type="email" 
                           id="email" 
-                          className="form-input" 
+                          className="booking-form-input" 
                           value={wizardData.email}
                           onChange={(e) => handleWizardDataChange('email', e.target.value)}
                           required 
                         />
                       </div>
                       
-                      <div className="form-group">
+                      <div className="booking-form-group">
                         <label htmlFor="phone">Telefono *</label>
                         <input 
                           type="tel" 
                           id="phone" 
-                          className="form-input" 
+                          className="booking-form-input" 
                           value={wizardData.phone}
                           onChange={(e) => handleWizardDataChange('phone', e.target.value)}
                           required 
