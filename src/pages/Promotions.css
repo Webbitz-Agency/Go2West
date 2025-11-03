@@ -102,7 +102,7 @@
 .filters-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 20px;
+  /*padding: 0 20px;*/
 }
 
 .filters-container h2 {
@@ -248,7 +248,7 @@
 }
 
 .promotion-card-content {
-  padding: 25px;
+  padding: 17.5px;
 }
 
 .promotion-meta {
@@ -293,7 +293,7 @@
 
 .promotion-features {
   display: flex;
-  gap: 15px;
+  gap: 10px;
   flex-wrap: wrap;
   flex: 1;
 }

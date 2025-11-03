@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { travelTypes } from '../config/travelTypes';
 import './Header.css';
 
 const Header = () => {
@@ -23,15 +24,7 @@ const Header = () => {
     { name: 'Polinesia Francese', country: 'polinesia-francese' }
   ];
 
-  // Tipologie di viaggio
-  const travelTypes = [
-    { name: 'City Breaks', slug: 'city-breaks' },
-    { name: 'Fly & Drive', slug: 'fly-drive' },
-    { name: 'Ride in Harley', slug: 'ride-harley' },
-    { name: 'Tour Guidati', slug: 'tour-guidati' },
-    { name: 'Luxury Travel', slug: 'luxury-travel' },
-    { name: 'Camper Adventures', slug: 'camper-adventures' }
-  ];
+  // Tipologie di viaggio importate dalla configurazione condivisa
 
   useEffect(() => {
     // Funzione semplice per controllare se una hero section è visibile

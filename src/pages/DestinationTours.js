@@ -7,7 +7,7 @@ import { destinations, destinationImages } from '../config/destinations';
 import './DestinationTours.css';
 
 const DestinationTours = () => {
-  const { country } = useParams();
+  const { country, type } = useParams();
   
   // Refs per gestione sticky/fade della hero
   const heroSectionRef = useRef(null);
@@ -125,7 +125,11 @@ const DestinationTours = () => {
         
         {/* Tours Section */}
         <section className="tours-section">
-          <DynamicTours destination={destinationParam} showFilters={true} />
+          <DynamicTours 
+            destination={destinationParam} 
+            type={type} 
+            showFilters={true} 
+          />
         </section>
       </div>
     </div>

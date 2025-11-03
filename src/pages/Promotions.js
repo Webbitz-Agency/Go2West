@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PageTitle from '../components/PageTitle';
+import { travelTypes } from '../config/travelTypes';
 import TourService from '../services/TourService';
 import './Promotions.css';
 
@@ -79,15 +80,24 @@ const Promotions = () => {
     });
   };
 
-  // Filtri disponibili
+  // Filtri disponibili basati su travelTypes
+  // Mappatura per allineare gli slug con i valori usati nel backend
+  const getFilterValue = (slug) => {
+    const mapping = {
+      'tour-guidati': 'tour',
+      'camper-adventures': 'camper',
+      'city-breaks': 'city-breaks',
+      'fly-drive': 'fly-drive'
+    };
+    return mapping[slug] || slug;
+  };
+
   const filters = [
     { value: 'all', label: 'Tutti i viaggi' },
-    { value: 'city-breaks', label: 'City Breaks' },
-    { value: 'fly-drive', label: 'Fly & Drive' },
-    { value: 'ride', label: 'Ride in Harley' },
-    { value: 'luxury', label: 'Luxury Travel' },
-    { value: 'camper', label: 'Camper Adventures' },
-    { value: 'tour', label: 'Tour Guidati' }
+    ...travelTypes.map(type => ({
+      value: getFilterValue(type.slug),
+      label: type.name
+    }))
   ];
 
   // Gestione filtri

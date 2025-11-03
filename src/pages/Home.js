@@ -5,6 +5,7 @@ import MasonryTours from '../components/MasonryTours';
 import PromotionCarousel from '../components/PromotionCarousel';
 import PageTitle from '../components/PageTitle';
 import { destinations, destinationImages } from '../config/destinations';
+import { travelTypes } from '../config/travelTypes';
 import TourService from '../services/TourService';
 import './Home.css';
 
@@ -639,10 +640,10 @@ const Home = () => {
           </div>
 
           {/* Riga 2 */}
-          <div onClick={() => openTravelModal('ride-harley')} className="option-card photo r2c1 reveal-on-scroll" style={{ backgroundImage: "url('/images/ride_in_harley.jpg')" }} data-dir="vertical">
+          <div onClick={() => openTravelModal('under-canvas')} className="option-card photo r2c1 reveal-on-scroll" style={{ backgroundImage: "url('/images/under-canvas.jpg')" }} data-dir="vertical">
             <div className="option-overlay">
-              <h3>Ride in Harley</h3>
-              <p>Monta in sella e scopri i territori più suggestivi.</p>
+              <h3>Under canvas</h3>
+              <p>Soggiorno in tenda e scopri i territori più suggestivi.</p>
               <span className="explore-btn">Scopri</span>
             </div>
           </div>
@@ -962,10 +963,12 @@ const Home = () => {
               <div className="form-group">
                 <label>Tipologia di viaggio</label>
                 <select value={selectedTravelType} onChange={(e) => setSelectedTravelType(e.target.value)}>
-                  <option value="city-breaks">City Breaks</option>
-                  <option value="fly-drive">Fly & Drive</option>
-                  <option value="ride-harley">Ride in Harley</option>
-                  <option value="tour-guidati">Tour Guidati</option>
+                  <option value="" disabled>Seleziona una tipologia</option>
+                  {travelTypes.map((type) => (
+                    <option key={type.slug} value={type.slug}>
+                      {type.name}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div className="form-group">
