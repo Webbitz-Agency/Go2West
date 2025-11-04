@@ -81,6 +81,7 @@ const TourEditor = () => {
     title: tour?.title || 'Titolo del Tour',
     destination: tour?.destination || 'USA',
     type: tour?.type || 'city breaks',
+    geographicArea: tour?.geographicArea || '',
     code: tour?.code || '',
     description: tour?.description || 'Descrizione del tour...',
     duration: tour?.duration || 7,
@@ -89,6 +90,7 @@ const TourEditor = () => {
     pdfUrl: tour?.pdfUrl || '',
     pasti: tour?.pasti || '',
     itinerario: tour?.itinerario || '',
+    itinerarioMode: tour?.itinerarioMode || 'days',
     isPromotion: tour?.isPromotion || false,
     heroImage: tour?.heroImage ? 'exists' : '',
     carouselImage1: tour?.carouselImage1 ? 'exists' : '',
@@ -99,6 +101,7 @@ const TourEditor = () => {
     image3: tour?.image3 ? 'exists' : '',
     image4: tour?.image4 ? 'exists' : '',
     image5: tour?.image5 ? 'exists' : '',
+    mapImage: tour?.mapImage ? 'exists' : '',
     program: tour?.program || {
       days: [
         { day: 1, title: 'GIORNO 1 - Arrivo', description: 'Descrizione del primo giorno...' },
@@ -390,7 +393,8 @@ const TourEditor = () => {
           'image2': 'image2',
           'image3': 'image3',
           'image4': 'image4',
-          'image5': 'image5'
+          'image5': 'image5',
+          'mapImage': 'map'
         };
         
         const backendImageType = imageTypeMap[imageType];
@@ -503,7 +507,7 @@ const TourEditor = () => {
       if (!tour?.id) {
         // Salva le immagini locali temporaneamente
         const localImages = {};
-        const imageFields = ['heroImage', 'carouselImage1', 'carouselImage2', 'carouselImage3', 'image1', 'image2', 'image3', 'image4', 'image5'];
+        const imageFields = ['heroImage', 'carouselImage1', 'carouselImage2', 'carouselImage3', 'image1', 'image2', 'image3', 'image4', 'image5', 'mapImage'];
         
         imageFields.forEach(field => {
           if (formData[field] && formData[field].startsWith('blob:')) {
@@ -531,7 +535,8 @@ const TourEditor = () => {
             'image2': 'image2',
             'image3': 'image3',
             'image4': 'image4',
-            'image5': 'image5'
+            'image5': 'image5',
+            'mapImage': 'map'
           };
           
           // Carica ogni immagine
@@ -882,6 +887,17 @@ const TourEditor = () => {
                         </span>
                       </div>
                       <div className="info-item">
+                        <span className="info-label">Area Geografica:</span>
+                        <span className="info-value">
+                          <EditableText 
+                            field="basic.geographicArea" 
+                            value={formData.geographicArea} 
+                            className="info-value-text" 
+                            placeholder="es. Sud America, Nord America, Centro America, Oceania"
+                          />
+                        </span>
+                      </div>
+                      <div className="info-item">
                         <span className="info-label">Tipo:</span>
                         <span className="info-value">
                           <EditableSelect 
@@ -890,7 +906,9 @@ const TourEditor = () => {
                             className="info-value-text" 
                             options={[
                               'city breaks', 'fly and drive', 'ride in harley', 
-                              'tour guidato', 'luxury travel', 'camper adventure', 'extra'
+                              'tour guidato', 'luxury travel', 'camper adventure', 'extra',
+                              'tour guidati (di gruppo)', 'fly & drive (individuali)', 
+                              'under canvas usa', 'ranch usa e canada', 'camper adventures', 'scoperta in treno'
                             ]}
                           />
                         </span>
@@ -923,6 +941,20 @@ const TourEditor = () => {
                         <span className="info-label">Pasti:</span>
                         <span className="info-value">
                           <EditableText field="basic.pasti" value={formData.pasti} className="info-value-text" placeholder="es. 9 cene incluse" />
+                        </span>
+                      </div>
+                      <div className="info-item">
+                        <span className="info-label">Modalità Itinerario:</span>
+                        <span className="info-value">
+                          <EditableSelect 
+                            field="basic.itinerarioMode" 
+                            value={formData.itinerarioMode} 
+                            className="info-value-text" 
+                            options={['days', 'unique']}
+                          />
+                          <span className="info-hint">
+                            {formData.itinerarioMode === 'days' ? '(suddiviso per giorni)' : '(testo unico)'}
+                          </span>
                         </span>
                       </div>
                       <div className="info-item">
@@ -1000,9 +1032,9 @@ const TourEditor = () => {
                   </div>
                 </section>
 
-                {formData.program && formData.program.days && formData.program.days.length > 0 && (
+                {formData.itinerarioMode === 'days' && formData.program && formData.program.days && formData.program.days.length > 0 && (
                   <section className="tour-section">
-                    <h2 className="section-title">Itinerario</h2>
+                    <h2 className="section-title">Itinerario (per Giorni)</h2>
                     <div className="itinerary-list">
                       {formData.program.days.map((day, index) => {
                         const dayNumber = day.day;
@@ -1034,6 +1066,20 @@ const TourEditor = () => {
                       <button type="button" onClick={addDay} className="add-day-btn">
                         + Aggiungi Giorno
                       </button>
+                    </div>
+                  </section>
+                )}
+
+                {formData.itinerarioMode === 'unique' && (
+                  <section className="tour-section">
+                    <h2 className="section-title">Itinerario (Testo Unico)</h2>
+                    <div className="itinerary-unique-container">
+                      <EditableTextarea 
+                        field="basic.itinerario" 
+                        value={formData.itinerario} 
+                        className="itinerary-unique-text" 
+                        placeholder="Scrivi qui l'itinerario completo come testo unico..."
+                      />
                     </div>
                   </section>
                 )}
@@ -1290,6 +1336,13 @@ const TourEditor = () => {
                 tour={tour}
               />
             ))}
+            <ImageUploader
+              imageType="mapImage"
+              currentImage={formData.mapImage}
+              label="Cartina Itinerario"
+              onImageUpload={handleImageUpload}
+              tour={tour}
+            />
           </div>
         </section>
 
