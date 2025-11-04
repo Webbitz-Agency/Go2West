@@ -957,12 +957,6 @@ const TourEditor = () => {
                           </span>
                         </span>
                       </div>
-                      <div className="info-item">
-                        <span className="info-label">Itinerario:</span>
-                        <span className="info-value">
-                          <EditableText field="basic.itinerario" value={formData.itinerario} className="info-value-text" placeholder="es. New York, Boston, Washington" />
-                        </span>
-                      </div>
                       <div className="info-item promotion-toggle-item">
                         <span className="info-label">In Promozione:</span>
                         <div className="promotion-toggle-container">
@@ -1032,9 +1026,10 @@ const TourEditor = () => {
                   </div>
                 </section>
 
-                {formData.itinerarioMode === 'days' && formData.program && formData.program.days && formData.program.days.length > 0 && (
-                  <section className="tour-section">
-                    <h2 className="section-title">Itinerario (per Giorni)</h2>
+                <section className="tour-section">
+                  <h2 className="section-title">Itinerario</h2>
+                  {formData.itinerarioMode === 'days' && formData.program && formData.program.days && formData.program.days.length > 0 ? (
+                    <>
                     <div className="itinerary-list">
                       {formData.program.days.map((day, index) => {
                         const dayNumber = day.day;
@@ -1067,12 +1062,8 @@ const TourEditor = () => {
                         + Aggiungi Giorno
                       </button>
                     </div>
-                  </section>
-                )}
-
-                {formData.itinerarioMode === 'unique' && (
-                  <section className="tour-section">
-                    <h2 className="section-title">Itinerario (Testo Unico)</h2>
+                    </>
+                  ) : formData.itinerarioMode === 'unique' ? (
                     <div className="itinerary-unique-container">
                       <EditableTextarea 
                         field="basic.itinerario" 
@@ -1081,8 +1072,12 @@ const TourEditor = () => {
                         placeholder="Scrivi qui l'itinerario completo come testo unico..."
                       />
                     </div>
-                  </section>
-                )}
+                  ) : (
+                    <div className="itinerary-empty-state">
+                      <p>Seleziona una modalità itinerario nelle informazioni del tour per iniziare.</p>
+                    </div>
+                  )}
+                </section>
 
                 {formData.included && formData.included.length > 0 && (
                   <section className="tour-section">
