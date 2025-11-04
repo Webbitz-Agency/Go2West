@@ -71,7 +71,7 @@ const Home = () => {
 
   const goToSelectedTravel = () => {
     if (!selectedTravelType || !selectedCountry) return;
-    navigate(`/travel/${selectedTravelType}/${selectedCountry}`);
+    window.location.href = `/travel/${selectedTravelType}/${selectedCountry}`;
     closeTravelModal();
   };
 
@@ -345,7 +345,7 @@ const Home = () => {
   };
 
   const navigateToNewYork = () => {
-    navigate('/destination/usa?filter=new-york');
+      window.location.href = '/destination/usa?filter=new-york';
   };
 
   // Funzione per cambiare immagine manualmente
