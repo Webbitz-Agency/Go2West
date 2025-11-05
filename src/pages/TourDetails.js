@@ -485,25 +485,16 @@ const TourDetails = () => {
             </section>
             {/* Itinerary */}
             {(() => {
-              // Usa lo stesso approccio di TourEditor: tour?.itinerarioMode
-              // Con fallback a 'days' se non specificato (come in TourEditor)
-              const itinerarioMode = tour?.itinerarioMode || 'days';
+              // Se ha il campo itinerario (testo unico), mostra quello
+              // Altrimenti, se ha il program con giorni, mostra la suddivisione per giorni
               
-              console.log('=== DEBUG ITINERARIO MODE ===');
-              console.log('tour.itinerarioMode:', tour?.itinerarioMode);
-              console.log('Final itinerarioMode value:', itinerarioMode);
-              console.log('Is unique?', itinerarioMode === 'unique');
-              console.log('Has itinerario text?', !!tour?.itinerario);
-              console.log('Has program days?', !!(tour?.program && tour?.program.days && tour.program.days.length > 0));
-              console.log('================================');
-              
-              // Se è "unique" e ha il testo dell'itinerario, mostra il testo unico
-              if (itinerarioMode === 'unique' && tour?.itinerario) {
+              if (tour?.itinerario && tour.itinerario.trim() !== '') {
+                // Modalità unique: mostra il testo unico
                 return (
                   <section className="tour-section">
                     <h2 className="section-title">Itinerario</h2>
                     <div className="notes-content">
-                      <p>{tour.itinerario}</p>
+                      <div style={{ whiteSpace: 'pre-line' }}>{tour.itinerario}</div>
                     </div>
                   </section>
                 );
