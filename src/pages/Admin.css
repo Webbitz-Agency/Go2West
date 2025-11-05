@@ -1072,14 +1072,14 @@
   flex-direction: column;
 }
 
-.tour-info-grid {
+.tour-info-grid-editor {
   display: flex;
   flex-direction: column;
   gap: 0;
   margin-top: 20px;
 }
 
-.tour-info-grid .info-item {
+.tour-info-grid-editor .info-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1087,17 +1087,17 @@
   border-bottom: 1px solid #f0f0f0;
 }
 
-.tour-info-grid .info-item:last-child {
+.tour-info-grid-editor .info-item:last-child {
   border-bottom: none;
 }
 
-.tour-info-grid .info-label {
+.tour-info-grid-editor .info-label {
   color: #666;
   font-size: 0.95rem;
   font-weight: 500;
 }
 
-.tour-info-grid .info-value {
+.tour-info-grid-editor .info-value {
   color: #2c3e50;
   font-size: 0.95rem;
   font-weight: 500;

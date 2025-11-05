@@ -82,24 +82,28 @@
 /* ===== TOUR OVERVIEW SECTION ===== */
 .tour-overview-section {
   background: #eefdff;
-  padding: 80px 0;
   border-bottom: 1px solid #e9ecef;
+  margin-top: clamp(100px, 10vw, 145px);
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 30px;
+  align-items: flex-start;
+  padding: 0;
 }
 
 .container-overview {
-  margin: 0 auto;
-  padding: 0 20px;
+  padding: 20px;
 }
 
-.overview-content {
+/*.overview-content {
   display: grid;
-  grid-template-columns: 1fr 0.6fr;
-  gap: 60px;
-  align-items: start;
-}
+  grid-template-columns: 2fr 1fr;
+  gap: 30px;
+  align-items: stretch;
+}*/
 
 /* Left Column - Overview Text */
-.overview-text {
+.overview-content {
   display: flex;
   flex-direction: column;
   gap: 30px;
@@ -143,71 +147,55 @@
   text-align: justify;
 }
 
-/* Right Column - Image Carousel */
-.overview-carousel {
+/* Three Images Row */
+.overview-images-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.overview-image-item {
   position: relative;
-  height: 500px;
-  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  aspect-ratio: 4/3;
+  cursor: pointer;
 }
 
-.overview-carousel-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
+.overview-image-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
-.overview-slide {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  transition: opacity 0.8s ease;
-}
-
-.overview-slide.active {
-  opacity: 1;
-}
-
-.overview-slide img {
+.overview-image-item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   filter: brightness(0.9);
+  transition: transform 0.3s ease, filter 0.3s ease;
 }
 
-.overview-indicators {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 10px;
-  z-index: 10;
+.overview-image-item:hover img {
+  transform: scale(1.05);
+  filter: brightness(1);
 }
 
-.overview-indicator {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.6);
-  background: transparent;
-  cursor: pointer;
-  transition: all 0.3s ease;
+/* Right Column - Single Image */
+.overview-image-container {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  padding-left: 30px;
 }
 
-.overview-indicator.active {
-  background: white;
-  border-color: white;
-  transform: scale(1.2);
-}
-
-.overview-indicator:hover {
-  border-color: white;
-  transform: scale(1.1);
+.overview-single-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.9);
 }
 
 /* ===== MAIN CONTENT ===== */
@@ -234,7 +222,7 @@
 .tour-section {
   background: white;
   border-radius: 12px;
-  padding: 30px;
+  padding: 20px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   border: 1px solid #e9ecef;
 }
@@ -246,7 +234,7 @@
   font-size: 1.4rem;
   font-weight: 500;
   color: #2c3e50;
-  margin-bottom: 25px;
+  margin-bottom: 0px;
   font-family: 'DM Serif Text', serif;
   padding-bottom: 15px;
   border-bottom: 2px solid #4facfe;
@@ -1361,7 +1349,6 @@
   grid-template-columns: 3fr 1fr;
   gap: 30px;
   align-items: start;
-  margin-top: 20px;
 }
 
 /* Responsive per Tour Info Container */
@@ -1375,9 +1362,10 @@
 
 .tour-info-grid .info-item {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 10px;
   align-items: center;
-  padding: 7.5px 0;
+  padding: 5px 0;
   border-bottom: 1px solid #f0f0f0;
 }
 
@@ -1659,8 +1647,8 @@
     gap: 40px;
   }
   
-  .overview-carousel {
-    height: 400px;
+  .overview-image-container {
+    min-height: 400px;
   }
   
   .tour-content {
@@ -2149,12 +2137,21 @@
     gap: 30px;
   }
   
-  .overview-text {
-    order: -1; /* Metti il testo sopra il carosello su mobile */
+  .overview-content {
+    order: -1; /* Metti il testo sopra l'immagine su mobile */
   }
   
-  .overview-carousel {
-    height: 350px;
+  .overview-image-container {
+    min-height: 350px;
+  }
+  
+  .overview-images-row {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  
+  .overview-image-item {
+    border-radius: 8px;
   }
   
   .highlights-carousel {
@@ -2689,12 +2686,23 @@
     padding: 40px 0;
   }
   
-  .overview-text {
-    order: -1; /* Metti il testo sopra il carosello su mobile */
+  .overview-content {
+    order: -1; /* Metti il testo sopra l'immagine su mobile */
   }
   
-  .overview-carousel {
-    height: 300px;
+  .overview-image-container {
+    min-height: 300px;
+  }
+  
+  .overview-images-row {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 15px;
+  }
+  
+  .overview-image-item {
+    border-radius: 6px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
   }
   
   .overview-title {

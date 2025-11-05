@@ -628,14 +628,12 @@ const Home = () => {
             <div className="option-overlay">
               <h3>City Breaks</h3>
               <p>Alla scoperta delle metropoli più iconiche.</p>
-              <span className="explore-btn">Scopri</span>
             </div>
           </div>
           <div onClick={() => openTravelModal('fly-drive')} className="option-card photo r1c2 reveal-on-scroll" style={{ backgroundImage: "url('/images/drive.jpg')" }} data-dir="horizontal">
             <div className="option-overlay">
               <h3>Fly & Drive</h3>
               <p>Auto a noleggio e libertà totale di esplorare.</p>
-              <span className="explore-btn">Scopri</span>
             </div>
           </div>
 
@@ -644,14 +642,12 @@ const Home = () => {
             <div className="option-overlay">
               <h3>Under canvas</h3>
               <p>Soggiorno in tenda e scopri i territori più suggestivi.</p>
-              <span className="explore-btn">Scopri</span>
             </div>
           </div>
           <div onClick={() => openTravelModal('tour-guidati')} className="option-card photo r2c2 reveal-on-scroll" style={{ backgroundImage: "url('/images/tour.jpg')" }} data-dir="horizontal">
             <div className="option-overlay">
               <h3>Tour Guidati</h3>
               <p>Itinerari completi, guide esperte e zero pensieri.</p>
-              <span className="explore-btn">Scopri</span>
             </div>
           </div>
         </div>

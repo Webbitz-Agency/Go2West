@@ -233,7 +233,7 @@ const TourDetails = () => {
     }
     
     // Aggiungi le immagini image1,2,3 se esistono (per i caroselli)
-    for (let i = 1; i <= 3; i++) {
+    for (let i = 1; i <= 5; i++) {
       if (tour[`image${i}`]) {
         images.push({
           src: TourService.getTourImageUrl(tour.id, `image${i}`),
@@ -313,6 +313,16 @@ const TourDetails = () => {
         }
         setTour(data);
         
+        // Debug: verifica il campo itinerarioMode
+        if (data) {
+          console.log('=== DEBUG TOUR DATA LOADED ===');
+          console.log('tour.itinerarioMode:', data.itinerarioMode);
+          console.log('tour.itinerario_mode:', data.itinerario_mode);
+          console.log('All tour keys:', Object.keys(data));
+          console.log('Full tour object:', JSON.stringify(data, null, 2));
+          console.log('================================');
+        }
+        
         // Imposta l'anno selezionato al primo anno disponibile
         if (data && data.dates) {
           const availableYears = Object.keys(data.dates)
@@ -376,7 +386,7 @@ const TourDetails = () => {
     <div className="tour-details">
       <PageTitle title={tour.title} />
       {/* Hero Section - Clean Image Gallery */}
-      <section className="tour-hero-masonry">
+      {/*<section className="tour-hero-masonry">
         <div className="masonry-container">
           {tourImages.map((image, index) => (
             <div
@@ -389,51 +399,46 @@ const TourDetails = () => {
             </div>
           ))}
         </div>
-      </section>
+      </section>*/}
 
       {/* Tour Overview Section */}
       <section className="tour-overview-section">
         <div className="container-overview">
           <div className="overview-content">
             {/* Left Column - Overview Text */}
-            <div className="overview-text">
               <div className="overview-header">
-                <span className="overview-label">OVERVIEW</span>
                 <h1 className="overview-title">{tour.title}</h1>
               </div>
               <div className="overview-description">
                 <p>{tour.description}</p>                
               </div>
-            </div>
-            
-            {/* Right Column - Image Carousel */}
-            {tourImages.length > 0 && (
-              <div className="overview-carousel">
-                <div className="overview-carousel-container">
-                  {tourImages.map((image, index) => (
-                    <div
-                      key={index}
-                      className={`overview-slide ${index === currentHighlightIndex % tourImages.length ? 'active' : ''}`}
-                    >
-                      <img src={image.src} alt={image.alt} />
+              {/* Three Images Row */}
+              {tourImages.length > 1 && (
+                <div className="overview-images-row">
+                  {tourImages.slice(1, 4).map((image, index) => (
+                    <div key={index} className="overview-image-item">
+                      <img 
+                        src={image.src} 
+                        alt={image.alt || `${tour.title} - Immagine ${index + 2}`} 
+                      />
                     </div>
                   ))}
                 </div>
-                {tourImages.length > 1 && (
-                  <div className="overview-indicators">
-                    {tourImages.map((_, index) => (
-                      <button
-                        key={index}
-                        className={`overview-indicator ${index === currentHighlightIndex % tourImages.length ? 'active' : ''}`}
-                        onClick={() => setCurrentHighlightIndex(index)}
-                      />
-                    ))}
-                  </div>
-                )}
+              )}
+           
+          </div>
+          
+        </div>
+         {/* Right Column - Single Image */}
+         {tourImages.length > 0 && tourImages[0] && (
+              <div className="overview-image-container">
+                <img 
+                  src={tourImages[0].src} 
+                  alt={tourImages[0].alt || tour.title} 
+                  className="overview-single-image"
+                />
               </div>
             )}
-          </div>
-        </div>
       </section>
 
       <div className="container-details">
@@ -469,12 +474,6 @@ const TourDetails = () => {
                       <span className="info-value">{tour.pasti}</span>
                     </div>
                   )}
-                  {tour.itinerario && (
-                    <div className="info-item">
-                      <span className="info-label">Itinerario:</span>
-                      <span className="info-value">{tour.itinerario}</span>
-                    </div>
-                  )}
                 </div>
                 <div className="tour-pdf-section">
                   <button className="pdf-download-btn" onClick={() => window.open(tour.pdfUrl || '#', '_blank')}>
@@ -485,31 +484,61 @@ const TourDetails = () => {
               </div>
             </section>
             {/* Itinerary */}
-            {tour.program && tour.program.days && tour.program.days.length > 0 && (
-              <section className="tour-section">
-                <h2 className="section-title">Itinerario</h2>
-                <div className="itinerary-list">
-                  {tour.program.days.map((day, index) => {
-                    const dayNumber = day.day;
-                    return (
-                      <div key={index} className="itinerary-item">
-                        <div className="itinerary-item-header">
-                          <div className="day-badge">Giorno {dayNumber}</div>
-                          <div className="day-content">
-                            <h3 className="day-title">{day.title}</h3>
+            {(() => {
+              // Usa lo stesso approccio di TourEditor: tour?.itinerarioMode
+              // Con fallback a 'days' se non specificato (come in TourEditor)
+              const itinerarioMode = tour?.itinerarioMode || 'days';
+              
+              console.log('=== DEBUG ITINERARIO MODE ===');
+              console.log('tour.itinerarioMode:', tour?.itinerarioMode);
+              console.log('Final itinerarioMode value:', itinerarioMode);
+              console.log('Is unique?', itinerarioMode === 'unique');
+              console.log('Has itinerario text?', !!tour?.itinerario);
+              console.log('Has program days?', !!(tour?.program && tour?.program.days && tour.program.days.length > 0));
+              console.log('================================');
+              
+              // Se è "unique" e ha il testo dell'itinerario, mostra il testo unico
+              if (itinerarioMode === 'unique' && tour?.itinerario) {
+                return (
+                  <section className="tour-section">
+                    <h2 className="section-title">Itinerario</h2>
+                    <div className="notes-content">
+                      <p>{tour.itinerario}</p>
+                    </div>
+                  </section>
+                );
+              } 
+              // Altrimenti, se ha il program con giorni, mostra la suddivisione per giorni
+              else if (tour?.program && tour.program.days && tour.program.days.length > 0) {
+                return (
+                  <section className="tour-section">
+                    <h2 className="section-title">Itinerario</h2>
+                    <div className="itinerary-list">
+                      {tour.program.days.map((day, index) => {
+                        const dayNumber = day.day;
+                        return (
+                          <div key={index} className="itinerary-item">
+                            <div className="itinerary-item-header">
+                              <div className="day-badge">Giorno {dayNumber}</div>
+                              <div className="day-content">
+                                <h3 className="day-title">{day.title}</h3>
+                              </div>
+                            </div>
+                            <div className="itinerary-details">
+                              <p className="day-description">
+                                {day.description || "Descrizione dettagliata non disponibile per questo giorno."}
+                              </p>
+                            </div>
                           </div>
-                        </div>
-                        <div className="itinerary-details">
-                          <p className="day-description">
-                            {day.description || "Descrizione dettagliata non disponibile per questo giorno."}
-                          </p>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </section>
-            )}
+                        );
+                      })}
+                    </div>
+                  </section>
+                );
+              }
+              // Se non ha né itinerario né program, non mostra nulla
+              return null;
+            })()}
 
             {/* Tour Highlights Carousel */}
           {tour.included && tour.included.length > 0 && (

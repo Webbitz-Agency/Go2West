@@ -809,7 +809,7 @@ const TourEditor = () => {
 
       <div className="editor-content">
         <div className="editable-tour-page">
-          {tourImages.length > 0 && (
+          {/*{tourImages.length > 0 && (
             <section className="tour-hero-masonry">
               <div className="masonry-container">
                 {tourImages.map((image, index) => (
@@ -824,14 +824,13 @@ const TourEditor = () => {
                 ))}
               </div>
             </section>
-          )}
+          )}*/}
 
-          <section className="tour-overview-section">
+          <section className="tour-overview-section-editor">
             <div className="container-overview">
               <div className="overview-content">
                 <div className="overview-text">
                   <div className="overview-header">
-                    <span className="overview-label">OVERVIEW</span>
                     <h1 className="overview-title">
                       <EditableText field="basic.title" value={formData.title} className="overview-title-text" placeholder="Titolo del Tour" />
                     </h1>
@@ -841,26 +840,6 @@ const TourEditor = () => {
                   </div>
                 </div>
 
-                {tourImages.length > 0 && (
-                  <div className="overview-carousel">
-                    <div className="overview-carousel-container">
-                      {tourImages.slice(0, 4).map((image, index) => (
-                        <div key={index} className={`overview-slide ${index === currentHighlightIndex % 4 ? 'active' : ''}`}>
-                          <img src={image.src} alt={image.alt} />
-                        </div>
-                      ))}
-                    </div>
-                    <div className="overview-indicators">
-                      {tourImages.slice(0, 4).map((_, index) => (
-                        <button
-                          key={index}
-                          className={`overview-indicator ${index === currentHighlightIndex % 4 ? 'active' : ''}`}
-                          onClick={() => setCurrentHighlightIndex(index)}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                )}
               </div>
             </div>
           </section>
@@ -870,8 +849,8 @@ const TourEditor = () => {
               <div className="tour-main">
               <section className="tour-section">
                   <h2 className="section-title">Informazioni Tour</h2>
-                  <div className="tour-info-container">
-                    <div className="tour-info-grid">
+                  <div className="tour-info-container-editor">
+                    <div className="tour-info-grid-editor">
                       <div className="info-item">
                         <span className="info-label">Destinazione:</span>
                         <span className="info-value">
@@ -1079,7 +1058,7 @@ const TourEditor = () => {
                   )}
                 </section>
 
-                {formData.included && formData.included.length > 0 && (
+                {/*{formData.included && formData.included.length > 0 && (
                   <section className="tour-section">
                     <h2 className="section-title">Servizi Inclusi</h2>
                     <div className="highlights-carousel">
@@ -1102,7 +1081,7 @@ const TourEditor = () => {
                       )}
                     </div>
                   </section>
-                )}
+                )}*/}
 
                 {formData.prices && formData.prices.prices && formData.prices.prices.length > 0 && (
                   <section className="tour-section">
