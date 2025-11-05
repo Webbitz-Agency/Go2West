@@ -398,12 +398,17 @@ const TourEditor = () => {
         };
         
         const backendImageType = imageTypeMap[imageType];
-        if (backendImageType) {
-          await TourService.uploadTourImage(tour.id, backendImageType, file);
-          // Aggiorna l'URL per puntare al server
-          const serverImageUrl = TourService.getTourImageUrl(tour.id, backendImageType);
-          setFormData(prev => ({ ...prev, [imageType]: serverImageUrl }));
+        console.log('DEBUG handleImageUpload:', { imageType, backendImageType, tourId: tour.id });
+        
+        if (!backendImageType) {
+          console.error(`Tipo di immagine non mappato: ${imageType}`);
+          throw new Error(`Tipo di immagine non supportato: ${imageType}`);
         }
+        
+        await TourService.uploadTourImage(tour.id, backendImageType, file);
+        // Aggiorna l'URL per puntare al server
+        const serverImageUrl = TourService.getTourImageUrl(tour.id, backendImageType);
+        setFormData(prev => ({ ...prev, [imageType]: serverImageUrl }));
       } catch (error) {
         console.error('Errore nel caricamento dell\'immagine:', error);
         // Fallback: usa l'URL locale per la preview
