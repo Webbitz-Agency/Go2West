@@ -265,6 +265,36 @@ const TourDetails = () => {
     return images;
   };
 
+  // Funzione per ottenere le immagini del carosello
+  const getCarouselImages = () => {
+    if (!tour) return [];
+    
+    const carouselImages = [];
+    
+    // Aggiungi le immagini del carosello se esistono
+    for (let i = 1; i <= 3; i++) {
+      if (tour[`carouselImage${i}`]) {
+        carouselImages.push({
+          src: TourService.getTourImageUrl(tour.id, `carousel${i}`),
+          alt: `${tour.title} - Carosello ${i}`,
+          index: i
+        });
+      }
+    }
+    
+    return carouselImages;
+  };
+
+  // Funzione per ottenere l'immagine della cartina
+  const getMapImage = () => {
+    if (!tour || !tour.mapImage) return null;
+    
+    return {
+      src: TourService.getTourImageUrl(tour.id, 'map'),
+      alt: `${tour.title} - Cartina Itinerario`
+    };
+  };
+
   // Funzione per creare le immagini dei servizi inclusi
   const getHighlightImages = () => {
     // Se è modalità unique, non mostrare immagini dal carousel
@@ -425,14 +455,14 @@ const TourDetails = () => {
               <div className="overview-description">
                 <p>{tour.description}</p>                
               </div>
-              {/* Three Images Row */}
-              {tourImages.length > 1 && (
+              {/* Three Images Row - Carousel Images */}
+              {getCarouselImages().length > 0 && (
                 <div className="overview-images-row">
-                  {tourImages.slice(1, 4).map((image, index) => (
+                  {getCarouselImages().slice(0, 3).map((image, index) => (
                     <div key={index} className="overview-image-item">
                       <img 
                         src={image.src} 
-                        alt={image.alt || `${tour.title} - Immagine ${index + 2}`} 
+                        alt={image.alt || `${tour.title} - Carosello ${index + 1}`} 
                       />
                     </div>
                   ))}
@@ -442,8 +472,16 @@ const TourDetails = () => {
           </div>
           
         </div>
-         {/* Right Column - Single Image */}
-         {tourImages.length > 0 && tourImages[0] && (
+         {/* Right Column - Map Image */}
+         {getMapImage() ? (
+              <div className="overview-image-container">
+                <img 
+                  src={getMapImage().src} 
+                  alt={getMapImage().alt || `${tour.title} - Cartina Itinerario`} 
+                  className="overview-single-image"
+                />
+              </div>
+            ) : tourImages.length > 0 && tourImages[0] && (
               <div className="overview-image-container">
                 <img 
                   src={tourImages[0].src} 
@@ -474,7 +512,13 @@ const TourDetails = () => {
                   {tour.duration && (
                     <div className="info-item">
                       <span className="info-label">Durata:</span>
-                      <span className="info-value">{tour.duration} giorni</span>
+                      <span className="info-value">{tour.duration}</span>
+                    </div>
+                  )}
+                  {tour.minPrice && (
+                    <div className="info-item">
+                      <span className="info-label">Prezzo Minimo:</span>
+                      <span className="info-value">€{tour.minPrice}</span>
                     </div>
                   )}
                   <div className="info-item">
@@ -489,10 +533,19 @@ const TourDetails = () => {
                   )}
                 </div>
                 <div className="tour-pdf-section">
+                  {tour.pdfUrl && (
                   <button className="pdf-download-btn" onClick={() => window.open(tour.pdfUrl || '#', '_blank')}>
                     <i className="fa-solid fa-file-pdf"></i>
                     <span>Scarica PDF</span>
                   </button>
+                  )}  { (
+                    <>
+                    <button className="pdf-download-btn pdf-download-btn-disabled" disabled>
+                      <i className="fa-solid fa-file-pdf"></i>
+                      <span>PDF non disponibile</span>
+                    </button>
+                    </>
+                  )}
                 </div>
               </div>
             </section>
@@ -506,7 +559,7 @@ const TourDetails = () => {
                 return (
                   <section className="tour-section">
                     <h2 className="section-title">Itinerario</h2>
-                    <div className="notes-content">
+                    <div className="info-content">
                       <div style={{ whiteSpace: 'pre-line' }}>{tour.itinerario}</div>
                     </div>
                   </section>
@@ -631,7 +684,7 @@ const TourDetails = () => {
                 return (
                   <section className="tour-section">
                     <h2 className="section-title">Servizi Inclusi</h2>
-                    <div className="notes-content">
+                    <div className="info-content">
                       <div style={{ whiteSpace: 'pre-line' }}>{tour.includedText}</div>
                     </div>
                   </section>
@@ -663,7 +716,7 @@ const TourDetails = () => {
                 return (
                   <section className="tour-section">
                     <h2 className="section-title">Servizi Non Inclusi</h2>
-                    <div className="notes-content">
+                    <div className="info-content">
                       <div style={{ whiteSpace: 'pre-line' }}>{tour.notIncludedText}</div>
                     </div>
                   </section>
@@ -692,7 +745,7 @@ const TourDetails = () => {
             {tour.notes && (
               <section className="tour-section">
                 <h2 className="section-title">Note Importanti</h2>
-                <div className="notes-content">
+                <div className="info-content">
                   <p>{tour.notes}</p>
                 </div>
               </section>
@@ -728,12 +781,12 @@ const TourDetails = () => {
           {/* Right Column - Dates & Prices */}
           <div className="tour-sidebar">
             <div className="dates-prices-section">
+            <h2 className="section-title">Date disponibili</h2>
               {/*<h2 className="dates-prices-title">Dates & Prices</h2>*/}
               
               {/* Se è modalità unique, mostra il testo unico */}
               {tour?.datesMode === 'unique' && tour?.datesText && tour.datesText.trim() !== '' ? (
-                <div className="notes-content">
-                  <h3 style={{ marginBottom: '10px', fontSize: '1.1rem', fontWeight: '600' }}>Date disponibili</h3>
+                <div className="info-content">
                   <div style={{ whiteSpace: 'pre-line' }}>{tour.datesText}</div>
                 </div>
               ) : (
@@ -1172,7 +1225,7 @@ const TourDetails = () => {
             <div className="dates-modal-content">
               {/* Se è modalità unique, mostra il testo unico */}
               {tour?.datesMode === 'unique' && tour?.datesText && tour.datesText.trim() !== '' ? (
-                <div className="notes-content">
+                <div className="info-content">
                   <div style={{ whiteSpace: 'pre-line' }}>{tour.datesText}</div>
                 </div>
               ) : (

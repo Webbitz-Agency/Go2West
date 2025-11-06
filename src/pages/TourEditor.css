@@ -319,6 +319,7 @@
 .editable-textarea {
   resize: vertical;
   min-height: 60px;
+  height: 300px;
   direction: ltr;
   text-align: left;
   unicode-bidi: normal;
@@ -500,11 +501,11 @@
   font-weight: 500;
 }
 
-.notes-content {
+.info-content {
   color: #666;
   line-height: 1.6;
   font-size: 0.95rem;
-  max-width: 300px;
+  /*max-width: 300px;*/
   word-wrap: break-word;
   overflow-wrap: break-word;
 }

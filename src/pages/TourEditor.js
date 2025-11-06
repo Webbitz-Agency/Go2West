@@ -8,9 +8,32 @@ import './TourEditor.css';
 const ImageUploader = ({ imageType, currentImage, label, onImageUpload, tour }) => {
   const fileInputRef = useRef(null);
   
+  // Mappa i tipi di immagine ai tipi del backend
+  const imageTypeMap = {
+    'heroImage': 'hero',
+    'carouselImage1': 'carousel1',
+    'carouselImage2': 'carousel2',
+    'carouselImage3': 'carousel3',
+    'image1': 'image1',
+    'image2': 'image2',
+    'image3': 'image3',
+    'image4': 'image4',
+    'image5': 'image5',
+    'mapImage': 'map'
+  };
+  
+  // Se l'immagine è 'exists' e c'è un tour, costruisci l'URL dell'immagine
+  let imageUrl = currentImage;
+  if (currentImage === 'exists' && tour?.id) {
+    const backendImageType = imageTypeMap[imageType];
+    if (backendImageType) {
+      imageUrl = TourService.getTourImageUrl(tour.id, backendImageType);
+    }
+  }
+  
   // Determina se mostrare l'immagine corrente
-  const showCurrentImage = currentImage && currentImage !== 'exists' && !currentImage.startsWith('blob:');
-  const hasExistingImage = currentImage === 'exists';
+  const showCurrentImage = imageUrl && imageUrl !== 'exists' && !imageUrl.startsWith('blob:');
+  const hasExistingImage = currentImage === 'exists' && !showCurrentImage;
   
   return (
     <div className="image-uploader">
@@ -18,7 +41,7 @@ const ImageUploader = ({ imageType, currentImage, label, onImageUpload, tour }) 
       <div className="image-upload-container">
         {showCurrentImage ? (
           <div className="current-image">
-            <img src={currentImage} alt="Current" />
+            <img src={imageUrl} alt="Current" />
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
@@ -889,7 +912,7 @@ const TourEditor = () => {
                             field="basic.geographicArea" 
                             value={formData.geographicArea} 
                             className="info-value-text" 
-                            placeholder="es. Sud America, Nord America, Centro America, Oceania"
+                            placeholder="es. EST, OVEST, EST E OVEST"
                           />
                         </span>
                       </div>
@@ -1196,7 +1219,7 @@ const TourEditor = () => {
                       </div>
                     </div>
                   ) : formData.includedMode === 'unique' ? (
-                    <div className="notes-content">
+                    <div className="info-content">
                       <EditableTextarea 
                         field="basic.includedText" 
                         value={formData.includedText} 
@@ -1241,7 +1264,7 @@ const TourEditor = () => {
                       </div>
                     </div>
                   ) : formData.notIncludedMode === 'unique' ? (
-                    <div className="notes-content">
+                    <div className="info-content">
                       <EditableTextarea 
                         field="basic.notIncludedText" 
                         value={formData.notIncludedText} 
@@ -1254,7 +1277,7 @@ const TourEditor = () => {
                 
                 <section className="tour-section">
                   <h2 className="section-title">Note</h2>
-                  <div className="notes-content">
+                  <div className="info-content">
                     <EditableTextarea field="basic.notes" value={formData.notes} className="notes-text" placeholder="Note aggiuntive..." />
                   </div>
                 </section>
@@ -1343,7 +1366,7 @@ const TourEditor = () => {
                       </div>
                     </>
                   ) : (
-                    <div className="notes-content">
+                    <div className="info-content">
                       <EditableTextarea 
                         field="basic.datesText" 
                         value={formData.datesText} 
@@ -1395,7 +1418,7 @@ const TourEditor = () => {
                 key={`image${index + 1}`}
                 imageType={`image${index + 1}`}
                 currentImage={formData[`image${index + 1}`]}
-                label={`Immagine ${service}`}
+                label={`Immagine ${index + 1}`}
                 onImageUpload={handleImageUpload}
                 tour={tour}
               />

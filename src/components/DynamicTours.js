@@ -30,7 +30,7 @@ const getFilterValue = (slug) => {
 };
 
 // Componente per i tour dinamici caricati dal backend
-const DynamicTours = ({ type, destination, limit = 6, showFilters = false }) => {
+const DynamicTours = ({ type, destination, limit = 6, showFilters = false, promotionsOnly = false }) => {
   const [allTours, setAllTours] = useState([]); // Tutti i tour caricati
   const [filteredTours, setFilteredTours] = useState([]); // Tour filtrati lato client
   const [loading, setLoading] = useState(true);
@@ -155,7 +155,9 @@ const DynamicTours = ({ type, destination, limit = 6, showFilters = false }) => 
         setLoading(true);
         let data;
         
-        if (destination) {
+        if (promotionsOnly) {
+          data = await TourService.getPromotionTours();
+        } else if (destination) {
           data = await TourService.getToursByDestination(destination);
         } else {
           data = await TourService.getAllTours();
@@ -170,7 +172,7 @@ const DynamicTours = ({ type, destination, limit = 6, showFilters = false }) => 
     };
 
     fetchAllTours();
-  }, [destination]);
+  }, [destination, promotionsOnly]);
 
   // Filtra i tour ogni volta che cambiano i filtri
   useEffect(() => {
@@ -295,7 +297,16 @@ const DynamicTours = ({ type, destination, limit = 6, showFilters = false }) => 
             </div>
             
             <div className="promotion-card-content">
-              <h3 className="destination-card-title">{tour.title}</h3>
+              {(promotionsOnly || tour.isPromotion) && (
+                <div className="promotion-meta">
+                  <div className="promotion-type-container">
+                    <span className="promotion-type">{tour.type || 'Tour'}</span>
+                    <span className="promotion-badge">PROMO</span>
+                  </div>
+                </div>
+              )}
+              
+              <h3 className={(promotionsOnly || tour.isPromotion) ? "promotion-title" : "destination-card-title"}>{tour.title}</h3>
               
               <p className="promotion-description">
                 {tour.description?.length > 150 
@@ -312,7 +323,7 @@ const DynamicTours = ({ type, destination, limit = 6, showFilters = false }) => 
                   </div>
                   <div className="feature">
                     <i className="fa-solid fa-clock"></i>
-                    <span>{tour.duration ? `${tour.duration} giorni` : 'Durata variabile'}</span>
+                    <span>{tour.duration ? `${tour.duration}${(promotionsOnly || tour.isPromotion)}` : 'Durata variabile'}</span>
                   </div>
                   <div className="feature">
                     <i className="fa-solid fa-tag"></i>
@@ -326,7 +337,7 @@ const DynamicTours = ({ type, destination, limit = 6, showFilters = false }) => 
                 </div>
               </div>
               
-              <a href={`/tour/${tour.code}`} className="scopri-viaggio-btn">
+              <a href={`/tour/${tour.code}`} className={(promotionsOnly || tour.isPromotion) ? "promotion-btn" : "scopri-viaggio-btn"}>
                 Scopri Offerta
                 <i className="fa-solid fa-arrow-right"></i>
               </a>

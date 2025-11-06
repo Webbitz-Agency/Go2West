@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PageTitle from '../components/PageTitle';
-import { travelTypes } from '../config/travelTypes';
-import TourService from '../services/TourService';
+import DynamicTours from '../components/DynamicTours';
 import './Promotions.css';
 
 const Promotions = () => {
-  const [tours, setTours] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [filteredTours, setFilteredTours] = useState([]);
-  const [selectedFilter, setSelectedFilter] = useState('all');
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [currentHeroImage, setCurrentHeroImage] = useState(0);
 
@@ -30,23 +24,6 @@ const Promotions = () => {
     '/images/usa3.jpg'
   ];
 
-  // Carica i tour dal backend
-  useEffect(() => {
-    const fetchTours = async () => {
-      try {
-        setLoading(true);
-        const data = await TourService.getPromotionTours();
-        setTours(data);
-        setFilteredTours(data);
-      } catch (err) {
-        setError('Errore nel caricamento dei tour: ' + err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTours();
-  }, []);
 
   // Scroll automatico in cima quando si apre la pagina
   useEffect(() => {
@@ -80,62 +57,6 @@ const Promotions = () => {
     });
   };
 
-  // Filtri disponibili basati su travelTypes
-  // Mappatura per allineare gli slug con i valori usati nel backend
-  const getFilterValue = (slug) => {
-    const mapping = {
-      'tour-guidati': 'tour',
-      'camper-adventures': 'camper',
-      'city-breaks': 'city-breaks',
-      'fly-drive': 'fly-drive'
-    };
-    return mapping[slug] || slug;
-  };
-
-  const filters = [
-    { value: 'all', label: 'Tutti i viaggi' },
-    ...travelTypes.map(type => ({
-      value: getFilterValue(type.slug),
-      label: type.name
-    }))
-  ];
-
-  // Gestione filtri
-  const handleFilterChange = (filterValue) => {
-    setSelectedFilter(filterValue);
-    
-    if (filterValue === 'all') {
-      setFilteredTours(tours);
-    } else {
-      const filtered = tours.filter(tour => 
-        tour.type?.toLowerCase().includes(filterValue.toLowerCase()) ||
-        tour.title?.toLowerCase().includes(filterValue.toLowerCase())
-      );
-      setFilteredTours(filtered);
-    }
-  };
-
-  if (loading) {
-    return (
-      <div className="promotions-page">
-        <div className="promotions-loading">
-          <div className="loading-spinner"></div>
-          <p>Caricamento viaggi...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="promotions-page">
-        <div className="promotions-error">
-          <h3>Errore nel caricamento</h3>
-          <p>{error}</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="promotions-page">
@@ -161,103 +82,14 @@ const Promotions = () => {
         </div>
       </section>
 
-      {/* Filtri */}
-      <section className="promotions-filters">
-        <div className="filters-container">
-          <h2>Filtra per categoria</h2>
-          <div className="filters-grid">
-            {filters.map((filter) => (
-              <button
-                key={filter.value}
-                className={`filter-btn ${selectedFilter === filter.value ? 'active' : ''}`}
-                onClick={() => handleFilterChange(filter.value)}
-              >
-                {filter.label}
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Griglia delle promozioni */}
+      {/* Griglia delle promozioni con DynamicTours */}
       <section className="promotions-grid-section">
         <div className="promotions-grid-container">
-          <div className="promotions-grid">
-            {filteredTours.map((tour) => (
-              <div key={tour.id} className="promotion-card">
-                <div className="promotion-card-image">
-                  {tour.heroImage ? (
-                    <img 
-                      src={TourService.getTourImageUrl(tour.id, 'hero')}
-                      alt={tour.title}
-                      loading="lazy"
-                    />
-                  ) : (
-                    <img 
-                      src="/images/copertina.jpeg" 
-                      alt={tour.title}
-                      loading="lazy"
-                    />
-                  )}
-                </div>
-                
-                <div className="promotion-card-content">
-                  <div className="promotion-meta">
-                    <div className="promotion-type-container">
-                      <span className="promotion-type">{tour.type || 'Tour'}</span>
-                      <span className="promotion-badge">PROMO</span>
-                    </div>
-                    <span className="promotion-duration">
-                      {tour.duration ? `${tour.duration} giorni` : 'Durata variabile'}
-                    </span>
-                  </div>
-                  
-                  <h3 className="promotion-title">{tour.title}</h3>
-                  
-                  <p className="promotion-description">
-                    {tour.description?.length > 150 
-                      ? `${tour.description.substring(0, 150)}...` 
-                      : tour.description
-                    }
-                  </p>
-                  
-                  <div className="promotion-features-container">
-                    <div className="promotion-features">
-                      <div className="feature">
-                        <i className="fa-solid fa-map-marker-alt"></i>
-                        <span>{tour.destination}</span>
-                      </div>
-                      <div className="feature">
-                        <i className="fa-solid fa-clock"></i>
-                        <span>{tour.duration ? `${tour.duration} giorni` : 'Durata variabile'}</span>
-                      </div>
-                      <div className="feature">
-                        <i className="fa-solid fa-tag"></i>
-                        <span>{tour.type}</span>
-                      </div>
-                    </div>
-                    
-                    <div className="promotion-price">
-                      <span className="price-label">da</span>
-                      <span className="price-amount">€{tour.minPrice || 0}</span>
-                    </div>
-                  </div>
-                  
-                  <a href={`/tour/${tour.code}`} className="promotion-btn">
-                    Scopri Offerta
-                    <i className="fa-solid fa-arrow-right"></i>
-                  </a>
-                </div>
-              </div>
-            ))}
-          </div>
-          
-          {filteredTours.length === 0 && (
-            <div className="no-promotions">
-              <h3>Nessun viaggio trovato</h3>
-              <p>Prova a cambiare filtro o torna più tardi per nuove offerte.</p>
-            </div>
-          )}
+          <DynamicTours 
+            promotionsOnly={true}
+            showFilters={true}
+            limit={100}
+          />
         </div>
       </section>
 
