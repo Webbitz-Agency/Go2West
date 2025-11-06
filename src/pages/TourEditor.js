@@ -565,6 +565,12 @@ const TourEditor = () => {
         }
       } else {
         // Per i tour esistenti, salva normalmente
+        console.log('DEBUG: Invio dati update tour:', {
+          itinerarioMode: formData.itinerarioMode,
+          hasItinerario: !!formData.itinerario,
+          hasProgram: !!formData.program,
+          programDays: formData.program?.days?.length || 0
+        });
         await TourService.updateTour(tour.id, formData);
       }
       
