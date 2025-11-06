@@ -44,6 +44,11 @@ const TourDetails = () => {
 
   // Funzione per ottenere le date del tour dal database
   const getTourDates = () => {
+    // Se è modalità unique, restituisci un oggetto vuoto (le date verranno mostrate come testo)
+    if (tour?.datesMode === 'unique' || (tour?.datesText && tour.datesText.trim() !== '')) {
+      return {};
+    }
+    
     if (!tour || !tour.dates) return {};
     
     // Converte le date dal database nel formato utilizzato dal componente
@@ -262,7 +267,12 @@ const TourDetails = () => {
 
   // Funzione per creare le immagini dei servizi inclusi
   const getHighlightImages = () => {
-    if (!tour || !tour.included) return [];
+    // Se è modalità unique, non mostrare immagini dal carousel
+    if (tour?.includedMode === 'unique' || (tour?.includedText && tour.includedText.trim() !== '')) {
+      return [];
+    }
+    
+    if (!tour || !tour.included || !Array.isArray(tour.included)) return [];
     
     return tour.included.slice(0, 5).map((service, index) => {
       const imageField = `image${index + 1}`;
@@ -284,7 +294,10 @@ const TourDetails = () => {
 
   // Effetto per lo scorrimento automatico del carosello
   useEffect(() => {
-    if (!tour || !tour.included) return;
+    // Se è modalità unique, non fare scorrimento automatico
+    if (tour?.includedMode === 'unique' || (tour?.includedText && tour.includedText.trim() !== '')) return;
+    
+    if (!tour || !tour.included || !Array.isArray(tour.included)) return;
     
     const highlightImages = getHighlightImages().filter(highlight => highlight.image);
     if (highlightImages.length <= 1) return;
@@ -532,7 +545,7 @@ const TourDetails = () => {
             })()}
 
             {/* Tour Highlights Carousel */}
-          {tour.included && tour.included.length > 0 && (
+          {(tour.included && tour.included.length > 0 && tour.includedMode !== 'unique') && (
               <section className="tour-section">
                 <h2 className="section-title">Servizi Inclusi</h2>
                 <div className="highlights-carousel">
@@ -612,34 +625,68 @@ const TourDetails = () => {
             )}
 
             {/* Inclusions */}
-            {tour.included && tour.included.length > 0 && (
-              <section className="tour-section">
-                <h2 className="section-title">Servizi Inclusi</h2>
-                <div className="inclusions-list">
-                  {tour.included.map((inclusion, index) => (
-                    <div key={index} className="inclusion-item">
-                      <span className="inclusion-icon">✓</span>
-                      <span className="inclusion-text">{inclusion}</span>
+            {(() => {
+              // Se è modalità unique, mostra il testo unico
+              if (tour?.includedMode === 'unique' && tour?.includedText && tour.includedText.trim() !== '') {
+                return (
+                  <section className="tour-section">
+                    <h2 className="section-title">Servizi Inclusi</h2>
+                    <div className="notes-content">
+                      <div style={{ whiteSpace: 'pre-line' }}>{tour.includedText}</div>
                     </div>
-                  ))}
-                </div>
-              </section>
-            )}
+                  </section>
+                );
+              }
+              // Altrimenti, se ha la lista, mostra quella
+              else if (tour?.included && Array.isArray(tour.included) && tour.included.length > 0) {
+                return (
+                  <section className="tour-section">
+                    <h2 className="section-title">Servizi Inclusi</h2>
+                    <div className="inclusions-list">
+                      {tour.included.map((inclusion, index) => (
+                        <div key={index} className="inclusion-item">
+                          <span className="inclusion-icon">✓</span>
+                          <span className="inclusion-text">{inclusion}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </section>
+                );
+              }
+              return null;
+            })()}
 
             {/* Exclusions */}
-            {tour.notIncluded && tour.notIncluded.length > 0 && (
-              <section className="tour-section">
-                <h2 className="section-title">Servizi Non Inclusi</h2>
-                <div className="exclusions-list">
-                  {tour.notIncluded.map((exclusion, index) => (
-                    <div key={index} className="exclusion-item">
-                      <span className="exclusion-icon">✗</span>
-                      <span className="exclusion-text">{exclusion}</span>
+            {(() => {
+              // Se è modalità unique, mostra il testo unico
+              if (tour?.notIncludedMode === 'unique' && tour?.notIncludedText && tour.notIncludedText.trim() !== '') {
+                return (
+                  <section className="tour-section">
+                    <h2 className="section-title">Servizi Non Inclusi</h2>
+                    <div className="notes-content">
+                      <div style={{ whiteSpace: 'pre-line' }}>{tour.notIncludedText}</div>
                     </div>
-                  ))}
-                </div>
-              </section>
-            )}
+                  </section>
+                );
+              }
+              // Altrimenti, se ha la lista, mostra quella
+              else if (tour?.notIncluded && Array.isArray(tour.notIncluded) && tour.notIncluded.length > 0) {
+                return (
+                  <section className="tour-section">
+                    <h2 className="section-title">Servizi Non Inclusi</h2>
+                    <div className="exclusions-list">
+                      {tour.notIncluded.map((exclusion, index) => (
+                        <div key={index} className="exclusion-item">
+                          <span className="exclusion-icon">✗</span>
+                          <span className="exclusion-text">{exclusion}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </section>
+                );
+              }
+              return null;
+            })()}
 
             {/* Notes */}
             {tour.notes && (
@@ -683,43 +730,53 @@ const TourDetails = () => {
             <div className="dates-prices-section">
               {/*<h2 className="dates-prices-title">Dates & Prices</h2>*/}
               
-              {/* Year Selection */}
-              {getAvailableYears().length > 0 && (
-                <div className="year-selection">
-                  {getAvailableYears().map((year, index) => (
-                    <button 
-                      key={year}
-                      className={`year-button ${selectedYear === year ? 'active' : ''}`}
-                      onClick={() => handleYearChange(year)}
-                      id={index === 0 ? 'first-year' : index === getAvailableYears().length - 1 ? 'last-year' : `year-${year}`}
-                    >
-                      {year}
-                    </button>
-                  ))}
+              {/* Se è modalità unique, mostra il testo unico */}
+              {tour?.datesMode === 'unique' && tour?.datesText && tour.datesText.trim() !== '' ? (
+                <div className="notes-content">
+                  <h3 style={{ marginBottom: '10px', fontSize: '1.1rem', fontWeight: '600' }}>Date disponibili</h3>
+                  <div style={{ whiteSpace: 'pre-line' }}>{tour.datesText}</div>
                 </div>
-              )}
-              
-              <p className="pricing-disclaimer">
-                A partire da €{getMinPrice().toLocaleString()} per persona.
-              </p>
-              
-              {/* Tour Dates List */}
-              <div className="tour-dates-list">
-                {tourDates[selectedYear]?.map((dateInfo, index) => (
-                  <div key={index} className="date-row">
-                    <div className="date-info">
-                      <span className="date-range">{dateInfo.dateRange}</span>
+              ) : (
+                <>
+                  {/* Year Selection */}
+                  {getAvailableYears().length > 0 && (
+                    <div className="year-selection">
+                      {getAvailableYears().map((year, index) => (
+                        <button 
+                          key={year}
+                          className={`year-button ${selectedYear === year ? 'active' : ''}`}
+                          onClick={() => handleYearChange(year)}
+                          id={index === 0 ? 'first-year' : index === getAvailableYears().length - 1 ? 'last-year' : `year-${year}`}
+                        >
+                          {year}
+                        </button>
+                      ))}
                     </div>
-                    {/*<div className="price-info">€{dateInfo.price}</div>*/}
-                    <button 
-                      className="availability-button"
-                      onClick={() => handleBookingClick(dateInfo.dateRange)}
-                    >
-                      RICHIEDI
-                    </button>
+                  )}
+                  
+                  <p className="pricing-disclaimer">
+                    A partire da €{getMinPrice().toLocaleString()} per persona.
+                  </p>
+                  
+                  {/* Tour Dates List */}
+                  <div className="tour-dates-list">
+                    {tourDates[selectedYear]?.map((dateInfo, index) => (
+                      <div key={index} className="date-row">
+                        <div className="date-info">
+                          <span className="date-range">{dateInfo.dateRange}</span>
+                        </div>
+                        {/*<div className="price-info">€{dateInfo.price}</div>*/}
+                        <button 
+                          className="availability-button"
+                          onClick={() => handleBookingClick(dateInfo.dateRange)}
+                        >
+                          RICHIEDI
+                        </button>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -1113,45 +1170,54 @@ const TourDetails = () => {
             </div>
             
             <div className="dates-modal-content">
-              {/* Year Selection */}
-              {getAvailableYears().length > 0 && (
-                <div className="year-selection">
-                  {getAvailableYears().map((year, index) => (
-                    <button 
-                      key={year}
-                      className={`year-button ${selectedYear === year ? 'active' : ''}`}
-                      onClick={() => handleYearChange(year)}
-                      id={index === 0 ? 'first-year' : index === getAvailableYears().length - 1 ? 'last-year' : `year-${year}`}
-                    >
-                      {year}
-                    </button>
-                  ))}
+              {/* Se è modalità unique, mostra il testo unico */}
+              {tour?.datesMode === 'unique' && tour?.datesText && tour.datesText.trim() !== '' ? (
+                <div className="notes-content">
+                  <div style={{ whiteSpace: 'pre-line' }}>{tour.datesText}</div>
                 </div>
-              )}
-              
-              <p className="pricing-disclaimer">
-                A partire da €{getMinPrice().toLocaleString()} per persona.
-              </p>
-              
-              {/* Tour Dates List */}
-              <div className="tour-dates-list">
-                {tourDates[selectedYear]?.map((dateInfo, index) => (
-                  <div key={index} className="date-row">
-                    <div className="date-info">
-                      <span className="date-range">{dateInfo.dateRange}</span>
+              ) : (
+                <>
+                  {/* Year Selection */}
+                  {getAvailableYears().length > 0 && (
+                    <div className="year-selection">
+                      {getAvailableYears().map((year, index) => (
+                        <button 
+                          key={year}
+                          className={`year-button ${selectedYear === year ? 'active' : ''}`}
+                          onClick={() => handleYearChange(year)}
+                          id={index === 0 ? 'first-year' : index === getAvailableYears().length - 1 ? 'last-year' : `year-${year}`}
+                        >
+                          {year}
+                        </button>
+                      ))}
                     </div>
-                    <button 
-                      className="availability-button"
-                      onClick={() => {
-                        handleBookingClick(dateInfo.dateRange);
-                        closeDatesModal();
-                      }}
-                    >
-                      RICHIEDI
-                    </button>
+                  )}
+                  
+                  <p className="pricing-disclaimer">
+                    A partire da €{getMinPrice().toLocaleString()} per persona.
+                  </p>
+                  
+                  {/* Tour Dates List */}
+                  <div className="tour-dates-list">
+                    {tourDates[selectedYear]?.map((dateInfo, index) => (
+                      <div key={index} className="date-row">
+                        <div className="date-info">
+                          <span className="date-range">{dateInfo.dateRange}</span>
+                        </div>
+                        <button 
+                          className="availability-button"
+                          onClick={() => {
+                            handleBookingClick(dateInfo.dateRange);
+                            closeDatesModal();
+                          }}
+                        >
+                          RICHIEDI
+                        </button>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                </>
+              )}
             </div>
           </div>
         </div>
