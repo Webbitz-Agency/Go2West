@@ -613,7 +613,7 @@ const TourEditor = () => {
       const [type, ...path] = editingField.split('.');
       if (type === 'basic') {
         const field = path[0];
-        const value = (field === 'duration' || field === 'minPrice') ? parseInt(editingValue) || 0 : editingValue;
+        const value = (field === 'minPrice') ? parseInt(editingValue) || 0 : editingValue;
         setFormData(prev => {
           const newData = { ...prev, [field]: value };
           
