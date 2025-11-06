@@ -84,13 +84,21 @@ const TourEditor = () => {
     geographicArea: tour?.geographicArea || '',
     code: tour?.code || '',
     description: tour?.description || 'Descrizione del tour...',
-    duration: tour?.duration || 7,
+    duration: tour?.duration || '7 giorni',
     minPrice: tour?.minPrice || 1000,
     notes: tour?.notes || '',
     pdfUrl: tour?.pdfUrl || '',
     pasti: tour?.pasti || '',
     itinerario: tour?.itinerario || '',
     itinerarioMode: tour?.itinerarioMode || 'days',
+    dates: tour?.dates || {
+      '2025': [
+        { startDate: 'Gen 7', endDate: 'Gen 14' },
+        { startDate: 'Feb 1', endDate: 'Feb 8' }
+      ]
+    },
+    datesText: tour?.datesText || '',
+    datesMode: tour?.datesMode || 'structured',
     isPromotion: tour?.isPromotion || false,
     heroImage: tour?.heroImage ? 'exists' : '',
     carouselImage1: tour?.carouselImage1 ? 'exists' : '',
@@ -117,13 +125,11 @@ const TourEditor = () => {
       ]
     },
     included: tour?.included || ['Volo internazionale', 'Hotel 4 stelle', 'Colazioni', 'Trasferimenti'],
+    includedText: tour?.includedText || '',
+    includedMode: tour?.includedMode || 'list',
     notIncluded: tour?.notIncluded || ['Pranzi e cene', 'Mance', 'Spese personali'],
-    dates: tour?.dates || {
-      '2025': [
-        { startDate: 'Gen 7', endDate: 'Gen 14' },
-        { startDate: 'Feb 1', endDate: 'Feb 8' }
-      ]
-    }
+    notIncludedText: tour?.notIncludedText || '',
+    notIncludedMode: tour?.notIncludedMode || 'list'
   });
 
   const [currentHighlightIndex, setCurrentHighlightIndex] = useState(0);
@@ -906,7 +912,7 @@ const TourEditor = () => {
                       <div className="info-item">
                         <span className="info-label">Durata:</span>
                         <span className="info-value">
-                          <EditableNumber field="basic.duration" value={formData.duration} className="info-value-text" placeholder="0" /> giorni
+                          <EditableText field="basic.duration" value={formData.duration} className="info-value-text" placeholder="es. 7 giorni, 10 notti, 2 settimane" />
                         </span>
                       </div>
                       <div className="info-item">
@@ -1156,9 +1162,23 @@ const TourEditor = () => {
                   </div>
                 </section>*/}
 
-                {formData.included && formData.included.length > 0 && (
-                  <section className="tour-section">
-                    <h2 className="section-title">Servizi Inclusi</h2>
+                <section className="tour-section">
+                  <h2 className="section-title">Servizi Inclusi</h2>
+                  <div className="info-item" style={{ marginBottom: '15px' }}>
+                    <span className="info-label">Modalità:</span>
+                    <span className="info-value">
+                      <EditableSelect 
+                        field="basic.includedMode" 
+                        value={formData.includedMode} 
+                        className="info-value-text" 
+                        options={['list', 'unique']}
+                      />
+                      <span className="info-hint">
+                        {formData.includedMode === 'list' ? '(lista)' : '(testo unico)'}
+                      </span>
+                    </span>
+                  </div>
+                  {formData.includedMode === 'list' && formData.included && formData.included.length > 0 ? (
                     <div className="inclusions-list">
                       {formData.included.map((inclusion, index) => (
                         <div key={index} className="inclusion-item">
@@ -1175,12 +1195,35 @@ const TourEditor = () => {
                         </button>
                       </div>
                     </div>
-                  </section>
-                )}
+                  ) : formData.includedMode === 'unique' ? (
+                    <div className="notes-content">
+                      <EditableTextarea 
+                        field="basic.includedText" 
+                        value={formData.includedText} 
+                        className="notes-text" 
+                        placeholder="Scrivi qui tutti i servizi inclusi come testo unico..."
+                      />
+                    </div>
+                  ) : null}
+                </section>
 
-                {formData.notIncluded && formData.notIncluded.length > 0 && (
-                  <section className="tour-section">
-                    <h2 className="section-title">Servizi Non Inclusi</h2>
+                <section className="tour-section">
+                  <h2 className="section-title">Servizi Non Inclusi</h2>
+                  <div className="info-item" style={{ marginBottom: '15px' }}>
+                    <span className="info-label">Modalità:</span>
+                    <span className="info-value">
+                      <EditableSelect 
+                        field="basic.notIncludedMode" 
+                        value={formData.notIncludedMode} 
+                        className="info-value-text" 
+                        options={['list', 'unique']}
+                      />
+                      <span className="info-hint">
+                        {formData.notIncludedMode === 'list' ? '(lista)' : '(testo unico)'}
+                      </span>
+                    </span>
+                  </div>
+                  {formData.notIncludedMode === 'list' && formData.notIncluded && formData.notIncluded.length > 0 ? (
                     <div className="exclusions-list">
                       {formData.notIncluded.map((exclusion, index) => (
                         <div key={index} className="exclusion-item">
@@ -1197,8 +1240,17 @@ const TourEditor = () => {
                         </button>
                       </div>
                     </div>
-                  </section>
-                )}
+                  ) : formData.notIncludedMode === 'unique' ? (
+                    <div className="notes-content">
+                      <EditableTextarea 
+                        field="basic.notIncludedText" 
+                        value={formData.notIncludedText} 
+                        className="notes-text" 
+                        placeholder="Scrivi qui tutti i servizi non inclusi come testo unico..."
+                      />
+                    </div>
+                  ) : null}
+                </section>
                 
                 <section className="tour-section">
                   <h2 className="section-title">Note</h2>
@@ -1210,69 +1262,96 @@ const TourEditor = () => {
 
               <div className="tour-editor-sidebar">
                 <div className="tour-editor-dates-prices-section">
-                  <div className="year-selection">
-                    {Object.keys(tourDates).map(year => (
-                      <button
-                        key={year}
-                        className={`year-button ${selectedYear === parseInt(year) ? 'active' : ''}`}
-                        onClick={() => setSelectedYear(parseInt(year))}
-                      >
-                        {year}
-                      </button>
-                    ))}
-                    <button type="button" onClick={addYear} className="tour-editor-add-year-btn" title="Aggiungi Anno">
-                      +
-                    </button>
+                  <div className="info-item" style={{ marginBottom: '15px' }}>
+                    <span className="info-label">Modalità Date:</span>
+                    <span className="info-value">
+                      <EditableSelect 
+                        field="basic.datesMode" 
+                        value={formData.datesMode} 
+                        className="info-value-text" 
+                        options={['structured', 'unique']}
+                      />
+                      <span className="info-hint">
+                        {formData.datesMode === 'structured' ? '(strutturate)' : '(testo unico)'}
+                      </span>
+                    </span>
                   </div>
-                  <p className="pricing-disclaimer">
-                    A partire da €<input 
-                      type="number" 
-                      value={formData.minPrice || ''} 
-                      onChange={(e) => setFormData(prev => ({ ...prev, minPrice: parseInt(e.target.value) || 0 }))}
-                      className="min-price-input"
-                      placeholder="0"
-                      dir="ltr"
-                      style={{ direction: 'ltr', textAlign: 'left' }}
-                    /> per persona.
-                  </p>
-
-                  <div className="tour-dates-list">
-                    {tourDates[selectedYear]?.map((dateInfo, index) => (
-                      <div key={index} className="date-row">
-                        <div className="date-info">
-                          <span className="date-range">
-                            <EditableText
-                              field={`date.${selectedYear}.${index}.startDate`}
-                              value={formData.dates[selectedYear]?.[index]?.startDate}
-                              className="date-start-text"
-                              placeholder="Gen 1"
-                            />
-                            {' - '}
-                            <EditableText
-                              field={`date.${selectedYear}.${index}.endDate`}
-                              value={formData.dates[selectedYear]?.[index]?.endDate}
-                              className="date-end-text"
-                              placeholder="Gen 7"
-                            />
-                          </span>
-                        </div>
-                        <button type="button" onClick={() => removeDate(selectedYear, index)} className="tour-editor-remove-date-btn" title="Rimuovi Data">
-                          ×
+                  
+                  {formData.datesMode === 'structured' ? (
+                    <>
+                      <div className="year-selection">
+                        {Object.keys(tourDates).map(year => (
+                          <button
+                            key={year}
+                            className={`year-button ${selectedYear === parseInt(year) ? 'active' : ''}`}
+                            onClick={() => setSelectedYear(parseInt(year))}
+                          >
+                            {year}
+                          </button>
+                        ))}
+                        <button type="button" onClick={addYear} className="tour-editor-add-year-btn" title="Aggiungi Anno">
+                          +
                         </button>
                       </div>
-                    ))}
-                    <div className="tour-editor-add-date-section">
-                      <button type="button" onClick={() => addDate(selectedYear)} className="tour-editor-add-date-btn">
-                        + Aggiungi Data
-                      </button>
-                      {Object.keys(tourDates).length > 1 && (                     
-                      <button type="button" onClick={() => removeYear(selectedYear)} className="tour-editor-remove-year-btn">
-                          - Rimuovi Anno {selectedYear}
-                        </button>
-                    )}
+                      <p className="pricing-disclaimer">
+                        A partire da €<input 
+                          type="number" 
+                          value={formData.minPrice || ''} 
+                          onChange={(e) => setFormData(prev => ({ ...prev, minPrice: parseInt(e.target.value) || 0 }))}
+                          className="min-price-input"
+                          placeholder="0"
+                          dir="ltr"
+                          style={{ direction: 'ltr', textAlign: 'left' }}
+                        /> per persona.
+                      </p>
+
+                      <div className="tour-dates-list">
+                        {tourDates[selectedYear]?.map((dateInfo, index) => (
+                          <div key={index} className="date-row">
+                            <div className="date-info">
+                              <span className="date-range">
+                                <EditableText
+                                  field={`date.${selectedYear}.${index}.startDate`}
+                                  value={formData.dates[selectedYear]?.[index]?.startDate}
+                                  className="date-start-text"
+                                  placeholder="Gen 1"
+                                />
+                                {' - '}
+                                <EditableText
+                                  field={`date.${selectedYear}.${index}.endDate`}
+                                  value={formData.dates[selectedYear]?.[index]?.endDate}
+                                  className="date-end-text"
+                                  placeholder="Gen 7"
+                                />
+                              </span>
+                            </div>
+                            <button type="button" onClick={() => removeDate(selectedYear, index)} className="tour-editor-remove-date-btn" title="Rimuovi Data">
+                              ×
+                            </button>
+                          </div>
+                        ))}
+                        <div className="tour-editor-add-date-section">
+                          <button type="button" onClick={() => addDate(selectedYear)} className="tour-editor-add-date-btn">
+                            + Aggiungi Data
+                          </button>
+                          {Object.keys(tourDates).length > 1 && (                     
+                          <button type="button" onClick={() => removeYear(selectedYear)} className="tour-editor-remove-year-btn">
+                              - Rimuovi Anno {selectedYear}
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="notes-content">
+                      <EditableTextarea 
+                        field="basic.datesText" 
+                        value={formData.datesText} 
+                        className="notes-text" 
+                        placeholder="Scrivi qui le date disponibili come testo unico..."
+                      />
                     </div>
-                    
-                  </div>
+                  )}
                 </div>
 
               </div>
