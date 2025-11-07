@@ -506,7 +506,7 @@ const TourDetails = () => {
                     <span className="info-value">{tour.destination}</span>
                   </div>
                   <div className="info-item">
-                    <span className="info-label">Tipo:</span>
+                    <span className="info-label">Tipo Viaggio:</span>
                     <span className="info-value">{tour.type}</span>
                   </div>
                   {tour.duration && (
