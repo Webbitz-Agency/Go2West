@@ -15,7 +15,7 @@ Il chatbot AI di Go2West è un assistente virtuale intelligente che utilizza Ope
 - **Chiave API**: Utilizza `OPENAI_API_KEY` dalle variabili d'ambiente di Render
 - **Aggiornamento automatico**: I file vengono aggiunti/aggiornati/eliminati automaticamente
 
-### 3. Database Tour Files
+### 3. Database Tour Files.
 ```sql
 CREATE TABLE tour_files (
     id INT AUTO_INCREMENT PRIMARY KEY,
