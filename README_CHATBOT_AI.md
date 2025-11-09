@@ -12,7 +12,7 @@ Il chatbot AI di Go2West è un assistente virtuale intelligente che utilizza Ope
 
 ### 2. Integrazione Vector Store OpenAI
 - **Vector Store ID**: `vs_68f350c542d88191a4026139f8bae406`
-- **Chiave API**: Utilizza `OPENAI_API_KEY` dalle variabili d'ambiente di Render
+- **Chiave API**: Utilizza `OPENAI_API_KEY` dalle variabili d'ambiente di Render.
 - **Aggiornamento automatico**: I file vengono aggiunti/aggiornati/eliminati automaticamente
 
 ### 3. Database Tour Files.
