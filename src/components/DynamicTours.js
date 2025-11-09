@@ -40,6 +40,7 @@ const DynamicTours = ({ type, destination, limit = 6, showFilters = false, promo
   const [selectedType, setSelectedType] = useState(() => type ? getFilterValue(type) : 'all');
   const [selectedDuration, setSelectedDuration] = useState('all');
   const [selectedPrice, setSelectedPrice] = useState('all');
+  const [selectedGeographicArea, setSelectedGeographicArea] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
 
   // Ref per mantenere il focus sulla searchbar
@@ -72,8 +73,16 @@ const DynamicTours = ({ type, destination, limit = 6, showFilters = false, promo
     { name: '€2000+', value: '2000+' }
   ];
 
+  // Filtri area geografica
+  const geographicAreaFilters = [
+    { name: 'Tutte le Aree', value: 'all' },
+    { name: 'EST', value: 'EST' },
+    { name: 'OVEST', value: 'OVEST' },
+    { name: 'EST E OVEST', value: 'EST E OVEST' }
+  ];
+
   // Funzione per filtrare i tour lato client
-  const filterTours = useCallback((tours, type, duration, price, search) => {
+  const filterTours = useCallback((tours, type, duration, price, geographicArea, search) => {
     let filtered = [...tours];
 
     // Filtro per tipo - confronto flessibile con mappatura esplicita
@@ -121,6 +130,15 @@ const DynamicTours = ({ type, destination, limit = 6, showFilters = false, promo
           case '2000+': return tourPrice >= 2000;
           default: return true;
         }
+      });
+    }
+
+    // Filtro per area geografica
+    if (geographicArea && geographicArea !== 'all') {
+      filtered = filtered.filter(tour => {
+        if (!tour.geographicArea) return false;
+        // Confronto case-insensitive per gestire eventuali variazioni
+        return tour.geographicArea.trim().toUpperCase() === geographicArea.toUpperCase();
       });
     }
 
@@ -176,18 +194,19 @@ const DynamicTours = ({ type, destination, limit = 6, showFilters = false, promo
 
   // Filtra i tour ogni volta che cambiano i filtri
   useEffect(() => {
-    const filtered = filterTours(allTours, selectedType, selectedDuration, selectedPrice, searchQuery);
+    const filtered = filterTours(allTours, selectedType, selectedDuration, selectedPrice, selectedGeographicArea, searchQuery);
     setFilteredTours(filtered.slice(0, limit));
-  }, [allTours, selectedType, selectedDuration, selectedPrice, searchQuery, limit, filterTours]);
+  }, [allTours, selectedType, selectedDuration, selectedPrice, selectedGeographicArea, searchQuery, limit, filterTours]);
 
   const clearAllFilters = () => {
     setSelectedType('all');
     setSelectedDuration('all');
     setSelectedPrice('all');
+    setSelectedGeographicArea('all');
     setSearchQuery('');
   };
 
-  const hasActiveFilters = selectedType !== 'all' || selectedDuration !== 'all' || selectedPrice !== 'all' || searchQuery.trim();
+  const hasActiveFilters = selectedType !== 'all' || selectedDuration !== 'all' || selectedPrice !== 'all' || selectedGeographicArea !== 'all' || searchQuery.trim();
 
   if (loading) {
     return (
@@ -275,6 +294,20 @@ const DynamicTours = ({ type, destination, limit = 6, showFilters = false, promo
               </select>
             </div>
 
+            <div className="filter-dropdown">
+              <select 
+                value={selectedGeographicArea} 
+                onChange={(e) => setSelectedGeographicArea(e.target.value)}
+                className="filter-select"
+              >
+                {geographicAreaFilters.map((area) => (
+                  <option key={area.value} value={area.value}>
+                    {area.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
             {hasActiveFilters && (
               <button onClick={clearAllFilters} className="clear-filters-btn">
                 Cancella Filtri
@@ -323,7 +356,7 @@ const DynamicTours = ({ type, destination, limit = 6, showFilters = false, promo
                   </div>
                   <div className="feature">
                     <i className="fa-solid fa-clock"></i>
-                    <span>{tour.duration ? `${tour.duration}${(promotionsOnly || tour.isPromotion)}` : 'Durata variabile'}</span>
+                    <span>{tour.duration}</span>
                   </div>
                   <div className="feature">
                     <i className="fa-solid fa-tag"></i>

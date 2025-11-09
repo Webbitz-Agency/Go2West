@@ -908,11 +908,11 @@ const TourEditor = () => {
                       <div className="info-item">
                         <span className="info-label">Area Geografica:</span>
                         <span className="info-value">
-                          <EditableText 
+                        <EditableSelect 
                             field="basic.geographicArea" 
                             value={formData.geographicArea} 
                             className="info-value-text" 
-                            placeholder="es. EST, OVEST, EST E OVEST"
+                            options={['EST', 'OVEST', 'EST E OVEST']}
                           />
                         </span>
                       </div>

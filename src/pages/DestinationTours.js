@@ -17,6 +17,9 @@ const DestinationTours = () => {
   
   // Stato per il carosello hero
   const [currentHeroImage, setCurrentHeroImage] = useState(0);
+  
+  // Stato per il bottone scroll to top
+  const [showBackToTop, setShowBackToTop] = useState(false);
 
   // Mappa il parametro URL alla destinazione del database
   const getDestinationFromParam = (param) => {
@@ -83,6 +86,17 @@ const DestinationTours = () => {
     };
   }, [isHeroFaded, isHeroFixed]);
 
+  // Gestione freccia "torna in cima"
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      setShowBackToTop(scrollTop > 300);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   // Funzione per tornare in cima
   const scrollToTop = () => {
     window.scrollTo({
@@ -132,6 +146,17 @@ const DestinationTours = () => {
           />
         </section>
       </div>
+
+      {/* Freccia torna in cima */}
+      {showBackToTop && (
+        <button 
+          className="back-to-top"
+          onClick={scrollToTop}
+          aria-label="Torna in cima"
+        >
+          <i className="fa-solid fa-arrow-up"></i>
+        </button>
+      )}
     </div>
   );
 };

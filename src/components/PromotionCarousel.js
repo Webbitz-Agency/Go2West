@@ -224,7 +224,7 @@ const PromotionCarousel = ({ itemsPerPage = 6 }) => {
                 <div className="tour-card-meta">
                   <div className="tour-duration">
                     <div>
-                    <strong>Durata:</strong> {tour.duration ? `${tour.duration} giorni` : 'Variabile'}
+                    <strong>Durata:</strong> {tour.duration ? `${tour.duration}` : 'Variabile'}
                     </div>
                     <div>
                     <strong>Da:</strong> €{tour.minPrice || 0}

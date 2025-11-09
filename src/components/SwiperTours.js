@@ -150,7 +150,7 @@ const SwiperTours = ({ itemsPerPage = 6 }) => {
                 <div className="tour-card-meta">
                   <div className="tour-duration">
                     {/*<span className="meta-icon"></span>*/}
-                    {tour.duration ? `${tour.duration} giorni` : 'Durata variabile'}
+                    {tour.duration ? `${tour.duration}` : 'Durata variabile'}
                   </div>
                   <div className="tour-location">
                     {/*<span className="meta-icon">📍</span>*/}
