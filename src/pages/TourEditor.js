@@ -1223,7 +1223,7 @@ const TourEditor = () => {
                       <EditableTextarea 
                         field="basic.includedText" 
                         value={formData.includedText} 
-                        className="notes-text" 
+                        className="unique-text" 
                         placeholder="Scrivi qui tutti i servizi inclusi come testo unico..."
                       />
                     </div>
@@ -1268,7 +1268,7 @@ const TourEditor = () => {
                       <EditableTextarea 
                         field="basic.notIncludedText" 
                         value={formData.notIncludedText} 
-                        className="notes-text" 
+                        className="unique-text" 
                         placeholder="Scrivi qui tutti i servizi non inclusi come testo unico..."
                       />
                     </div>
@@ -1278,7 +1278,7 @@ const TourEditor = () => {
                 <section className="tour-section">
                   <h2 className="section-title">Note</h2>
                   <div className="info-content">
-                    <EditableTextarea field="basic.notes" value={formData.notes} className="notes-text" placeholder="Note aggiuntive..." />
+                    <EditableTextarea field="basic.notes" value={formData.notes} className="unique-text" placeholder="Note aggiuntive..." />
                   </div>
                 </section>
               </div>
@@ -1370,7 +1370,7 @@ const TourEditor = () => {
                       <EditableTextarea 
                         field="basic.datesText" 
                         value={formData.datesText} 
-                        className="notes-text" 
+                        className="unique-text" 
                         placeholder="Scrivi qui le date disponibili come testo unico..."
                       />
                     </div>

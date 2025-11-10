@@ -397,11 +397,11 @@
   color: #2c3e50;
 }
 
-.notes-text {
+.unique-text {
   font-size: 0.95rem;
   line-height: 1.5;
   color: #666;
-  max-width: 300px;
+  /*max-width: 300px;*/
   word-wrap: break-word;
   overflow-wrap: break-word;
 }

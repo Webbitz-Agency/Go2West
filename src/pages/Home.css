@@ -1356,8 +1356,8 @@
   padding: var(--container-padding);
   position: relative;
   background-image: 
-    radial-gradient(circle at 20% 80%, rgba(79, 172, 254, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(0, 242, 254, 0.1) 0%, transparent 50%);
+    radial-gradient(circle at 20% 80%, rgba(254, 242, 79, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(254, 237, 0, 0.1) 0%, transparent 50%);
 }
 
 
