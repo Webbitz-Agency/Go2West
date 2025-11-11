@@ -88,6 +88,35 @@ export class TourService {
     }
   }
 
+  // Carica un PDF per un tour
+  static async uploadTourPdf(tourId, pdfFile) {
+    const formData = new FormData();
+    formData.append('pdf', pdfFile);
+    
+    try {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/api/tours/${tourId}/pdf`, {
+        method: 'POST',
+        body: formData
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+      }
+      
+      const result = await response.json();
+      return result.pdfUrl || result.url || result;
+    } catch (error) {
+      console.error('API PDF Upload Error:', error);
+      throw error;
+    }
+  }
+
+  // Ottieni l'URL del PDF del tour
+  static getTourPdfUrl(id) {
+    return `${API_CONFIG.BASE_URL}/api/tours/${id}/pdf`;
+  }
+
   // Attiva/disattiva promozione per un tour
   static async toggleTourPromotion(tourId, isPromotion) {
     return await apiPut(`/api/tours/${tourId}/promotion`, { 

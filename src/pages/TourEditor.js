@@ -110,7 +110,8 @@ const TourEditor = () => {
     duration: tour?.duration || '7 giorni',
     minPrice: tour?.minPrice || 1000,
     notes: tour?.notes || '',
-    pdfUrl: tour?.pdfUrl || '',
+    pdfUrl: tour?.pdfUrl ? 'exists' : '',
+    pdfFile: null, // File PDF da caricare per i nuovi tour
     pasti: tour?.pasti || '',
     itinerario: tour?.itinerario || '',
     itinerarioMode: tour?.itinerarioMode || 'days',
@@ -549,11 +550,16 @@ const TourEditor = () => {
           }
         });
         
-        // Rimuovi le immagini dal formData per la creazione del tour
+        // Rimuovi le immagini e il PDF dal formData per la creazione del tour
         const tourDataWithoutImages = { ...formData };
         imageFields.forEach(field => {
           delete tourDataWithoutImages[field];
         });
+        // Rimuovi il pdfFile ma mantieni pdfUrl se non è un blob URL
+        if (tourDataWithoutImages.pdfUrl && tourDataWithoutImages.pdfUrl.startsWith('blob:')) {
+          delete tourDataWithoutImages.pdfUrl;
+        }
+        delete tourDataWithoutImages.pdfFile;
         
         // Crea il tour senza immagini
         const newTour = await TourService.createTour(tourDataWithoutImages);
@@ -592,15 +598,32 @@ const TourEditor = () => {
             }
           }
         }
+        
+        // Se c'è un PDF locale, caricalo sul server
+        if (formData.pdfFile && newTour.id) {
+          try {
+            await TourService.uploadTourPdf(newTour.id, formData.pdfFile);
+          } catch (pdfError) {
+            console.error('Errore nel caricamento del PDF:', pdfError);
+          }
+        }
       } else {
         // Per i tour esistenti, salva normalmente
+        // Rimuovi pdfUrl se è 'exists' (solo marker locale) o un blob URL già caricato
+        const updateData = { ...formData };
+        if (updateData.pdfUrl === 'exists' || (updateData.pdfUrl && updateData.pdfUrl.startsWith('blob:'))) {
+          delete updateData.pdfUrl;
+        }
+        delete updateData.pdfFile; // Non inviare il file nel body JSON
+        
         console.log('DEBUG: Invio dati update tour:', {
-          itinerarioMode: formData.itinerarioMode,
-          hasItinerario: !!formData.itinerario,
-          hasProgram: !!formData.program,
-          programDays: formData.program?.days?.length || 0
+          itinerarioMode: updateData.itinerarioMode,
+          hasItinerario: !!updateData.itinerario,
+          hasProgram: !!updateData.program,
+          programDays: updateData.program?.days?.length || 0,
+          hasPdfUrl: !!updateData.pdfUrl
         });
-        await TourService.updateTour(tour.id, formData);
+        await TourService.updateTour(tour.id, updateData);
       }
       
       // Pulisci i dati salvati dopo il salvataggio riuscito
@@ -1001,10 +1024,22 @@ const TourEditor = () => {
                       <div className="pdf-upload-container">
                         <label className="pdf-upload-label">PDF del Tour</label>
                         <div className="pdf-upload-area">
-                          {formData.pdfUrl ? (
+                          {formData.pdfUrl && formData.pdfUrl !== 'exists' ? (
                             <div className="current-pdf">
                               <i className="fa-solid fa-file-pdf"></i>
                               <span>PDF caricato</span>
+                              <button
+                                type="button"
+                                onClick={() => document.getElementById('pdf-upload').click()}
+                                className="change-pdf-btn"
+                              >
+                                Cambia PDF
+                              </button>
+                            </div>
+                          ) : formData.pdfUrl === 'exists' ? (
+                            <div className="current-pdf">
+                              <i className="fa-solid fa-file-pdf"></i>
+                              <span>PDF esistente</span>
                               <button
                                 type="button"
                                 onClick={() => document.getElementById('pdf-upload').click()}
@@ -1030,12 +1065,28 @@ const TourEditor = () => {
                             type="file"
                             accept=".pdf"
                             style={{ display: 'none' }}
-                            onChange={(e) => {
+                            onChange={async (e) => {
                               if (e.target.files[0]) {
-                                // Qui puoi gestire l'upload del PDF
                                 const file = e.target.files[0];
-                                const fileUrl = URL.createObjectURL(file);
-                                setFormData(prev => ({ ...prev, pdfUrl: fileUrl }));
+                                
+                                // Se è un tour esistente, carica il PDF sul server
+                                if (tour?.id) {
+                                  try {
+                                    await TourService.uploadTourPdf(tour.id, file);
+                                    // Aggiorna l'URL per puntare al server
+                                    const serverPdfUrl = TourService.getTourPdfUrl(tour.id);
+                                    setFormData(prev => ({ ...prev, pdfUrl: serverPdfUrl }));
+                                  } catch (error) {
+                                    console.error('Errore nel caricamento del PDF:', error);
+                                    // Fallback: usa l'URL locale per la preview
+                                    const fileUrl = URL.createObjectURL(file);
+                                    setFormData(prev => ({ ...prev, pdfUrl: fileUrl }));
+                                  }
+                                } else {
+                                  // Per i nuovi tour, salva il file per caricarlo dopo la creazione
+                                  const fileUrl = URL.createObjectURL(file);
+                                  setFormData(prev => ({ ...prev, pdfUrl: fileUrl, pdfFile: file }));
+                                }
                               }
                             }}
                           />
