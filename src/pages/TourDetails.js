@@ -533,18 +533,25 @@ const TourDetails = () => {
                   )}
                 </div>
                 <div className="tour-pdf-section">
-                  {tour.pdfUrl && (
-                  <button className="pdf-download-btn" onClick={() => window.open(tour.pdfUrl || '#', '_blank')}>
-                    <i className="fa-solid fa-file-pdf"></i>
-                    <span>Scarica PDF</span>
-                  </button>
-                  )}  { (
-                    <>
+                  {tour.pdfUrl ? (
+                    <button 
+                      className="pdf-download-btn" 
+                      onClick={() => {
+                        // Se pdfUrl è un booleano true, costruisci l'URL usando TourService
+                        const pdfUrl = typeof tour.pdfUrl === 'boolean' && tour.pdfUrl
+                          ? TourService.getTourPdfUrl(tour.id)
+                          : tour.pdfUrl;
+                        window.open(pdfUrl || '#', '_blank');
+                      }}
+                    >
+                      <i className="fa-solid fa-file-pdf"></i>
+                      <span>Scarica PDF</span>
+                    </button>
+                  ) : (
                     <button className="pdf-download-btn pdf-download-btn-disabled" disabled>
                       <i className="fa-solid fa-file-pdf"></i>
                       <span>PDF non disponibile</span>
                     </button>
-                    </>
                   )}
                 </div>
               </div>
