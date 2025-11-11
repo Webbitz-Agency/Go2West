@@ -5,7 +5,7 @@ import TourService from '../services/TourService';
 import './TourEditor.css';
 
 // Componente per l'upload delle immagini
-const ImageUploader = ({ imageType, currentImage, label, onImageUpload, tour }) => {
+const ImageUploader = ({ imageType, currentImage, label, onImageUpload, onImageDelete, tour }) => {
   const fileInputRef = useRef(null);
   
   // Mappa i tipi di immagine ai tipi del backend
@@ -34,6 +34,7 @@ const ImageUploader = ({ imageType, currentImage, label, onImageUpload, tour }) 
   // Determina se mostrare l'immagine corrente
   const showCurrentImage = imageUrl && imageUrl !== 'exists' && !imageUrl.startsWith('blob:');
   const hasExistingImage = currentImage === 'exists' && !showCurrentImage;
+  const hasImage = showCurrentImage || hasExistingImage;
   
   return (
     <div className="image-uploader">
@@ -42,13 +43,25 @@ const ImageUploader = ({ imageType, currentImage, label, onImageUpload, tour }) 
         {showCurrentImage ? (
           <div className="current-image">
             <img src={imageUrl} alt="Current" />
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              className="change-image-btn"
-            >
-              Cambia Immagine
-            </button>
+            <div className="image-actions">
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className="change-image-btn"
+              >
+                Cambia Immagine
+              </button>
+              {tour?.id && onImageDelete && (
+                <button
+                  type="button"
+                  onClick={() => onImageDelete(imageType)}
+                  className="delete-image-btn"
+                  title="Elimina immagine"
+                >
+                  <i className="fa-solid fa-trash"></i>
+                </button>
+              )}
+            </div>
           </div>
         ) : hasExistingImage ? (
           <div className="existing-image">
@@ -56,13 +69,25 @@ const ImageUploader = ({ imageType, currentImage, label, onImageUpload, tour }) 
               <i className="fa-solid fa-image"></i>
               <span>Immagine esistente</span>
             </div>
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              className="change-image-btn"
-            >
-              Cambia Immagine
-            </button>
+            <div className="image-actions">
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className="change-image-btn"
+              >
+                Cambia Immagine
+              </button>
+              {tour?.id && onImageDelete && (
+                <button
+                  type="button"
+                  onClick={() => onImageDelete(imageType)}
+                  className="delete-image-btn"
+                  title="Elimina immagine"
+                >
+                  <i className="fa-solid fa-trash"></i>
+                </button>
+              )}
+            </div>
           </div>
         ) : (
           <div className="no-image">
@@ -449,6 +474,59 @@ const TourEditor = () => {
       // Per i nuovi tour, usa l'URL locale per la preview
       const imageUrl = URL.createObjectURL(file);
       setFormData(prev => ({ ...prev, [imageType]: imageUrl }));
+    }
+  };
+
+  const handleImageDelete = async (imageType) => {
+    if (!tour?.id) return;
+    
+    if (!window.confirm('Sei sicuro di voler eliminare questa immagine?')) {
+      return;
+    }
+    
+    try {
+      // Mappa i tipi di immagine ai tipi del backend
+      const imageTypeMap = {
+        'heroImage': 'hero',
+        'carouselImage1': 'carousel1',
+        'carouselImage2': 'carousel2',
+        'carouselImage3': 'carousel3',
+        'image1': 'image1',
+        'image2': 'image2',
+        'image3': 'image3',
+        'image4': 'image4',
+        'image5': 'image5',
+        'mapImage': 'map'
+      };
+      
+      const backendImageType = imageTypeMap[imageType];
+      if (!backendImageType) {
+        throw new Error(`Tipo di immagine non supportato: ${imageType}`);
+      }
+      
+      await TourService.deleteTourImage(tour.id, backendImageType);
+      // Rimuovi l'immagine dal formData
+      setFormData(prev => ({ ...prev, [imageType]: '' }));
+    } catch (error) {
+      console.error('Errore nell\'eliminazione dell\'immagine:', error);
+      alert('Errore nell\'eliminazione dell\'immagine: ' + error.message);
+    }
+  };
+
+  const handlePdfDelete = async () => {
+    if (!tour?.id) return;
+    
+    if (!window.confirm('Sei sicuro di voler eliminare questo PDF?')) {
+      return;
+    }
+    
+    try {
+      await TourService.deleteTourPdf(tour.id);
+      // Rimuovi il PDF dal formData
+      setFormData(prev => ({ ...prev, pdfUrl: '', pdfFile: null }));
+    } catch (error) {
+      console.error('Errore nell\'eliminazione del PDF:', error);
+      alert('Errore nell\'eliminazione del PDF: ' + error.message);
     }
   };
 
@@ -1028,25 +1106,49 @@ const TourEditor = () => {
                             <div className="current-pdf">
                               <i className="fa-solid fa-file-pdf"></i>
                               <span>PDF caricato</span>
-                              <button
-                                type="button"
-                                onClick={() => document.getElementById('pdf-upload').click()}
-                                className="change-pdf-btn"
-                              >
-                                Cambia PDF
-                              </button>
+                              <div className="pdf-actions">
+                                <button
+                                  type="button"
+                                  onClick={() => document.getElementById('pdf-upload').click()}
+                                  className="change-pdf-btn"
+                                >
+                                  Cambia PDF
+                                </button>
+                                {tour?.id && (
+                                  <button
+                                    type="button"
+                                    onClick={handlePdfDelete}
+                                    className="delete-pdf-btn"
+                                    title="Elimina PDF"
+                                  >
+                                    <i className="fa-solid fa-trash"></i>
+                                  </button>
+                                )}
+                              </div>
                             </div>
                           ) : formData.pdfUrl === 'exists' ? (
                             <div className="current-pdf">
                               <i className="fa-solid fa-file-pdf"></i>
                               <span>PDF esistente</span>
-                              <button
-                                type="button"
-                                onClick={() => document.getElementById('pdf-upload').click()}
-                                className="change-pdf-btn"
-                              >
-                                Cambia PDF
-                              </button>
+                              <div className="pdf-actions">
+                                <button
+                                  type="button"
+                                  onClick={() => document.getElementById('pdf-upload').click()}
+                                  className="change-pdf-btn"
+                                >
+                                  Cambia PDF
+                                </button>
+                                {tour?.id && (
+                                  <button
+                                    type="button"
+                                    onClick={handlePdfDelete}
+                                    className="delete-pdf-btn"
+                                    title="Elimina PDF"
+                                  >
+                                    <i className="fa-solid fa-trash"></i>
+                                  </button>
+                                )}
+                              </div>
                             </div>
                           ) : (
                             <div className="no-pdf">
@@ -1441,6 +1543,7 @@ const TourEditor = () => {
               currentImage={formData.heroImage}
               label="Copertina"
               onImageUpload={handleImageUpload}
+              onImageDelete={handleImageDelete}
               tour={tour}
             />
             <ImageUploader
@@ -1448,6 +1551,7 @@ const TourEditor = () => {
               currentImage={formData.carouselImage1}
               label="Foto Carosello 1"
               onImageUpload={handleImageUpload}
+              onImageDelete={handleImageDelete}
               tour={tour}
             />
             <ImageUploader
@@ -1455,6 +1559,7 @@ const TourEditor = () => {
               currentImage={formData.carouselImage2}
               label="Foto Carosello 2"
               onImageUpload={handleImageUpload}
+              onImageDelete={handleImageDelete}
               tour={tour}
             />
             <ImageUploader
@@ -1462,6 +1567,7 @@ const TourEditor = () => {
               currentImage={formData.carouselImage3}
               label="Foto Carosello 3"
               onImageUpload={handleImageUpload}
+              onImageDelete={handleImageDelete}
               tour={tour}
             />
             {formData.included && formData.included.slice(0, 5).map((service, index) => (
@@ -1471,6 +1577,7 @@ const TourEditor = () => {
                 currentImage={formData[`image${index + 1}`]}
                 label={`Immagine ${index + 1}`}
                 onImageUpload={handleImageUpload}
+                onImageDelete={handleImageDelete}
                 tour={tour}
               />
             ))}
@@ -1479,6 +1586,7 @@ const TourEditor = () => {
               currentImage={formData.mapImage}
               label="Cartina Itinerario"
               onImageUpload={handleImageUpload}
+              onImageDelete={handleImageDelete}
               tour={tour}
             />
           </div>

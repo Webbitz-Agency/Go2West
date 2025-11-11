@@ -117,6 +117,44 @@ export class TourService {
     return `${API_CONFIG.BASE_URL}/api/tours/${id}/pdf`;
   }
 
+  // Elimina un'immagine di un tour
+  static async deleteTourImage(tourId, imageType) {
+    try {
+      const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.TOUR_IMAGE(tourId, imageType)}`, {
+        method: 'DELETE'
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('API Image Delete Error:', error);
+      throw error;
+    }
+  }
+
+  // Elimina il PDF di un tour
+  static async deleteTourPdf(tourId) {
+    try {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/api/tours/${tourId}/pdf`, {
+        method: 'DELETE'
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('API PDF Delete Error:', error);
+      throw error;
+    }
+  }
+
   // Attiva/disattiva promozione per un tour
   static async toggleTourPromotion(tourId, isPromotion) {
     return await apiPut(`/api/tours/${tourId}/promotion`, { 
