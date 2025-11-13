@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { it } from 'date-fns/locale';
 import PageTitle from '../components/PageTitle';
 import TourService from '../services/TourService';
 import { destinationImages } from '../config/destinations';
@@ -16,6 +19,14 @@ const TourDetails = () => {
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState('');
   const [isDatesModalOpen, setIsDatesModalOpen] = useState(false);
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [expandedSections, setExpandedSections] = useState({
+    itinerario: false,
+    included: false,
+    notIncluded: false,
+    notes: false
+  });
   const [currentWizardStep, setCurrentWizardStep] = useState(1);
   const [wizardData, setWizardData] = useState({
     // Step 1: Dettagli Viaggio
@@ -222,6 +233,28 @@ const TourDetails = () => {
     document.body.style.overflow = 'auto'; // Riavvia lo scroll della pagina
   };
 
+  // Funzione per aprire il modale dell'immagine
+  const openImageModal = (imageSrc, imageAlt) => {
+    setSelectedImage({ src: imageSrc, alt: imageAlt });
+    setIsImageModalOpen(true);
+    document.body.style.overflow = 'hidden'; // Blocca lo scroll della pagina
+  };
+
+  // Funzione per chiudere il modale dell'immagine
+  const closeImageModal = () => {
+    setIsImageModalOpen(false);
+    setSelectedImage(null);
+    document.body.style.overflow = 'auto'; // Riavvia lo scroll della pagina
+  };
+
+  // Funzione per gestire l'espansione delle sezioni su mobile
+  const toggleSection = (sectionKey) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [sectionKey]: !prev[sectionKey]
+    }));
+  };
+
   // Funzione per ottenere le immagini del tour
   const getTourImages = () => {
     if (!tour) return [];
@@ -389,7 +422,7 @@ const TourDetails = () => {
 
   // Gestisce la classe body-modal-open per nascondere il chatbot
   useEffect(() => {
-    if (isBookingModalOpen || isDatesModalOpen) {
+    if (isBookingModalOpen || isDatesModalOpen || isImageModalOpen) {
       document.body.classList.add('body-modal-open');
     } else {
       document.body.classList.remove('body-modal-open');
@@ -399,7 +432,24 @@ const TourDetails = () => {
     return () => {
       document.body.classList.remove('body-modal-open');
     };
-  }, [isBookingModalOpen, isDatesModalOpen]);
+  }, [isBookingModalOpen, isDatesModalOpen, isImageModalOpen]);
+
+  // Gestisce il tasto ESC per chiudere il modale dell'immagine
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape' && isImageModalOpen) {
+        closeImageModal();
+      }
+    };
+
+    if (isImageModalOpen) {
+      document.addEventListener('keydown', handleEscape);
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [isImageModalOpen]);
 
   // Mostra loading
   if (loading) {
@@ -424,6 +474,20 @@ const TourDetails = () => {
   }
 
   const tourImages = getTourImages();
+  const carouselImages = getCarouselImages();
+  const rawMapImage = getMapImage();
+  const mapImage = (() => {
+    if (rawMapImage) {
+      return rawMapImage;
+    }
+    if (tourImages.length > 0 && tourImages[0]) {
+      return {
+        src: tourImages[0].src,
+        alt: tourImages[0].alt || tour.title
+      };
+    }
+    return null;
+  })();
 
   return (
     <div className="tour-details">
@@ -455,14 +519,24 @@ const TourDetails = () => {
               <div className="overview-description">
                 <p>{tour.description}</p>                
               </div>
+              {mapImage && (
+                <div className="overview-map-mobile">
+                  <img
+                    src={mapImage.src}
+                    alt={mapImage.alt || `${tour.title} - Cartina Itinerario`}
+                    onClick={() => openImageModal(mapImage.src, mapImage.alt || `${tour.title} - Cartina Itinerario`)}
+                  />
+                </div>
+              )}
               {/* Three Images Row - Carousel Images */}
-              {getCarouselImages().length > 0 && (
+              {carouselImages.length > 0 && (
                 <div className="overview-images-row">
-                  {getCarouselImages().slice(0, 3).map((image, index) => (
+                  {carouselImages.slice(0, 3).map((image, index) => (
                     <div key={index} className="overview-image-item">
                       <img 
                         src={image.src} 
-                        alt={image.alt || `${tour.title} - Carosello ${index + 1}`} 
+                        alt={image.alt || `${tour.title} - Carosello ${index + 1}`}
+                        onClick={() => openImageModal(image.src, image.alt || `${tour.title} - Carosello ${index + 1}`)}
                       />
                     </div>
                   ))}
@@ -473,23 +547,16 @@ const TourDetails = () => {
           
         </div>
          {/* Right Column - Map Image */}
-         {getMapImage() ? (
-              <div className="overview-image-container">
-                <img 
-                  src={getMapImage().src} 
-                  alt={getMapImage().alt || `${tour.title} - Cartina Itinerario`} 
-                  className="overview-single-image"
-                />
-              </div>
-            ) : tourImages.length > 0 && tourImages[0] && (
-              <div className="overview-image-container">
-                <img 
-                  src={tourImages[0].src} 
-                  alt={tourImages[0].alt || tour.title} 
-                  className="overview-single-image"
-                />
-              </div>
-            )}
+         {mapImage && (
+            <div className="overview-image-container">
+              <img 
+                src={mapImage.src} 
+                alt={mapImage.alt || `${tour.title} - Cartina Itinerario`} 
+                className="overview-single-image"
+                onClick={() => openImageModal(mapImage.src, mapImage.alt || `${tour.title} - Cartina Itinerario`)}
+              />
+            </div>
+          )}
       </section>
 
       <div className="container-details">
@@ -566,9 +633,25 @@ const TourDetails = () => {
                 return (
                   <section className="tour-section">
                     <h2 className="section-title">Itinerario</h2>
-                    <div className="info-content">
+                    <div className={`info-content ${expandedSections.itinerario ? 'expanded' : 'collapsed'}`}>
                       <div style={{ whiteSpace: 'pre-line' }}>{tour.itinerario}</div>
                     </div>
+                    <button 
+                      className="read-more-btn"
+                      onClick={() => toggleSection('itinerario')}
+                    >
+                      {expandedSections.itinerario ? (
+                        <>
+                          <span>Leggi di meno</span>
+                          <i className="fa-solid fa-chevron-up"></i>
+                        </>
+                      ) : (
+                        <>
+                          <span>Leggi di più</span>
+                          <i className="fa-solid fa-chevron-down"></i>
+                        </>
+                      )}
+                    </button>
                   </section>
                 );
               } 
@@ -607,7 +690,6 @@ const TourDetails = () => {
             {/* Tour Highlights Carousel */}
           {(tour.included && tour.included.length > 0 && tour.includedMode !== 'unique') && (
               <section className="tour-section">
-                <h2 className="section-title">Servizi Inclusi</h2>
                 <div className="highlights-carousel">
                   <div className="carousel-container">
                     {getHighlightImages().filter(highlight => highlight.image).map((highlight, index) => (
@@ -618,9 +700,12 @@ const TourDetails = () => {
                           transform: `translateX(-${currentHighlightIndex * 100}%)`
                         }}*/
                       >
-                        <img src={highlight.image} alt={highlight.alt} />
+                        <img 
+                          src={highlight.image} 
+                          alt={highlight.alt}
+                          onClick={() => openImageModal(highlight.image, highlight.alt)}
+                        />
                         <div className="highlight-overlay">
-                          <h3 className="highlight-title">{highlight.title}</h3>
                         </div>
                       </div>
                     ))}
@@ -691,9 +776,25 @@ const TourDetails = () => {
                 return (
                   <section className="tour-section">
                     <h2 className="section-title">Servizi Inclusi</h2>
-                    <div className="info-content">
+                    <div className={`info-content ${expandedSections.included ? 'expanded' : 'collapsed'}`}>
                       <div style={{ whiteSpace: 'pre-line' }}>{tour.includedText}</div>
                     </div>
+                    <button 
+                      className="read-more-btn"
+                      onClick={() => toggleSection('included')}
+                    >
+                      {expandedSections.included ? (
+                        <>
+                          <span>Leggi di meno</span>
+                          <i className="fa-solid fa-chevron-up"></i>
+                        </>
+                      ) : (
+                        <>
+                          <span>Leggi di più</span>
+                          <i className="fa-solid fa-chevron-down"></i>
+                        </>
+                      )}
+                    </button>
                   </section>
                 );
               }
@@ -723,9 +824,25 @@ const TourDetails = () => {
                 return (
                   <section className="tour-section">
                     <h2 className="section-title">Servizi Non Inclusi</h2>
-                    <div className="info-content">
+                    <div className={`info-content ${expandedSections.notIncluded ? 'expanded' : 'collapsed'}`}>
                       <div style={{ whiteSpace: 'pre-line' }}>{tour.notIncludedText}</div>
                     </div>
+                    <button 
+                      className="read-more-btn"
+                      onClick={() => toggleSection('notIncluded')}
+                    >
+                      {expandedSections.notIncluded ? (
+                        <>
+                          <span>Leggi di meno</span>
+                          <i className="fa-solid fa-chevron-up"></i>
+                        </>
+                      ) : (
+                        <>
+                          <span>Leggi di più</span>
+                          <i className="fa-solid fa-chevron-down"></i>
+                        </>
+                      )}
+                    </button>
                   </section>
                 );
               }
@@ -752,9 +869,25 @@ const TourDetails = () => {
             {tour.notes && (
               <section className="tour-section">
                 <h2 className="section-title">Note Importanti</h2>
-                <div className="info-content">
+                <div className={`info-content ${expandedSections.notes ? 'expanded' : 'collapsed'}`}>
                   <p>{tour.notes}</p>
                 </div>
+                <button 
+                  className="read-more-btn"
+                  onClick={() => toggleSection('notes')}
+                >
+                  {expandedSections.notes ? (
+                    <>
+                      <span>Leggi di meno</span>
+                      <i className="fa-solid fa-chevron-up"></i>
+                    </>
+                  ) : (
+                    <>
+                      <span>Leggi di più</span>
+                      <i className="fa-solid fa-chevron-down"></i>
+                    </>
+                  )}
+                </button>
               </section>
             )}
 
@@ -881,30 +1014,48 @@ const TourDetails = () => {
                     
                     <div className="booking-form-group">
                       <label htmlFor="departure-date">Data di partenza *</label>
-                      {selectedDate ? (
-                        <input 
-                          type="text" 
-                          id="departure-date" 
-                          value={wizardData.departureDate} 
-                          readOnly 
-                          className="booking-form-input"
-                        />
-                      ) : (
-                        <select 
-                          id="departure-date" 
-                          className="booking-form-select" 
-                          value={wizardData.departureDate}
-                          onChange={(e) => handleWizardDataChange('departureDate', e.target.value)}
-                          required
-                        >
-                          <option value="">Seleziona una data</option>
-                          {tourDates[selectedYear]?.map((dateInfo, index) => (
-                            <option key={index} value={dateInfo.dateRange}>
-                              {dateInfo.dateRange}
-                            </option>
-                          ))}
-                        </select>
-                      )}
+                      <DatePicker
+                        id="departure-date"
+                        selected={(() => {
+                          // Converte la stringa data in oggetto Date
+                          if (wizardData.departureDate) {
+                            const dateMatch = wizardData.departureDate.match(/^(\d{4}-\d{2}-\d{2})/);
+                            if (dateMatch) {
+                              const date = new Date(dateMatch[1]);
+                              return isNaN(date.getTime()) ? null : date;
+                            }
+                            // Se è già nel formato YYYY-MM-DD
+                            if (/^\d{4}-\d{2}-\d{2}$/.test(wizardData.departureDate)) {
+                              const date = new Date(wizardData.departureDate);
+                              return isNaN(date.getTime()) ? null : date;
+                            }
+                          }
+                          return null;
+                        })()}
+                        onChange={(date) => {
+                          // Converte l'oggetto Date in stringa YYYY-MM-DD
+                          if (date) {
+                            const year = date.getFullYear();
+                            const month = String(date.getMonth() + 1).padStart(2, '0');
+                            const day = String(date.getDate()).padStart(2, '0');
+                            handleWizardDataChange('departureDate', `${year}-${month}-${day}`);
+                          } else {
+                            handleWizardDataChange('departureDate', '');
+                          }
+                        }}
+                        minDate={new Date()}
+                        locale={it}
+                        dateFormat="dd/MM/yyyy"
+                        placeholderText="Seleziona una data"
+                        className="booking-form-input"
+                        wrapperClassName="date-picker-wrapper"
+                        required
+                        autoComplete='off'
+                        isClearable
+                        showYearDropdown
+                        showMonthDropdown
+                        dropdownMode="select"
+                      />
                     </div>
                     
                     <div className="booking-form-row-preventivo">
@@ -1150,6 +1301,9 @@ const TourDetails = () => {
                     <div className="confirmation-summary">
                       <h4>Riepilogo Richiesta</h4>
                       <div className="summary-item">
+                        <strong>Codice Viaggio:</strong> {tour?.code || 'Nessun codice disponibile'}
+                      </div>
+                      <div className="summary-item">
                         <strong>Data:</strong> {wizardData.departureDate || 'Non specificata'}
                       </div>
                       <div className="summary-item">
@@ -1279,6 +1433,22 @@ const TourDetails = () => {
                 </>
               )}
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Image Modal */}
+      {isImageModalOpen && selectedImage && (
+        <div className="image-modal-overlay" onClick={closeImageModal}>
+          <div className="image-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="image-modal-close" onClick={closeImageModal}>
+              <i className="fa-solid fa-times"></i>
+            </button>
+            <img 
+              src={selectedImage.src} 
+              alt={selectedImage.alt}
+              className="image-modal-img"
+            />
           </div>
         </div>
       )}
