@@ -2359,7 +2359,8 @@ h2.react-datepicker__current-month {
     position: relative;
   }
   
-  .info-content.collapsed::after {
+  /* Gradiente solo quando il contenuto supera il limite */
+  .info-content.collapsed.needs-read-more::after {
     content: '';
     position: absolute;
     bottom: 0;

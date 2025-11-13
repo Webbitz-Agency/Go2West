@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -27,6 +27,21 @@ const TourDetails = () => {
     notIncluded: false,
     notes: false
   });
+  const [needsReadMore, setNeedsReadMore] = useState({
+    itinerario: false,
+    included: false,
+    notIncluded: false,
+    notes: false
+  });
+  
+  // Refs per misurare l'altezza del contenuto
+  const contentRefs = {
+    itinerario: useRef(null),
+    included: useRef(null),
+    notIncluded: useRef(null),
+    notes: useRef(null)
+  };
+  
   const [currentWizardStep, setCurrentWizardStep] = useState(1);
   const [wizardData, setWizardData] = useState({
     // Step 1: Dettagli Viaggio
@@ -451,6 +466,56 @@ const TourDetails = () => {
     };
   }, [isImageModalOpen]);
 
+  // Controlla se le sezioni hanno bisogno del bottone "leggi di più"
+  useEffect(() => {
+    const checkContentHeight = () => {
+      // Max-height su mobile: 200px per 768px, 150px per 480px
+      const isMobile = window.innerWidth <= 768;
+      const isSmallMobile = window.innerWidth <= 480;
+      const maxHeight = isSmallMobile ? 150 : (isMobile ? 200 : Infinity);
+      
+      if (!isMobile) {
+        // Su desktop, non serve il bottone
+        setNeedsReadMore({
+          itinerario: false,
+          included: false,
+          notIncluded: false,
+          notes: false
+        });
+        return;
+      }
+
+      const newNeedsReadMore = {
+        itinerario: false,
+        included: false,
+        notIncluded: false,
+        notes: false
+      };
+      
+      Object.keys(contentRefs).forEach((key) => {
+        const ref = contentRefs[key];
+        if (ref.current) {
+          const scrollHeight = ref.current.scrollHeight;
+          newNeedsReadMore[key] = scrollHeight > maxHeight;
+        }
+      });
+      
+      setNeedsReadMore(newNeedsReadMore);
+    };
+
+    // Aspetta che il DOM sia renderizzato prima di controllare l'altezza
+    const timeoutId = setTimeout(() => {
+      checkContentHeight();
+    }, 100);
+
+    window.addEventListener('resize', checkContentHeight);
+
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener('resize', checkContentHeight);
+    };
+  }, [tour]);
+
   // Mostra loading
   if (loading) {
     return (
@@ -633,25 +698,30 @@ const TourDetails = () => {
                 return (
                   <section className="tour-section">
                     <h2 className="section-title">Itinerario</h2>
-                    <div className={`info-content ${expandedSections.itinerario ? 'expanded' : 'collapsed'}`}>
+                    <div 
+                      ref={contentRefs.itinerario}
+                      className={`info-content ${expandedSections.itinerario ? 'expanded' : 'collapsed'} ${needsReadMore.itinerario ? 'needs-read-more' : ''}`}
+                    >
                       <div style={{ whiteSpace: 'pre-line' }}>{tour.itinerario}</div>
                     </div>
-                    <button 
-                      className="read-more-btn"
-                      onClick={() => toggleSection('itinerario')}
-                    >
-                      {expandedSections.itinerario ? (
-                        <>
-                          <span>Leggi di meno</span>
-                          <i className="fa-solid fa-chevron-up"></i>
-                        </>
-                      ) : (
-                        <>
-                          <span>Leggi di più</span>
-                          <i className="fa-solid fa-chevron-down"></i>
-                        </>
-                      )}
-                    </button>
+                    {needsReadMore.itinerario && (
+                      <button 
+                        className="read-more-btn"
+                        onClick={() => toggleSection('itinerario')}
+                      >
+                        {expandedSections.itinerario ? (
+                          <>
+                            <span>Leggi di meno</span>
+                            <i className="fa-solid fa-chevron-up"></i>
+                          </>
+                        ) : (
+                          <>
+                            <span>Leggi di più</span>
+                            <i className="fa-solid fa-chevron-down"></i>
+                          </>
+                        )}
+                      </button>
+                    )}
                   </section>
                 );
               } 
@@ -776,25 +846,30 @@ const TourDetails = () => {
                 return (
                   <section className="tour-section">
                     <h2 className="section-title">Servizi Inclusi</h2>
-                    <div className={`info-content ${expandedSections.included ? 'expanded' : 'collapsed'}`}>
+                    <div 
+                      ref={contentRefs.included}
+                      className={`info-content ${expandedSections.included ? 'expanded' : 'collapsed'} ${needsReadMore.included ? 'needs-read-more' : ''}`}
+                    >
                       <div style={{ whiteSpace: 'pre-line' }}>{tour.includedText}</div>
                     </div>
-                    <button 
-                      className="read-more-btn"
-                      onClick={() => toggleSection('included')}
-                    >
-                      {expandedSections.included ? (
-                        <>
-                          <span>Leggi di meno</span>
-                          <i className="fa-solid fa-chevron-up"></i>
-                        </>
-                      ) : (
-                        <>
-                          <span>Leggi di più</span>
-                          <i className="fa-solid fa-chevron-down"></i>
-                        </>
-                      )}
-                    </button>
+                    {needsReadMore.included && (
+                      <button 
+                        className="read-more-btn"
+                        onClick={() => toggleSection('included')}
+                      >
+                        {expandedSections.included ? (
+                          <>
+                            <span>Leggi di meno</span>
+                            <i className="fa-solid fa-chevron-up"></i>
+                          </>
+                        ) : (
+                          <>
+                            <span>Leggi di più</span>
+                            <i className="fa-solid fa-chevron-down"></i>
+                          </>
+                        )}
+                      </button>
+                    )}
                   </section>
                 );
               }
@@ -824,25 +899,30 @@ const TourDetails = () => {
                 return (
                   <section className="tour-section">
                     <h2 className="section-title">Servizi Non Inclusi</h2>
-                    <div className={`info-content ${expandedSections.notIncluded ? 'expanded' : 'collapsed'}`}>
+                    <div 
+                      ref={contentRefs.notIncluded}
+                      className={`info-content ${expandedSections.notIncluded ? 'expanded' : 'collapsed'} ${needsReadMore.notIncluded ? 'needs-read-more' : ''}`}
+                    >
                       <div style={{ whiteSpace: 'pre-line' }}>{tour.notIncludedText}</div>
                     </div>
-                    <button 
-                      className="read-more-btn"
-                      onClick={() => toggleSection('notIncluded')}
-                    >
-                      {expandedSections.notIncluded ? (
-                        <>
-                          <span>Leggi di meno</span>
-                          <i className="fa-solid fa-chevron-up"></i>
-                        </>
-                      ) : (
-                        <>
-                          <span>Leggi di più</span>
-                          <i className="fa-solid fa-chevron-down"></i>
-                        </>
-                      )}
-                    </button>
+                    {needsReadMore.notIncluded && (
+                      <button 
+                        className="read-more-btn"
+                        onClick={() => toggleSection('notIncluded')}
+                      >
+                        {expandedSections.notIncluded ? (
+                          <>
+                            <span>Leggi di meno</span>
+                            <i className="fa-solid fa-chevron-up"></i>
+                          </>
+                        ) : (
+                          <>
+                            <span>Leggi di più</span>
+                            <i className="fa-solid fa-chevron-down"></i>
+                          </>
+                        )}
+                      </button>
+                    )}
                   </section>
                 );
               }
@@ -869,25 +949,30 @@ const TourDetails = () => {
             {tour.notes && (
               <section className="tour-section">
                 <h2 className="section-title">Note Importanti</h2>
-                <div className={`info-content ${expandedSections.notes ? 'expanded' : 'collapsed'}`}>
+                <div 
+                  ref={contentRefs.notes}
+                  className={`info-content ${expandedSections.notes ? 'expanded' : 'collapsed'} ${needsReadMore.notes ? 'needs-read-more' : ''}`}
+                >
                   <p>{tour.notes}</p>
                 </div>
-                <button 
-                  className="read-more-btn"
-                  onClick={() => toggleSection('notes')}
-                >
-                  {expandedSections.notes ? (
-                    <>
-                      <span>Leggi di meno</span>
-                      <i className="fa-solid fa-chevron-up"></i>
-                    </>
-                  ) : (
-                    <>
-                      <span>Leggi di più</span>
-                      <i className="fa-solid fa-chevron-down"></i>
-                    </>
-                  )}
-                </button>
+                {needsReadMore.notes && (
+                  <button 
+                    className="read-more-btn"
+                    onClick={() => toggleSection('notes')}
+                  >
+                    {expandedSections.notes ? (
+                      <>
+                        <span>Leggi di meno</span>
+                        <i className="fa-solid fa-chevron-up"></i>
+                      </>
+                    ) : (
+                      <>
+                        <span>Leggi di più</span>
+                        <i className="fa-solid fa-chevron-down"></i>
+                      </>
+                    )}
+                  </button>
+                )}
               </section>
             )}
 
