@@ -2942,9 +2942,9 @@ h2.react-datepicker__current-month {
     line-height: 1.4;
   }
   
-  .info-content.collapsed {
+  /*.info-content.collapsed {
     max-height: 150px;
-  }
+  }*/
   
   .read-more-btn {
     padding: 10px 18px;
