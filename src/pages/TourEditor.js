@@ -1276,7 +1276,7 @@ const TourEditor = () => {
                   </section>
                 )}*/}
 
-                {formData.prices && formData.prices.prices && formData.prices.prices.length > 0 && (
+                {/*{formData.prices && formData.prices.prices && formData.prices.prices.length > 0 && (*/}
                   <section className="tour-section">
                     <h2 className="section-title">Prezzi</h2>
                     <div className="pricing-table-container">
@@ -1324,7 +1324,7 @@ const TourEditor = () => {
                       </div>
                     </div>
                   </section>
-                )}
+                {/*})}*/}
 
                 {/*<section className="tour-section quote-request-section">
                   <div className="quote-request-content">
