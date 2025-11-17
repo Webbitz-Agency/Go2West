@@ -157,48 +157,79 @@
   left: 50%;
   transform: translateX(-50%);
   background: white;
-  border-radius: 12px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  min-width: 200px;
-  padding: 8px 0;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+  min-width: 220px;
+  padding: 12px 8px;
   z-index: 1000;
-  margin-top: 8px;
-  animation: dropdownSlide 0.3s ease-out;
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  animation: dropdownSlide 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  margin-top: 4px;
+}
+
+/* Pseudo-elemento invisibile che crea un ponte tra il trigger e il menu */
+.dropdown-menu::before {
+  content: '';
+  position: absolute;
+  top: -12px;
+  left: 0;
+  right: 0;
+  height: 12px;
+  background: transparent;
 }
 
 @keyframes dropdownSlide {
   0% {
     opacity: 0;
-    transform: translateX(-50%) translateY(-10px);
+    transform: translateX(-50%) translateY(-8px) scale(0.95);
   }
   100% {
     opacity: 1;
-    transform: translateX(-50%) translateY(0);
+    transform: translateX(-50%) translateY(0) scale(1);
   }
 }
 
 .dropdown-item {
   display: block;
-  padding: 12px 20px;
+  padding: 14px 20px;
   color: #333;
   text-decoration: none;
-  transition: all 0.2s ease;
-  border-radius: 8px;
-  margin: 2px 8px;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 10px;
+  margin: 4px 6px;
   font-weight: 500;
+  font-size: 0.95rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.dropdown-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 3px;
+  background: linear-gradient(45deg, #006fcf, #004cfe);
+  transform: scaleY(0);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .dropdown-item:hover {
-  background: linear-gradient(45deg, #006fcf, #004cfe);
-  color: white;
+  background: rgba(79, 172, 254, 0.12);
   transform: translateX(4px);
+  box-shadow: 0 2px 8px rgba(79, 172, 254, 0.15);
+}
+
+.dropdown-item:hover::before {
+  transform: scaleY(1);
 }
 
 /* Stato attivo per item del dropdown viaggi */
 .dropdown-item.active {
-  background: linear-gradient(45deg, #006fcf, #004cfe);
-  color: white;
+  background: rgba(79, 172, 254, 0.12);
+  transform: translateX(4px);
+  box-shadow: 0 2px 8px rgba(79, 172, 254, 0.15);
 }
 
 /* === SUBMENU STYLES === */
@@ -215,8 +246,9 @@
 }
 
 .dropdown-item-with-submenu:hover .dropdown-item:not(.active) {
-  background: rgba(79, 172, 254, 0.1);
-  transform: translateX(2px);
+  background: rgba(79, 172, 254, 0.12);
+  transform: translateX(4px);
+  box-shadow: 0 2px 8px rgba(79, 172, 254, 0.15);
 }
 
 
@@ -233,51 +265,73 @@
 
 .submenu {
   position: absolute;
-  top: 0;
-  left: calc(100% - 4px);
+  left: calc(100% - 8px);
   background: white;
-  border-radius: 12px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-  min-width: 180px;
-  padding: 8px 0;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+  min-width: 200px;
+  padding: 12px 8px;
   z-index: 1001;
-  animation: submenuSlide 0.25s ease-out;
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  animation: submenuSlide 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
-/* Posizionamento fisso del submenu sempre alla stessa altezza */
-.dropdown-menu .submenu {
+/* Pseudo-elemento invisibile che crea un ponte tra il menu principale e il submenu */
+.submenu::before {
+  content: '';
+  position: absolute;
   top: 0;
-  left: calc(100% - 4px);
+  left: -16px;
+  width: 16px;
+  height: 100%;
+  background: transparent;
 }
 
 @keyframes submenuSlide {
   0% {
     opacity: 0;
-    transform: translateX(-8px);
+    transform: translateX(-8px) scale(0.95);
   }
   100% {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateX(0) scale(1);
   }
 }
 
 .submenu-item {
   display: block;
-  padding: 10px 16px;
+  padding: 12px 18px;
   color: #333;
   text-decoration: none;
-  transition: all 0.2s ease;
-  border-radius: 6px;
-  margin: 1px 6px;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 10px;
+  margin: 4px 6px;
   font-size: 0.9rem;
   font-weight: 500;
+  position: relative;
+  overflow: hidden;
+}
+
+.submenu-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 3px;
+  background: linear-gradient(45deg, #006fcf, #004cfe);
+  transform: scaleY(0);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .submenu-item:hover {
-  background: linear-gradient(45deg, #006fcf, #004cfe);
-  color: white;
-  transform: translateX(2px);
+  background: rgba(79, 172, 254, 0.12);
+  transform: translateX(4px);
+  box-shadow: 0 2px 8px rgba(79, 172, 254, 0.15);
+}
+
+.submenu-item:hover::before {
+  transform: scaleY(1);
 }
 
 /* === BURGER MENU === */
@@ -746,14 +800,14 @@
 
 .header.transparent .dropdown-item:hover,
 .header.transparent .submenu-item:hover {
-  background: linear-gradient(45deg, #006fcf, #004cfe);
-  color: white;
+  /*background: linear-gradient(45deg, #006fcf, #004cfe);*/
+  color: black;
 }
 
 .header.solid .dropdown-item:hover,
 .header.solid .submenu-item:hover {
-  background: linear-gradient(45deg, #006fcf, #004cfe);
-  color: white;
+  /*background: linear-gradient(45deg, #006fcf, #004cfe);*/
+  color: black;
 }
 
 .header.transparent .logo-text { 

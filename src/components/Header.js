@@ -12,6 +12,9 @@ const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileMenuLevel, setMobileMenuLevel] = useState('main'); // 'main', 'destinations', 'travels'
   const [activeTravelType, setActiveTravelType] = useState(null);
+  const [dropdownTimeout, setDropdownTimeout] = useState(null);
+  const [hoveredItemRef, setHoveredItemRef] = useState(null);
+  const [submenuTop, setSubmenuTop] = useState(0);
 
   // Dati delle destinazioni
   const destinations = [
@@ -94,18 +97,68 @@ const Header = () => {
     return false;
   };
 
-  // Gestione hover dropdown
+  // Gestione hover dropdown con delay per evitare chiusure accidentali
   const handleMouseEnter = (dropdown) => {
+    // Cancella eventuali timeout in corso
+    if (dropdownTimeout) {
+      clearTimeout(dropdownTimeout);
+      setDropdownTimeout(null);
+    }
     setActiveDropdown(dropdown);
   };
 
   const handleMouseLeave = () => {
-    setActiveDropdown(null);
-    setActiveSubMenu(null);
+    // Aggiungi un piccolo delay prima di chiudere il menu
+    // Questo permette all'utente di spostare il cursore dal trigger al menu
+    // Non chiudere se il submenu è ancora aperto (per il dropdown viaggi)
+    const timeout = setTimeout(() => {
+      // Se c'è un submenu attivo, non chiudere il dropdown principale
+      if (activeSubMenu && activeDropdown === 'travels') {
+        return; // Mantieni aperto se il submenu è attivo
+      }
+      setActiveDropdown(null);
+      setActiveSubMenu(null);
+    }, 150); // 150ms di delay
+    setDropdownTimeout(timeout);
   };
 
-  const handleSubMenuClick = (subMenu) => {
-    setActiveSubMenu(activeSubMenu === subMenu ? null : subMenu);
+  const handleSubMenuEnter = (subMenu, event) => {
+    // Cancella eventuali timeout in corso
+    if (dropdownTimeout) {
+      clearTimeout(dropdownTimeout);
+      setDropdownTimeout(null);
+    }
+    setActiveSubMenu(subMenu);
+    // Calcola la posizione top del submenu basandosi sull'elemento hover
+    if (event && event.currentTarget) {
+      const itemElement = event.currentTarget;
+      const menuElement = itemElement.closest('.dropdown-menu');
+      if (menuElement) {
+        const itemRect = itemElement.getBoundingClientRect();
+        const menuRect = menuElement.getBoundingClientRect();
+        setSubmenuTop(itemRect.top - menuRect.top);
+        setHoveredItemRef(itemElement);
+      }
+    }
+  };
+
+  const handleSubMenuLeave = () => {
+    // Aggiungi un piccolo delay prima di chiudere il submenu
+    const timeout = setTimeout(() => {
+      setActiveSubMenu(null);
+      setHoveredItemRef(null);
+      setSubmenuTop(0);
+    }, 150); // 150ms di delay
+    setDropdownTimeout(timeout);
+  };
+
+  // Funzione per chiudere completamente il dropdown viaggi (incluso submenu)
+  const handleTravelsDropdownClose = () => {
+    const timeout = setTimeout(() => {
+      setActiveDropdown(null);
+      setActiveSubMenu(null);
+    }, 150);
+    setDropdownTimeout(timeout);
   };
 
   const toggleMobileMenu = () => {
@@ -172,6 +225,15 @@ const Header = () => {
     }
   };
 
+  // Cleanup del timeout quando il componente viene smontato
+  useEffect(() => {
+    return () => {
+      if (dropdownTimeout) {
+        clearTimeout(dropdownTimeout);
+      }
+    };
+  }, [dropdownTimeout]);
+
   // Chiudi menu mobile quando cambia la rotta
   useEffect(() => {
     setMobileMenuOpen(false);
@@ -221,16 +283,31 @@ const Header = () => {
             {/* Destinazioni Dropdown */}
             <div 
               className="nav-dropdown"
-              onMouseEnter={() => handleMouseEnter('destinations')}
+              style={{ 
+                padding: '10px 10px',
+            }}
+              onMouseEnter={() => {
+                // Mantieni il menu aperto se è già aperto quando il cursore entra nello spazio del nav-dropdown
+                if (activeDropdown === 'destinations') {
+                  handleMouseEnter('destinations');
+                }
+              }}
               onMouseLeave={handleMouseLeave}
             >
-              <span className={`nav-link ${isActiveSection('destinations') ? 'active' : ''}`}>
+              <span 
+                className={`nav-link ${isActiveSection('destinations') ? 'active' : ''}`}
+                onMouseEnter={() => handleMouseEnter('destinations')}
+              >
                 Destinazioni
                 <span className="dropdown-arrow"><i class="fa-solid fa-angle-down"></i></span>
               </span>
               
               {activeDropdown === 'destinations' && (
-                <div className="dropdown-menu">
+                <div 
+                  className="dropdown-menu"
+                  onMouseEnter={() => handleMouseEnter('destinations')}
+                  onMouseLeave={handleMouseLeave}
+                >
                   {destinations.map((dest) => (
                     <a 
                       key={dest.country}
@@ -247,21 +324,62 @@ const Header = () => {
             {/* Viaggi Dropdown */}
             <div 
               className="nav-dropdown"
-              onMouseEnter={() => handleMouseEnter('travels')}
-              onMouseLeave={handleMouseLeave}
+              style={{ 
+                padding: '10px 10px',
+            }}
+              onMouseEnter={() => {
+                // Mantieni il menu aperto se è già aperto quando il cursore entra nello spazio del nav-dropdown
+                if (activeDropdown === 'travels') {
+                  handleMouseEnter('travels');
+                  // Se c'è un submenu attivo, mantienilo aperto
+                  if (activeSubMenu) {
+                    handleSubMenuEnter(activeSubMenu);
+                  }
+                }
+              }}
+              onMouseLeave={() => {
+                // Se non c'è un submenu attivo, chiudi normalmente
+                // Se c'è un submenu attivo, non chiudere (il cursore potrebbe essere sul submenu)
+                if (!activeSubMenu) {
+                  handleMouseLeave();
+                }
+              }}
             >
-              <span className={`nav-link ${isActiveSection('travels') ? 'active' : ''}`}>
+              <span 
+                className={`nav-link ${isActiveSection('travels') ? 'active' : ''}`}
+                onMouseEnter={() => handleMouseEnter('travels')}
+              >
                 Viaggi
                 <span className="dropdown-arrow"><i class="fa-solid fa-angle-down"></i></span>
               </span>
               
               {activeDropdown === 'travels' && (
-                <div className="dropdown-menu">
+                <div 
+                  className="dropdown-menu"
+                  onMouseEnter={() => {
+                    // Semplice: mantieni tutto aperto
+                    if (dropdownTimeout) {
+                      clearTimeout(dropdownTimeout);
+                      setDropdownTimeout(null);
+                    }
+                    handleMouseEnter('travels');
+                  }}
+                  onMouseLeave={(e) => {
+                    // Non chiudere se c'è un submenu attivo e il cursore sta andando verso il submenu
+                    // Controlla se il cursore sta andando verso il submenu (a destra)
+                    if (activeSubMenu) {
+                      // Non chiudere, il submenu gestirà la chiusura
+                      return;
+                    }
+                    handleMouseLeave();
+                  }}
+                >
                   {travelTypes.map((type) => (
                     <div 
                       key={type.slug}
                       className="dropdown-item-with-submenu"
-                      onClick={() => handleSubMenuClick(type.slug)}
+                      onMouseEnter={(e) => handleSubMenuEnter(type.slug, e)}
+                      onMouseLeave={handleSubMenuLeave}
                     >
                       <span className={`dropdown-item ${activeSubMenu === type.slug ? 'active' : ''}`}>
                         {type.name}
@@ -270,9 +388,26 @@ const Header = () => {
                     </div>
                   ))}
                   
-                  {/* Submenu posizionato sempre alla stessa altezza */}
+                  {/* Submenu posizionato all'opzione hover */}
                   {activeSubMenu && (
-                    <div className="submenu">
+                    <div 
+                      className="submenu"
+                      style={{
+                        top: `${submenuTop}px`
+                      }}
+                      onMouseEnter={() => {
+                        // Semplice: mantieni tutto aperto quando il cursore è sul submenu
+                        if (dropdownTimeout) {
+                          clearTimeout(dropdownTimeout);
+                          setDropdownTimeout(null);
+                        }
+                        // Mantieni il dropdown principale aperto
+                        handleMouseEnter('travels');
+                        // Mantieni il submenu aperto
+                        setActiveSubMenu(activeSubMenu);
+                      }}
+                      onMouseLeave={handleSubMenuLeave}
+                    >
                       {destinations.map((dest) => (
                         <a 
                           key={`${activeSubMenu}-${dest.country}`}
