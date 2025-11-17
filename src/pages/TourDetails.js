@@ -1081,7 +1081,7 @@ const TourDetails = () => {
                   ref={contentRefs.notes}
                   className={`info-content ${expandedSections.notes ? 'expanded' : 'collapsed'} ${needsReadMore.notes ? 'needs-read-more' : ''}`}
                 >
-                  <p>{tour.notes}</p>
+                  {tour.notes}
                 </div>
                 {needsReadMore.notes && (
                   <button 

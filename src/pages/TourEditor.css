@@ -502,7 +502,7 @@
 }
 
 .info-content {
-  color: #666;
+  color: #000 !important;
   line-height: 1.6;
   font-size: 0.95rem;
   /*max-width: 300px;*/
