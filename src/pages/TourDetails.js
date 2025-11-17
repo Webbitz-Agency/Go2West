@@ -68,6 +68,12 @@ const TourDetails = () => {
     privacyAccepted: false
   });
 
+  const overviewGalleryRef = useRef(null);
+  const [galleryScrollIndicators, setGalleryScrollIndicators] = useState({
+    canScrollLeft: false,
+    canScrollRight: false
+  });
+
   // Funzione per ottenere le date del tour dal database
   const getTourDates = () => {
     // Se è modalità unique, restituisci un oggetto vuoto (le date verranno mostrate come testo)
@@ -516,6 +522,120 @@ const TourDetails = () => {
     };
   }, [tour]);
 
+  const tourImages = getTourImages();
+  const carouselImages = getCarouselImages();
+  const overviewGalleryImages = (() => {
+    if (!tour) return [];
+
+    const gallery = [];
+
+    const resolveCustomImageSrc = (imageKey) => {
+      const fieldValue = tour[imageKey];
+      if (!fieldValue) return null;
+
+      if (typeof fieldValue === 'string') {
+        if (fieldValue === 'exists') {
+          return TourService.getTourImageUrl(tour.id, imageKey);
+        }
+        if (fieldValue.startsWith('http') || fieldValue.startsWith('/')) {
+          return fieldValue;
+        }
+        if (fieldValue.trim() !== '') {
+          return TourService.getTourImageUrl(tour.id, imageKey);
+        }
+      }
+
+      if (typeof fieldValue === 'boolean') {
+        return TourService.getTourImageUrl(tour.id, imageKey);
+      }
+
+      if (typeof fieldValue === 'object' && fieldValue?.src) {
+        return fieldValue.src;
+      }
+
+      return TourService.getTourImageUrl(tour.id, imageKey);
+    };
+
+    const pushImage = (src, alt) => {
+      if (!src || gallery.length >= 4) return;
+      gallery.push({ src, alt });
+    };
+
+    for (let i = 1; i <= 4; i++) {
+      const src = resolveCustomImageSrc(`image${i}`);
+      pushImage(src, `${tour.title} - Immagine ${i}`);
+    }
+
+    const pushFallbackCollection = (collection, labelPrefix) => {
+      collection.forEach((image, index) => {
+        pushImage(
+          image.src,
+          image.alt || `${tour.title} - ${labelPrefix} ${index + 1}`
+        );
+      });
+    };
+
+    if (gallery.length < 4 && carouselImages.length > 0) {
+      pushFallbackCollection(carouselImages, 'Carosello');
+    }
+
+    if (gallery.length < 4 && tourImages.length > 0) {
+      pushFallbackCollection(tourImages, 'Galleria');
+    }
+
+    return gallery.slice(0, 4);
+  })();
+
+  const rawMapImage = getMapImage();
+  const mapImage = (() => {
+    if (rawMapImage) {
+      return rawMapImage;
+    }
+    if (tourImages.length > 0 && tourImages[0]) {
+      return {
+        src: tourImages[0].src,
+        alt: tourImages[0].alt || tour.title
+      };
+    }
+    return null;
+  })();
+
+  const updateGalleryScrollState = () => {
+    const container = overviewGalleryRef.current;
+    if (!container) return;
+    const { scrollLeft, scrollWidth, clientWidth } = container;
+    setGalleryScrollIndicators({
+      canScrollLeft: scrollLeft > 8,
+      canScrollRight: scrollLeft + clientWidth < scrollWidth - 8
+    });
+  };
+
+  const scrollGallery = (direction) => {
+    const container = overviewGalleryRef.current;
+    if (!container) return;
+    const scrollAmount = Math.max(container.clientWidth * 0.8, 200);
+    container.scrollBy({
+      left: direction * scrollAmount,
+      behavior: 'smooth'
+    });
+  };
+
+  useEffect(() => {
+    const container = overviewGalleryRef.current;
+    if (!container) return;
+
+    updateGalleryScrollState();
+
+    const handleScroll = () => updateGalleryScrollState();
+    container.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', updateGalleryScrollState);
+
+    return () => {
+      container.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', updateGalleryScrollState);
+    };
+  }, [overviewGalleryImages.length]);
+
   // Mostra loading
   if (loading) {
     return (
@@ -537,22 +657,6 @@ const TourDetails = () => {
       </div>
     );
   }
-
-  const tourImages = getTourImages();
-  const carouselImages = getCarouselImages();
-  const rawMapImage = getMapImage();
-  const mapImage = (() => {
-    if (rawMapImage) {
-      return rawMapImage;
-    }
-    if (tourImages.length > 0 && tourImages[0]) {
-      return {
-        src: tourImages[0].src,
-        alt: tourImages[0].alt || tour.title
-      };
-    }
-    return null;
-  })();
 
   return (
     <div className="tour-details">
@@ -593,18 +697,42 @@ const TourDetails = () => {
                   />
                 </div>
               )}
-              {/* Three Images Row - Carousel Images */}
-              {carouselImages.length > 0 && (
-                <div className="overview-images-row">
-                  {carouselImages.slice(0, 3).map((image, index) => (
-                    <div key={index} className="overview-image-item">
-                      <img 
-                        src={image.src} 
-                        alt={image.alt || `${tour.title} - Carosello ${index + 1}`}
-                        onClick={() => openImageModal(image.src, image.alt || `${tour.title} - Carosello ${index + 1}`)}
-                      />
-                    </div>
-                  ))}
+              {/* Gallery Row - Custom Images */}
+              {overviewGalleryImages.length > 0 && (
+                <div className="overview-images-wrapper">
+                  {galleryScrollIndicators.canScrollLeft && (
+                    <button 
+                      className="overview-gallery-nav left"
+                      type="button"
+                      onClick={() => scrollGallery(-1)}
+                      aria-label="Scorri immagini indietro"
+                    >
+                      <i className="fa-solid fa-chevron-left"></i>
+                    </button>
+                  )}
+
+                  <div className="overview-images-row" ref={overviewGalleryRef}>
+                    {overviewGalleryImages.map((image, index) => (
+                      <div key={`${image.src}-${index}`} className="overview-image-item">
+                        <img 
+                          src={image.src} 
+                          alt={image.alt || `${tour.title} - Immagine ${index + 1}`}
+                          onClick={() => openImageModal(image.src, image.alt || `${tour.title} - Immagine ${index + 1}`)}
+                        />
+                      </div>
+                    ))}
+                  </div>
+
+                  {galleryScrollIndicators.canScrollRight && (
+                    <button 
+                      className="overview-gallery-nav right"
+                      type="button"
+                      onClick={() => scrollGallery(1)}
+                      aria-label="Scorri immagini avanti"
+                    >
+                      <i className="fa-solid fa-chevron-right"></i>
+                    </button>
+                  )}
                 </div>
               )}
            

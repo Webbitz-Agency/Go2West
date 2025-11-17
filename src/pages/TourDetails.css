@@ -147,12 +147,69 @@
   text-align: justify;
 }
 
-/* Three Images Row */
+/* Overview Images Row */
+.overview-images-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .overview-images-row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-wrap: nowrap;
   gap: 15px;
   margin-top: 0;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+  scroll-behavior: smooth;
+}
+
+.overview-images-row::-webkit-scrollbar {
+  height: 6px;
+}
+
+.overview-images-row::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.overview-images-row::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.25);
+  border-radius: 999px;
+}
+
+.overview-gallery-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  color: #1a2332;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  z-index: 2;
+}
+
+.overview-gallery-nav.left {
+  left: -10px;
+}
+
+.overview-gallery-nav.right {
+  right: -10px;
+}
+
+.overview-gallery-nav:hover {
+  transform: translateY(-50%) scale(1.05);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
 }
 
 .overview-image-item {
@@ -163,6 +220,7 @@
   transition: all 0.3s ease;
   aspect-ratio: 4/3;
   cursor: pointer;
+  flex: 1 0 clamp(220px, 25%, 320px);
 }
 
 .overview-image-item:hover {
@@ -2041,15 +2099,31 @@ h2.react-datepicker__current-month {
   .overview-image-container {
     display: none;
   }
+
+  .overview-images-wrapper {
+    gap: 6px;
+  }
   
   .overview-images-row {
-    grid-template-columns: repeat(3, 1fr);
     gap: 12px;
-    /*margin-top: 15px;*/
   }
   
   .overview-image-item {
+    flex: 0 0 clamp(220px, 40%, 280px);
     aspect-ratio: 4 / 3;
+  }
+
+  .overview-gallery-nav {
+    width: 34px;
+    height: 34px;
+  }
+
+  .overview-gallery-nav.left {
+    left: -6px;
+  }
+
+  .overview-gallery-nav.right {
+    right: -6px;
   }
   
   .tour-sidebar {
@@ -2446,10 +2520,31 @@ h2.react-datepicker__current-month {
     border-width: 1.5px;
   }
   
-  .overview-images-row {
-    grid-template-columns: 1fr;
+  .overview-images-wrapper {
+    gap: 4px;
   }
   
+  .overview-images-row {
+    gap: 10px;
+  }
+  
+  .overview-image-item {
+    flex: 0 0 clamp(200px, 80%, 260px);
+  }
+
+  .overview-gallery-nav {
+    width: 32px;
+    height: 32px;
+  }
+
+  .overview-gallery-nav.left {
+    left: -4px;
+  }
+
+  .overview-gallery-nav.right {
+    right: -4px;
+  }
+
   .overview-map-mobile img {
     margin: 0;
   }
@@ -2579,12 +2674,12 @@ h2.react-datepicker__current-month {
   }
   
   .overview-images-row {
-    grid-template-columns: repeat(3, 1fr);
     gap: 10px;
   }
   
   .overview-image-item {
     border-radius: 8px;
+    flex: 0 0 clamp(200px, 65%, 260px);
   }
   
   .highlights-carousel {
@@ -3164,7 +3259,6 @@ h2.react-datepicker__current-month {
   }
   
   .overview-images-row {
-    grid-template-columns: repeat(3, 1fr);
     gap: 8px;
     margin-top: 0;
   }
@@ -3172,6 +3266,7 @@ h2.react-datepicker__current-month {
   .overview-image-item {
     border-radius: 6px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    flex: 0 0 clamp(180px, 85%, 240px);
   }
   
   .overview-title {
