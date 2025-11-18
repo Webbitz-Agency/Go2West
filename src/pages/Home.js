@@ -56,6 +56,9 @@ const Home = () => {
   // Stato per i conteggi dei tour per destinazione
   const [toursCount, setToursCount] = useState({});
 
+  // Stato per verificare se ci sono tour in promozione
+  const [hasPromotionTours, setHasPromotionTours] = useState(false);
+
   const openTravelModal = (travelTypeSlug) => {
     setPendingTravelType(travelTypeSlug);
     setSelectedTravelType(travelTypeSlug);
@@ -223,6 +226,21 @@ const Home = () => {
     };
 
     fetchToursCount();
+  }, []);
+
+  // Verifica se ci sono tour in promozione
+  useEffect(() => {
+    const checkPromotionTours = async () => {
+      try {
+        const promotionTours = await TourService.getPromotionTours();
+        setHasPromotionTours(Array.isArray(promotionTours) && promotionTours.length > 0);
+      } catch (error) {
+        console.warn('Errore nel recupero dei tour in promozione:', error);
+        setHasPromotionTours(false);
+      }
+    };
+
+    checkPromotionTours();
   }, []);
 
   // Destinazioni ora dalla configurazione condivisa - aggiungiamo le proprietà mancanti
@@ -859,17 +877,19 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Sezione Viaggi in promozione - Carosello */}
-      <section id="all-destinations" className="suggestions-section">
-        <div className="section-header">
-          <h2>Viaggi in Primo Piano</h2>
-          <p>Scopri le nostre offerte speciali e del momento, per vivere esperienze indimenticabili.</p>
-        </div>
+      {/* Sezione Viaggi in promozione - Carosello */}      
+      {hasPromotionTours && (
+        <section id="all-destinations" className="suggestions-section">
+          <div className="section-header">
+            <h2>Viaggi in Primo Piano</h2>
+            <p>Scopri le nostre offerte speciali e del momento, per vivere esperienze indimenticabili.</p>
+          </div>
 
-        <div className="suggestions-container">
-          <PromotionCarousel limit={6} />
-        </div>
-      </section>
+          <div className="suggestions-container">
+            <PromotionCarousel limit={6} />
+          </div>
+        </section>
+      )}
 
       {/* Sezione Contatti - Bacheca da Viaggio */}
       <section className="contact-section" id="contact" ref={contactRef}>
