@@ -88,7 +88,6 @@ const Promotions = () => {
           <DynamicTours 
             promotionsOnly={true}
             showFilters={true}
-            limit={100}
           />
         </div>
       </section>

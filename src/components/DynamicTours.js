@@ -30,7 +30,7 @@ const getFilterValue = (slug) => {
 };
 
 // Componente per i tour dinamici caricati dal backend
-const DynamicTours = ({ type, destination, limit = 6, showFilters = false, promotionsOnly = false }) => {
+const DynamicTours = ({ type, destination, showFilters = false, promotionsOnly = false }) => {
   const [allTours, setAllTours] = useState([]); // Tutti i tour caricati
   const [filteredTours, setFilteredTours] = useState([]); // Tour filtrati lato client
   const [loading, setLoading] = useState(true);
@@ -195,8 +195,8 @@ const DynamicTours = ({ type, destination, limit = 6, showFilters = false, promo
   // Filtra i tour ogni volta che cambiano i filtri
   useEffect(() => {
     const filtered = filterTours(allTours, selectedType, selectedDuration, selectedPrice, selectedGeographicArea, searchQuery);
-    setFilteredTours(filtered.slice(0, limit));
-  }, [allTours, selectedType, selectedDuration, selectedPrice, selectedGeographicArea, searchQuery, limit, filterTours]);
+    setFilteredTours(filtered);
+  }, [allTours, selectedType, selectedDuration, selectedPrice, selectedGeographicArea, searchQuery, filterTours]);
 
   const clearAllFilters = () => {
     setSelectedType('all');
