@@ -130,7 +130,7 @@ DESCRIZIONE:
 
     # Date disponibili
     if tour_data['dates']:
-        content += "DATE DISPONIBILI:\n"
+        content += "DATE DI PARTENZA:\n"
         dates = tour_data['dates']
         if isinstance(dates, str):
             try:

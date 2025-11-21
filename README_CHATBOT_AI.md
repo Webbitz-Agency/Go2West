@@ -139,7 +139,7 @@ Il problema `Client.__init__() got an unexpected keyword argument 'proxies'` è 
 ### Capacità
 - Informazioni dettagliate sui tour
 - Consigli su destinazioni
-- Prezzi e date disponibili
+- Prezzi e date di partenza
 - Itinerari e programmi
 - Cosa è incluso/escluso
 - Suggerimenti personalizzati
@@ -216,7 +216,7 @@ curl -X POST https://your-backend-url/api/sync-vector-store
 
 ### Possibili Miglioramenti
 1. **Memoria conversazione**: Mantenere contesto tra messaggi
-2. **Integrazione calendario**: Date disponibili in tempo reale
+2. **Integrazione calendario**: Date di partenza in tempo reale
 3. **Prezzi dinamici**: Connessione a sistema di pricing
 4. **Multilingua**: Supporto inglese e altre lingue
 5. **Analytics**: Tracking domande frequenti

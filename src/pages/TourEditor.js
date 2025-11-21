@@ -1524,7 +1524,7 @@ const TourEditor = () => {
                         field="basic.datesText" 
                         value={formData.datesText} 
                         className="unique-text" 
-                        placeholder="Scrivi qui le date disponibili come testo unico..."
+                        placeholder="Scrivi qui le date di partenza come testo unico..."
                       />
                     </div>
                   )}
