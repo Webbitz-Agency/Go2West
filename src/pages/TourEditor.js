@@ -1013,7 +1013,7 @@ const TourEditor = () => {
                             field="basic.geographicArea" 
                             value={formData.geographicArea} 
                             className="info-value-text" 
-                            options={['EST', 'OVEST', 'EST E OVEST']}
+                            options={['Seleziona...', 'EST', 'OVEST', 'EST E OVEST']}
                           />
                         </span>
                       </div>
