@@ -141,7 +141,7 @@
 
 .overview-description p {
   font-size: 1.1rem;
-  color: #555;
+  color: #000;
   line-height: 1.7;
   margin: 0;
   text-align: justify;
@@ -224,7 +224,7 @@
 }
 
 .overview-image-item:hover {
-  transform: translateY(-4px);
+  /*transform: translateY(-4px);*/
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
@@ -288,7 +288,7 @@
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 40px;
-  padding: 60px 0;
+  padding: 20px 0;
 }
 
 /* Responsive per il layout principale */
@@ -518,7 +518,7 @@
 }
 
 .day-description {
-  color: #555;
+  color: #000;
   font-size: 1rem;
   line-height: 1.7;
   margin: 0;
@@ -880,7 +880,7 @@
 
 .summary-item {
   margin-bottom: 8px;
-  color: #555;
+  color: #000;
   font-size: 0.95rem;
 }
 
@@ -1324,7 +1324,7 @@ h2.react-datepicker__current-month {
 }
 
 .privacy-checkbox-text {
-  color: #555;
+  color: #000;
   font-size: 0.9rem;
   line-height: 1.5;
 }
@@ -1377,7 +1377,7 @@ h2.react-datepicker__current-month {
 
 .quote-request-description {
   margin: 0;
-  color: #555;
+  color: #000;
   font-size: 1.1rem;
   line-height: 1.6;
   max-width: 600px;
@@ -1503,7 +1503,7 @@ h2.react-datepicker__current-month {
 
 
 .pricing-disclaimer {
-  color: #555;
+  color: #000;
   font-size: clamp(0.8rem, 1.2vw, 1rem);
   text-align: center;
   margin-bottom: clamp(15px, 2.5vw, 25px);
@@ -1969,7 +1969,7 @@ h2.react-datepicker__current-month {
   .tour-content {
     grid-template-columns: 1fr 1fr; /* Layout 50/50 */
     gap: 30px;
-    padding: 50px 0;
+    padding: 20px 0;
   }
   
   /* Forza le colonne ad avere la stessa larghezza */
@@ -2038,10 +2038,6 @@ h2.react-datepicker__current-month {
     min-height: 400px;
   }
   
-  .tour-content {
-    gap: 30px;
-    padding: 40px 0;
-  }
   
   .tour-section {
     padding: 25px;
@@ -2072,7 +2068,7 @@ h2.react-datepicker__current-month {
   .tour-content {
     grid-template-columns: 1fr;
     gap: 30px;
-    padding: 40px 0;
+    padding: 20px 0;
   }
   
   .tour-overview-section {
