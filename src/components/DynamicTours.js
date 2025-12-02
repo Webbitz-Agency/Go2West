@@ -243,8 +243,9 @@ const DynamicTours = ({ type, destination, showFilters = false, promotionsOnly =
                 <button 
                   onClick={() => setSearchQuery('')}
                   className="clear-search-btn"
+                  aria-label="Cancella ricerca"
                 >
-                  ✕
+                  <i className="fa-solid fa-times"></i>
                 </button>
               )}
             </div>

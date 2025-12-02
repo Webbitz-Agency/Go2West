@@ -95,7 +95,7 @@
 .nav-link.active {
   background: linear-gradient(45deg, #006fcf, #004cfe);
   color: white;
-  box-shadow: 0 4px 12px rgba(79, 172, 254, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 /* Rimuovi l'effetto underline precedente */
@@ -121,7 +121,7 @@
 .header.transparent .nav-link.active {
   background: linear-gradient(45deg, #006fcf, #004cfe);
   color: white;
-  box-shadow: 0 4px 12px rgba(79, 172, 254, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   text-shadow: none;
 }
 
@@ -130,7 +130,7 @@
 .nav-link.active:hover {
   background: linear-gradient(45deg, #006fcf, #004cfe);
   color: white;
-  box-shadow: 0 6px 16px rgba(79, 172, 254, 0.5);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
   transform: translateY(-1px);
 }
 

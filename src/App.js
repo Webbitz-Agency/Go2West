@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import './App.css';
 
 // Import dei componenti delle pagine.
@@ -38,6 +39,7 @@ function AppContent() {
       </main>
       <Footer />
       {shouldShowChatbot && <ChatBot />}
+      <Analytics />
     </div>
   );
 }

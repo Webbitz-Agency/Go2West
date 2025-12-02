@@ -642,16 +642,16 @@ const Home = () => {
         </div>
         <div className="options-grid two-by-two">
           {/* Card cliccabili come grandi pulsanti */}
-          <div onClick={() => openTravelModal('city-breaks')} className="option-card photo r1c1 reveal-on-scroll" style={{ backgroundImage: "url('/images/city.jpg')" }} data-dir="vertical">
+          <div onClick={() => openTravelModal('city-breaks')} className="option-card photo r1c1 reveal-on-scroll" style={{ backgroundImage: "url('/images/city3.jpg')" }} data-dir="vertical">
             <div className="option-overlay">
               <h3>City Breaks</h3>
               <p>Alla scoperta delle metropoli più iconiche.</p>
             </div>
           </div>
-          <div onClick={() => openTravelModal('fly-drive')} className="option-card photo r1c2 reveal-on-scroll" style={{ backgroundImage: "url('/images/drive.jpg')" }} data-dir="horizontal">
+          <div onClick={() => openTravelModal('tour-guidati')} className="option-card photo r1c2 reveal-on-scroll" style={{ backgroundImage: "url('/images/tour4.jpg')" }} data-dir="horizontal">
             <div className="option-overlay">
-              <h3>Fly & Drive</h3>
-              <p>Auto a noleggio e libertà totale di esplorare.</p>
+              <h3>Tour Guidati</h3>
+              <p>Itinerari completi, guide esperte e zero pensieri.</p>
             </div>
           </div>
 
@@ -662,12 +662,13 @@ const Home = () => {
               <p>Soggiorno in tenda e scopri i territori più suggestivi.</p>
             </div>
           </div>
-          <div onClick={() => openTravelModal('tour-guidati')} className="option-card photo r2c2 reveal-on-scroll" style={{ backgroundImage: "url('/images/tour.jpg')" }} data-dir="horizontal">
+          <div onClick={() => openTravelModal('fly-drive')} className="option-card photo r2c2 reveal-on-scroll" style={{ backgroundImage: "url('/images/drive1.jpg')" }} data-dir="horizontal">
             <div className="option-overlay">
-              <h3>Tour Guidati</h3>
-              <p>Itinerari completi, guide esperte e zero pensieri.</p>
+              <h3>Fly & Drive</h3>
+              <p>Auto a noleggio e libertà totale di esplorare.</p>
             </div>
           </div>
+          
         </div>
         <div className="options-footer reveal-on-scroll">
           <button className="options-cta" onClick={scrollToJourneys}>
