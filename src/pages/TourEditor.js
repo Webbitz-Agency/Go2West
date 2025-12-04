@@ -901,9 +901,9 @@ const TourEditor = () => {
       }, 0);
     };
 
-    const handleBold = () => insertTag('*', '*');
-    const handleItalic = () => insertTag('/', '/');
-    const handleUnderline = () => insertTag('-', '-');
+    const handleBold = () => insertTag('<bold>', '</bold>');
+    const handleItalic = () => insertTag('<italic>', '</italic>');
+    const handleUnderline = () => insertTag('<underline>', '</underline>');
 
     const handleBlur = () => {
       const [type, ...path] = field.split('.');
@@ -932,7 +932,7 @@ const TourEditor = () => {
             type="button"
             onClick={handleBold}
             className="toolbar-btn"
-            title="Grassetto (*testo*)"
+            title="Grassetto (<bold>testo</bold>)"
             onMouseDown={(e) => e.preventDefault()}
           >
             <i className="fa-solid fa-bold"></i>
@@ -941,7 +941,7 @@ const TourEditor = () => {
             type="button"
             onClick={handleItalic}
             className="toolbar-btn"
-            title="Corsivo (/testo/)"
+            title="Corsivo (<italic>testo</italic>)"
             onMouseDown={(e) => e.preventDefault()}
           >
             <i className="fa-solid fa-italic"></i>
@@ -950,7 +950,7 @@ const TourEditor = () => {
             type="button"
             onClick={handleUnderline}
             className="toolbar-btn"
-            title="Sottolineato (-testo-)"
+            title="Sottolineato (<underline>testo</underline>)"
             onMouseDown={(e) => e.preventDefault()}
           >
             <i className="fa-solid fa-underline"></i>

@@ -13,24 +13,24 @@ const formatText = (text) => {
   if (!text || typeof text !== 'string') return text;
   
   // Converte i tag in HTML
-  // *testo* -> <strong>testo</strong>
-  // /testo/ -> <em>testo</em>
-  // -testo- -> <u>testo</u>
+  // <bold>testo</bold> -> <strong>testo</strong>
+  // <italic>testo</italic> -> <em>testo</em>
+  // <underline>testo</underline> -> <u>testo</u>
   
   let formatted = text;
   
-  // Bold: *testo*
-  formatted = formatted.replace(/\*([^*]+)\*/g, '<strong>$1</strong>');
+  // Processa i tag in modo ricorsivo per gestire i tag annidati
+  // Prima processa i tag più interni (underline), poi italic, poi bold
+  // Questo permette di gestire tag annidati come <bold>testo <italic>altro</italic></bold>
   
-  // Italic: /testo/
-  formatted = formatted.replace(/\/([^/]+)\//g, '<em>$1</em>');
+  // Underline: <underline>testo</underline> (prima i più interni)
+  formatted = formatted.replace(/<underline>(.*?)<\/underline>/gi, '<u>$1</u>');
   
-  // Underline: -testo-
-  formatted = formatted.replace(/-([^-]+)-/g, '<u>$1</u>');
+  // Italic: <italic>testo</italic>
+  formatted = formatted.replace(/<italic>(.*?)<\/italic>/gi, '<em>$1</em>');
   
-  // Gestisce i casi in cui ci sono più formattazioni annidate o consecutive
-  // Esempio: *testo /altro/-altro ancora*
-  // Questo è più complesso, ma per ora gestiamo i casi semplici
+  // Bold: <bold>testo</bold> (ultimo, così può contenere gli altri)
+  formatted = formatted.replace(/<bold>(.*?)<\/bold>/gi, '<strong>$1</strong>');
   
   return formatted;
 };
