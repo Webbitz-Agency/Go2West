@@ -8,6 +8,33 @@ import TourService from '../services/TourService';
 import { destinationImages } from '../config/destinations';
 import './TourDetails.css';
 
+// Funzione per convertire i tag di formattazione in HTML
+const formatText = (text) => {
+  if (!text || typeof text !== 'string') return text;
+  
+  // Converte i tag in HTML
+  // *testo* -> <strong>testo</strong>
+  // /testo/ -> <em>testo</em>
+  // -testo- -> <u>testo</u>
+  
+  let formatted = text;
+  
+  // Bold: *testo*
+  formatted = formatted.replace(/\*([^*]+)\*/g, '<strong>$1</strong>');
+  
+  // Italic: /testo/
+  formatted = formatted.replace(/\/([^/]+)\//g, '<em>$1</em>');
+  
+  // Underline: -testo-
+  formatted = formatted.replace(/-([^-]+)-/g, '<u>$1</u>');
+  
+  // Gestisce i casi in cui ci sono più formattazioni annidate o consecutive
+  // Esempio: *testo /altro/-altro ancora*
+  // Questo è più complesso, ma per ora gestiamo i casi semplici
+  
+  return formatted;
+};
+
 const TourDetails = () => {
   const { tourId } = useParams();
   const [tour, setTour] = useState(null);
@@ -686,7 +713,7 @@ const TourDetails = () => {
                 <h1 className="overview-title">{tour.title}</h1>
               </div>
               <div className="overview-description">
-                <p>{tour.description}</p>                
+                <p dangerouslySetInnerHTML={{ __html: formatText(tour.description) }}></p>                
               </div>
               {mapImage && (
                 <div className="overview-map-mobile">
@@ -830,7 +857,7 @@ const TourDetails = () => {
                       ref={contentRefs.itinerario}
                       className={`info-content ${expandedSections.itinerario ? 'expanded' : 'collapsed'} ${needsReadMore.itinerario ? 'needs-read-more' : ''}`}
                     >
-                      <div style={{ whiteSpace: 'pre-line' }}>{tour.itinerario}</div>
+                      <div style={{ whiteSpace: 'pre-line' }} dangerouslySetInnerHTML={{ __html: formatText(tour.itinerario) }}></div>
                     </div>
                     {needsReadMore.itinerario && (
                       <button 
@@ -870,9 +897,7 @@ const TourDetails = () => {
                               </div>
                             </div>
                             <div className="itinerary-details">
-                              <p className="day-description">
-                                {day.description || "Descrizione dettagliata non disponibile per questo giorno."}
-                              </p>
+                              <p className="day-description" dangerouslySetInnerHTML={{ __html: formatText(day.description || "Descrizione dettagliata non disponibile per questo giorno.") }}></p>
                             </div>
                           </div>
                         );
@@ -978,7 +1003,7 @@ const TourDetails = () => {
                       ref={contentRefs.included}
                       className={`info-content ${expandedSections.included ? 'expanded' : 'collapsed'} ${needsReadMore.included ? 'needs-read-more' : ''}`}
                     >
-                      <div style={{ whiteSpace: 'pre-line' }}>{tour.includedText}</div>
+                      <div style={{ whiteSpace: 'pre-line' }} dangerouslySetInnerHTML={{ __html: formatText(tour.includedText) }}></div>
                     </div>
                     {needsReadMore.included && (
                       <button 
@@ -1031,7 +1056,7 @@ const TourDetails = () => {
                       ref={contentRefs.notIncluded}
                       className={`info-content ${expandedSections.notIncluded ? 'expanded' : 'collapsed'} ${needsReadMore.notIncluded ? 'needs-read-more' : ''}`}
                     >
-                      <div style={{ whiteSpace: 'pre-line' }}>{tour.notIncludedText}</div>
+                      <div style={{ whiteSpace: 'pre-line' }} dangerouslySetInnerHTML={{ __html: formatText(tour.notIncludedText) }}></div>
                     </div>
                     {needsReadMore.notIncluded && (
                       <button 
@@ -1081,7 +1106,7 @@ const TourDetails = () => {
                   ref={contentRefs.notes}
                   className={`info-content ${expandedSections.notes ? 'expanded' : 'collapsed'} ${needsReadMore.notes ? 'needs-read-more' : ''}`}
                 >
-                  {tour.notes}
+                  <div dangerouslySetInnerHTML={{ __html: formatText(tour.notes) }}></div>
                 </div>
                 {needsReadMore.notes && (
                   <button 
@@ -1140,7 +1165,7 @@ const TourDetails = () => {
               {/* Se è modalità unique, mostra il testo unico */}
               {tour?.datesMode === 'unique' && tour?.datesText && tour.datesText.trim() !== '' ? (
                 <div className="info-content">
-                  <div style={{ whiteSpace: 'pre-line' }}>{tour.datesText}</div>
+                  <div style={{ whiteSpace: 'pre-line' }} dangerouslySetInnerHTML={{ __html: formatText(tour.datesText) }}></div>
                 </div>
               ) : (
                 <>
@@ -1600,7 +1625,7 @@ const TourDetails = () => {
               {/* Se è modalità unique, mostra il testo unico */}
               {tour?.datesMode === 'unique' && tour?.datesText && tour.datesText.trim() !== '' ? (
                 <div className="info-content">
-                  <div style={{ whiteSpace: 'pre-line' }}>{tour.datesText}</div>
+                  <div style={{ whiteSpace: 'pre-line' }} dangerouslySetInnerHTML={{ __html: formatText(tour.datesText) }}></div>
                 </div>
               ) : (
                 <>

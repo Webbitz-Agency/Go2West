@@ -501,6 +501,23 @@ const Home = () => {
   return (
     <div className="home">
       <PageTitle title="Home" />
+      {/* Alert barra fissa sotto header */}
+      <div className="site-population-alert">
+        <div className="alert-content">
+          <i className="fa-solid fa-info-circle"></i>
+          <span>Il sito sta venendo popolato di viaggi e potrebbe non essere completo. Se non trovi quello che cerchi, invia una richiesta tramite il form di contatto.</span>
+          <button 
+            className="alert-close-btn" 
+            onClick={() => {
+              const alert = document.querySelector('.site-population-alert');
+              if (alert) alert.style.display = 'none';
+            }}
+            aria-label="Chiudi alert"
+          >
+            <i className="fa-solid fa-times"></i>
+          </button>
+        </div>
+      </div>
       {/* Sezione Hero Video */}
       <section ref={heroSectionRef} id="hero-videos" className="home-hero" aria-label="Video introduttivi">
         {heroVideos.map((video, index) => (

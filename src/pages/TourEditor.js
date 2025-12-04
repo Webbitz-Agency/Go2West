@@ -855,6 +855,122 @@ const TourEditor = () => {
     );
   };
 
+  // Componente per textarea con formattazione (bold, italic, underline)
+  const EditableRichTextarea = ({ field, value, className = '', placeholder = 'Clicca per modificare', textareaRef = null }) => {
+    const [localValue, setLocalValue] = useState(value || '');
+    const textareaRefLocal = useRef(null);
+    const actualRef = textareaRef || textareaRefLocal;
+    
+    // Aggiorna il valore locale quando il valore prop cambia
+    useEffect(() => {
+      setLocalValue(value || '');
+    }, [value]);
+
+    // Funzione per inserire tag nel testo alla posizione del cursore
+    const insertTag = (tagStart, tagEnd) => {
+      const textarea = actualRef.current;
+      if (!textarea) return;
+      
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const selectedText = localValue.substring(start, end);
+      const beforeText = localValue.substring(0, start);
+      const afterText = localValue.substring(end);
+      
+      let newText;
+      if (selectedText) {
+        // Se c'è testo selezionato, avvolgilo con i tag
+        newText = beforeText + tagStart + selectedText + tagEnd + afterText;
+      } else {
+        // Altrimenti inserisci i tag e posiziona il cursore tra di essi
+        newText = beforeText + tagStart + tagEnd + afterText;
+      }
+      
+      setLocalValue(newText);
+      
+      // Riposiziona il cursore
+      setTimeout(() => {
+        if (textarea) {
+          if (selectedText) {
+            textarea.setSelectionRange(start + tagStart.length, end + tagStart.length);
+          } else {
+            textarea.setSelectionRange(start + tagStart.length, start + tagStart.length);
+          }
+          textarea.focus();
+        }
+      }, 0);
+    };
+
+    const handleBold = () => insertTag('*', '*');
+    const handleItalic = () => insertTag('/', '/');
+    const handleUnderline = () => insertTag('-', '-');
+
+    const handleBlur = () => {
+      const [type, ...path] = field.split('.');
+      if (type === 'basic') {
+        const fieldName = path[0];
+        setFormData(prev => ({ ...prev, [fieldName]: localValue }));
+      } else if (type === 'day') {
+        const [index, fieldName] = path;
+        updateDay(parseInt(index), fieldName, localValue);
+      } else if (type === 'included') {
+        const index = parseInt(path[0]);
+        handleArrayChange('included', index, localValue);
+      } else if (type === 'notIncluded') {
+        const index = parseInt(path[0]);
+        handleArrayChange('notIncluded', index, localValue);
+      } else if (type === 'date') {
+        const [year, index, fieldName] = path;
+        updateDate(year, parseInt(index), fieldName, localValue);
+      }
+    };
+
+    return (
+      <div className="rich-textarea-container">
+        <div className="rich-textarea-toolbar">
+          <button
+            type="button"
+            onClick={handleBold}
+            className="toolbar-btn"
+            title="Grassetto (*testo*)"
+            onMouseDown={(e) => e.preventDefault()}
+          >
+            <i className="fa-solid fa-bold"></i>
+          </button>
+          <button
+            type="button"
+            onClick={handleItalic}
+            className="toolbar-btn"
+            title="Corsivo (/testo/)"
+            onMouseDown={(e) => e.preventDefault()}
+          >
+            <i className="fa-solid fa-italic"></i>
+          </button>
+          <button
+            type="button"
+            onClick={handleUnderline}
+            className="toolbar-btn"
+            title="Sottolineato (-testo-)"
+            onMouseDown={(e) => e.preventDefault()}
+          >
+            <i className="fa-solid fa-underline"></i>
+          </button>
+        </div>
+        <textarea
+          ref={actualRef}
+          value={localValue}
+          onChange={(e) => setLocalValue(e.target.value)}
+          onBlur={handleBlur}
+          className={`editable-textarea rich-textarea ${className}`}
+          rows="5"
+          dir="ltr"
+          style={{ direction: 'ltr', textAlign: 'left' }}
+          placeholder={placeholder}
+        />
+      </div>
+    );
+  };
+
   const EditableNumber = ({ field, value, className = '', placeholder = '0' }) => {
     const isEditing = editingField === field;
     if (isEditing) {
@@ -977,7 +1093,7 @@ const TourEditor = () => {
                     </h1>
                   </div>
                   <div className="overview-description">
-                    <EditableTextarea field="basic.description" value={formData.description} className="overview-description-text" placeholder="Descrizione del tour..." />
+                    <EditableRichTextarea field="basic.description" value={formData.description} className="overview-description-text" placeholder="Descrizione del tour..." />
                   </div>
                 </div>
 
@@ -1222,7 +1338,7 @@ const TourEditor = () => {
                             </div>
                             <div className="itinerary-details">
                               <div className="day-description">
-                                <EditableTextarea field={`day.${index}.description`} value={day.description} className="day-description-text" placeholder="Descrizione dettagliata del giorno..." />
+                                <EditableRichTextarea field={`day.${index}.description`} value={day.description} className="day-description-text" placeholder="Descrizione dettagliata del giorno..." />
                               </div>
                             </div>
                           </div>
@@ -1237,7 +1353,7 @@ const TourEditor = () => {
                     </>
                   ) : formData.itinerarioMode === 'unique' ? (
                     <div className="itinerary-unique-container">
-                      <EditableTextarea 
+                      <EditableRichTextarea 
                         field="basic.itinerario" 
                         value={formData.itinerario} 
                         className="itinerary-unique-text" 
@@ -1373,7 +1489,7 @@ const TourEditor = () => {
                     </div>
                   ) : formData.includedMode === 'unique' ? (
                     <div className="info-content">
-                      <EditableTextarea 
+                      <EditableRichTextarea 
                         field="basic.includedText" 
                         value={formData.includedText} 
                         className="unique-text" 
@@ -1418,7 +1534,7 @@ const TourEditor = () => {
                     </div>
                   ) : formData.notIncludedMode === 'unique' ? (
                     <div className="info-content">
-                      <EditableTextarea 
+                      <EditableRichTextarea 
                         field="basic.notIncludedText" 
                         value={formData.notIncludedText} 
                         className="unique-text" 
@@ -1431,7 +1547,7 @@ const TourEditor = () => {
                 <section className="tour-section">
                   <h2 className="section-title">Note</h2>
                   <div className="info-content">
-                    <EditableTextarea field="basic.notes" value={formData.notes} className="unique-text" placeholder="Note aggiuntive..." />
+                    <EditableRichTextarea field="basic.notes" value={formData.notes} className="unique-text" placeholder="Note aggiuntive..." />
                   </div>
                 </section>
               </div>
@@ -1520,7 +1636,7 @@ const TourEditor = () => {
                     </>
                   ) : (
                     <div className="info-content">
-                      <EditableTextarea 
+                      <EditableRichTextarea 
                         field="basic.datesText" 
                         value={formData.datesText} 
                         className="unique-text" 

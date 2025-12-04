@@ -1267,3 +1267,48 @@
 .promotion-status i.fa-regular {
   color: #ccc;
 }
+
+/* Rich Textarea Toolbar */
+.rich-textarea-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rich-textarea-toolbar {
+  display: flex;
+  gap: 4px;
+  padding: 6px;
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 4px 4px 0 0;
+  border-bottom: none;
+}
+
+.toolbar-btn {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  padding: 6px 10px;
+  cursor: pointer;
+  color: #333;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toolbar-btn:hover {
+  background: #e8e8e8;
+  border-color: #bbb;
+}
+
+.toolbar-btn:active {
+  background: #ddd;
+}
+
+.rich-textarea {
+  border-radius: 0 0 4px 4px;
+  border-top: 1px solid #ddd;
+}
