@@ -207,7 +207,7 @@ app.post('/api/articles', async (req, res) => {
     ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'style', 'target', 'rel'],
     ALLOWED_STYLES: {
       '*': {
-        'color': [/^#[0-9a-fA-F]{3,6}$/],
+        'color': [/^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/],
       },
     },
   });
