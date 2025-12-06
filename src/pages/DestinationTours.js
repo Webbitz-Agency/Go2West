@@ -147,6 +147,25 @@ const DestinationTours = () => {
         </section>
       </div>
 
+      {/* Hero CTA Finale */}
+      <section className="destinations-cta">
+        <div className="destinations-cta-hero-image">
+          <img src="/images/hollywood.jpg" alt="Hollywood" />
+        </div>
+        <div className="destinations-cta-hero-content">
+          <h2>Pronto per la tua prossima avventura?</h2>
+          <p>Scopri le nostre destinazioni e inizia a pianificare il viaggio dei tuoi sogni</p>
+          <div className="cta-buttons">
+            <Link to="/#destinations-showcase-new" className="cta-btn primary">
+              Scopri Destinazioni
+            </Link>
+            <Link to="/about#contact" className="cta-btn secondary">
+              Contattaci
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Freccia torna in cima */}
       {showBackToTop && (
         <button 

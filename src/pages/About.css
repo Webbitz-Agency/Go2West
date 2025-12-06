@@ -788,8 +788,7 @@ strong {
   flex-wrap: wrap;
 }
 
-.about-cta .primary-cta,
-.about-cta .secondary-cta {
+.about-cta .cta-btn {
   padding: 12px 25px;
   border-radius: 50px;
   font-size: 1rem;
@@ -802,25 +801,25 @@ strong {
   min-width: 180px;
 }
 
-.about-cta .primary-cta {
+.about-cta .cta-btn.primary {
   background: linear-gradient(135deg, #4A90E2, #007bff);
   color: white;
   box-shadow: 0 10px 30px rgba(74, 144, 226, 0.3);
 }
 
-.about-cta .primary-cta:hover {
+.about-cta .cta-btn.primary:hover {
   transform: translateY(-2px);
   box-shadow: 0 15px 40px rgba(74, 144, 226, 0.4);
 }
 
-.about-cta .secondary-cta {
+.about-cta .cta-btn.secondary {
   background: transparent;
   color: white;
   border: 2px solid white;
   box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
 }
 
-.about-cta .secondary-cta:hover {
+.about-cta .cta-btn.secondary:hover {
   background: white;
   color: #2c3e50;
   transform: translateY(-2px);
@@ -1102,8 +1101,7 @@ strong {
     gap: 12px;
   }
   
-  .about-cta .primary-cta,
-  .about-cta .secondary-cta {
+  .about-cta .cta-btn {
     padding: 10px 22px;
     font-size: 0.95rem;
     min-width: 160px;
@@ -1219,8 +1217,7 @@ strong {
     gap: 10px;
   }
   
-  .about-cta .primary-cta,
-  .about-cta .secondary-cta {
+  .about-cta .cta-btn {
     padding: 8px 18px;
     font-size: 0.85rem;
     min-width: 140px;

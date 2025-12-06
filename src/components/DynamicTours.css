@@ -199,6 +199,25 @@
   box-shadow: 0 6px 18px rgba(108, 117, 125, 0.4);
 }
 
+/* ===== CONTATORE RISULTATI ===== */
+.results-count {
+  margin: 20px 0 10px 0;
+  padding: 0 10px;
+  text-align: left;
+}
+
+.results-count-text {
+  font-size: 1rem;
+  color: #555;
+  font-weight: 500;
+}
+
+.results-count-total {
+  color: #888;
+  font-weight: 400;
+  font-size: 0.9em;
+}
+
 /* ===== GRID TOUR PULITI ===== */
 .tours-grid {
   display: grid;
@@ -443,6 +462,15 @@
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
   }
+  
+  .results-count {
+    margin: 15px 0 8px 0;
+    padding: 0 8px;
+  }
+  
+  .results-count-text {
+    font-size: 0.95rem;
+  }
 }
 
 @media (max-width: 768px) {
@@ -508,6 +536,15 @@
     gap: 20px;
   }
   
+  .results-count {
+    margin: 12px 0 6px 0;
+    padding: 0 5px;
+  }
+  
+  .results-count-text {
+    font-size: 0.9rem;
+  }
+
   .tour-card-content {
     padding: 20px;
   }

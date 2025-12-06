@@ -344,18 +344,18 @@ const About = () => {
         </div>
       </section>*/}
 
-      <section className="promotions-cta">
-      <div className="promotions-cta-hero-image">
+      <section className="about-cta">
+        <div className="about-cta-hero-image">
           <img src="/images/plane.jpg" alt="Aereo" />
         </div>
         <div className="about-cta-hero-content">
-        <h2>Pronto per la tua prossima avventura?</h2>
-        <p>Scopri le nostre destinazioni e inizia a pianificare il viaggio dei tuoi sogni</p>
+          <h2>Pronto per la tua prossima avventura?</h2>
+          <p>Scopri le nostre destinazioni e inizia a pianificare il viaggio dei tuoi sogni</p>
           <div className="cta-buttons">
-          <Link to="/#destinations-showcase-new" className="primary-cta">
+            <Link to="/#destinations-showcase-new" className="cta-btn primary">
               Scopri Destinazioni
             </Link>
-            <button className="secondary-cta" onClick={scrollToContact}>
+            <button className="cta-btn secondary" onClick={scrollToContact}>
               Contattaci
             </button>
           </div>

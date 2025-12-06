@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { travelTypes } from '../config/travelTypes';
 import TourService from '../services/TourService';
+import DOMPurify from 'dompurify';
 import './DynamicTours.css';
 
 // Mappatura inversa: dai valori dei filtri ai possibili valori nel database
@@ -27,6 +28,81 @@ const getFilterValue = (slug) => {
     'fly-drive': 'fly-drive'
   };
   return mapping[slug] || slug;
+};
+
+// Funzione helper per estrarre testo puro da HTML
+const getPlainText = (html) => {
+  if (!html || typeof document === 'undefined') return '';
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = html;
+  return tempDiv.textContent || tempDiv.innerText || '';
+};
+
+// Funzione helper per troncare HTML mantenendo la struttura
+const truncateHtml = (html, maxLength) => {
+  if (!html || typeof document === 'undefined') return html || '';
+  
+  const plainText = getPlainText(html);
+  if (plainText.length <= maxLength) return html;
+  
+  // Trova l'ultimo spazio prima del limite per non tagliare a metà parola
+  const truncatedText = plainText.substring(0, maxLength);
+  const lastSpace = truncatedText.lastIndexOf(' ');
+  const cutPoint = lastSpace > maxLength * 0.7 ? lastSpace : maxLength;
+  
+  // Crea un elemento temporaneo per processare l'HTML
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = html;
+  
+  // Funzione ricorsiva per tagliare il contenuto
+  const truncateNode = (node, remaining) => {
+    if (remaining <= 0) {
+      if (node.nodeType === Node.TEXT_NODE) {
+        node.textContent = '';
+      } else if (node.nodeType === Node.ELEMENT_NODE) {
+        node.innerHTML = '';
+      }
+      return 0;
+    }
+    
+    if (node.nodeType === Node.TEXT_NODE) {
+      const text = node.textContent;
+      if (text.length <= remaining) {
+        return text.length;
+      }
+      node.textContent = text.substring(0, remaining);
+      return remaining;
+    }
+    
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      let used = 0;
+      const children = Array.from(node.childNodes);
+      for (const child of children) {
+        if (used >= remaining) {
+          node.removeChild(child);
+          continue;
+        }
+        const childUsed = truncateNode(child, remaining - used);
+        used += childUsed;
+        if (used >= remaining) {
+          // Rimuovi i figli rimanenti
+          let nextSibling = child.nextSibling;
+          while (nextSibling) {
+            const toRemove = nextSibling;
+            nextSibling = nextSibling.nextSibling;
+            node.removeChild(toRemove);
+          }
+          break;
+        }
+      }
+      return used;
+    }
+    
+    return 0;
+  };
+  
+  truncateNode(tempDiv, cutPoint);
+  return tempDiv.innerHTML + '...';
 };
 
 // Componente per i tour dinamici caricati dal backend
@@ -318,6 +394,23 @@ const DynamicTours = ({ type, destination, showFilters = false, promotionsOnly =
         </div>
       )}
       
+      {/* Contatore risultati */}
+      {!loading && filteredTours.length > 0 && (
+        <div className="results-count">
+          <span className="results-count-text">
+            {filteredTours.length === 1 
+              ? '1 tour trovato' 
+              : `${filteredTours.length} tour trovati`
+            }
+            {hasActiveFilters && allTours.length !== filteredTours.length && (
+              <span className="results-count-total">
+                {' '}su {allTours.length} totali
+              </span>
+            )}
+          </span>
+        </div>
+      )}
+      
       {/* Grid dei tour */}
       <div className="tours-grid">
         {filteredTours.map((tour) => (
@@ -342,12 +435,23 @@ const DynamicTours = ({ type, destination, showFilters = false, promotionsOnly =
               
               <h3 className={(promotionsOnly || tour.isPromotion) ? "promotion-title" : "destination-card-title"}>{tour.title}</h3>
               
-              <p className="promotion-description">
-                {tour.description?.length > 150 
-                  ? `${tour.description.substring(0, 150)}...` 
-                  : tour.description
-                }
-              </p>
+              <div 
+                className="promotion-description"
+                dangerouslySetInnerHTML={{
+                  __html: (() => {
+                    if (!tour.description) return '';
+                    
+                    // Sanitizza l'HTML
+                    const sanitized = DOMPurify.sanitize(tour.description, {
+                      ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'u', 'h1', 'h2', 'h3', 'ul', 'ol', 'li', 'a'],
+                      ALLOWED_ATTR: ['href', 'target', 'rel'],
+                    });
+                    
+                    // Tronca se necessario (150 caratteri di testo puro)
+                    return truncateHtml(sanitized, 150);
+                  })()
+                }}
+              />
               
               <div className="promotion-features-container">
                 <div className="promotion-features">
