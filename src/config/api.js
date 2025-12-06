@@ -12,6 +12,7 @@ const API_CONFIG = {
     TOURS_BY_TYPE: (type) => `/api/tours/type/${type}`,
     TOURS_BY_DESTINATION_AND_TYPE: (destination, type) => `/api/tours/destination/${destination}/type/${type}`,
     TOUR_IMAGE: (id, imageType) => `/api/tours/${id}/image/${imageType}`,
+    UPLOAD_IMAGE: '/api/upload-image',
     HEALTH: '/health'
   },
   

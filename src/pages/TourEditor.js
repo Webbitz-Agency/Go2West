@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import PageTitle from '../components/PageTitle';
 import TourService from '../services/TourService';
+import RichEditorTiptap from '../components/RichEditorTiptap';
 import './TourEditor.css';
 
 // Componente per l'upload delle immagini
@@ -855,116 +856,61 @@ const TourEditor = () => {
     );
   };
 
-  // Componente per textarea con formattazione (bold, italic, underline)
-  const EditableRichTextarea = ({ field, value, className = '', placeholder = 'Clicca per modificare', textareaRef = null }) => {
-    const [localValue, setLocalValue] = useState(value || '');
-    const textareaRefLocal = useRef(null);
-    const actualRef = textareaRef || textareaRefLocal;
-    
-    // Aggiorna il valore locale quando il valore prop cambia
-    useEffect(() => {
-      setLocalValue(value || '');
-    }, [value]);
-
-    // Funzione per inserire tag nel testo alla posizione del cursore
-    const insertTag = (tagStart, tagEnd) => {
-      const textarea = actualRef.current;
-      if (!textarea) return;
-      
-      const start = textarea.selectionStart;
-      const end = textarea.selectionEnd;
-      const selectedText = localValue.substring(start, end);
-      const beforeText = localValue.substring(0, start);
-      const afterText = localValue.substring(end);
-      
-      let newText;
-      if (selectedText) {
-        // Se c'è testo selezionato, avvolgilo con i tag
-        newText = beforeText + tagStart + selectedText + tagEnd + afterText;
-      } else {
-        // Altrimenti inserisci i tag e posiziona il cursore tra di essi
-        newText = beforeText + tagStart + tagEnd + afterText;
-      }
-      
-      setLocalValue(newText);
-      
-      // Riposiziona il cursore
-      setTimeout(() => {
-        if (textarea) {
-          if (selectedText) {
-            textarea.setSelectionRange(start + tagStart.length, end + tagStart.length);
-          } else {
-            textarea.setSelectionRange(start + tagStart.length, start + tagStart.length);
-          }
-          textarea.focus();
-        }
-      }, 0);
-    };
-
-    const handleBold = () => insertTag('<bold>', '</bold>');
-    const handleItalic = () => insertTag('<italic>', '</italic>');
-    const handleUnderline = () => insertTag('<underline>', '</underline>');
-
-    const handleBlur = () => {
+  // Componente wrapper per RichEditorTiptap che mantiene compatibilità con il sistema di field path
+  const EditableRichTextarea = ({ field, value, className = '', placeholder = 'Clicca per modificare' }) => {
+    const handleChange = (html) => {
       const [type, ...path] = field.split('.');
       if (type === 'basic') {
         const fieldName = path[0];
-        setFormData(prev => ({ ...prev, [fieldName]: localValue }));
+        setFormData(prev => ({ ...prev, [fieldName]: html }));
       } else if (type === 'day') {
         const [index, fieldName] = path;
-        updateDay(parseInt(index), fieldName, localValue);
+        updateDay(parseInt(index), fieldName, html);
       } else if (type === 'included') {
         const index = parseInt(path[0]);
-        handleArrayChange('included', index, localValue);
+        handleArrayChange('included', index, html);
       } else if (type === 'notIncluded') {
         const index = parseInt(path[0]);
-        handleArrayChange('notIncluded', index, localValue);
+        handleArrayChange('notIncluded', index, html);
       } else if (type === 'date') {
         const [year, index, fieldName] = path;
-        updateDate(year, parseInt(index), fieldName, localValue);
+        updateDate(year, parseInt(index), fieldName, html);
       }
     };
 
+    // Converti il valore da HTML o testo semplice a HTML
+    // Se il valore contiene tag personalizzati come <bold>, li convertiamo in HTML standard
+    const convertToHtml = (val) => {
+      if (!val) return '';
+      // Se è già HTML valido (contiene tag HTML standard), usalo così com'è
+      if (val.includes('<p>') || val.includes('<div>') || val.includes('<strong>') || val.includes('<em>')) {
+        return val;
+      }
+      // Altrimenti converti i tag personalizzati in HTML standard
+      let html = val
+        .replace(/<bold>(.*?)<\/bold>/gi, '<strong>$1</strong>')
+        .replace(/<italic>(.*?)<\/italic>/gi, '<em>$1</em>')
+        .replace(/<underline>(.*?)<\/underline>/gi, '<u>$1</u>');
+      
+      // Se non ci sono paragrafi, avvolgi in <p>
+      if (!html.includes('<p>') && !html.includes('<div>')) {
+        // Dividi per newline e avvolgi ogni riga in <p>
+        const lines = html.split('\n').filter(line => line.trim());
+        if (lines.length > 0) {
+          html = lines.map(line => `<p>${line}</p>`).join('');
+        } else {
+          html = `<p>${html}</p>`;
+        }
+      }
+      
+      return html;
+    };
+
     return (
-      <div className="rich-textarea-container">
-        <div className="rich-textarea-toolbar">
-          <button
-            type="button"
-            onClick={handleBold}
-            className="toolbar-btn"
-            title="Grassetto (<bold>testo</bold>)"
-            onMouseDown={(e) => e.preventDefault()}
-          >
-            <i className="fa-solid fa-bold"></i>
-          </button>
-          <button
-            type="button"
-            onClick={handleItalic}
-            className="toolbar-btn"
-            title="Corsivo (<italic>testo</italic>)"
-            onMouseDown={(e) => e.preventDefault()}
-          >
-            <i className="fa-solid fa-italic"></i>
-          </button>
-          <button
-            type="button"
-            onClick={handleUnderline}
-            className="toolbar-btn"
-            title="Sottolineato (<underline>testo</underline>)"
-            onMouseDown={(e) => e.preventDefault()}
-          >
-            <i className="fa-solid fa-underline"></i>
-          </button>
-        </div>
-        <textarea
-          ref={actualRef}
-          value={localValue}
-          onChange={(e) => setLocalValue(e.target.value)}
-          onBlur={handleBlur}
-          className={`editable-textarea rich-textarea ${className}`}
-          rows="5"
-          dir="ltr"
-          style={{ direction: 'ltr', textAlign: 'left' }}
+      <div className={`rich-textarea-wrapper ${className}`}>
+        <RichEditorTiptap
+          initialHtml={convertToHtml(value || '')}
+          onChange={handleChange}
           placeholder={placeholder}
         />
       </div>

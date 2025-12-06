@@ -29,6 +29,10 @@ const Home = () => {
   const [isHeroFaded, setIsHeroFaded] = useState(false);
   const [isHeroFixed, setIsHeroFixed] = useState(false);
   const [isScrollIndicatorVisible, setIsScrollIndicatorVisible] = useState(true);
+  
+  // Stato per controllare visibilità hero per l'alert
+  const [isHeroVisible, setIsHeroVisible] = useState(true);
+  const [isAlertClosed, setIsAlertClosed] = useState(false);
 
   // Stato e logica Modale selezione destinazione/viaggio
   const navigate = useNavigate();
@@ -158,6 +162,15 @@ const Home = () => {
       if (shouldShowIndicator !== isScrollIndicatorVisible) {
         setIsScrollIndicatorVisible(shouldShowIndicator);
       }
+      
+      // Controlla se la hero è ancora visibile per mostrare/nascondere l'alert
+      // La hero è considerata visibile quando:
+      // 1. È completamente visibile (top >= 0) OPPURE
+      // 2. È parzialmente scrollata (top <= 0) ma ancora visibile (bottom > 100)
+      const heroIsVisible = (sectionRect.top >= 0) || (sectionRect.top <= 0 && sectionRect.bottom > 100);
+      if (heroIsVisible !== isHeroVisible) {
+        setIsHeroVisible(heroIsVisible);
+      }
     };
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -166,7 +179,7 @@ const Home = () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleScroll);
     };
-  }, [isHeroFaded, isHeroFixed, isScrollIndicatorVisible]);
+  }, [isHeroFaded, isHeroFixed, isScrollIndicatorVisible, isHeroVisible]);
 
   // Array delle immagini per i caroselli della sezione orizzontale
   const leftImages = ['ny2.jpg', 'ny5.jpg', 'ny6.jpg', 'ny7.jpg'];
@@ -501,23 +514,25 @@ const Home = () => {
   return (
     <div className="home">
       <PageTitle title="Home" />
-      {/* Alert barra fissa sotto header */}
-      <div className="site-population-alert">
-        <div className="alert-content">
-          <i className="fa-solid fa-info-circle"></i>
-          <span>Il sito sta venendo popolato di viaggi e potrebbe non essere completo. Se non trovi quello che cerchi, invia una richiesta tramite il form di contatto.</span>
-          <button 
-            className="alert-close-btn" 
-            onClick={() => {
-              const alert = document.querySelector('.site-population-alert');
-              if (alert) alert.style.display = 'none';
-            }}
-            aria-label="Chiudi alert"
-          >
-            <i className="fa-solid fa-times"></i>
-          </button>
+      {/* Alert popup in basso a sinistra */}
+      {!isHeroVisible && !isAlertClosed && (
+        <div className="site-population-alert">
+          <div className="alert-content">
+            <i className="fa-solid fa-info-circle"></i>
+            <div className="alert-text">
+              <p className="alert-title">Sito in aggiornamento</p>
+              <p className="alert-message">Il sito sta venendo popolato di viaggi e potrebbe non essere completo. Se non trovi quello che cerchi, invia una richiesta tramite il form di contatto.</p>
+            </div>
+            <button 
+              className="alert-close-btn" 
+              onClick={() => setIsAlertClosed(true)}
+              aria-label="Chiudi alert"
+            >
+              <i className="fa-solid fa-times"></i>
+            </button>
+          </div>
         </div>
-      </div>
+      )}
       {/* Sezione Hero Video */}
       <section ref={heroSectionRef} id="hero-videos" className="home-hero" aria-label="Video introduttivi">
         {heroVideos.map((video, index) => (

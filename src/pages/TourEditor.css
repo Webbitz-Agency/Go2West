@@ -1269,6 +1269,23 @@
 }
 
 /* Rich Textarea Toolbar */
+/* Wrapper per RichEditorTiptap */
+.rich-textarea-wrapper {
+  width: 100%;
+  margin: 8px 0;
+}
+
+.rich-textarea-wrapper .rich-editor-container {
+  border: 2px solid #e0e0e0;
+  transition: border-color 0.2s ease;
+}
+
+.rich-textarea-wrapper .rich-editor-container:focus-within {
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+/* Stili legacy per compatibilità */
 .rich-textarea-container {
   display: flex;
   flex-direction: column;
