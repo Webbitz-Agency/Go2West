@@ -10,8 +10,10 @@ import DOMPurify from 'dompurify';
 import API_CONFIG from '../config/api';
 import './RichEditorTiptap.css';
 
-const RichEditorTiptap = ({ initialHtml = '', onChange, placeholder = 'Scrivi qui...' }) => {
+const RichEditorTiptap = ({ initialHtml = '', onChange, onBlur, placeholder = 'Scrivi qui...' }) => {
   const fileInputRef = useRef(null);
+  const isUpdatingRef = useRef(false);
+  const lastEmittedHtmlRef = useRef('');
 
   const editor = useEditor({
     extensions: [
@@ -41,6 +43,14 @@ const RichEditorTiptap = ({ initialHtml = '', onChange, placeholder = 'Scrivi qu
         class: 'rich-editor-content',
         'data-placeholder': placeholder,
       },
+      handleDOMEvents: {
+        blur: () => {
+          if (onBlur) {
+            onBlur();
+          }
+          return false;
+        },
+      },
     },
     onUpdate: ({ editor }) => {
       const html = editor.getHTML();
@@ -56,6 +66,10 @@ const RichEditorTiptap = ({ initialHtml = '', onChange, placeholder = 'Scrivi qu
           },
         },
       });
+      
+      // Salva l'HTML emesso per evitare loop di aggiornamento
+      lastEmittedHtmlRef.current = sanitizedHtml;
+      
       if (onChange) {
         onChange(sanitizedHtml);
       }
@@ -63,9 +77,52 @@ const RichEditorTiptap = ({ initialHtml = '', onChange, placeholder = 'Scrivi qu
   });
 
   // Aggiorna il contenuto quando initialHtml cambia esternamente
+  // MA MAI durante la digitazione (quando l'editor è in focus)
   useEffect(() => {
-    if (editor && initialHtml !== editor.getHTML()) {
+    if (!editor || isUpdatingRef.current) {
+      return;
+    }
+    
+    // Se l'editor è in focus, NON aggiornare MAI (l'utente sta digitando)
+    // Questo è il punto chiave: durante la digitazione, non toccare mai il contenuto
+    if (editor.isFocused) {
+      return;
+    }
+    
+    const currentHtml = editor.getHTML();
+    
+    // Normalizza gli HTML per il confronto (rimuovi spazi extra, ecc.)
+    const normalizeHtml = (html) => {
+      if (!html) return '';
+      // Rimuovi spazi extra e normalizza
+      return html
+        .trim()
+        .replace(/\s+/g, ' ')
+        .replace(/>\s+</g, '><')
+        .replace(/<p><\/p>/g, '')
+        .replace(/<p>\s*<\/p>/g, '');
+    };
+    
+    const normalizedInitial = normalizeHtml(initialHtml);
+    const normalizedCurrent = normalizeHtml(currentHtml);
+    const normalizedLastEmitted = normalizeHtml(lastEmittedHtmlRef.current);
+    
+    // Se initialHtml corrisponde all'ultimo HTML emesso, non aggiornare
+    // (significa che l'aggiornamento viene dalla nostra onChange)
+    if (normalizedInitial === normalizedLastEmitted && normalizedLastEmitted !== '') {
+      return;
+    }
+    
+    // Aggiorna solo se initialHtml è diverso dal contenuto corrente
+    // E non corrisponde all'ultimo HTML emesso
+    // IMPORTANTE: questo avviene SOLO quando l'editor NON è in focus
+    if (normalizedInitial !== normalizedCurrent && normalizedInitial !== normalizedLastEmitted) {
+      isUpdatingRef.current = true;
       editor.commands.setContent(initialHtml);
+      // Reset del flag dopo un breve delay per permettere all'editor di aggiornarsi
+      setTimeout(() => {
+        isUpdatingRef.current = false;
+      }, 100);
     }
   }, [initialHtml, editor]);
 
