@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import PageTitle from '../components/PageTitle';
 import TourService from '../services/TourService';
@@ -858,7 +858,22 @@ const TourEditor = () => {
 
   // Componente wrapper per RichEditorTiptap che mantiene compatibilità con il sistema di field path
   const EditableRichTextarea = ({ field, value, className = '', placeholder = 'Clicca per modificare' }) => {
-    const handleChange = (html) => {
+    const localValueRef = useRef(value || '');
+    const isUserTypingRef = useRef(false);
+    const hasInitializedRef = useRef(false);
+
+    // Inizializza il ref locale solo una volta o quando il valore cambia esternamente (non dall'utente)
+    useEffect(() => {
+      if (!isUserTypingRef.current) {
+        localValueRef.current = value || '';
+        if (!hasInitializedRef.current) {
+          hasInitializedRef.current = true;
+        }
+      }
+    }, [value]);
+
+    // Funzione per aggiornare formData
+    const updateFormData = (html) => {
       const [type, ...path] = field.split('.');
       if (type === 'basic') {
         const fieldName = path[0];
@@ -875,6 +890,20 @@ const TourEditor = () => {
       } else if (type === 'date') {
         const [year, index, fieldName] = path;
         updateDate(year, parseInt(index), fieldName, html);
+      }
+    };
+
+    const handleChange = (html) => {
+      // Salva solo nel ref locale durante la digitazione, NON aggiornare formData
+      isUserTypingRef.current = true;
+      localValueRef.current = html;
+    };
+
+    const handleBlur = () => {
+      // Quando l'editor perde il focus, aggiorna formData con il valore finale
+      if (isUserTypingRef.current) {
+        updateFormData(localValueRef.current);
+        isUserTypingRef.current = false;
       }
     };
 
@@ -906,11 +935,23 @@ const TourEditor = () => {
       return html;
     };
 
+    // Usa useMemo per evitare conversioni non necessarie
+    // Durante la digitazione, usa sempre il valore locale per evitare che initialHtml cambi
+    const convertedHtml = useMemo(() => {
+      // Se l'utente sta digitando, usa sempre il valore locale (non cambia initialHtml)
+      if (isUserTypingRef.current) {
+        return convertToHtml(localValueRef.current);
+      }
+      // Altrimenti usa il valore dal formData (aggiornamento esterno o inizializzazione)
+      return convertToHtml(value || '');
+    }, [value]);
+
     return (
       <div className={`rich-textarea-wrapper ${className}`}>
         <RichEditorTiptap
-          initialHtml={convertToHtml(value || '')}
+          initialHtml={convertedHtml}
           onChange={handleChange}
+          onBlur={handleBlur}
           placeholder={placeholder}
         />
       </div>
