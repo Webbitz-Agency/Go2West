@@ -6,7 +6,8 @@ export const travelTypes = [
   { name: 'Glamping', slug: 'glamping' },
   { name: 'Ranch', slug: 'ranch' },
   { name: 'Camper Adventures', slug: 'camper-adventures' },
-  { name: 'Scoperta in treno', slug: 'scoperta-in-treno' }
+  { name: 'Scoperta in treno', slug: 'scoperta-in-treno' },
+  { name: 'Combinati', slug: 'combinati' }
 ];
 
 // Helper per ottenere una tipologia per slug

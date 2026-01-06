@@ -170,7 +170,9 @@ const DynamicTours = ({ type, destination, showFilters = false, promotionsOnly =
     { name: 'Tutte le Aree', value: 'all' },
     { name: 'EST', value: 'EST' },
     { name: 'OVEST', value: 'OVEST' },
-    { name: 'EST E OVEST', value: 'EST E OVEST' }
+    { name: 'EST E OVEST', value: 'EST E OVEST' },
+    { name: 'SOUTH', value: 'SOUTH' },
+    { name: 'MID WEST', value: 'MID WEST' }
   ];
 
   // Funzione per filtrare i tour lato client

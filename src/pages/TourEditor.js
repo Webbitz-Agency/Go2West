@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import PageTitle from '../components/PageTitle';
 import TourService from '../services/TourService';
 import RichEditorTiptap from '../components/RichEditorTiptap';
+import { countriesByRegion, getCountriesByRegion, requiresCountrySelection } from '../config/countries';
 import './TourEditor.css';
 
 // Componente per l'upload delle immagini
@@ -129,6 +130,8 @@ const TourEditor = () => {
   const [formData, setFormData] = useState({
     title: tour?.title || 'Titolo del Tour',
     destination: tour?.destination || 'USA',
+    destinations: tour?.destinations || (tour?.destination ? [tour.destination] : ['USA']),
+    countries: tour?.countries || [],
     type: tour?.type || 'city breaks',
     geographicArea: tour?.geographicArea || '',
     code: tour?.code || '',
@@ -1010,6 +1013,90 @@ const TourEditor = () => {
     );
   };
 
+  const EditableMultiSelect = ({ field, value = [], className = '', options = [], placeholder = 'Seleziona...' }) => {
+    const [localSelected, setLocalSelected] = useState(value || []);
+    const [isOpen, setIsOpen] = useState(false);
+    const dropdownRef = useRef(null);
+    
+    useEffect(() => {
+      setLocalSelected(value || []);
+    }, [value]);
+
+    // Chiudi il dropdown quando si clicca fuori
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+          setIsOpen(false);
+        }
+      };
+
+      if (isOpen) {
+        document.addEventListener('mousedown', handleClickOutside);
+      }
+
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }, [isOpen]);
+
+    const handleToggle = (option) => {
+      const newSelected = localSelected.includes(option)
+        ? localSelected.filter(item => item !== option)
+        : [...localSelected, option];
+      setLocalSelected(newSelected);
+      
+      // Salva immediatamente
+      const [type, ...path] = field.split('.');
+      if (type === 'basic') {
+        const fieldName = path[0];
+        setFormData(prev => {
+          const newData = { ...prev, [fieldName]: newSelected };
+          // Mantieni compatibilità con destination (singolare) - usa la prima destinazione
+          if (fieldName === 'destinations' && newSelected.length > 0) {
+            newData.destination = newSelected[0];
+          }
+          return newData;
+        });
+      }
+    };
+
+    const displayValue = localSelected.length > 0 
+      ? localSelected.join(', ') 
+      : placeholder;
+
+    return (
+      <div className={`editable-multiselect ${className}`} ref={dropdownRef}>
+        <div className="multiselect-display" onClick={() => setIsOpen(!isOpen)}>
+          <span className="editable-text" title="Clicca per modificare">
+            {displayValue}
+          </span>
+          <i className={`fa-solid fa-chevron-${isOpen ? 'up' : 'down'}`}></i>
+        </div>
+        {isOpen && (
+          <div className="multiselect-dropdown">
+            {options.map((option) => (
+              <label key={option} className="multiselect-option">
+                <input
+                  type="checkbox"
+                  checked={localSelected.includes(option)}
+                  onChange={() => handleToggle(option)}
+                />
+                <span>{option}</span>
+              </label>
+            ))}
+            <button
+              type="button"
+              onClick={() => setIsOpen(false)}
+              className="multiselect-close"
+            >
+              Chiudi
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  };
+
   return (
     <div className="tour-editor-page">
       <PageTitle title="Editor Tour" />
@@ -1096,19 +1183,48 @@ const TourEditor = () => {
                   <div className="tour-info-container-editor">
                     <div className="tour-info-grid-editor">
                       <div className="info-item">
-                        <span className="info-label">Destinazione:</span>
+                        <span className="info-label">Destinazioni:</span>
                         <span className="info-value">
-                          <EditableSelect 
-                            field="basic.destination" 
-                            value={formData.destination} 
+                          <EditableMultiSelect 
+                            field="basic.destinations" 
+                            value={formData.destinations || []} 
                             className="info-value-text" 
                             options={[
                               'USA', 'Canada', 'Messico', 'America Centrale', 
                               'Sud America', 'Caraibi', 'Polinesia Francese'
                             ]}
+                            placeholder="Seleziona una o più destinazioni..."
                           />
                         </span>
                       </div>
+                      {(requiresCountrySelection(formData.destinations?.[0]) || 
+                        formData.destinations?.some(dest => requiresCountrySelection(dest))) && (
+                        <div className="info-item">
+                          <span className="info-label">Paesi:</span>
+                          <span className="info-value">
+                            <EditableMultiSelect 
+                              field="basic.countries" 
+                              value={formData.countries || []} 
+                              className="info-value-text" 
+                              options={(() => {
+                                const selectedDest = formData.destinations?.find(dest => requiresCountrySelection(dest));
+                                if (selectedDest) {
+                                  return getCountriesByRegion(selectedDest);
+                                }
+                                // Se ci sono più destinazioni che richiedono paesi, unisci tutte le opzioni
+                                const allCountries = [];
+                                formData.destinations?.forEach(dest => {
+                                  if (requiresCountrySelection(dest)) {
+                                    allCountries.push(...getCountriesByRegion(dest));
+                                  }
+                                });
+                                return [...new Set(allCountries)]; // Rimuovi duplicati
+                              })()}
+                              placeholder="Seleziona uno o più paesi..."
+                            />
+                          </span>
+                        </div>
+                      )}
                       <div className="info-item">
                         <span className="info-label">Area Geografica:</span>
                         <span className="info-value">
@@ -1116,7 +1232,7 @@ const TourEditor = () => {
                             field="basic.geographicArea" 
                             value={formData.geographicArea} 
                             className="info-value-text" 
-                            options={['Seleziona...', 'EST', 'OVEST', 'EST E OVEST']}
+                            options={['Seleziona...', 'EST', 'OVEST', 'EST E OVEST', 'SOUTH', 'MID WEST']}
                           />
                         </span>
                       </div>
@@ -1131,7 +1247,7 @@ const TourEditor = () => {
                               'city breaks', 'fly and drive', 'ride in harley', 
                               'tour guidato', 'luxury travel', 'camper adventure', 'extra',
                               'tour guidati (di gruppo)', 'fly & drive (individuali)', 
-                              'Glamping usa', 'ranch usa e canada', 'camper adventures', 'scoperta in treno'
+                              'Glamping usa', 'ranch usa e canada', 'camper adventures', 'scoperta in treno', 'combinati'
                             ]}
                           />
                         </span>
