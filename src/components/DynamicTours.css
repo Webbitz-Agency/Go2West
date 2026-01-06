@@ -4,7 +4,7 @@
   border-radius: 16px;
   padding: 35px;
   margin-bottom: 40px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  /*box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);*/
   border: 1px solid rgba(79, 172, 254, 0.15);
   position: relative;
   overflow: hidden;
@@ -296,6 +296,94 @@
   -webkit-line-clamp: 3;
   line-clamp: 3;
   -webkit-box-orient: vertical;
+  /* Forza un font uniforme per tutte le descrizioni */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+  /* Rimuove qualsiasi stile inline */
+  font-variant: normal !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+}
+
+/* Sovrascrive TUTTI gli elementi figli con stili molto specifici */
+.promotion-description *,
+.promotion-description *::before,
+.promotion-description *::after {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  /* Rimuove qualsiasi stile inline */
+  font-size: inherit !important;
+  line-height: inherit !important;
+  color: inherit !important;
+}
+
+/* Regole specifiche per ogni possibile tag HTML */
+.promotion-description p,
+.promotion-description span,
+.promotion-description div,
+.promotion-description strong,
+.promotion-description em,
+.promotion-description u,
+.promotion-description h1,
+.promotion-description h2,
+.promotion-description h3,
+.promotion-description h4,
+.promotion-description h5,
+.promotion-description h6,
+.promotion-description li,
+.promotion-description ul,
+.promotion-description ol,
+.promotion-description a,
+.promotion-description b,
+.promotion-description i,
+.promotion-description small,
+.promotion-description sub,
+.promotion-description sup,
+.promotion-description mark,
+.promotion-description del,
+.promotion-description ins,
+.promotion-description code,
+.promotion-description pre,
+.promotion-description blockquote {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+}
+
+/* Mantiene il grassetto per strong ma con lo stesso font */
+.promotion-description strong,
+.promotion-description b {
+  font-weight: 600 !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif !important;
+}
+
+/* Mantiene il corsivo per em/i ma con lo stesso font */
+.promotion-description em,
+.promotion-description i {
+  font-style: italic !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif !important;
+  font-weight: 400 !important;
+}
+
+/* Rimuove stili dai titoli e li rende normali */
+.promotion-description h1,
+.promotion-description h2,
+.promotion-description h3,
+.promotion-description h4,
+.promotion-description h5,
+.promotion-description h6 {
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 .promotion-features-container {

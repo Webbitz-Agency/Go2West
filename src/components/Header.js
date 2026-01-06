@@ -1,6 +1,7 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { travelTypes } from '../config/travelTypes';
+import TourService from '../services/TourService';
 import './Header.css';
 
 const Header = () => {
@@ -9,14 +10,22 @@ const Header = () => {
   const [isHeroVisible, setIsHeroVisible] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [mobileMenuLevel, setMobileMenuLevel] = useState('main'); // 'main', 'destinations', 'travels'
+  const [mobileMenuLevel, setMobileMenuLevel] = useState('main'); // 'main', 'destinations', 'travels', 'destination-types'
   const [activeTravelType, setActiveTravelType] = useState(null);
+  const [activeDestination, setActiveDestination] = useState(null);
   const [submenuTop, setSubmenuTop] = useState(0);
   const [hoveredTravelType, setHoveredTravelType] = useState(null);
+  const [hoveredDestination, setHoveredDestination] = useState(null);
   const dropdownCloseTimeoutRef = useRef(null);
   const travelsMenuRef = useRef(null);
   const travelsSubmenuRef = useRef(null);
+  const destinationsMenuRef = useRef(null);
+  const destinationsSubmenuRef = useRef(null);
   const hoveredTravelItemRef = useRef(null);
+  const hoveredDestinationItemRef = useRef(null);
+  const [availableDestinationsByType, setAvailableDestinationsByType] = useState({});
+  const [availableTypesByDestination, setAvailableTypesByDestination] = useState({});
+  const [destinationsSubmenuTop, setDestinationsSubmenuTop] = useState(0);
 
   // Dati delle destinazioni
   const destinations = [
@@ -28,6 +37,149 @@ const Header = () => {
     { name: 'Caraibi', country: 'caraibi' },
     { name: 'Polinesia Francese', country: 'polinesia-francese' }
   ];
+
+  // Mappatura slug -> valori possibili nel database (simile a DynamicTours)
+  const getDatabaseTypeVariants = (slug) => {
+    const mapping = {
+      'tour-guidati': ['tour guidati', 'tour guidato', 'tour'],
+      'city-breaks': ['city breaks', 'city-breaks'],
+      'fly-drive': ['fly and drive', 'fly-drive', 'fly & drive'],
+      'camper-adventures': ['camper adventure', 'camper adventures', 'camper'],
+      'glamping': ['Glamping', 'glamping'],
+      'ranch': ['ranch', 'Ranch'],
+      'scoperta-in-treno': ['scoperta in treno', 'scoperta-in-treno']
+    };
+    return mapping[slug] || [slug];
+  };
+
+  // Mappatura destinazione -> possibili valori nel database
+  const getDestinationVariants = (country) => {
+    const mapping = {
+      'usa': ['USA', 'usa', 'Usa', 'United States', 'Stati Uniti'],
+      'canada': ['Canada', 'canada'],
+      'messico': ['Messico', 'messico', 'Mexico', 'mexico'],
+      'america-centrale': ['America Centrale', 'america-centrale', 'Central America', 'central america'],
+      'sud-america': ['Sud America', 'sud-america', 'South America', 'south america'],
+      'caraibi': ['Caraibi', 'caraibi', 'Caribbean', 'caribbean'],
+      'polinesia-francese': ['Polinesia Francese', 'polinesia-francese', 'French Polynesia', 'french polynesia']
+    };
+    return mapping[country] || [country];
+  };
+
+  // Carica i tour e crea le mappe delle destinazioni disponibili per tipo e viceversa
+  useEffect(() => {
+    const loadAvailableDestinations = async () => {
+      try {
+        const allTours = await TourService.getAllTours();
+        const destinationsMap = {};
+        const typesMap = {};
+
+        // Per ogni tipo di viaggio - crea mappa destinazioni disponibili
+        travelTypes.forEach(type => {
+          const typeVariants = getDatabaseTypeVariants(type.slug);
+          const availableDestinations = new Set();
+
+          // Per ogni destinazione
+          destinations.forEach(dest => {
+            const destVariants = getDestinationVariants(dest.country);
+            
+            // Verifica se ci sono tour che corrispondono a questo tipo e destinazione
+            const hasTours = allTours.some(tour => {
+              const tourType = (tour.type || '').toLowerCase().trim();
+              const tourDestination = (tour.destination || '').trim();
+              
+              // Verifica tipo
+              const matchesType = typeVariants.some(variant => {
+                const variantLower = variant.toLowerCase().trim();
+                return tourType === variantLower || 
+                       tourType.includes(variantLower) ||
+                       variantLower.includes(tourType);
+              });
+              
+              // Verifica destinazione
+              const matchesDestination = destVariants.some(variant => {
+                const variantTrimmed = variant.trim();
+                return tourDestination === variantTrimmed ||
+                       tourDestination.toLowerCase() === variantTrimmed.toLowerCase() ||
+                       tourDestination.toLowerCase().includes(variantTrimmed.toLowerCase()) ||
+                       variantTrimmed.toLowerCase().includes(tourDestination.toLowerCase());
+              });
+              
+              return matchesType && matchesDestination;
+            });
+
+            if (hasTours) {
+              availableDestinations.add(dest.country);
+            }
+          });
+
+          destinationsMap[type.slug] = Array.from(availableDestinations);
+        });
+
+        // Per ogni destinazione - crea mappa tipologie disponibili (inverso)
+        destinations.forEach(dest => {
+          const destVariants = getDestinationVariants(dest.country);
+          const availableTypes = new Set();
+
+          // Per ogni tipo di viaggio
+          travelTypes.forEach(type => {
+            const typeVariants = getDatabaseTypeVariants(type.slug);
+            
+            // Verifica se ci sono tour che corrispondono a questa destinazione e tipo
+            const hasTours = allTours.some(tour => {
+              const tourType = (tour.type || '').toLowerCase().trim();
+              const tourDestination = (tour.destination || '').trim();
+              
+              // Verifica tipo
+              const matchesType = typeVariants.some(variant => {
+                const variantLower = variant.toLowerCase().trim();
+                return tourType === variantLower || 
+                       tourType.includes(variantLower) ||
+                       variantLower.includes(tourType);
+              });
+              
+              // Verifica destinazione
+              const matchesDestination = destVariants.some(variant => {
+                const variantTrimmed = variant.trim();
+                return tourDestination === variantTrimmed ||
+                       tourDestination.toLowerCase() === variantTrimmed.toLowerCase() ||
+                       tourDestination.toLowerCase().includes(variantTrimmed.toLowerCase()) ||
+                       variantTrimmed.toLowerCase().includes(tourDestination.toLowerCase());
+              });
+              
+              return matchesType && matchesDestination;
+            });
+
+            if (hasTours) {
+              availableTypes.add(type.slug);
+            }
+          });
+
+          typesMap[dest.country] = Array.from(availableTypes);
+        });
+
+        setAvailableDestinationsByType(destinationsMap);
+        setAvailableTypesByDestination(typesMap);
+      } catch (error) {
+        console.error('Errore nel caricamento delle destinazioni disponibili:', error);
+        // In caso di errore, mostra tutte le destinazioni e tipologie
+        const allDestinations = destinations.map(d => d.country);
+        const allTypes = travelTypes.map(t => t.slug);
+        const fallbackDestinationsMap = {};
+        const fallbackTypesMap = {};
+        travelTypes.forEach(type => {
+          fallbackDestinationsMap[type.slug] = allDestinations;
+        });
+        destinations.forEach(dest => {
+          fallbackTypesMap[dest.country] = allTypes;
+        });
+        setAvailableDestinationsByType(fallbackDestinationsMap);
+        setAvailableTypesByDestination(fallbackTypesMap);
+      }
+    };
+
+    loadAvailableDestinations();
+  }, []);
 
   // Tipologie di viaggio importate dalla configurazione condivisa
 
@@ -111,7 +263,9 @@ const Header = () => {
     dropdownCloseTimeoutRef.current = setTimeout(() => {
       setActiveDropdown(null);
       setHoveredTravelType(null);
+      setHoveredDestination(null);
       hoveredTravelItemRef.current = null;
+      hoveredDestinationItemRef.current = null;
     }, 150);
   };
 
@@ -121,6 +275,10 @@ const Header = () => {
     if (dropdown !== 'travels') {
       setHoveredTravelType(null);
       hoveredTravelItemRef.current = null;
+    }
+    if (dropdown !== 'destinations') {
+      setHoveredDestination(null);
+      hoveredDestinationItemRef.current = null;
     }
   };
 
@@ -145,6 +303,27 @@ const Header = () => {
     setSubmenuTop(calculatedTop);
   };
 
+  const positionDestinationsSubmenu = () => {
+    if (!hoveredDestinationItemRef.current || !destinationsMenuRef.current || !destinationsSubmenuRef.current) {
+      return;
+    }
+
+    const menuRect = destinationsMenuRef.current.getBoundingClientRect();
+    const itemRect = hoveredDestinationItemRef.current.getBoundingClientRect();
+    const submenuRect = destinationsSubmenuRef.current.getBoundingClientRect();
+
+    let calculatedTop = itemRect.top - menuRect.top;
+    const maxTop = Math.max(0, menuRect.height - submenuRect.height);
+
+    if (calculatedTop < 0) {
+      calculatedTop = 0;
+    } else if (calculatedTop > maxTop) {
+      calculatedTop = maxTop;
+    }
+
+    setDestinationsSubmenuTop(calculatedTop);
+  };
+
   const requestSubmenuPosition = () => {
     if (typeof window === 'undefined') {
       positionSubmenu();
@@ -153,10 +332,20 @@ const Header = () => {
     window.requestAnimationFrame(positionSubmenu);
   };
 
+  const requestDestinationsSubmenuPosition = () => {
+    if (typeof window === 'undefined') {
+      positionDestinationsSubmenu();
+      return;
+    }
+    window.requestAnimationFrame(positionDestinationsSubmenu);
+  };
+
   const handleTravelTypeEnter = (typeSlug, event) => {
     clearDropdownCloseTimer();
     setActiveDropdown('travels');
     setHoveredTravelType(typeSlug);
+    setHoveredDestination(null);
+    hoveredDestinationItemRef.current = null;
 
     if (event && event.currentTarget) {
       hoveredTravelItemRef.current = event.currentTarget;
@@ -164,17 +353,34 @@ const Header = () => {
     }
   };
 
+  const handleDestinationEnter = (country, event) => {
+    clearDropdownCloseTimer();
+    setActiveDropdown('destinations');
+    setHoveredDestination(country);
+    setHoveredTravelType(null);
+    hoveredTravelItemRef.current = null;
+
+    if (event && event.currentTarget) {
+      hoveredDestinationItemRef.current = event.currentTarget;
+      requestDestinationsSubmenuPosition();
+    }
+  };
+
   useLayoutEffect(() => {
     if (activeDropdown === 'travels' && hoveredTravelType && hoveredTravelItemRef.current) {
       positionSubmenu();
     }
-  }, [activeDropdown, hoveredTravelType]);
+    if (activeDropdown === 'destinations' && hoveredDestination && hoveredDestinationItemRef.current) {
+      positionDestinationsSubmenu();
+    }
+  }, [activeDropdown, hoveredTravelType, hoveredDestination]);
 
   const toggleMobileMenu = () => {
     if (!mobileMenuOpen) {
       // Se stiamo aprendo il menu, resettiamo sempre al livello principale
       setMobileMenuLevel('main');
       setActiveTravelType(null);
+      setActiveDestination(null);
     }
     setMobileMenuOpen(!mobileMenuOpen);
   };
@@ -183,6 +389,7 @@ const Header = () => {
     setMobileMenuOpen(false);
     setMobileMenuLevel('main');
     setActiveTravelType(null);
+    setActiveDestination(null);
   };
 
   const goToDestinations = () => {
@@ -195,17 +402,30 @@ const Header = () => {
 
   const goToTravelType = (typeSlug) => {
     setActiveTravelType(typeSlug);
+    setActiveDestination(null);
     setMobileMenuLevel('travel-destinations');
+  };
+
+  const goToDestinationTypes = (country) => {
+    setActiveDestination(country);
+    setActiveTravelType(null);
+    setMobileMenuLevel('destination-types');
   };
 
   const goBackToMain = () => {
     setMobileMenuLevel('main');
     setActiveTravelType(null);
+    setActiveDestination(null);
   };
 
   const goBackToTravels = () => {
     setMobileMenuLevel('travels');
     setActiveTravelType(null);
+  };
+
+  const goBackToDestinations = () => {
+    setMobileMenuLevel('destinations');
+    setActiveDestination(null);
   };
 
   const scrollToContact = () => {
@@ -246,9 +466,12 @@ const Header = () => {
     setMobileMenuOpen(false);
     setMobileMenuLevel('main');
     setActiveTravelType(null);
+    setActiveDestination(null);
     setActiveDropdown(null);
     setHoveredTravelType(null);
+    setHoveredDestination(null);
     hoveredTravelItemRef.current = null;
+    hoveredDestinationItemRef.current = null;
   }, [location.pathname]);
 
   // Gestisci lo scroll al form di contatti quando arriviamo alla home
@@ -310,18 +533,58 @@ const Header = () => {
               {activeDropdown === 'destinations' && (
                 <div 
                   className="dropdown-menu"
+                  ref={destinationsMenuRef}
                   onMouseEnter={() => handleDropdownEnter('destinations')}
                   onMouseLeave={scheduleDropdownClose}
                 >
                   {destinations.map((dest) => (
-                    <a 
+                    <div 
                       key={dest.country}
-                      href={`/destination/${dest.country}`}
-                      className="dropdown-item"
+                      className="dropdown-item-with-submenu"
+                      onMouseEnter={(e) => handleDestinationEnter(dest.country, e)}
                     >
-                      {dest.name}
-                    </a>
+                      <span className={`dropdown-item ${hoveredDestination === dest.country ? 'active' : ''}`}>
+                        {dest.name}
+                        <span className="submenu-arrow"><i class="fa-solid fa-angle-right"></i></span>
+                      </span>
+                    </div>
                   ))}
+                  
+                  {/* Submenu posizionato all'opzione hover */}
+                  {hoveredDestination && (() => {
+                    const availableTypes = availableTypesByDestination[hoveredDestination] || [];
+                    const filteredTypes = travelTypes.filter(type => {
+                      // Se non abbiamo ancora caricato i dati, mostra tutti i tipi
+                      // Altrimenti mostra solo quelli disponibili
+                      return availableTypes.length === 0 || availableTypes.includes(type.slug);
+                    });
+                    
+                    if (filteredTypes.length === 0) {
+                      return null; // Non mostrare il submenu se non ci sono tipi
+                    }
+                    
+                    return (
+                      <div 
+                        className="submenu"
+                        ref={destinationsSubmenuRef}
+                        style={{
+                          top: `${destinationsSubmenuTop}px`
+                        }}
+                        onMouseEnter={() => handleDropdownEnter('destinations')}
+                        onMouseLeave={scheduleDropdownClose}
+                      >
+                        {filteredTypes.map((type) => (
+                          <a 
+                            key={`${hoveredDestination}-${type.slug}`}
+                            href={`/travel/${type.slug}/${hoveredDestination}`}
+                            className="submenu-item"
+                          >
+                            {type.name}
+                          </a>
+                        ))}
+                      </div>
+                    );
+                  })()}
                 </div>
               )}
             </div>
@@ -364,27 +627,40 @@ const Header = () => {
                   ))}
                   
                   {/* Submenu posizionato all'opzione hover */}
-                  {hoveredTravelType && (
-                    <div 
-                      className="submenu"
-                      ref={travelsSubmenuRef}
-                      style={{
-                        top: `${submenuTop}px`
-                      }}
-                      onMouseEnter={() => handleDropdownEnter('travels')}
-                      onMouseLeave={scheduleDropdownClose}
-                    >
-                      {destinations.map((dest) => (
-                        <a 
-                          key={`${hoveredTravelType}-${dest.country}`}
-                          href={`/travel/${hoveredTravelType}/${dest.country}`}
-                          className="submenu-item"
-                        >
-                          {dest.name}
-                        </a>
-                      ))}
-                    </div>
-                  )}
+                  {hoveredTravelType && (() => {
+                    const availableDests = availableDestinationsByType[hoveredTravelType] || [];
+                    const filteredDestinations = destinations.filter(dest => {
+                      // Se non abbiamo ancora caricato i dati, mostra tutte le destinazioni
+                      // Altrimenti mostra solo quelle disponibili
+                      return availableDests.length === 0 || availableDests.includes(dest.country);
+                    });
+                    
+                    if (filteredDestinations.length === 0) {
+                      return null; // Non mostrare il submenu se non ci sono destinazioni
+                    }
+                    
+                    return (
+                      <div 
+                        className="submenu"
+                        ref={travelsSubmenuRef}
+                        style={{
+                          top: `${submenuTop}px`
+                        }}
+                        onMouseEnter={() => handleDropdownEnter('travels')}
+                        onMouseLeave={scheduleDropdownClose}
+                      >
+                        {filteredDestinations.map((dest) => (
+                          <a 
+                            key={`${hoveredTravelType}-${dest.country}`}
+                            href={`/travel/${hoveredTravelType}/${dest.country}`}
+                            className="submenu-item"
+                          >
+                            {dest.name}
+                          </a>
+                        ))}
+                      </div>
+                    );
+                  })()}
                 </div>
               )}
             </div>
@@ -452,14 +728,14 @@ const Header = () => {
               </button>
               
               {destinations.map((dest) => (
-                <Link 
+                <button 
                   key={dest.country}
-                  to={`/destination/${dest.country}`}
-                  className="mobile-submenu-item"
-                  onClick={closeMobileMenu}
+                  className="mobile-nav-link" 
+                  onClick={() => goToDestinationTypes(dest.country)}
                 >
                   {dest.name}
-                </Link>
+                  <span className="mobile-arrow"><i className="fa-solid fa-angle-right"></i></span>
+                </button>
               ))}
               
               {/* CTA nel submenu destinazioni */}
@@ -468,6 +744,49 @@ const Header = () => {
               </button>
             </>
           )}
+
+          {/* Submenu tipologie per destinazione */}
+          {mobileMenuLevel === 'destination-types' && activeDestination && (() => {
+            const availableTypes = availableTypesByDestination[activeDestination] || [];
+            const filteredTypes = travelTypes.filter(type => {
+              // Se non abbiamo ancora caricato i dati, mostra tutti i tipi
+              // Altrimenti mostra solo quelli disponibili
+              return availableTypes.length === 0 || availableTypes.includes(type.slug);
+            });
+            
+            const destinationName = destinations.find(d => d.country === activeDestination)?.name || activeDestination;
+            
+            return (
+              <>
+                <button className="mobile-nav-back" onClick={goBackToDestinations}>
+                  <span className="back-arrow"><i className="fa-solid fa-angle-left"></i></span>
+                  {destinationName}
+                </button>
+                
+                {filteredTypes.length > 0 ? (
+                  filteredTypes.map((type) => (
+                    <Link 
+                      key={`${activeDestination}-${type.slug}`}
+                      to={`/travel/${type.slug}/${activeDestination}`}
+                      className="mobile-submenu-item"
+                      onClick={closeMobileMenu}
+                    >
+                      {type.name}
+                    </Link>
+                  ))
+                ) : (
+                  <div className="mobile-submenu-item" style={{ color: '#999', pointerEvents: 'none', padding: '15px' }}>
+                    Nessuna tipologia disponibile per questa destinazione
+                  </div>
+                )}
+                
+                {/* CTA nel submenu specifico */}
+                <button className="mobile-cta" onClick={scrollToContact}>
+                  Richiedi Info
+                </button>
+              </>
+            );
+          })()}
 
           {/* Submenu Viaggi */}
           {mobileMenuLevel === 'travels' && (
@@ -496,30 +815,45 @@ const Header = () => {
           )}
 
           {/* Submenu specifico tipo di viaggio */}
-          {mobileMenuLevel === 'travel-destinations' && activeTravelType && (
-            <>
-              <button className="mobile-nav-back" onClick={goBackToTravels}>
-                <span className="back-arrow"><i className="fa-solid fa-angle-left"></i></span>
-                {travelTypes.find(t => t.slug === activeTravelType)?.name}
-              </button>
-              
-              {destinations.map((dest) => (
-                <Link 
-                  key={`${activeTravelType}-${dest.country}`}
-                  to={`/travel/${activeTravelType}/${dest.country}`}
-                  className="mobile-submenu-item"
-                  onClick={closeMobileMenu}
-                >
-                  {dest.name}
-                </Link>
-              ))}
-              
-              {/* CTA nel submenu specifico */}
-              <button className="mobile-cta" onClick={scrollToContact}>
-                Richiedi Info
-              </button>
-            </>
-          )}
+          {mobileMenuLevel === 'travel-destinations' && activeTravelType && (() => {
+            const availableDests = availableDestinationsByType[activeTravelType] || [];
+            const filteredDestinations = destinations.filter(dest => {
+              // Se non abbiamo ancora caricato i dati, mostra tutte le destinazioni
+              // Altrimenti mostra solo quelle disponibili
+              return availableDests.length === 0 || availableDests.includes(dest.country);
+            });
+            
+            return (
+              <>
+                <button className="mobile-nav-back" onClick={goBackToTravels}>
+                  <span className="back-arrow"><i className="fa-solid fa-angle-left"></i></span>
+                  {travelTypes.find(t => t.slug === activeTravelType)?.name}
+                </button>
+                
+                {filteredDestinations.length > 0 ? (
+                  filteredDestinations.map((dest) => (
+                    <Link 
+                      key={`${activeTravelType}-${dest.country}`}
+                      to={`/travel/${activeTravelType}/${dest.country}`}
+                      className="mobile-submenu-item"
+                      onClick={closeMobileMenu}
+                    >
+                      {dest.name}
+                    </Link>
+                  ))
+                ) : (
+                  <div className="mobile-submenu-item" style={{ color: '#999', pointerEvents: 'none', padding: '15px' }}>
+                    Nessuna destinazione disponibile per questo tipo di viaggio
+                  </div>
+                )}
+                
+                {/* CTA nel submenu specifico */}
+                <button className="mobile-cta" onClick={scrollToContact}>
+                  Richiedi Info
+                </button>
+              </>
+            );
+          })()}
         </div>
       </div>
     </header>

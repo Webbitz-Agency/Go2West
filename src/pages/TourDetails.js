@@ -804,7 +804,7 @@ const TourDetails = () => {
                   )}
                   {tour.minPrice && (
                     <div className="info-item">
-                      <span className="info-label">Prezzo Minimo:</span>
+                      <span className="info-label">Prezzo Minimo in base doppia:</span>
                       <span className="info-value">€{tour.minPrice}</span>
                     </div>
                   )}

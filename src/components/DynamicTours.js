@@ -12,7 +12,7 @@ const getDatabaseTypeVariants = (filterValue) => {
     'city-breaks': ['city breaks', 'city-breaks'],
     'fly-drive': ['fly and drive', 'fly-drive', 'fly & drive'],
     'camper': ['camper adventure', 'camper adventures', 'camper'],
-    'under-canvas': ['under canvas'],
+    'glamping': ['Glamping'],
     'ranch': ['ranch'],
     'scoperta-in-treno': ['scoperta in treno', 'scoperta-in-treno']
   };
@@ -36,6 +36,22 @@ const getPlainText = (html) => {
   const tempDiv = document.createElement('div');
   tempDiv.innerHTML = html;
   return tempDiv.textContent || tempDiv.innerText || '';
+};
+
+// Funzione per ordinare i tour dal più recente al meno recente
+const sortToursByDate = (tours) => {
+  return [...tours].sort((a, b) => {
+    // Prova prima con updated_at, poi created_at, infine id come fallback
+    const dateA = a.updated_at || a.updatedAt || a.created_at || a.createdAt;
+    const dateB = b.updated_at || b.updatedAt || b.created_at || b.createdAt;
+    
+    if (dateA && dateB) {
+      return new Date(dateB) - new Date(dateA); // Più recente prima
+    }
+    
+    // Fallback: ordina per ID decrescente (assumendo che ID più alti = più recenti)
+    return (b.id || 0) - (a.id || 0);
+  });
 };
 
 // Funzione helper per troncare HTML mantenendo la struttura
@@ -257,7 +273,9 @@ const DynamicTours = ({ type, destination, showFilters = false, promotionsOnly =
           data = await TourService.getAllTours();
         }
         
-        setAllTours(data);
+        // Ordina i tour dal più recente al meno recente
+        const sortedData = sortToursByDate(data);
+        setAllTours(sortedData);
       } catch (err) {
         setError('Errore nel caricamento dei tour: ' + err.message);
       } finally {
@@ -441,10 +459,11 @@ const DynamicTours = ({ type, destination, showFilters = false, promotionsOnly =
                   __html: (() => {
                     if (!tour.description) return '';
                     
-                    // Sanitizza l'HTML
+                    // Sanitizza l'HTML rimuovendo tutti gli attributi di stile
                     const sanitized = DOMPurify.sanitize(tour.description, {
                       ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'u', 'h1', 'h2', 'h3', 'ul', 'ol', 'li', 'a'],
                       ALLOWED_ATTR: ['href', 'target', 'rel'],
+                      FORBID_ATTR: ['style', 'class', 'id'], // Rimuove attributi di stile, classi e id
                     });
                     
                     // Tronca se necessario (150 caratteri di testo puro)

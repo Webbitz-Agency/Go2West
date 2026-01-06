@@ -1131,7 +1131,7 @@ const TourEditor = () => {
                               'city breaks', 'fly and drive', 'ride in harley', 
                               'tour guidato', 'luxury travel', 'camper adventure', 'extra',
                               'tour guidati (di gruppo)', 'fly & drive (individuali)', 
-                              'under canvas usa', 'ranch usa e canada', 'camper adventures', 'scoperta in treno'
+                              'Glamping usa', 'ranch usa e canada', 'camper adventures', 'scoperta in treno'
                             ]}
                           />
                         </span>
@@ -1143,7 +1143,7 @@ const TourEditor = () => {
                         </span>
                       </div>
                       <div className="info-item">
-                        <span className="info-label">Prezzo Min:</span>
+                        <span className="info-label">Prezzo Min. in base doppia:</span>
                         <span className="info-value">
                           €<input 
                             type="number" 
@@ -1673,12 +1673,12 @@ const TourEditor = () => {
               onImageDelete={handleImageDelete}
               tour={tour}
             />
-            {formData.included && formData.included.slice(0, 5).map((service, index) => (
+            {[1, 2, 3, 4].map((index) => (
               <ImageUploader
-                key={`image${index + 1}`}
-                imageType={`image${index + 1}`}
-                currentImage={formData[`image${index + 1}`]}
-                label={`Immagine ${index + 1}`}
+                key={`image${index}`}
+                imageType={`image${index}`}
+                currentImage={formData[`image${index}`]}
+                label={`Immagine ${index}`}
                 onImageUpload={handleImageUpload}
                 onImageDelete={handleImageDelete}
                 tour={tour}

@@ -688,9 +688,9 @@ const Home = () => {
           </div>
 
           {/* Riga 2 */}
-          <div onClick={() => openTravelModal('under-canvas')} className="option-card photo r2c1 reveal-on-scroll" style={{ backgroundImage: "url('/images/under-canvas.jpg')" }} data-dir="vertical">
+          <div onClick={() => openTravelModal('glamping')} className="option-card photo r2c1 reveal-on-scroll" style={{ backgroundImage: "url('/images/glamping.jpg')" }} data-dir="vertical">
             <div className="option-overlay">
-              <h3>Under canvas</h3>
+              <h3>Glamping</h3>
               <p>Soggiorno in tenda e scopri i territori più suggestivi.</p>
             </div>
           </div>

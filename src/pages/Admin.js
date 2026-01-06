@@ -5,6 +5,22 @@ import PageTitle from '../components/PageTitle';
 import TourService from '../services/TourService';
 import './Admin.css';
 
+// Funzione per ordinare i tour dal più recente al meno recente
+const sortToursByDate = (tours) => {
+  return [...tours].sort((a, b) => {
+    // Prova prima con updated_at, poi created_at, infine id come fallback
+    const dateA = a.updated_at || a.updatedAt || a.created_at || a.createdAt;
+    const dateB = b.updated_at || b.updatedAt || b.created_at || b.createdAt;
+    
+    if (dateA && dateB) {
+      return new Date(dateB) - new Date(dateA); // Più recente prima
+    }
+    
+    // Fallback: ordina per ID decrescente (assumendo che ID più alti = più recenti)
+    return (b.id || 0) - (a.id || 0);
+  });
+};
+
 
 
 // Componente Admin principale
@@ -91,8 +107,10 @@ const Admin = () => {
     setLoading(true);
     try {
       const data = await TourService.getAllTours();
-      setTours(data);
-      setFilteredTours(data);
+      // Ordina i tour dal più recente al meno recente
+      const sortedData = sortToursByDate(data);
+      setTours(sortedData);
+      setFilteredTours(sortedData);
     } catch (err) {
       setError('Errore nel caricamento dei tour: ' + err.message);
     } finally {

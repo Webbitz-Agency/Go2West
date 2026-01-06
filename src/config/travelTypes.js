@@ -3,7 +3,7 @@ export const travelTypes = [
   { name: 'Tour Guidati', slug: 'tour-guidati' },
   { name: 'Fly & Drive', slug: 'fly-drive' },
   { name: 'City Breaks', slug: 'city-breaks' },
-  { name: 'Under canvas', slug: 'under-canvas' },
+  { name: 'Glamping', slug: 'glamping' },
   { name: 'Ranch', slug: 'ranch' },
   { name: 'Camper Adventures', slug: 'camper-adventures' },
   { name: 'Scoperta in treno', slug: 'scoperta-in-treno' }
