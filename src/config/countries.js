@@ -8,8 +8,7 @@ export const countriesByRegion = {
     'Cile',
     'Colombia',
     'Ecuador',
-    'Perù',
-    'Venezuela'
+    'Perù'
   ],
   'America Centrale': [
     'Costa Rica',
