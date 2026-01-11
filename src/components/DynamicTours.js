@@ -8,26 +8,25 @@ import './DynamicTours.css';
 // Mappatura inversa: dai valori dei filtri ai possibili valori nel database
 const getDatabaseTypeVariants = (filterValue) => {
   const mapping = {
-    'tour': ['tour guidati', 'tour guidato', 'tour'],
-    'city-breaks': ['city breaks', 'city-breaks'],
-    'fly-drive': ['fly and drive', 'fly-drive', 'fly & drive'],
-    'camper': ['camper adventure', 'camper adventures', 'camper'],
-    'glamping': ['Glamping'],
+    'city-breaks': ['city breaks'],
+    'fly-drive': ['fly & drive'],
+    'tour-guidato': ['tour guidato'],
+    'camper-adventure': ['camper adventure'],
+    'glamping': ['glamping'],
     'ranch': ['ranch'],
-    'scoperta-in-treno': ['scoperta in treno', 'scoperta-in-treno']
+    'scoperta-in-treno': ['scoperta in treno'],
+    'hotel-resort': ['hotel/resort'],
+    'combinati': ['combinati'],
+    'luxury-travel': ['luxury travel'],
+    'extra': ['extra']
   };
   return mapping[filterValue] || [filterValue];
 };
 
 // Funzione helper per mappare lo slug al valore del filtro
 const getFilterValue = (slug) => {
-  const mapping = {
-    'tour-guidati': 'tour',
-    'camper-adventures': 'camper',
-    'city-breaks': 'city-breaks',
-    'fly-drive': 'fly-drive'
-  };
-  return mapping[slug] || slug;
+  // Lo slug corrisponde direttamente al valore del filtro
+  return slug;
 };
 
 // Funzione helper per estrarre testo puro da HTML

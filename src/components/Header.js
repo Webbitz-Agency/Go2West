@@ -41,13 +41,17 @@ const Header = () => {
   // Mappatura slug -> valori possibili nel database (simile a DynamicTours)
   const getDatabaseTypeVariants = (slug) => {
     const mapping = {
-      'tour-guidati': ['tour guidati', 'tour guidato', 'tour'],
-      'city-breaks': ['city breaks', 'city-breaks'],
-      'fly-drive': ['fly and drive', 'fly-drive', 'fly & drive'],
-      'camper-adventures': ['camper adventure', 'camper adventures', 'camper'],
-      'glamping': ['Glamping', 'glamping'],
-      'ranch': ['ranch', 'Ranch'],
-      'scoperta-in-treno': ['scoperta in treno', 'scoperta-in-treno']
+      'city-breaks': ['city breaks'],
+      'fly-drive': ['fly & drive'],
+      'tour-guidato': ['tour guidato'],
+      'camper-adventure': ['camper adventure'],
+      'glamping': ['glamping'],
+      'ranch': ['ranch'],
+      'scoperta-in-treno': ['scoperta in treno'],
+      'hotel-resort': ['hotel/resort'],
+      'combinati': ['combinati'],
+      'luxury-travel': ['luxury travel'],
+      'extra': ['extra']
     };
     return mapping[slug] || [slug];
   };

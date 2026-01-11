@@ -1244,10 +1244,17 @@ const TourEditor = () => {
                             value={formData.type} 
                             className="info-value-text" 
                             options={[
-                              'city breaks', 'fly and drive', 'ride in harley', 
-                              'tour guidato', 'luxury travel', 'camper adventure', 'extra',
-                              'tour guidati (di gruppo)', 'fly & drive (individuali)', 
-                              'Glamping usa', 'ranch usa e canada', 'camper adventures', 'scoperta in treno', 'combinati', 'hotel/resort'
+                              'city breaks',
+                              'fly & drive',
+                              'tour guidato',
+                              'camper adventure',
+                              'glamping',
+                              'ranch',
+                              'scoperta in treno',
+                              'hotel/resort',
+                              'combinati',
+                              'luxury travel',
+                              'extra'
                             ]}
                           />
                         </span>
