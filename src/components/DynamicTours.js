@@ -139,7 +139,7 @@ const DynamicTours = ({ type, destination, showFilters = false, promotionsOnly =
 
   // Tipi di tour disponibili basati su travelTypes
   const tourTypes = [
-    { name: 'Tutti i Tour', value: 'all' },
+    { name: 'Tutti i prodotti', value: 'all' },
     ...travelTypes.map(type => ({
       name: type.name,
       value: getFilterValue(type.slug)
@@ -509,7 +509,7 @@ const DynamicTours = ({ type, destination, showFilters = false, promotionsOnly =
           <h3>Nessun tour trovato</h3>
           <p>Prova a modificare i filtri o la ricerca per trovare altri tour disponibili.</p>
           <button onClick={clearAllFilters} className="reset-filters-btn">
-            Mostra Tutti i Tour
+            Mostra Tutti i prodotti
           </button>
         </div>
       )}

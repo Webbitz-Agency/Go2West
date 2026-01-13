@@ -136,8 +136,8 @@ const TourEditor = () => {
     geographicArea: tour?.geographicArea || '',
     code: tour?.code || '',
     description: tour?.description || 'Descrizione del tour...',
-    duration: tour?.duration || '7 giorni',
-    minPrice: tour?.minPrice || 1000,
+    duration: tour?.duration || '',
+    minPrice: tour?.minPrice || '',
     notes: tour?.notes || '',
     pdfUrl: tour?.pdfUrl ? 'exists' : '',
     pdfFile: null, // File PDF da caricare per i nuovi tour
@@ -604,7 +604,7 @@ const TourEditor = () => {
       if (Array.isArray(formData.dates[year])) {
         formattedDates[year] = formData.dates[year].map(dateInfo => ({
           dateRange: `${dateInfo.startDate} - ${dateInfo.endDate}`,
-          price: formData.minPrice || 0
+          price: formData.minPrice && formData.minPrice !== '' ? formData.minPrice : 0
         }));
       }
     });
@@ -620,6 +620,23 @@ const TourEditor = () => {
     setError('');
     
     try {
+      // Validazione per nuovi tour: minPrice e duration devono essere valorizzati
+      if (!tour?.id) {
+        const minPriceValue = typeof formData.minPrice === 'string' ? parseInt(formData.minPrice) : formData.minPrice;
+        if (!formData.minPrice || formData.minPrice === '' || isNaN(minPriceValue) || minPriceValue <= 0) {
+          setError('Il prezzo minimo è obbligatorio e deve essere un numero maggiore di 0 per creare un nuovo tour.');
+          setLoading(false);
+          alert('Errore: Il prezzo minimo è obbligatorio e deve essere un numero maggiore di 0 per creare un nuovo tour.');
+          return;
+        }
+        if (!formData.duration || (typeof formData.duration === 'string' && formData.duration.trim() === '')) {
+          setError('La durata è obbligatoria per creare un nuovo tour.');
+          setLoading(false);
+          alert('Errore: La durata è obbligatoria per creare un nuovo tour.');
+          return;
+        }
+      }
+      
       // Se è un nuovo tour, devo gestire le immagini diversamente
       if (!tour?.id) {
         // Salva le immagini locali temporaneamente
@@ -741,7 +758,7 @@ const TourEditor = () => {
       const [type, ...path] = editingField.split('.');
       if (type === 'basic') {
         const field = path[0];
-        const value = (field === 'minPrice') ? parseInt(editingValue) || 0 : editingValue;
+        const value = (field === 'minPrice') ? (editingValue === '' ? '' : (parseInt(editingValue) || '')) : editingValue;
         setFormData(prev => {
           const newData = { ...prev, [field]: value };
           
@@ -1262,7 +1279,7 @@ const TourEditor = () => {
                       <div className="info-item">
                         <span className="info-label">Durata:</span>
                         <span className="info-value">
-                          <EditableText field="basic.duration" value={formData.duration} className="info-value-text" placeholder="es. 7 giorni, 10 notti, 2 settimane" />
+                          <EditableText field="basic.duration" value={formData.duration || ''} className="info-value-text" placeholder="es. 7 giorni, 10 notti, 2 settimane (obbligatorio)" />
                         </span>
                       </div>
                       <div className="info-item">
@@ -1271,9 +1288,12 @@ const TourEditor = () => {
                           €<input 
                             type="number" 
                             value={formData.minPrice || ''} 
-                            onChange={(e) => setFormData(prev => ({ ...prev, minPrice: parseInt(e.target.value) || 0 }))}
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              setFormData(prev => ({ ...prev, minPrice: value === '' ? '' : (parseInt(value) || '') }));
+                            }}
                             className="min-price-input"
-                            placeholder="0"
+                            placeholder="Inserisci prezzo (obbligatorio)"
                             dir="ltr"
                             style={{ direction: 'ltr', textAlign: 'left' }}
                           />
@@ -1699,9 +1719,12 @@ const TourEditor = () => {
                         A partire da €<input 
                           type="number" 
                           value={formData.minPrice || ''} 
-                          onChange={(e) => setFormData(prev => ({ ...prev, minPrice: parseInt(e.target.value) || 0 }))}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            setFormData(prev => ({ ...prev, minPrice: value === '' ? '' : (parseInt(value) || '') }));
+                          }}
                           className="min-price-input"
-                          placeholder="0"
+                          placeholder="Inserisci prezzo (obbligatorio)"
                           dir="ltr"
                           style={{ direction: 'ltr', textAlign: 'left' }}
                         /> per persona.
