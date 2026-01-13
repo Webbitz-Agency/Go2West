@@ -510,6 +510,40 @@
   transform: translateX(5px);
 }
 
+/* Mobile destination item con link e toggle separati */
+.mobile-destination-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  position: relative;
+}
+
+.mobile-destination-link {
+  flex: 1;
+  text-decoration: none;
+}
+
+.mobile-submenu-toggle {
+  padding: 14px 20px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mobile-submenu-toggle:hover {
+  color: #006fcf;
+  transform: translateX(5px);
+}
+
+.mobile-submenu-toggle .mobile-arrow {
+  margin: 0;
+}
+
 .mobile-nav-back:hover .back-arrow {
   transform: translateX(-3px);
 }

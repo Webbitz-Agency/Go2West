@@ -547,10 +547,17 @@ const Header = () => {
                       className="dropdown-item-with-submenu"
                       onMouseEnter={(e) => handleDestinationEnter(dest.country, e)}
                     >
-                      <span className={`dropdown-item ${hoveredDestination === dest.country ? 'active' : ''}`}>
+                      <a 
+                        href={`/destination/${dest.country}`}
+                        className={`dropdown-item ${hoveredDestination === dest.country ? 'active' : ''}`}
+                        onClick={(e) => {
+                          // Permetti la navigazione anche se c'è il submenu
+                          // Il submenu si aprirà comunque al hover
+                        }}
+                      >
                         {dest.name}
                         <span className="submenu-arrow"><i class="fa-solid fa-angle-right"></i></span>
-                      </span>
+                      </a>
                     </div>
                   ))}
                   
@@ -732,14 +739,22 @@ const Header = () => {
               </button>
               
               {destinations.map((dest) => (
-                <button 
-                  key={dest.country}
-                  className="mobile-nav-link" 
-                  onClick={() => goToDestinationTypes(dest.country)}
-                >
-                  {dest.name}
-                  <span className="mobile-arrow"><i className="fa-solid fa-angle-right"></i></span>
-                </button>
+                <div key={dest.country} className="mobile-destination-item">
+                  <a 
+                    href={`/destination/${dest.country}`}
+                    className="mobile-nav-link mobile-destination-link" 
+                    onClick={closeMobileMenu}
+                  >
+                    {dest.name}
+                  </a>
+                  <button 
+                    className="mobile-submenu-toggle" 
+                    onClick={() => goToDestinationTypes(dest.country)}
+                    aria-label={`Mostra tipologie per ${dest.name}`}
+                  >
+                    <span className="mobile-arrow"><i className="fa-solid fa-angle-right"></i></span>
+                  </button>
+                </div>
               ))}
               
               {/* CTA nel submenu destinazioni */}
