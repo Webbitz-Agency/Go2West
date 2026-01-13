@@ -19,11 +19,13 @@ export const countriesByRegion = {
   'Caraibi': [
     'Antigua & Barbuda',
     'Aruba, Bonaire, Curaçao ABC',
-    'Repubblica Dominicana',
+    'Bahamas',
     'Barbados',
-    'Turks & Caicos',
+    'Isole Vergini Americane',
     'Isole Vergini Britanniche',
-    'Isole Vergini Americane'
+    'Jamaica',
+    'Repubblica Dominicana',
+    'Turks & Caicos'
   ]
 };
 
