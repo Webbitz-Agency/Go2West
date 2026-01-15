@@ -551,6 +551,7 @@ const TourDetails = () => {
 
   const tourImages = getTourImages();
   const carouselImages = getCarouselImages();
+  const rawMapImage = getMapImage();
   const overviewGalleryImages = (() => {
     if (!tour) return [];
 
@@ -584,9 +585,14 @@ const TourDetails = () => {
     };
 
     const pushImage = (src, alt) => {
-      if (!src || gallery.length >= 4) return;
+      if (!src || gallery.length >= 5) return;
       gallery.push({ src, alt });
     };
+
+    // Aggiungi la mappa in prima posizione se esiste
+    if (rawMapImage) {
+      pushImage(rawMapImage.src, rawMapImage.alt || `${tour.title} - Cartina Itinerario`);
+    }
 
     for (let i = 1; i <= 4; i++) {
       const src = resolveCustomImageSrc(`image${i}`);
@@ -602,29 +608,15 @@ const TourDetails = () => {
       });
     };
 
-    if (gallery.length < 4 && carouselImages.length > 0) {
+    if (gallery.length < 5 && carouselImages.length > 0) {
       pushFallbackCollection(carouselImages, 'Carosello');
     }
 
-    if (gallery.length < 4 && tourImages.length > 0) {
+    if (gallery.length < 5 && tourImages.length > 0) {
       pushFallbackCollection(tourImages, 'Galleria');
     }
 
-    return gallery.slice(0, 4);
-  })();
-
-  const rawMapImage = getMapImage();
-  const mapImage = (() => {
-    if (rawMapImage) {
-      return rawMapImage;
-    }
-    if (tourImages.length > 0 && tourImages[0]) {
-      return {
-        src: tourImages[0].src,
-        alt: tourImages[0].alt || tour.title
-      };
-    }
-    return null;
+    return gallery.slice(0, 5);
   })();
 
   const updateGalleryScrollState = () => {
@@ -704,83 +696,67 @@ const TourDetails = () => {
         </div>
       </section>*/}
 
-      {/* Tour Overview Section */}
-      <section className="tour-overview-section">
-        <div className="container-overview">
-          <div className="overview-content">
-            {/* Left Column - Overview Text */}
-              <div className="overview-header">
-                <h1 className="overview-title">{tour.title}</h1>
-              </div>
-              <div className="overview-description">
-                <p dangerouslySetInnerHTML={{ __html: formatText(tour.description) }}></p>                
-              </div>
-              {mapImage && (
-                <div className="overview-map-mobile">
-                  <img
-                    src={mapImage.src}
-                    alt={mapImage.alt || `${tour.title} - Cartina Itinerario`}
-                    onClick={() => openImageModal(mapImage.src, mapImage.alt || `${tour.title} - Cartina Itinerario`)}
-                  />
-                </div>
-              )}
-              {/* Gallery Row - Custom Images */}
-              {overviewGalleryImages.length > 0 && (
-                <div className="overview-images-wrapper">
-                  {galleryScrollIndicators.canScrollLeft && (
-                    <button 
-                      className="overview-gallery-nav left"
-                      type="button"
-                      onClick={() => scrollGallery(-1)}
-                      aria-label="Scorri immagini indietro"
-                    >
-                      <i className="fa-solid fa-chevron-left"></i>
-                    </button>
-                  )}
-
-                  <div className="overview-images-row" ref={overviewGalleryRef}>
-                    {overviewGalleryImages.map((image, index) => (
-                      <div key={`${image.src}-${index}`} className="overview-image-item">
-                        <img 
-                          src={image.src} 
-                          alt={image.alt || `${tour.title} - Immagine ${index + 1}`}
-                          onClick={() => openImageModal(image.src, image.alt || `${tour.title} - Immagine ${index + 1}`)}
-                        />
-                      </div>
-                    ))}
+      {/* Main Content Wrapper */}
+      <div className="tour-main-wrapper">
+        {/* Left Column - Overview and Content */}
+        <div className="tour-main-content">
+          {/* Tour Overview Section */}
+          <section className="tour-overview-section">
+            <div className="container-overview">
+              <div className="overview-content">
+                {/* Left Column - Overview Text */}
+                  <div className="overview-header">
+                    <h1 className="overview-title">{tour.title}</h1>
                   </div>
+                  <div className="overview-description">
+                    <p dangerouslySetInnerHTML={{ __html: formatText(tour.description) }}></p>                
+                  </div>
+                  {/* Gallery Row - Custom Images */}
+                  {overviewGalleryImages.length > 0 && (
+                    <div className="overview-images-wrapper">
+                      {galleryScrollIndicators.canScrollLeft && (
+                        <button 
+                          className="overview-gallery-nav left"
+                          type="button"
+                          onClick={() => scrollGallery(-1)}
+                          aria-label="Scorri immagini indietro"
+                        >
+                          <i className="fa-solid fa-chevron-left"></i>
+                        </button>
+                      )}
 
-                  {galleryScrollIndicators.canScrollRight && (
-                    <button 
-                      className="overview-gallery-nav right"
-                      type="button"
-                      onClick={() => scrollGallery(1)}
-                      aria-label="Scorri immagini avanti"
-                    >
-                      <i className="fa-solid fa-chevron-right"></i>
-                    </button>
+                      <div className="overview-images-row" ref={overviewGalleryRef}>
+                        {overviewGalleryImages.map((image, index) => (
+                          <div key={`${image.src}-${index}`} className="overview-image-item">
+                            <img 
+                              src={image.src} 
+                              alt={image.alt || `${tour.title} - Immagine ${index + 1}`}
+                              onClick={() => openImageModal(image.src, image.alt || `${tour.title} - Immagine ${index + 1}`)}
+                            />
+                          </div>
+                        ))}
+                      </div>
+
+                      {galleryScrollIndicators.canScrollRight && (
+                        <button 
+                          className="overview-gallery-nav right"
+                          type="button"
+                          onClick={() => scrollGallery(1)}
+                          aria-label="Scorri immagini avanti"
+                        >
+                          <i className="fa-solid fa-chevron-right"></i>
+                        </button>
+                      )}
+                    </div>
                   )}
-                </div>
-              )}
-           
-          </div>
-          
-        </div>
-         {/* Right Column - Map Image */}
-         {mapImage && (
-            <div className="overview-image-container">
-              <img 
-                src={mapImage.src} 
-                alt={mapImage.alt || `${tour.title} - Cartina Itinerario`} 
-                className="overview-single-image"
-                onClick={() => openImageModal(mapImage.src, mapImage.alt || `${tour.title} - Cartina Itinerario`)}
-              />
+               
+              </div>
+              
             </div>
-          )}
-      </section>
+          </section>
 
-      <div className="container-details">
-        <div className="tour-content">
+          <div className="container-details">
+            <div className="tour-content">
           {/* Left Column - Main Content */}
           <div className="tour-main">
             {/* Tour Information */}
@@ -1156,59 +1132,59 @@ const TourDetails = () => {
             </button>
           </div>
 
-          {/* Right Column - Dates & Prices */}
-          <div className="tour-sidebar">
-            <div className="dates-prices-section">
-            <h2 className="section-title">Date di partenza</h2>
-              {/*<h2 className="dates-prices-title">Dates & Prices</h2>*/}
-              
-              {/* Se è modalità unique, mostra il testo unico */}
-              {tour?.datesMode === 'unique' && tour?.datesText && tour.datesText.trim() !== '' ? (
-                <div className="info-content">
-                  <div style={{ whiteSpace: 'pre-line' }} dangerouslySetInnerHTML={{ __html: formatText(tour.datesText) }}></div>
-                </div>
-              ) : (
-                <>
-                  {/* Year Selection */}
-                  {getAvailableYears().length > 0 && (
-                    <div className="year-selection">
-                      {getAvailableYears().map((year, index) => (
-                        <button 
-                          key={year}
-                          className={`year-button ${selectedYear === year ? 'active' : ''}`}
-                          onClick={() => handleYearChange(year)}
-                          id={index === 0 ? 'first-year' : index === getAvailableYears().length - 1 ? 'last-year' : `year-${year}`}
-                        >
-                          {year}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                  
-                  <p className="pricing-disclaimer">
-                    A partire da €{getMinPrice().toLocaleString()} per persona.
-                  </p>
-                  
-                  {/* Tour Dates List */}
-                  <div className="tour-dates-list">
-                    {tourDates[selectedYear]?.map((dateInfo, index) => (
-                      <div key={index} className="date-row">
-                        <div className="date-info">
-                          <span className="date-range">{dateInfo.dateRange}</span>
-                        </div>
-                        {/*<div className="price-info">€{dateInfo.price}</div>*/}
-                        <button 
-                          className="availability-button"
-                          onClick={() => handleBookingClick(dateInfo.dateRange)}
-                        >
-                          RICHIEDI
-                        </button>
-                      </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column - Dates & Prices - Extended Sidebar */}
+        <div className="tour-sidebar-overview">
+          <div className="dates-prices-section">
+          <h2 className="section-title">Date di partenza</h2>
+            {/* Se è modalità unique, mostra il testo unico */}
+            {tour?.datesMode === 'unique' && tour?.datesText && tour.datesText.trim() !== '' ? (
+              <div className="info-content">
+                <div style={{ whiteSpace: 'pre-line' }} dangerouslySetInnerHTML={{ __html: formatText(tour.datesText) }}></div>
+              </div>
+            ) : (
+              <>
+                {/* Year Selection */}
+                {getAvailableYears().length > 0 && (
+                  <div className="year-selection">
+                    {getAvailableYears().map((year, index) => (
+                      <button 
+                        key={year}
+                        className={`year-button ${selectedYear === year ? 'active' : ''}`}
+                        onClick={() => handleYearChange(year)}
+                        id={index === 0 ? 'first-year' : index === getAvailableYears().length - 1 ? 'last-year' : `year-${year}`}
+                      >
+                        {year}
+                      </button>
                     ))}
                   </div>
-                </>
-              )}
-            </div>
+                )}
+                
+                <p className="pricing-disclaimer">
+                  A partire da €{getMinPrice().toLocaleString()} per persona.
+                </p>
+                
+                {/* Tour Dates List */}
+                <div className="tour-dates-list">
+                  {tourDates[selectedYear]?.map((dateInfo, index) => (
+                    <div key={index} className="date-row">
+                      <div className="date-info">
+                        <span className="date-range">{dateInfo.dateRange}</span>
+                      </div>
+                      <button 
+                        className="availability-button"
+                        onClick={() => handleBookingClick(dateInfo.dateRange)}
+                      >
+                        RICHIEDI
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
