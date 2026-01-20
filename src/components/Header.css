@@ -334,6 +334,35 @@
   transform: scaleY(1);
 }
 
+/* Submenu di terzo livello (tipi di viaggio per paese) */
+.submenu-level-3 {
+  left: calc(100% - 8px);
+  top: 0;
+  z-index: 1002;
+}
+
+/* Submenu item con submenu (per i paesi) */
+.submenu-item-with-submenu {
+  position: relative;
+}
+
+.submenu-item-with-submenu .submenu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.submenu-item-with-submenu:hover .submenu-item:not(.active) {
+  background: rgba(79, 172, 254, 0.12);
+  transform: translateX(4px);
+  box-shadow: 0 2px 8px rgba(79, 172, 254, 0.15);
+}
+
+.submenu-item-with-submenu:hover .submenu-item:not(.active)::before {
+  transform: scaleY(1);
+}
+
 /* === BURGER MENU === */
 
 .burger-menu {

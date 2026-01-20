@@ -1052,6 +1052,15 @@
   }
 }
 
+/* Tour Content - Layout a 2 colonne per main e sidebar */
+.tour-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
+  align-items: flex-start;
+  padding: 20px 0;
+}
+
 /* Tour Info Container - Layout a 2 colonne */
 .tour-info-container-editor {
   display: grid;
@@ -1229,6 +1238,11 @@
 
 /* Responsive per la sezione PDF */
 @media (max-width: 992px) {
+  .tour-content {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  
   .tour-info-container-editor {
     grid-template-columns: 1fr;
     gap: 20px;
@@ -1245,10 +1259,13 @@
   /* Assicurati che la sidebar delle date in TourEditor sia sempre visibile */
   .tour-editor-sidebar {
     display: flex !important;
+    position: relative !important;
+    top: 0 !important;
   }
   
   .tour-editor-dates-prices-section {
     display: flex !important;
+    max-height: none !important;
   }
 }
 
