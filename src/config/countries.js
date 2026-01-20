@@ -1,4 +1,4 @@
-// Configurazione paesi per Sud America, Centro America e Caraibi.
+// Configurazione dei paesi per Sud America, Centro America e Caraibi.
 
 export const countriesByRegion = {
   'Sud America': [
