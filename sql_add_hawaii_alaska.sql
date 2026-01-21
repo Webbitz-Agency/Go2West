@@ -1,13 +1,10 @@
--- Aggiunta HAWAII e ALASKA alle aree geografiche USA
--- Esegui solo se la colonna geographic_area è di tipo ENUM.
--- Se è VARCHAR/TEXT non è necessario: i valori sono già accettati.
-
--- Se geographic_area è ENUM, adatta il nome della tabella se diverso da 'tours':
-ALTER TABLE tours
-MODIFY COLUMN geographic_area ENUM(
-  'EST', 'OVEST', 'EST E OVEST', 'SOUTH', 'MID WEST', 'HAWAII', 'ALASKA'
-) NULL;
-
--- Se il tuo ENUM ha più valori o il nome della colonna è diverso (es. geographic_area),
--- usa questo schema e adatta l'elenco ai valori attuali presenti nel DB:
--- ALTER TABLE <nome_tabella> MODIFY COLUMN <nome_colonna> ENUM('EST','OVEST','EST E OVEST','SOUTH','MID WEST','HAWAII','ALASKA', ...) NULL;
+-- Hawaii e Alaska come aree geografiche USA
+-- La colonna geographic_area è VARCHAR(100) NULL, quindi accetta qualsiasi valore
+-- incluso 'HAWAII' e 'ALASKA' senza ulteriori modifiche al DB.
+--
+-- Se in passato era ENUM, la migrazione è:
+--   ALTER TABLE tours
+--   MODIFY COLUMN geographic_area VARCHAR(100) NULL;
+--
+-- Frontend: TourEditor (Area Geografica) e DynamicTours (filtri) includono già
+-- le opzioni: EST, OVEST, EST E OVEST, SOUTH, MID WEST, HAWAII, ALASKA.
