@@ -1283,7 +1283,7 @@ const TourEditor = () => {
                         </span>
                       </div>
                       <div className="info-item">
-                        <span className="info-label">Prezzo Min. in base doppia:</span>
+                        <span className="info-label">Prezzo Min. a persona in base doppia:</span>
                         <span className="info-value">
                           €<input 
                             type="number" 
