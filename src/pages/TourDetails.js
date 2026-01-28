@@ -8,6 +8,7 @@ import TourService from '../services/TourService';
 import { destinationImages } from '../config/destinations';
 import './TourDetails.css';
 
+// Pagina dettaglio tour con prenotazione e date
 // Funzione per convertire i tag di formattazione in HTML
 const formatText = (text) => {
   if (!text || typeof text !== 'string') return text;
