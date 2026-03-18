@@ -18,15 +18,19 @@ const Header = () => {
   const [hoveredTravelType, setHoveredTravelType] = useState(null);
   const [hoveredDestination, setHoveredDestination] = useState(null);
   const [hoveredCountry, setHoveredCountry] = useState(null);
+  const [hoveredTravelDestination, setHoveredTravelDestination] = useState(null);
+  const [travelCountriesSubmenuTop, setTravelCountriesSubmenuTop] = useState(0);
   const dropdownCloseTimeoutRef = useRef(null);
   const travelsMenuRef = useRef(null);
   const travelsSubmenuRef = useRef(null);
+  const travelCountriesSubmenuRef = useRef(null);
   const destinationsMenuRef = useRef(null);
   const destinationsSubmenuRef = useRef(null);
   const countriesSubmenuRef = useRef(null);
   const hoveredTravelItemRef = useRef(null);
   const hoveredDestinationItemRef = useRef(null);
   const hoveredCountryItemRef = useRef(null);
+  const hoveredTravelDestinationItemRef = useRef(null);
   const [availableDestinationsByType, setAvailableDestinationsByType] = useState({});
   const [availableTypesByDestination, setAvailableTypesByDestination] = useState({});
   const [availableTypesByCountry, setAvailableTypesByCountry] = useState({});
@@ -56,8 +60,7 @@ const Header = () => {
       'scoperta-in-treno': ['scoperta in treno'],
       'hotel-resort': ['hotel/resort'],
       'combinati': ['combinati'],
-      'luxury-travel': ['luxury travel'],
-      'extra': ['extra']
+      'luxury-travel': ['luxury travel']
     };
     return mapping[slug] || [slug];
   };
@@ -328,9 +331,11 @@ const Header = () => {
       setHoveredTravelType(null);
       setHoveredDestination(null);
       setHoveredCountry(null);
+      setHoveredTravelDestination(null);
       hoveredTravelItemRef.current = null;
       hoveredDestinationItemRef.current = null;
       hoveredCountryItemRef.current = null;
+      hoveredTravelDestinationItemRef.current = null;
     }, 150);
   };
 
@@ -339,7 +344,9 @@ const Header = () => {
     setActiveDropdown(dropdown);
     if (dropdown !== 'travels') {
       setHoveredTravelType(null);
+      setHoveredTravelDestination(null);
       hoveredTravelItemRef.current = null;
+      hoveredTravelDestinationItemRef.current = null;
     }
     if (dropdown !== 'destinations') {
       setHoveredDestination(null);
@@ -412,6 +419,27 @@ const Header = () => {
     setCountriesSubmenuTop(calculatedTop);
   };
 
+  const positionTravelCountriesSubmenu = () => {
+    if (!hoveredTravelDestinationItemRef.current || !travelsSubmenuRef.current || !travelCountriesSubmenuRef.current) {
+      return;
+    }
+
+    const menuRect = travelsSubmenuRef.current.getBoundingClientRect();
+    const itemRect = hoveredTravelDestinationItemRef.current.getBoundingClientRect();
+    const submenuRect = travelCountriesSubmenuRef.current.getBoundingClientRect();
+
+    let calculatedTop = itemRect.top - menuRect.top;
+    const maxTop = Math.max(0, menuRect.height - submenuRect.height);
+
+    if (calculatedTop < 0) {
+      calculatedTop = 0;
+    } else if (calculatedTop > maxTop) {
+      calculatedTop = maxTop;
+    }
+
+    setTravelCountriesSubmenuTop(calculatedTop);
+  };
+
   const requestSubmenuPosition = () => {
     if (typeof window === 'undefined') {
       positionSubmenu();
@@ -436,16 +464,37 @@ const Header = () => {
     window.requestAnimationFrame(positionCountriesSubmenu);
   };
 
+  const requestTravelCountriesSubmenuPosition = () => {
+    if (typeof window === 'undefined') {
+      positionTravelCountriesSubmenu();
+      return;
+    }
+    window.requestAnimationFrame(positionTravelCountriesSubmenu);
+  };
+
   const handleTravelTypeEnter = (typeSlug, event) => {
     clearDropdownCloseTimer();
     setActiveDropdown('travels');
     setHoveredTravelType(typeSlug);
     setHoveredDestination(null);
+    setHoveredTravelDestination(null);
     hoveredDestinationItemRef.current = null;
+    hoveredTravelDestinationItemRef.current = null;
 
     if (event && event.currentTarget) {
       hoveredTravelItemRef.current = event.currentTarget;
       requestSubmenuPosition();
+    }
+  };
+
+  const handleTravelDestinationEnter = (destinationCountry, event) => {
+    clearDropdownCloseTimer();
+    setActiveDropdown('travels');
+    setHoveredTravelDestination(destinationCountry);
+
+    if (event && event.currentTarget) {
+      hoveredTravelDestinationItemRef.current = event.currentTarget;
+      requestTravelCountriesSubmenuPosition();
     }
   };
 
@@ -481,13 +530,16 @@ const Header = () => {
     if (activeDropdown === 'travels' && hoveredTravelType && hoveredTravelItemRef.current) {
       positionSubmenu();
     }
+    if (activeDropdown === 'travels' && hoveredTravelDestination && hoveredTravelDestinationItemRef.current) {
+      positionTravelCountriesSubmenu();
+    }
     if (activeDropdown === 'destinations' && hoveredDestination && hoveredDestinationItemRef.current) {
       positionDestinationsSubmenu();
     }
     if (activeDropdown === 'destinations' && hoveredCountry && hoveredCountryItemRef.current) {
       positionCountriesSubmenu();
     }
-  }, [activeDropdown, hoveredTravelType, hoveredDestination, hoveredCountry]);
+  }, [activeDropdown, hoveredTravelType, hoveredTravelDestination, hoveredDestination, hoveredCountry]);
 
   const toggleMobileMenu = () => {
     if (!mobileMenuOpen) {
@@ -876,15 +928,86 @@ const Header = () => {
                         onMouseEnter={() => handleDropdownEnter('travels')}
                         onMouseLeave={scheduleDropdownClose}
                       >
-                        {filteredDestinations.map((dest) => (
-                          <a 
-                            key={`${hoveredTravelType}-${dest.country}`}
-                            href={`/travel/${hoveredTravelType}/${dest.country}`}
-                            className="submenu-item"
-                          >
-                            {dest.name}
-                          </a>
-                        ))}
+                        {filteredDestinations.map((dest) => {
+                          const needsCountries = requiresCountrySelection(dest.name);
+
+                          // Mostra la freccia solo se esistono paesi con tour per questo tipo
+                          let hasCountriesWithToursForType = false;
+                          if (needsCountries) {
+                            const countries = getCountriesByRegion(dest.name);
+                            hasCountriesWithToursForType = countries.some(country => {
+                              const availableTypes = availableTypesByCountry[country] || [];
+                              return availableTypes.includes(hoveredTravelType);
+                            });
+                          }
+
+                          const showCountriesSubmenu = needsCountries && hasCountriesWithToursForType;
+
+                          return (
+                            <div
+                              key={`${hoveredTravelType}-${dest.country}`}
+                              className={showCountriesSubmenu ? "submenu-item-with-submenu" : ""}
+                              onMouseEnter={(e) => {
+                                if (showCountriesSubmenu) {
+                                  handleTravelDestinationEnter(dest.country, e);
+                                } else {
+                                  // Se passo su una destinazione senza 3° livello, chiudi l'eventuale submenu paesi
+                                  setHoveredTravelDestination(null);
+                                  hoveredTravelDestinationItemRef.current = null;
+                                }
+                              }}
+                            >
+                              <a 
+                                href={`/travel/${hoveredTravelType}/${dest.country}`}
+                                className={`submenu-item ${hoveredTravelDestination === dest.country ? 'active' : ''}`}
+                                style={showCountriesSubmenu ? { display: 'flex', alignItems: 'center', justifyContent: 'space-between' } : undefined}
+                              >
+                                {dest.name}
+                                {showCountriesSubmenu && (
+                                  <span className="submenu-arrow"><i className="fa-solid fa-angle-right"></i></span>
+                                )}
+                              </a>
+                            </div>
+                          );
+                        })}
+
+                        {/* Submenu Paesi (3° livello) per macro-aree */}
+                        {hoveredTravelDestination && (() => {
+                          const dest = destinations.find(d => d.country === hoveredTravelDestination);
+                          const needsCountries = dest && requiresCountrySelection(dest.name);
+
+                          if (!needsCountries) return null;
+
+                          const countries = getCountriesByRegion(dest.name);
+                          const countriesWithToursForType = countries.filter(country => {
+                            const availableTypes = availableTypesByCountry[country] || [];
+                            return availableTypes.includes(hoveredTravelType);
+                          });
+
+                          if (countriesWithToursForType.length === 0) return null;
+
+                          return (
+                            <div 
+                              className="submenu submenu-level-3"
+                              ref={travelCountriesSubmenuRef}
+                              style={{
+                                top: `${travelCountriesSubmenuTop}px`
+                              }}
+                              onMouseEnter={() => handleDropdownEnter('travels')}
+                              onMouseLeave={scheduleDropdownClose}
+                            >
+                              {countriesWithToursForType.map((country) => (
+                                <a
+                                  key={`${hoveredTravelType}-${hoveredTravelDestination}-${country}`}
+                                  href={`/travel/${hoveredTravelType}/${hoveredTravelDestination}?country=${encodeURIComponent(country)}`}
+                                  className="submenu-item"
+                                >
+                                  {country}
+                                </a>
+                              ))}
+                            </div>
+                          );
+                        })()}
                       </div>
                     );
                   })()}

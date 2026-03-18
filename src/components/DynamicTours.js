@@ -17,8 +17,7 @@ const getDatabaseTypeVariants = (filterValue) => {
     'scoperta-in-treno': ['scoperta in treno'],
     'hotel-resort': ['hotel/resort'],
     'combinati': ['combinati'],
-    'luxury-travel': ['luxury travel'],
-    'extra': ['extra']
+    'luxury-travel': ['luxury travel']
   };
   return mapping[filterValue] || [filterValue];
 };

@@ -9,8 +9,7 @@ export const travelTypes = [
   { name: 'Scoperta in treno', slug: 'scoperta-in-treno' },
   { name: 'Hotel/Resort', slug: 'hotel-resort' },
   { name: 'Combinati', slug: 'combinati' },
-  { name: 'Luxury Travel', slug: 'luxury-travel' },
-  { name: 'Extra', slug: 'extra' }
+  { name: 'Luxury Travel', slug: 'luxury-travel' }
 ];
 
 // Helper per ottenere una tipologia per slug

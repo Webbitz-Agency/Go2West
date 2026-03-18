@@ -1270,8 +1270,7 @@ const TourEditor = () => {
                               'scoperta in treno',
                               'hotel/resort',
                               'combinati',
-                              'luxury travel',
-                              'extra'
+                              'luxury travel'
                             ]}
                           />
                         </span>
