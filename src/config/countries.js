@@ -25,7 +25,8 @@ export const countriesByRegion = {
     'Isole Vergini Britanniche',
     'Jamaica',
     'Repubblica Dominicana',
-    'Turks & Caicos'
+    'Turks & Caicos',
+    'Puerto Rico'
   ]
 };
 
