@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useLocation } from 'react-router-dom';
 import PageTitle from '../components/PageTitle';
 import TourService from '../services/TourService';
 import DynamicTours from '../components/DynamicTours';
@@ -8,6 +8,7 @@ import './DestinationTours.css';
 
 const DestinationTours = () => {
   const { country, type } = useParams();
+  const location = useLocation();
   
   // Refs per gestione sticky/fade della hero
   const heroSectionRef = useRef(null);
@@ -38,6 +39,7 @@ const DestinationTours = () => {
   // Trova la destinazione corrente
   const currentDestination = destinations.find(d => d.country === country) || destinations[0];
   const destinationParam = getDestinationFromParam(country);
+  const selectedCountryFromQuery = new URLSearchParams(location.search).get('country') || '';
   
   // Ottieni le immagini per la destinazione corrente
   const currentImages = destinationImages[country] || destinationImages['usa'];
@@ -142,6 +144,7 @@ const DestinationTours = () => {
           <DynamicTours 
             destination={destinationParam} 
             type={type} 
+            initialCountry={selectedCountryFromQuery}
             showFilters={true} 
           />
         </section>

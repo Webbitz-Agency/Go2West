@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { travelTypes } from '../config/travelTypes';
+import { requiresCountrySelection, getCountriesByRegion } from '../config/countries';
 import TourService from '../services/TourService';
 import DOMPurify from 'dompurify';
 import './DynamicTours.css';
@@ -120,7 +121,7 @@ const truncateHtml = (html, maxLength) => {
 };
 
 // Componente per i tour dinamici caricati dal backend
-const DynamicTours = ({ type, destination, showFilters = false, promotionsOnly = false }) => {
+const DynamicTours = ({ type, destination, initialCountry = '', showFilters = false, promotionsOnly = false }) => {
   const [allTours, setAllTours] = useState([]); // Tutti i tour caricati
   const [filteredTours, setFilteredTours] = useState([]); // Tour filtrati lato client
   const [loading, setLoading] = useState(true);
@@ -131,6 +132,7 @@ const DynamicTours = ({ type, destination, showFilters = false, promotionsOnly =
   const [selectedDuration, setSelectedDuration] = useState('all');
   const [selectedPrice, setSelectedPrice] = useState('all');
   const [selectedGeographicArea, setSelectedGeographicArea] = useState('all');
+  const [selectedCountry, setSelectedCountry] = useState(() => initialCountry || 'all');
   const [searchQuery, setSearchQuery] = useState('');
 
   // Ref per mantenere il focus sulla searchbar
@@ -175,8 +177,16 @@ const DynamicTours = ({ type, destination, showFilters = false, promotionsOnly =
     { name: 'ALASKA', value: 'ALASKA' }
   ];
 
+  const hasCountryFilter = Boolean(destination && requiresCountrySelection(destination));
+  const countryFilters = hasCountryFilter
+    ? [
+        { name: 'Tutti i Paesi', value: 'all' },
+        ...getCountriesByRegion(destination).map(country => ({ name: country, value: country }))
+      ]
+    : [];
+
   // Funzione per filtrare i tour lato client
-  const filterTours = useCallback((tours, type, duration, price, geographicArea, search) => {
+  const filterTours = useCallback((tours, type, duration, price, geographicArea, country, search) => {
     let filtered = [...tours];
 
     // Filtro per tipo - confronto flessibile con mappatura esplicita
@@ -236,6 +246,18 @@ const DynamicTours = ({ type, destination, showFilters = false, promotionsOnly =
       });
     }
 
+    // Filtro per paese (usa il campo countries del tour)
+    if (country && country !== 'all') {
+      filtered = filtered.filter(tour => {
+        const tourCountries = Array.isArray(tour.countries) ? tour.countries : [];
+        if (tourCountries.length === 0) return false;
+        return tourCountries.some(tourCountry => {
+          if (typeof tourCountry !== 'string') return false;
+          return tourCountry.trim().toLowerCase() === country.trim().toLowerCase();
+        });
+      });
+    }
+
     // Filtro per ricerca
     if (search && search.trim()) {
       const searchLower = search.toLowerCase();
@@ -259,6 +281,15 @@ const DynamicTours = ({ type, destination, showFilters = false, promotionsOnly =
       setSelectedType('all');
     }
   }, [type]);
+
+  // Se arriva un paese dalla querystring, precompila il filtro paese
+  useEffect(() => {
+    if (initialCountry && hasCountryFilter) {
+      setSelectedCountry(initialCountry);
+    } else {
+      setSelectedCountry('all');
+    }
+  }, [initialCountry, hasCountryFilter, destination]);
 
   // Carica tutti i tour una sola volta
   useEffect(() => {
@@ -290,19 +321,34 @@ const DynamicTours = ({ type, destination, showFilters = false, promotionsOnly =
 
   // Filtra i tour ogni volta che cambiano i filtri
   useEffect(() => {
-    const filtered = filterTours(allTours, selectedType, selectedDuration, selectedPrice, selectedGeographicArea, searchQuery);
+    const filtered = filterTours(
+      allTours,
+      selectedType,
+      selectedDuration,
+      selectedPrice,
+      selectedGeographicArea,
+      selectedCountry,
+      searchQuery
+    );
     setFilteredTours(filtered);
-  }, [allTours, selectedType, selectedDuration, selectedPrice, selectedGeographicArea, searchQuery, filterTours]);
+  }, [allTours, selectedType, selectedDuration, selectedPrice, selectedGeographicArea, selectedCountry, searchQuery, filterTours]);
 
   const clearAllFilters = () => {
     setSelectedType('all');
     setSelectedDuration('all');
     setSelectedPrice('all');
     setSelectedGeographicArea('all');
+    setSelectedCountry('all');
     setSearchQuery('');
   };
 
-  const hasActiveFilters = selectedType !== 'all' || selectedDuration !== 'all' || selectedPrice !== 'all' || selectedGeographicArea !== 'all' || searchQuery.trim();
+  const hasActiveFilters =
+    selectedType !== 'all' ||
+    selectedDuration !== 'all' ||
+    selectedPrice !== 'all' ||
+    selectedGeographicArea !== 'all' ||
+    selectedCountry !== 'all' ||
+    searchQuery.trim();
 
   if (loading) {
     return (
@@ -405,9 +451,25 @@ const DynamicTours = ({ type, destination, showFilters = false, promotionsOnly =
               </select>
             </div>
 
+            {hasCountryFilter && (
+              <div className="filter-dropdown">
+                <select
+                  value={selectedCountry}
+                  onChange={(e) => setSelectedCountry(e.target.value)}
+                  className="filter-select"
+                >
+                  {countryFilters.map((countryOption) => (
+                    <option key={countryOption.value} value={countryOption.value}>
+                      {countryOption.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+
             {hasActiveFilters && (
-              <button onClick={clearAllFilters} className="clear-filters-btn">
-                Cancella Filtri
+              <button onClick={clearAllFilters} className="clear-filters-btn" aria-label="Cancella filtri">
+                x
               </button>
             )}
           </div>
