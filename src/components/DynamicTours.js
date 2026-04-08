@@ -469,7 +469,7 @@ const DynamicTours = ({ type, destination, initialCountry = '', showFilters = fa
 
             {hasActiveFilters && (
               <button onClick={clearAllFilters} className="clear-filters-btn" aria-label="Cancella filtri">
-                x
+                <i className="fa-solid fa-xmark"></i>
               </button>
             )}
           </div>

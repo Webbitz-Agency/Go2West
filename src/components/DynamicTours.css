@@ -173,7 +173,7 @@
   width: 42px;
   height: 42px;
   padding: 0;
-  background: linear-gradient(45deg, #6c757d, #495057);
+  background: linear-gradient(45deg, #e95b5b, rgb(237, 28, 36));
   border: none;
   border-radius: 10px;
   color: white;
@@ -194,7 +194,7 @@
 }
 
 .clear-filters-btn:hover {
-  background: linear-gradient(45deg, #495057, #343a40);
+  background: linear-gradient(45deg, rgb(237, 28, 36), rgb(237, 28, 36));
   transform: translateY(-2px);
   box-shadow: 0 6px 18px rgba(108, 117, 125, 0.4);
 }
