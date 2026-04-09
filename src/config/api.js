@@ -1,6 +1,6 @@
 // Configurazione API per Go2West
 const API_CONFIG = {
-  // URL del backend su Render
+  // URL del backend ospitato su Render
   BASE_URL: 'https://go2west-backend.onrender.com',
   
   // Endpoints
