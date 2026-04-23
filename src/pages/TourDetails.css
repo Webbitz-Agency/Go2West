@@ -237,11 +237,6 @@
   flex: 1 0 clamp(220px, 25%, 320px);
 }
 
-.overview-image-item:hover {
-  /*transform: translateY(-4px);*/
-  /*box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);*/
-}
-
 .overview-image-item img {
   width: 100%;
   height: 100%;
@@ -294,6 +289,33 @@
   max-height: calc(100vh - 250px);
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+}
+
+/* Modalita' date testuali: contenuto scrollabile dentro la card */
+.dates-text-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.dates-text-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dates-text-scroll::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.dates-text-scroll::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.dates-text-scroll::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
 }
 
 /* ===== MAIN CONTENT ===== */

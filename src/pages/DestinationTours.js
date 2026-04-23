@@ -40,6 +40,7 @@ const DestinationTours = () => {
   const currentDestination = destinations.find(d => d.country === country) || destinations[0];
   const destinationParam = getDestinationFromParam(country);
   const selectedCountryFromQuery = new URLSearchParams(location.search).get('country') || '';
+  const selectedAreaFromQuery = new URLSearchParams(location.search).get('area') || '';
   
   // Ottieni le immagini per la destinazione corrente
   const currentImages = destinationImages[country] || destinationImages['usa'];
@@ -145,6 +146,7 @@ const DestinationTours = () => {
             destination={destinationParam} 
             type={type} 
             initialCountry={selectedCountryFromQuery}
+            initialGeographicArea={selectedAreaFromQuery}
             showFilters={true} 
           />
         </section>

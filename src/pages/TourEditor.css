@@ -1052,8 +1052,8 @@
   }
 }
 
-/* Tour Content - Layout a 2 colonne per main e sidebar */
-.tour-content {
+/* Tour Content - Layout a 2 colonne per main e sidebar (solo editor) */
+.tour-editor-page .tour-content {
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 40px;
@@ -1238,7 +1238,7 @@
 
 /* Responsive per la sezione PDF */
 @media (max-width: 992px) {
-  .tour-content {
+  .tour-editor-page .tour-content {
     grid-template-columns: 1fr;
     gap: 30px;
   }

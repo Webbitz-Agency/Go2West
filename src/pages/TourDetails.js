@@ -1143,7 +1143,7 @@ const TourDetails = () => {
           <h2 className="section-title">Date di partenza</h2>
             {/* Se è modalità unique, mostra il testo unico */}
             {tour?.datesMode === 'unique' && tour?.datesText && tour.datesText.trim() !== '' ? (
-              <div className="info-content">
+              <div className="info-content dates-text-scroll">
                 <div style={{ whiteSpace: 'pre-line' }} dangerouslySetInnerHTML={{ __html: formatText(tour.datesText) }}></div>
               </div>
             ) : (

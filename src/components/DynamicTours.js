@@ -121,7 +121,14 @@ const truncateHtml = (html, maxLength) => {
 };
 
 // Componente per i tour dinamici caricati dal backend
-const DynamicTours = ({ type, destination, initialCountry = '', showFilters = false, promotionsOnly = false }) => {
+const DynamicTours = ({
+  type,
+  destination,
+  initialCountry = '',
+  initialGeographicArea = '',
+  showFilters = false,
+  promotionsOnly = false
+}) => {
   const [allTours, setAllTours] = useState([]); // Tutti i tour caricati
   const [filteredTours, setFilteredTours] = useState([]); // Tour filtrati lato client
   const [loading, setLoading] = useState(true);
@@ -131,7 +138,7 @@ const DynamicTours = ({ type, destination, initialCountry = '', showFilters = fa
   const [selectedType, setSelectedType] = useState(() => type ? getFilterValue(type) : 'all');
   const [selectedDuration, setSelectedDuration] = useState('all');
   const [selectedPrice, setSelectedPrice] = useState('all');
-  const [selectedGeographicArea, setSelectedGeographicArea] = useState('all');
+  const [selectedGeographicArea, setSelectedGeographicArea] = useState(() => initialGeographicArea || 'all');
   const [selectedCountry, setSelectedCountry] = useState(() => initialCountry || 'all');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -281,6 +288,15 @@ const DynamicTours = ({ type, destination, initialCountry = '', showFilters = fa
       setSelectedType('all');
     }
   }, [type]);
+
+  // Se arriva un'area geografica dalla querystring, precompila il filtro area
+  useEffect(() => {
+    if (initialGeographicArea) {
+      setSelectedGeographicArea(initialGeographicArea);
+    } else {
+      setSelectedGeographicArea('all');
+    }
+  }, [initialGeographicArea]);
 
   // Se arriva un paese dalla querystring, precompila il filtro paese
   useEffect(() => {

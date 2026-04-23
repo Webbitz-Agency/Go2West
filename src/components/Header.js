@@ -18,8 +18,10 @@ const Header = () => {
   const [hoveredTravelType, setHoveredTravelType] = useState(null);
   const [hoveredDestination, setHoveredDestination] = useState(null);
   const [hoveredCountry, setHoveredCountry] = useState(null);
+  const [hoveredArea, setHoveredArea] = useState(null);
   const [hoveredTravelDestination, setHoveredTravelDestination] = useState(null);
   const [travelCountriesSubmenuTop, setTravelCountriesSubmenuTop] = useState(0);
+  const [areasSubmenuTop, setAreasSubmenuTop] = useState(0);
   const dropdownCloseTimeoutRef = useRef(null);
   const travelsMenuRef = useRef(null);
   const travelsSubmenuRef = useRef(null);
@@ -27,15 +29,22 @@ const Header = () => {
   const destinationsMenuRef = useRef(null);
   const destinationsSubmenuRef = useRef(null);
   const countriesSubmenuRef = useRef(null);
+  const areasSubmenuRef = useRef(null);
   const hoveredTravelItemRef = useRef(null);
   const hoveredDestinationItemRef = useRef(null);
   const hoveredCountryItemRef = useRef(null);
+  const hoveredAreaItemRef = useRef(null);
   const hoveredTravelDestinationItemRef = useRef(null);
   const [availableDestinationsByType, setAvailableDestinationsByType] = useState({});
   const [availableTypesByDestination, setAvailableTypesByDestination] = useState({});
   const [availableTypesByCountry, setAvailableTypesByCountry] = useState({});
+  const [availableAreasByDestination, setAvailableAreasByDestination] = useState({});
+  const [availableTypesByDestinationArea, setAvailableTypesByDestinationArea] = useState({});
+  const [availableAreasByTypeDestination, setAvailableAreasByTypeDestination] = useState({});
   const [destinationsSubmenuTop, setDestinationsSubmenuTop] = useState(0);
   const [countriesSubmenuTop, setCountriesSubmenuTop] = useState(0);
+
+  const geographicAreaOrder = ['EST', 'OVEST', 'EST E OVEST', 'SOUTH', 'MID WEST', 'HAWAII', 'ALASKA'];
 
   // Dati delle destinazioni
   const destinations = [
@@ -79,6 +88,16 @@ const Header = () => {
     return mapping[country] || [country];
   };
 
+  const normalizeGeographicArea = (area) => {
+    if (!area || typeof area !== 'string') return null;
+    const normalized = area.trim().toUpperCase();
+    return geographicAreaOrder.includes(normalized) ? normalized : null;
+  };
+
+  const sortGeographicAreas = (areas) => {
+    return [...areas].sort((a, b) => geographicAreaOrder.indexOf(a) - geographicAreaOrder.indexOf(b));
+  };
+
   // Carica i tour e crea le mappe delle destinazioni disponibili per tipo e viceversa
   useEffect(() => {
     const loadAvailableDestinations = async () => {
@@ -86,6 +105,9 @@ const Header = () => {
         const allTours = await TourService.getAllTours();
         const destinationsMap = {};
         const typesMap = {};
+        const areasByDestinationMap = {};
+        const typesByDestinationAreaMap = {};
+        const areasByTypeDestinationMap = {};
 
         // Per ogni tipo di viaggio - crea mappa destinazioni disponibili
         travelTypes.forEach(type => {
@@ -215,9 +237,96 @@ const Header = () => {
           }
         });
 
+        // Per ogni destinazione - crea mappa aree geografiche disponibili
+        destinations.forEach(dest => {
+          const destVariants = getDestinationVariants(dest.country);
+          const availableAreas = new Set();
+
+          allTours.forEach(tour => {
+            const tourDestination = (tour.destination || '').trim();
+
+            const matchesDestination = destVariants.some(variant => {
+              const variantTrimmed = variant.trim();
+              return tourDestination === variantTrimmed ||
+                     tourDestination.toLowerCase() === variantTrimmed.toLowerCase() ||
+                     tourDestination.toLowerCase().includes(variantTrimmed.toLowerCase()) ||
+                     variantTrimmed.toLowerCase().includes(tourDestination.toLowerCase());
+            });
+
+            if (matchesDestination) {
+              const normalizedArea = normalizeGeographicArea(tour.geographicArea);
+              if (normalizedArea) {
+                availableAreas.add(normalizedArea);
+              }
+            }
+          });
+
+          areasByDestinationMap[dest.country] = sortGeographicAreas(Array.from(availableAreas));
+        });
+
+        // Per ogni destinazione + area - crea mappa tipologie disponibili
+        destinations.forEach(dest => {
+          const destinationAreas = areasByDestinationMap[dest.country] || [];
+          const destVariants = getDestinationVariants(dest.country);
+
+          destinationAreas.forEach(area => {
+            const availableTypes = new Set();
+
+            travelTypes.forEach(type => {
+              const typeVariants = getDatabaseTypeVariants(type.slug);
+
+              const hasTours = allTours.some(tour => {
+                const tourType = (tour.type || '').toLowerCase().trim();
+                const tourDestination = (tour.destination || '').trim();
+                const normalizedArea = normalizeGeographicArea(tour.geographicArea);
+
+                const matchesType = typeVariants.some(variant => {
+                  const variantLower = variant.toLowerCase().trim();
+                  return tourType === variantLower ||
+                         tourType.includes(variantLower) ||
+                         variantLower.includes(tourType);
+                });
+
+                const matchesDestination = destVariants.some(variant => {
+                  const variantTrimmed = variant.trim();
+                  return tourDestination === variantTrimmed ||
+                         tourDestination.toLowerCase() === variantTrimmed.toLowerCase() ||
+                         tourDestination.toLowerCase().includes(variantTrimmed.toLowerCase()) ||
+                         variantTrimmed.toLowerCase().includes(tourDestination.toLowerCase());
+                });
+
+                const matchesArea = normalizedArea === area;
+
+                return matchesType && matchesDestination && matchesArea;
+              });
+
+              if (hasTours) {
+                availableTypes.add(type.slug);
+              }
+            });
+
+            typesByDestinationAreaMap[`${dest.country}::${area}`] = Array.from(availableTypes);
+          });
+        });
+
+        // Per ogni tipologia + destinazione - crea mappa aree disponibili
+        travelTypes.forEach(type => {
+          destinations.forEach(dest => {
+            const destinationAreas = areasByDestinationMap[dest.country] || [];
+            const areasForType = destinationAreas.filter(area => {
+              const typesForArea = typesByDestinationAreaMap[`${dest.country}::${area}`] || [];
+              return typesForArea.includes(type.slug);
+            });
+            areasByTypeDestinationMap[`${type.slug}::${dest.country}`] = areasForType;
+          });
+        });
+
         setAvailableDestinationsByType(destinationsMap);
         setAvailableTypesByDestination(typesMap);
         setAvailableTypesByCountry(typesByCountryMap);
+        setAvailableAreasByDestination(areasByDestinationMap);
+        setAvailableTypesByDestinationArea(typesByDestinationAreaMap);
+        setAvailableAreasByTypeDestination(areasByTypeDestinationMap);
       } catch (error) {
         console.error('Errore nel caricamento delle destinazioni disponibili:', error);
         // In caso di errore, mostra tutte le destinazioni e tipologie
@@ -241,6 +350,9 @@ const Header = () => {
         setAvailableDestinationsByType(fallbackDestinationsMap);
         setAvailableTypesByDestination(fallbackTypesMap);
         setAvailableTypesByCountry(fallbackCountriesMap);
+        setAvailableAreasByDestination({});
+        setAvailableTypesByDestinationArea({});
+        setAvailableAreasByTypeDestination({});
       }
     };
 
@@ -331,10 +443,12 @@ const Header = () => {
       setHoveredTravelType(null);
       setHoveredDestination(null);
       setHoveredCountry(null);
+      setHoveredArea(null);
       setHoveredTravelDestination(null);
       hoveredTravelItemRef.current = null;
       hoveredDestinationItemRef.current = null;
       hoveredCountryItemRef.current = null;
+      hoveredAreaItemRef.current = null;
       hoveredTravelDestinationItemRef.current = null;
     }, 150);
   };
@@ -351,8 +465,10 @@ const Header = () => {
     if (dropdown !== 'destinations') {
       setHoveredDestination(null);
       setHoveredCountry(null);
+      setHoveredArea(null);
       hoveredDestinationItemRef.current = null;
       hoveredCountryItemRef.current = null;
+      hoveredAreaItemRef.current = null;
     }
   };
 
@@ -419,6 +535,27 @@ const Header = () => {
     setCountriesSubmenuTop(calculatedTop);
   };
 
+  const positionAreasSubmenu = () => {
+    if (!hoveredAreaItemRef.current || !destinationsSubmenuRef.current || !areasSubmenuRef.current) {
+      return;
+    }
+
+    const menuRect = destinationsSubmenuRef.current.getBoundingClientRect();
+    const itemRect = hoveredAreaItemRef.current.getBoundingClientRect();
+    const submenuRect = areasSubmenuRef.current.getBoundingClientRect();
+
+    let calculatedTop = itemRect.top - menuRect.top;
+    const maxTop = Math.max(0, menuRect.height - submenuRect.height);
+
+    if (calculatedTop < 0) {
+      calculatedTop = 0;
+    } else if (calculatedTop > maxTop) {
+      calculatedTop = maxTop;
+    }
+
+    setAreasSubmenuTop(calculatedTop);
+  };
+
   const positionTravelCountriesSubmenu = () => {
     if (!hoveredTravelDestinationItemRef.current || !travelsSubmenuRef.current || !travelCountriesSubmenuRef.current) {
       return;
@@ -464,6 +601,14 @@ const Header = () => {
     window.requestAnimationFrame(positionCountriesSubmenu);
   };
 
+  const requestAreasSubmenuPosition = () => {
+    if (typeof window === 'undefined') {
+      positionAreasSubmenu();
+      return;
+    }
+    window.requestAnimationFrame(positionAreasSubmenu);
+  };
+
   const requestTravelCountriesSubmenuPosition = () => {
     if (typeof window === 'undefined') {
       positionTravelCountriesSubmenu();
@@ -503,9 +648,11 @@ const Header = () => {
     setActiveDropdown('destinations');
     setHoveredDestination(country);
     setHoveredCountry(null);
+    setHoveredArea(null);
     setHoveredTravelType(null);
     hoveredTravelItemRef.current = null;
     hoveredCountryItemRef.current = null;
+    hoveredAreaItemRef.current = null;
 
     if (event && event.currentTarget) {
       hoveredDestinationItemRef.current = event.currentTarget;
@@ -517,12 +664,29 @@ const Header = () => {
     clearDropdownCloseTimer();
     setActiveDropdown('destinations');
     setHoveredCountry(country);
+    setHoveredArea(null);
     setHoveredTravelType(null);
     hoveredTravelItemRef.current = null;
+    hoveredAreaItemRef.current = null;
 
     if (event && event.currentTarget) {
       hoveredCountryItemRef.current = event.currentTarget;
       requestCountriesSubmenuPosition();
+    }
+  };
+
+  const handleAreaEnter = (area, event) => {
+    clearDropdownCloseTimer();
+    setActiveDropdown('destinations');
+    setHoveredArea(area);
+    setHoveredCountry(null);
+    setHoveredTravelType(null);
+    hoveredTravelItemRef.current = null;
+    hoveredCountryItemRef.current = null;
+
+    if (event && event.currentTarget) {
+      hoveredAreaItemRef.current = event.currentTarget;
+      requestAreasSubmenuPosition();
     }
   };
 
@@ -539,7 +703,10 @@ const Header = () => {
     if (activeDropdown === 'destinations' && hoveredCountry && hoveredCountryItemRef.current) {
       positionCountriesSubmenu();
     }
-  }, [activeDropdown, hoveredTravelType, hoveredTravelDestination, hoveredDestination, hoveredCountry]);
+    if (activeDropdown === 'destinations' && hoveredArea && hoveredAreaItemRef.current) {
+      positionAreasSubmenu();
+    }
+  }, [activeDropdown, hoveredTravelType, hoveredTravelDestination, hoveredDestination, hoveredCountry, hoveredArea]);
 
   const toggleMobileMenu = () => {
     if (!mobileMenuOpen) {
@@ -637,9 +804,13 @@ const Header = () => {
       setHoveredTravelType(null);
       setHoveredDestination(null);
       setHoveredCountry(null);
+      setHoveredArea(null);
+      setHoveredTravelDestination(null);
       hoveredTravelItemRef.current = null;
       hoveredDestinationItemRef.current = null;
       hoveredCountryItemRef.current = null;
+      hoveredAreaItemRef.current = null;
+      hoveredTravelDestinationItemRef.current = null;
   }, [location.pathname]);
 
   // Gestisci lo scroll al form di contatti quando arriviamo alla home
@@ -833,11 +1004,81 @@ const Header = () => {
                         </div>
                       );
                     } else {
-                      // Se la destinazione NON richiede paesi, mostra direttamente i tipi di viaggio
+                      // Se la destinazione NON richiede paesi:
+                      // - se ha aree geografiche disponibili, mostra prima aree -> tipi
+                      // - altrimenti mostra direttamente i tipi
+                      const destinationAreas = availableAreasByDestination[hoveredDestination] || [];
+
+                      if (destinationAreas.length > 0) {
+                        return (
+                          <div 
+                            className="submenu"
+                            ref={destinationsSubmenuRef}
+                            style={{
+                              top: `${destinationsSubmenuTop}px`
+                            }}
+                            onMouseEnter={() => handleDropdownEnter('destinations')}
+                            onMouseLeave={scheduleDropdownClose}
+                          >
+                            {destinationAreas.map((area) => {
+                              const typesForArea = availableTypesByDestinationArea[`${hoveredDestination}::${area}`] || [];
+                              const hasTypesForArea = typesForArea.length > 0;
+
+                              return (
+                                <div
+                                  key={`${hoveredDestination}-${area}`}
+                                  className={hasTypesForArea ? "submenu-item-with-submenu" : ""}
+                                  onMouseEnter={hasTypesForArea ? (e) => handleAreaEnter(area, e) : undefined}
+                                >
+                                  <div
+                                    className={`submenu-item ${hoveredArea === area ? 'active' : ''}`}
+                                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+                                  >
+                                    {area}
+                                    {hasTypesForArea && (
+                                      <span className="submenu-arrow"><i className="fa-solid fa-angle-right"></i></span>
+                                    )}
+                                  </div>
+                                </div>
+                              );
+                            })}
+
+                            {hoveredArea && (() => {
+                              const availableTypes = availableTypesByDestinationArea[`${hoveredDestination}::${hoveredArea}`] || [];
+                              const filteredTypes = travelTypes.filter(type => availableTypes.includes(type.slug));
+
+                              if (filteredTypes.length === 0) {
+                                return null;
+                              }
+
+                              return (
+                                <div 
+                                  className="submenu submenu-level-3"
+                                  ref={areasSubmenuRef}
+                                  style={{
+                                    top: `${areasSubmenuTop}px`
+                                  }}
+                                  onMouseEnter={() => handleDropdownEnter('destinations')}
+                                  onMouseLeave={scheduleDropdownClose}
+                                >
+                                  {filteredTypes.map((type) => (
+                                    <a
+                                      key={`${hoveredDestination}-${hoveredArea}-${type.slug}`}
+                                      href={`/travel/${type.slug}/${hoveredDestination}?area=${encodeURIComponent(hoveredArea)}`}
+                                      className="submenu-item"
+                                    >
+                                      {type.name}
+                                    </a>
+                                  ))}
+                                </div>
+                              );
+                            })()}
+                          </div>
+                        );
+                      }
+
                       const availableTypes = availableTypesByDestination[hoveredDestination] || [];
-                      const filteredTypes = travelTypes.filter(type => {
-                        return availableTypes.includes(type.slug);
-                      });
+                      const filteredTypes = travelTypes.filter(type => availableTypes.includes(type.slug));
                       
                       if (filteredTypes.length === 0) {
                         return null; // Non mostrare submenu se non ci sono tipi disponibili
@@ -930,6 +1171,8 @@ const Header = () => {
                       >
                         {filteredDestinations.map((dest) => {
                           const needsCountries = requiresCountrySelection(dest.name);
+                          const destinationAreas = availableAreasByTypeDestination[`${hoveredTravelType}::${dest.country}`] || [];
+                          const hasAreasWithToursForType = destinationAreas.length > 0;
 
                           // Mostra la freccia solo se esistono paesi con tour per questo tipo
                           let hasCountriesWithToursForType = false;
@@ -942,16 +1185,18 @@ const Header = () => {
                           }
 
                           const showCountriesSubmenu = needsCountries && hasCountriesWithToursForType;
+                          const showAreasSubmenu = !needsCountries && hasAreasWithToursForType;
+                          const showThirdLevelSubmenu = showCountriesSubmenu || showAreasSubmenu;
 
                           return (
                             <div
                               key={`${hoveredTravelType}-${dest.country}`}
-                              className={showCountriesSubmenu ? "submenu-item-with-submenu" : ""}
+                              className={showThirdLevelSubmenu ? "submenu-item-with-submenu" : ""}
                               onMouseEnter={(e) => {
-                                if (showCountriesSubmenu) {
+                                if (showThirdLevelSubmenu) {
                                   handleTravelDestinationEnter(dest.country, e);
                                 } else {
-                                  // Se passo su una destinazione senza 3° livello, chiudi l'eventuale submenu paesi
+                                  // Se passo su una destinazione senza 3° livello, chiudi l'eventuale submenu annidato
                                   setHoveredTravelDestination(null);
                                   hoveredTravelDestinationItemRef.current = null;
                                 }
@@ -960,10 +1205,10 @@ const Header = () => {
                               <a 
                                 href={`/travel/${hoveredTravelType}/${dest.country}`}
                                 className={`submenu-item ${hoveredTravelDestination === dest.country ? 'active' : ''}`}
-                                style={showCountriesSubmenu ? { display: 'flex', alignItems: 'center', justifyContent: 'space-between' } : undefined}
+                                style={showThirdLevelSubmenu ? { display: 'flex', alignItems: 'center', justifyContent: 'space-between' } : undefined}
                               >
                                 {dest.name}
-                                {showCountriesSubmenu && (
+                                {showThirdLevelSubmenu && (
                                   <span className="submenu-arrow"><i className="fa-solid fa-angle-right"></i></span>
                                 )}
                               </a>
@@ -971,20 +1216,45 @@ const Header = () => {
                           );
                         })}
 
-                        {/* Submenu Paesi (3° livello) per macro-aree */}
+                        {/* Submenu 3° livello: Paesi (macro-aree) o Aree Geografiche (es. USA) */}
                         {hoveredTravelDestination && (() => {
                           const dest = destinations.find(d => d.country === hoveredTravelDestination);
                           const needsCountries = dest && requiresCountrySelection(dest.name);
 
-                          if (!needsCountries) return null;
+                          if (needsCountries) {
+                            const countries = getCountriesByRegion(dest.name);
+                            const countriesWithToursForType = countries.filter(country => {
+                              const availableTypes = availableTypesByCountry[country] || [];
+                              return availableTypes.includes(hoveredTravelType);
+                            });
 
-                          const countries = getCountriesByRegion(dest.name);
-                          const countriesWithToursForType = countries.filter(country => {
-                            const availableTypes = availableTypesByCountry[country] || [];
-                            return availableTypes.includes(hoveredTravelType);
-                          });
+                            if (countriesWithToursForType.length === 0) return null;
 
-                          if (countriesWithToursForType.length === 0) return null;
+                            return (
+                              <div 
+                                className="submenu submenu-level-3"
+                                ref={travelCountriesSubmenuRef}
+                                style={{
+                                  top: `${travelCountriesSubmenuTop}px`
+                                }}
+                                onMouseEnter={() => handleDropdownEnter('travels')}
+                                onMouseLeave={scheduleDropdownClose}
+                              >
+                                {countriesWithToursForType.map((country) => (
+                                  <a
+                                    key={`${hoveredTravelType}-${hoveredTravelDestination}-${country}`}
+                                    href={`/travel/${hoveredTravelType}/${hoveredTravelDestination}?country=${encodeURIComponent(country)}`}
+                                    className="submenu-item"
+                                  >
+                                    {country}
+                                  </a>
+                                ))}
+                              </div>
+                            );
+                          }
+
+                          const destinationAreas = availableAreasByTypeDestination[`${hoveredTravelType}::${hoveredTravelDestination}`] || [];
+                          if (destinationAreas.length === 0) return null;
 
                           return (
                             <div 
@@ -996,13 +1266,13 @@ const Header = () => {
                               onMouseEnter={() => handleDropdownEnter('travels')}
                               onMouseLeave={scheduleDropdownClose}
                             >
-                              {countriesWithToursForType.map((country) => (
+                              {destinationAreas.map((area) => (
                                 <a
-                                  key={`${hoveredTravelType}-${hoveredTravelDestination}-${country}`}
-                                  href={`/travel/${hoveredTravelType}/${hoveredTravelDestination}?country=${encodeURIComponent(country)}`}
+                                  key={`${hoveredTravelType}-${hoveredTravelDestination}-${area}`}
+                                  href={`/travel/${hoveredTravelType}/${hoveredTravelDestination}?area=${encodeURIComponent(area)}`}
                                   className="submenu-item"
                                 >
-                                  {country}
+                                  {area}
                                 </a>
                               ))}
                             </div>
