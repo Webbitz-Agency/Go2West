@@ -191,7 +191,7 @@ const TourDetails = () => {
       phone: '',
       privacyAccepted: false
     });
-    document.body.style.overflow = 'auto'; // Riavvia lo scroll della pagina
+    document.body.style.overflow = 'auto'; // Ripristina lo scroll della pagina
   };
 
   // Funzioni per gestire il wizard
