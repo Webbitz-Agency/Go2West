@@ -43,6 +43,18 @@ const Header = () => {
   const [availableAreasByTypeDestination, setAvailableAreasByTypeDestination] = useState({});
   const [destinationsSubmenuTop, setDestinationsSubmenuTop] = useState(0);
   const [countriesSubmenuTop, setCountriesSubmenuTop] = useState(0);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isSearchClosing, setIsSearchClosing] = useState(false);
+  const [headerSearchQuery, setHeaderSearchQuery] = useState('');
+  const [searchBarWidth, setSearchBarWidth] = useState(0);
+  const [preservedNavWidth, setPreservedNavWidth] = useState(null);
+
+  const navRef = useRef(null);
+  const navMainItemsRef = useRef(null);
+  const searchTriggerRef = useRef(null);
+  const searchInputRef = useRef(null);
+  const collapsedSearchWidthRef = useRef(40);
+  const SEARCH_ANIMATION_MS = 250;
 
   const geographicAreaOrder = ['EST', 'OVEST', 'EST E OVEST', 'SOUTH', 'MID WEST', 'HAWAII', 'ALASKA'];
 
@@ -761,6 +773,65 @@ const Header = () => {
     setActiveDestination(null);
   };
 
+  const openHeaderSearch = () => {
+    if (!navMainItemsRef.current || !searchTriggerRef.current) return;
+
+    const homeLink = navMainItemsRef.current.querySelector('a[href="/"]');
+    if (!homeLink) return;
+
+    clearDropdownCloseTimer();
+    setActiveDropdown(null);
+
+    const homeRect = homeLink.getBoundingClientRect();
+    const triggerRect = searchTriggerRef.current.getBoundingClientRect();
+    const dotsWidth = 40;
+    const navGap = 20;
+    const targetWidth = Math.ceil(triggerRect.right - homeRect.left - dotsWidth - navGap);
+    const collapsedWidth = Math.ceil(triggerRect.width);
+
+    collapsedSearchWidthRef.current = collapsedWidth;
+    setPreservedNavWidth(navRef.current?.offsetWidth || null);
+    setSearchBarWidth(collapsedWidth);
+    setIsSearchClosing(false);
+    setIsSearchOpen(true);
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setSearchBarWidth(targetWidth);
+      });
+    });
+
+    setTimeout(() => {
+      searchInputRef.current?.focus();
+    }, SEARCH_ANIMATION_MS + 20);
+  };
+
+  const closeHeaderSearch = () => {
+    if (!isSearchOpen || isSearchClosing) return;
+    setIsSearchClosing(true);
+    setSearchBarWidth(collapsedSearchWidthRef.current);
+  };
+
+  const handleSearchBarTransitionEnd = (e) => {
+    if (e.propertyName !== 'width') return;
+
+    if (isSearchClosing) {
+      setIsSearchOpen(false);
+      setIsSearchClosing(false);
+      setHeaderSearchQuery('');
+      setSearchBarWidth(0);
+      setPreservedNavWidth(null);
+    }
+  };
+
+  const handleHeaderSearchSubmit = (e) => {
+    e.preventDefault();
+    const query = headerSearchQuery.trim();
+    if (!query) return;
+
+    navigate(`/cerca?q=${encodeURIComponent(query)}`);
+  };
+
   const scrollToContact = () => {
     const element = document.getElementById('contact');
     
@@ -793,6 +864,15 @@ const Header = () => {
       clearDropdownCloseTimer();
     };
   }, []);
+
+  // Chiudi ricerca header quando cambia la rotta
+  useEffect(() => {
+    setIsSearchOpen(false);
+    setIsSearchClosing(false);
+    setHeaderSearchQuery('');
+    setSearchBarWidth(0);
+    setPreservedNavWidth(null);
+  }, [location.pathname, location.search]);
 
   // Chiudi menu mobile quando cambia la rotta
   useEffect(() => {
@@ -839,7 +919,22 @@ const Header = () => {
         </a>
         
         <div className="nav-wrapper">
-          <nav className="nav">
+          <nav
+            className={`nav ${isSearchOpen ? 'nav--search-mode' : ''}`}
+            ref={navRef}
+            style={isSearchOpen && preservedNavWidth ? { width: `${preservedNavWidth}px` } : undefined}
+          >
+            {isSearchOpen ? (
+              <button
+                type="button"
+                className="nav-dots-btn"
+                onClick={closeHeaderSearch}
+                aria-label="Chiudi ricerca"
+              >
+                <i className="fa-solid fa-ellipsis"></i>
+              </button>
+            ) : (
+              <div className="nav-main-items" ref={navMainItemsRef}>
             {/* Home */}
             <a href="/" className={`nav-link ${isActiveSection('home') ? 'active' : ''}`}>
               Home
@@ -1289,6 +1384,40 @@ const Header = () => {
               <span className="about-text-full">About us</span>
               <span className="about-text-short">About</span>
             </a>
+
+            <button
+              ref={searchTriggerRef}
+              type="button"
+              className="nav-link nav-search-trigger"
+              onClick={openHeaderSearch}
+              aria-label="Apri ricerca"
+            >
+              <i className="fa-solid fa-magnifying-glass"></i>
+            </button>
+              </div>
+            )}
+
+            {isSearchOpen && (
+              <form
+                className={`nav-search-bar ${isSearchClosing ? 'nav-search-bar--closing' : ''}`}
+                style={{ width: `${searchBarWidth}px` }}
+                onTransitionEnd={handleSearchBarTransitionEnd}
+                onSubmit={handleHeaderSearchSubmit}
+              >
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  className="nav-search-input"
+                  placeholder="Cerca tour..."
+                  value={headerSearchQuery}
+                  onChange={(e) => setHeaderSearchQuery(e.target.value)}
+                  aria-label="Cerca tour"
+                />
+                <button type="submit" className="nav-search-submit" aria-label="Cerca">
+                  <i className="fa-solid fa-magnifying-glass"></i>
+                </button>
+              </form>
+            )}
           </nav>
         </div>
 
@@ -1332,6 +1461,27 @@ const Header = () => {
               <a href="/about" className={`mobile-nav-link ${isActiveSection('about') ? 'active' : ''}`} onClick={closeMobileMenu}>
                 About
               </a>
+              <form
+                className="mobile-search-form"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const query = e.target.elements.mobileSearch.value.trim();
+                  if (!query) return;
+                  closeMobileMenu();
+                  navigate(`/cerca?q=${encodeURIComponent(query)}`);
+                }}
+              >
+                <div className="mobile-search-input-wrapper">
+                  <i className="fa-solid fa-magnifying-glass mobile-search-icon"></i>
+                  <input
+                    type="text"
+                    name="mobileSearch"
+                    className="mobile-search-input"
+                    placeholder="Cerca tour..."
+                    aria-label="Cerca tour"
+                  />
+                </div>
+              </form>
               {/* CTA nel menu mobile principale */}
               <button className="mobile-cta" onClick={scrollToContact}>
                 Richiedi Info

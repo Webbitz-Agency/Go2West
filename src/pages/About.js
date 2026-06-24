@@ -3,10 +3,43 @@ import { Link } from 'react-router-dom';
 import PageTitle from '../components/PageTitle';
 import './About.css';
 
+const teamMembers = [
+  {
+    name: 'Raffaello',
+    role: 'Manager / Product Manager',
+    image: '/images/team/RAFFAELLO.PNG',
+    description: 'Scelta e sviluppo del prodotto per le destinazioni offerte.',
+    background: 'Background di compagnie aeree (KLM e United) e business Travel (American Express) in Italia e all\'estero.'
+  },
+  {
+    name: 'Daniel',
+    role: 'Responsabile Booking',
+    image: '/images/team/DANIEL.PNG',
+    description: 'Gestione delle piattaforme dei partner e dei processi di prenotazione.',
+    background: 'Esperienza in compagnia aerea (Swiss) e business travel in American Express.'
+  },
+  {
+    name: 'Saverio',
+    role: 'Sviluppatore Web e AI',
+    image: '/images/team/SAVERIO.JPG',
+    description: 'Esperto in React e AI, trasforma idee complesse in soluzioni digitali accattivanti e user friendly.',
+    background: null
+  },
+  {
+    name: 'Debora',
+    role: 'Finance Manager',
+    image: '/images/team/DEBORA.PNG',
+    description: 'Tiene i conti sotto controllo e la crescita in carreggiata. Mosse intelligenti, mente brillante. Sempre un passo avanti.',
+    background: 'Background di tour operating (Cormorano, Eko Africa).'
+  }
+];
+
 const About = () => {
   // Stati per i caroselli delle immagini
   const [currentStoryImage, setCurrentStoryImage] = useState(0);
   const [currentValuesImage, setCurrentValuesImage] = useState(0);
+  const [teamModalMember, setTeamModalMember] = useState(null);
+  const [isTouchTeamCards, setIsTouchTeamCards] = useState(false);
 
   // Array delle immagini per i caroselli
   const storyImages = ['story1.jpg', 'story2.jpg', 'story3.jpg', 'story4.jpg', 'story5.jpg'];
@@ -46,6 +79,56 @@ const About = () => {
     elements.forEach((el) => obs.observe(el));
     return () => obs.disconnect();
   }, []);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(hover: none) and (pointer: coarse)');
+    const updateTouchMode = () => setIsTouchTeamCards(mediaQuery.matches);
+
+    updateTouchMode();
+    mediaQuery.addEventListener('change', updateTouchMode);
+    return () => mediaQuery.removeEventListener('change', updateTouchMode);
+  }, []);
+
+  useEffect(() => {
+    if (!teamModalMember) return undefined;
+
+    const scrollY = window.scrollY;
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
+    document.body.style.overflow = 'hidden';
+
+    const handleEscape = (event) => {
+      if (event.key === 'Escape') {
+        setTeamModalMember(null);
+      }
+    };
+
+    window.addEventListener('keydown', handleEscape);
+
+    return () => {
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
+      document.body.style.width = '';
+      document.body.style.overflow = '';
+      window.scrollTo(0, scrollY);
+      window.removeEventListener('keydown', handleEscape);
+    };
+  }, [teamModalMember]);
+
+  const handleTeamCardClick = (member) => {
+    if (isTouchTeamCards) {
+      setTeamModalMember(member);
+    }
+  };
+
+  const closeTeamModal = () => {
+    setTeamModalMember(null);
+  };
 
   const scrollToContact = () => {
     const element = document.getElementById('contact');
@@ -180,6 +263,95 @@ const About = () => {
             </div>
           </div>
         </div>
+      </section>
+
+      {/* Sezione Meet the Team */}
+      <section className="meet-team-section">
+        <div className="meet-team-header reveal-on-scroll">
+          <h2>Meet the Team</h2>
+          <p>Le persone che rendono possibile ogni viaggio Go2West</p>
+        </div>
+
+        <div className={`meet-team-grid ${isTouchTeamCards ? 'meet-team-grid--touch' : ''}`}>
+          {teamMembers.map((member) => (
+            <article
+              key={member.name}
+              className={`meet-team-card ${isTouchTeamCards ? 'meet-team-card--touch' : ''}`}
+              tabIndex={isTouchTeamCards ? -1 : 0}
+              onClick={() => handleTeamCardClick(member)}
+              onKeyDown={(event) => {
+                if (!isTouchTeamCards && (event.key === 'Enter' || event.key === ' ')) {
+                  event.preventDefault();
+                }
+              }}
+              role={isTouchTeamCards ? 'button' : undefined}
+              aria-label={isTouchTeamCards ? `Apri dettagli di ${member.name}` : undefined}
+            >
+              <div className="meet-team-card-body">
+                <img
+                  src={member.image}
+                  alt={member.name}
+                  className="meet-team-photo-img"
+                  loading="lazy"
+                />
+                <div className="meet-team-overlay" aria-hidden="true">
+                  <div className="meet-team-overlay-content">
+                    <span className="meet-team-role">{member.role}</span>
+                    <p className="meet-team-description">{member.description}</p>
+                    {member.background && (
+                      <p className="meet-team-background">{member.background}</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className="meet-team-namebar">
+                <h3>{member.name}</h3>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        {teamModalMember && (
+          <div
+            className="team-modal-backdrop"
+            onClick={closeTeamModal}
+            role="presentation"
+          >
+            <div
+              className="team-modal"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="team-modal-title"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <button
+                type="button"
+                className="team-modal-close"
+                onClick={closeTeamModal}
+                aria-label="Chiudi"
+              >
+                <i className="fa-solid fa-times"></i>
+              </button>
+
+              <div className="team-modal-header">
+                <img
+                  src={teamModalMember.image}
+                  alt={teamModalMember.name}
+                  className="team-modal-avatar"
+                />
+                <h3 id="team-modal-title">{teamModalMember.name}</h3>
+                <span className="team-modal-role">{teamModalMember.role}</span>
+              </div>
+
+              <div className="team-modal-body">
+                <p className="team-modal-description">{teamModalMember.description}</p>
+                {teamModalMember.background && (
+                  <p className="team-modal-background">{teamModalMember.background}</p>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
       </section>
 
       {/* Sezione La Nostra Missione */}

@@ -37,6 +37,24 @@ const getPlainText = (html) => {
   return tempDiv.textContent || tempDiv.innerText || '';
 };
 
+const getSearchableItineraryText = (tour) => {
+  const parts = [];
+
+  if (tour.itinerario) {
+    parts.push(getPlainText(tour.itinerario));
+  }
+
+  if (tour.program?.days?.length) {
+    tour.program.days.forEach((day) => {
+      if (day.title) parts.push(day.title);
+      if (day.description) parts.push(getPlainText(day.description));
+      if (day.activities) parts.push(getPlainText(day.activities));
+    });
+  }
+
+  return parts.join(' ');
+};
+
 // Funzione per ordinare i tour dal più recente al meno recente
 const sortToursByDate = (tours) => {
   return [...tours].sort((a, b) => {
@@ -126,6 +144,7 @@ const DynamicTours = ({
   destination,
   initialCountry = '',
   initialGeographicArea = '',
+  initialSearchQuery = '',
   showFilters = false,
   promotionsOnly = false
 }) => {
@@ -140,7 +159,7 @@ const DynamicTours = ({
   const [selectedPrice, setSelectedPrice] = useState('all');
   const [selectedGeographicArea, setSelectedGeographicArea] = useState(() => initialGeographicArea || 'all');
   const [selectedCountry, setSelectedCountry] = useState(() => initialCountry || 'all');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(initialSearchQuery || '');
 
   // Ref per mantenere il focus sulla searchbar
   const searchInputRef = useRef(null);
@@ -267,12 +286,16 @@ const DynamicTours = ({
 
     // Filtro per ricerca
     if (search && search.trim()) {
-      const searchLower = search.toLowerCase();
-      filtered = filtered.filter(tour => 
-        tour.title.toLowerCase().includes(searchLower) ||
-        tour.description.toLowerCase().includes(searchLower) ||
-        (tour.destination && tour.destination.toLowerCase().includes(searchLower))
-      );
+      const searchLower = search.toLowerCase().trim();
+      filtered = filtered.filter(tour => {
+        const title = (tour.title || '').toLowerCase();
+        const description = getPlainText(tour.description || '').toLowerCase();
+        const itinerary = getSearchableItineraryText(tour).toLowerCase();
+
+        return title.includes(searchLower) ||
+          description.includes(searchLower) ||
+          itinerary.includes(searchLower);
+      });
     }
 
     return filtered;
@@ -306,6 +329,10 @@ const DynamicTours = ({
       setSelectedCountry('all');
     }
   }, [initialCountry, hasCountryFilter, destination]);
+
+  useEffect(() => {
+    setSearchQuery(initialSearchQuery || '');
+  }, [initialSearchQuery]);
 
   // Carica tutti i tour una sola volta
   useEffect(() => {

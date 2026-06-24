@@ -14,6 +14,7 @@ import TourDetails from './pages/TourDetails';
 import Admin from './pages/Admin';
 import TourEditor from './pages/TourEditor';
 import Promotions from './pages/Promotions';
+import SearchResults from './pages/SearchResults';
 
 function AppContent() {
   const location = useLocation();
@@ -30,6 +31,7 @@ function AppContent() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/promozioni" element={<Promotions />} />
+          <Route path="/cerca" element={<SearchResults />} />
           <Route path="/destination/:country" element={<DestinationTours />} />
           <Route path="/travel/:type/:country" element={<DestinationTours />} />
           <Route path="/tour/:tourId" element={<TourDetails />} />

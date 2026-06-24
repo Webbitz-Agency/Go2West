@@ -399,4 +399,19 @@
     padding: 10px 20px;
     font-size: 0.95rem;
   }
+}
+
+.search-results-page .search-hero {
+  height: 50vh;
+}
+
+.search-empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #555;
+}
+
+.search-empty-state p {
+  margin-bottom: 24px;
+  font-size: 1.1rem;
 } 
