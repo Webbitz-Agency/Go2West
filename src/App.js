@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { Analytics } from '@vercel/analytics/react';
 import './App.css';
 
-// Import dei componenti delle pagine.
+// Import dei componenti delle pagine e delle route principali.
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ChatBot from './components/ChatBot';
