@@ -413,13 +413,14 @@ strong {
   gap: 14px;
   margin: 0 auto;
   padding: 0 20px;
-  height: 400px;
+  width: 100%;
+  height: auto;
 }
 
 .meet-team-card {
   flex: 1 1 0;
   min-width: 0;
-  height: 100%;
+  height: auto;
   display: flex;
   flex-direction: column;
   border-radius: 16px;
@@ -434,16 +435,18 @@ strong {
 
 .meet-team-card-body {
   position: relative;
-  flex: 1;
-  min-height: 0;
+  width: 100%;
+  flex: none;
   overflow: hidden;
+  /* Altezza fissa basata sulla larghezza media (1/4 griglia): l'hover allarga solo in orizzontale */
+  height: calc(((100vw - 40px - 42px) / 4) * 6 / 5);
 }
 
 .meet-team-photo-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: top center;
+  object-position: center 22%;
   display: block;
   max-width: none;
   transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1405,6 +1408,7 @@ strong {
     height: auto;
     gap: 12px;
     padding: 0 clamp(56px, 12vw, 112px);
+    max-width: none;
   }
 
   .meet-team-card,
@@ -1414,6 +1418,13 @@ strong {
   .meet-team-card:focus-within {
     flex: 1 1 calc(50% - 6px);
     height: 320px;
+  }
+
+  .meet-team-card-body {
+    aspect-ratio: auto;
+    flex: 1;
+    min-height: 0;
+    width: auto;
   }
 }
 

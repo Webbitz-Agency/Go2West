@@ -8,6 +8,7 @@ const teamMembers = [
     name: 'Raffaello',
     role: 'Manager / Product Manager',
     image: '/images/team/RAFFAELLO.PNG',
+    objectPosition: 'center 22%',
     description: 'Scelta e sviluppo del prodotto per le destinazioni offerte.',
     background: 'Background di compagnie aeree (KLM e United) e business Travel (American Express) in Italia e all\'estero.'
   },
@@ -15,6 +16,7 @@ const teamMembers = [
     name: 'Daniel',
     role: 'Responsabile Booking',
     image: '/images/team/DANIEL.PNG',
+    objectPosition: 'center 20%',
     description: 'Gestione delle piattaforme dei partner e dei processi di prenotazione.',
     background: 'Esperienza in compagnia aerea (Swiss) e business travel in American Express.'
   },
@@ -22,6 +24,7 @@ const teamMembers = [
     name: 'Saverio',
     role: 'Sviluppatore Web e AI',
     image: '/images/team/SAVERIO.JPG',
+    objectPosition: 'center 18%',
     description: 'Esperto in React e AI, trasforma idee complesse in soluzioni digitali accattivanti e user friendly.',
     background: null
   },
@@ -29,6 +32,7 @@ const teamMembers = [
     name: 'Debora',
     role: 'Finance Manager',
     image: '/images/team/DEBORA.PNG',
+    objectPosition: 'center 12%',
     description: 'Tiene i conti sotto controllo e la crescita in carreggiata. Mosse intelligenti, mente brillante. Sempre un passo avanti.',
     background: 'Background di tour operating (Cormorano, Eko Africa).'
   }
@@ -292,6 +296,7 @@ const About = () => {
                   src={member.image}
                   alt={member.name}
                   className="meet-team-photo-img"
+                  style={{ objectPosition: member.objectPosition || 'center 22%' }}
                   loading="lazy"
                 />
                 <div className="meet-team-overlay" aria-hidden="true">
