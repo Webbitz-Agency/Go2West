@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Serif+Text:ital@0;1&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <!-- Meta Pixel Code -->
-    <script type="text/plain" data-cookieconsent="marketing">
+    <script data-cookieconsent="ignore">
     !function(f,b,e,v,n,t,s)
     {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
     n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -20,8 +20,18 @@
     t.src=v;s=b.getElementsByTagName(e)[0];
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('consent', 'revoke');
     fbq('init', '1969967370520153');
     fbq('track', 'PageView');
+    function updateFbqConsent() {
+      if (typeof fbq !== 'function' || !window.Cookiebot || !window.Cookiebot.consent) return;
+      fbq('consent', window.Cookiebot.consent.marketing ? 'grant' : 'revoke');
+    }
+    window.addEventListener('CookiebotOnConsentReady', updateFbqConsent, false);
+    window.addEventListener('CookiebotOnAccept', updateFbqConsent, false);
+    window.addEventListener('CookiebotOnDecline', function() {
+      if (typeof fbq === 'function') fbq('consent', 'revoke');
+    }, false);
     </script>
     <!-- End Meta Pixel Code -->
 </head>

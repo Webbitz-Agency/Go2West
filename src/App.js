@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { Analytics } from '@vercel/analytics/react';
 import './App.css';
@@ -18,6 +18,17 @@ import SearchResults from './pages/SearchResults';
 
 function AppContent() {
   const location = useLocation();
+  const isFirstRender = useRef(true);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    if (typeof window.fbq === 'function' && window.Cookiebot?.consent?.marketing) {
+      window.fbq('track', 'PageView');
+    }
+  }, [location.pathname]);
   
   // Percorsi dove il chatbot non deve essere mostrato
   const hideChatbotPaths = ['/admin', '/admin/tour-editor'];
