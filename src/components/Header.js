@@ -1427,6 +1427,12 @@ const Header = () => {
             href="tel:+393444019689"
             className="header-call-btn"
             aria-label="Chiama 344 401 9689"
+            onClick={(e) => {
+              if (typeof window.gtag_report_conversion === 'function') {
+                e.preventDefault();
+                window.gtag_report_conversion('tel:+393444019689');
+              }
+            }}
           >
             <i className="fa-solid fa-phone"></i>
             <span className="header-call-text">Chiama</span>

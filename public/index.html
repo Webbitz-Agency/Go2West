@@ -43,6 +43,23 @@
 
       gtag('config', 'AW-18346881743');
     </script>
+    <!-- Event snippet for Click-to-call conversion -->
+    <script>
+      function gtag_report_conversion(url) {
+        var callback = function () {
+          if (typeof(url) != 'undefined') {
+            window.location = url;
+          }
+        };
+        gtag('event', 'conversion', {
+            'send_to': 'AW-18346881743/QUTCCMSW5NUcEM_lvKxE',
+            'value': 1.0,
+            'currency': 'EUR',
+            'event_callback': callback
+        });
+        return false;
+      }
+    </script>
 </head>
 <body>
     <noscript>Devi abilitare JavaScript per utilizzare questa app.</noscript>
