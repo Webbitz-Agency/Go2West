@@ -6,6 +6,7 @@ import { it } from 'date-fns/locale';
 import PageTitle from '../components/PageTitle';
 import TourService from '../services/TourService';
 import { destinationImages } from '../config/destinations';
+import { trackLeadConversion } from '../utils/conversionTracking';
 import './TourDetails.css';
 
 // Pagina dettaglio tour
@@ -266,6 +267,7 @@ const TourDetails = () => {
     
     // Qui implementeresti la logica per inviare i dati
     console.log('Dati del wizard:', wizardData);
+    trackLeadConversion();
     alert('Richiesta inviata con successo!');
     closeBookingModal();
   };

@@ -7,6 +7,7 @@ import PageTitle from '../components/PageTitle';
 import { destinations, destinationImages } from '../config/destinations';
 import { travelTypes } from '../config/travelTypes';
 import TourService from '../services/TourService';
+import { trackLeadConversion } from '../utils/conversionTracking';
 import './Home.css';
 
 const Home = () => {
@@ -938,7 +939,12 @@ const Home = () => {
             
             {/* Form principale - ora occupa tutta la larghezza */}
             <div className="contact-form-container">
-              <form className="contact-form" onSubmit={(e) => e.preventDefault()}>
+              <form className="contact-form" onSubmit={(e) => {
+                e.preventDefault();
+                trackLeadConversion();
+                alert('Richiesta inviata con successo!');
+                e.target.reset();
+              }}>
                 <div className="form-row">
                   <div className="form-group">
                     <label className="form-label-desktop">Nome e Cognome</label>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PageTitle from '../components/PageTitle';
+import { trackLeadConversion } from '../utils/conversionTracking';
 import './About.css';
 
 const teamMembers = [
@@ -487,7 +488,12 @@ const About = () => {
             </div>
             
             <div className="contact-form-container-about">
-              <form className="contact-form" onSubmit={(e) => e.preventDefault()}>
+              <form className="contact-form" onSubmit={(e) => {
+                e.preventDefault();
+                trackLeadConversion();
+                alert('Richiesta inviata con successo!');
+                e.target.reset();
+              }}>
                 <div className="form-row">
                   <div className="form-group">
                     <label>Nome e Cognome</label>

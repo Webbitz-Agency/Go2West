@@ -15,6 +15,7 @@ import Admin from './pages/Admin';
 import TourEditor from './pages/TourEditor';
 import Promotions from './pages/Promotions';
 import SearchResults from './pages/SearchResults';
+import Grazie from './pages/Grazie';
 
 function AppContent() {
   const location = useLocation();
@@ -28,7 +29,13 @@ function AppContent() {
     if (typeof window.fbq === 'function' && window.Cookiebot?.consent?.marketing) {
       window.fbq('track', 'PageView');
     }
-  }, [location.pathname]);
+    if (typeof window.gtag === 'function') {
+      window.gtag('event', 'page_view', {
+        page_path: location.pathname + location.search,
+        page_location: window.location.href,
+      });
+    }
+  }, [location.pathname, location.search]);
   
   // Percorsi dove il chatbot non deve essere mostrato
   const hideChatbotPaths = ['/admin', '/admin/tour-editor'];
@@ -41,6 +48,7 @@ function AppContent() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/grazie" element={<Grazie />} />
           <Route path="/promozioni" element={<Promotions />} />
           <Route path="/cerca" element={<SearchResults />} />
           <Route path="/destination/:country" element={<DestinationTours />} />

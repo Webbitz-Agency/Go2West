@@ -1421,16 +1421,26 @@ const Header = () => {
           </nav>
         </div>
 
-        {/* CTA Richiedi Info - Desktop */}
-        <button className="header-cta" onClick={scrollToContact}>
-          Richiedi Info
-        </button>
+        {/* Azioni header: chiama + CTA + burger */}
+        <div className="header-actions">
+          <a
+            href="tel:+393444019689"
+            className="header-call-btn"
+            aria-label="Chiama 344 401 9689"
+          >
+            <i className="fa-solid fa-phone"></i>
+            <span className="header-call-text">Chiama</span>
+          </a>
 
-        {/* Burger Menu */}
-        <div className={`burger-menu ${mobileMenuOpen ? 'active' : ''}`} onClick={toggleMobileMenu}>
-          <div className="burger-line"></div>
-          <div className="burger-line"></div>
-          <div className="burger-line"></div>
+          <button className="header-cta" onClick={scrollToContact}>
+            Richiedi Info
+          </button>
+
+          <div className={`burger-menu ${mobileMenuOpen ? 'active' : ''}`} onClick={toggleMobileMenu}>
+            <div className="burger-line"></div>
+            <div className="burger-line"></div>
+            <div className="burger-line"></div>
+          </div>
         </div>
       </div>
 
