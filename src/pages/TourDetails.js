@@ -6,6 +6,7 @@ import { it } from 'date-fns/locale';
 import PageTitle from '../components/PageTitle';
 import TourService from '../services/TourService';
 import { destinationImages } from '../config/destinations';
+import { sendLeadEmail } from '../services/LeadService';
 import { trackLeadConversion } from '../utils/conversionTracking';
 import './TourDetails.css';
 
@@ -258,18 +259,28 @@ const TourDetails = () => {
     }
   };
 
-  const submitWizard = () => {
+  const submitWizard = async () => {
     // Validazione finale
     if (!wizardData.privacyAccepted) {
       alert('Devi accettare l\'informativa sulla privacy per procedere');
       return;
     }
-    
-    // Qui implementeresti la logica per inviare i dati
-    console.log('Dati del wizard:', wizardData);
-    trackLeadConversion();
-    alert('Richiesta inviata con successo!');
-    closeBookingModal();
+
+    try {
+      await sendLeadEmail({
+        source: 'tour',
+        ...wizardData,
+        name: `${wizardData.firstName} ${wizardData.lastName}`.trim(),
+        tourCode: tour?.code || '',
+        tourTitle: tour?.title || '',
+        message: wizardData.comments || '',
+      });
+      trackLeadConversion();
+      alert('Richiesta inviata con successo!');
+      closeBookingModal();
+    } catch (error) {
+      alert(error.message || 'Invio non riuscito. Riprova tra poco.');
+    }
   };
 
   // Funzione per aprire il modale delle date

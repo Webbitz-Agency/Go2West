@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PageTitle from '../components/PageTitle';
+import { sendLeadEmail } from '../services/LeadService';
 import { trackLeadConversion } from '../utils/conversionTracking';
 import './About.css';
 
@@ -488,25 +489,42 @@ const About = () => {
             </div>
             
             <div className="contact-form-container-about">
-              <form className="contact-form" onSubmit={(e) => {
+              <form className="contact-form" onSubmit={async (e) => {
                 e.preventDefault();
-                trackLeadConversion();
-                alert('Richiesta inviata con successo!');
-                e.target.reset();
+                const form = e.target;
+                const submitBtn = form.querySelector('button[type="submit"]');
+                const formData = new FormData(form);
+
+                if (submitBtn) submitBtn.disabled = true;
+                try {
+                  await sendLeadEmail({
+                    source: 'about',
+                    name: formData.get('name'),
+                    email: formData.get('email'),
+                    message: formData.get('message'),
+                  });
+                  trackLeadConversion();
+                  alert('Richiesta inviata con successo!');
+                  form.reset();
+                } catch (error) {
+                  alert(error.message || 'Invio non riuscito. Riprova tra poco.');
+                } finally {
+                  if (submitBtn) submitBtn.disabled = false;
+                }
               }}>
                 <div className="form-row">
                   <div className="form-group">
                     <label>Nome e Cognome</label>
-                    <input type="text" placeholder="Mario Rossi" required />
+                    <input name="name" type="text" placeholder="Mario Rossi" required />
                   </div>
                   <div className="form-group">
                     <label>Email</label>
-                    <input type="email" placeholder="mario@example.com" required />
+                    <input name="email" type="email" placeholder="mario@example.com" required />
                   </div>
                 </div>
                 <div className="form-group">
                   <label>Messaggio</label>
-                  <textarea rows="4" placeholder="Raccontaci cosa stai cercando..." />
+                  <textarea name="message" rows="4" placeholder="Raccontaci cosa stai cercando..." />
                 </div>
                 <button type="submit" className="submit-btn">Invia Richiesta</button>
               </form>

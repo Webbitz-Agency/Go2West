@@ -7,6 +7,7 @@ import PageTitle from '../components/PageTitle';
 import { destinations, destinationImages } from '../config/destinations';
 import { travelTypes } from '../config/travelTypes';
 import TourService from '../services/TourService';
+import { sendLeadEmail } from '../services/LeadService';
 import { trackLeadConversion } from '../utils/conversionTracking';
 import './Home.css';
 
@@ -939,30 +940,49 @@ const Home = () => {
             
             {/* Form principale - ora occupa tutta la larghezza */}
             <div className="contact-form-container">
-              <form className="contact-form" onSubmit={(e) => {
+              <form className="contact-form" onSubmit={async (e) => {
                 e.preventDefault();
-                trackLeadConversion();
-                alert('Richiesta inviata con successo!');
-                e.target.reset();
+                const form = e.target;
+                const submitBtn = form.querySelector('button[type="submit"]');
+                const formData = new FormData(form);
+
+                if (submitBtn) submitBtn.disabled = true;
+                try {
+                  await sendLeadEmail({
+                    source: 'home',
+                    name: formData.get('name'),
+                    email: formData.get('email'),
+                    phone: formData.get('phone'),
+                    destination: formData.get('destination'),
+                    message: formData.get('message'),
+                  });
+                  trackLeadConversion();
+                  alert('Richiesta inviata con successo!');
+                  form.reset();
+                } catch (error) {
+                  alert(error.message || 'Invio non riuscito. Riprova tra poco.');
+                } finally {
+                  if (submitBtn) submitBtn.disabled = false;
+                }
               }}>
                 <div className="form-row">
                   <div className="form-group">
                     <label className="form-label-desktop">Nome e Cognome</label>
-                    <input type="text" placeholder="Mario Rossi" className="form-input-mobile" required />
+                    <input name="name" type="text" placeholder="Mario Rossi" className="form-input-mobile" required />
                   </div>
                   <div className="form-group">
                     <label className="form-label-desktop">Email</label>
-                    <input type="email" placeholder="mario@example.com" className="form-input-mobile" required />
+                    <input name="email" type="email" placeholder="mario@example.com" className="form-input-mobile" required />
                   </div>
                 </div>
                 <div className="form-row">
                   <div className="form-group">
                     <label className="form-label-desktop">Telefono</label>
-                    <input type="tel" placeholder="+39 333 1234567" className="form-input-mobile" />
+                    <input name="phone" type="tel" placeholder="+39 333 1234567" className="form-input-mobile" />
                   </div>
                   <div className="form-group">
                     <label className="form-label-desktop">Destinazione d'interesse</label>
-                    <select defaultValue="" className="form-select-mobile">
+                    <select name="destination" defaultValue="" className="form-select-mobile">
                       <option value="" disabled>Seleziona una destinazione</option>
                       {destinationsWithImages.map((d) => (
                         <option key={d.country} value={d.country}>{d.name}</option>
@@ -973,7 +993,7 @@ const Home = () => {
                 </div>
                 <div className="form-group">
                   <label className="form-label-desktop">Messaggio</label>
-                  <textarea rows="4" placeholder="Raccontaci cosa stai cercando..." className="form-textarea-mobile" />
+                  <textarea name="message" rows="4" placeholder="Raccontaci cosa stai cercando..." className="form-textarea-mobile" />
                 </div>
                 <button type="submit" className="submit-btn">Invia Richiesta</button>
               </form>
