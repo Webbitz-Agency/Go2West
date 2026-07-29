@@ -15,7 +15,7 @@ const teamMembers = [
     background: 'Background di compagnie aeree (KLM e United) e business Travel (American Express) in Italia e all\'estero.'
   },
   {
-    name: 'Daniel',
+    name: 'Daniele',
     role: 'Responsabile Booking',
     image: '/images/team/DANIEL.PNG',
     objectPosition: 'center 20%',
