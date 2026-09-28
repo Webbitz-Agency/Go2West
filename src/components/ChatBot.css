@@ -278,6 +278,20 @@ body.body-modal-open .chatbot-container {
   word-wrap: break-word;
 }
 
+.chat-message-link {
+  color: #004cfe;
+  text-decoration: underline;
+  word-break: break-all;
+}
+
+.bot-message .chat-message-link {
+  color: #004cfe;
+}
+
+.user-message .chat-message-link {
+  color: #fff;
+}
+
 .message-time {
   font-size: 11px;
   opacity: 0.7;

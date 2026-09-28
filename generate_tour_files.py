@@ -34,12 +34,15 @@ def generate_tour_txt_content(tour_data):
     Genera il contenuto del file .txt per un tour
     Replica esattamente la funzione generate_tour_txt_content() di app.py
     """
+    tour_code = tour_data.get('code') or ''
+    tour_link = f"https://www.go2west.org/tour/{tour_code}" if tour_code else 'Non disponibile'
     content = f"""TOUR: {tour_data['title']}
 CODICE: {tour_data['code']}
 DESTINAZIONE: {tour_data['destination']}
 TIPO DI VIAGGIO: {tour_data['type']}
 DURATA: {tour_data['duration']} giorni
 PREZZO MINIMO: €{tour_data['minPrice'] if tour_data['minPrice'] else 'Da definire'}
+LINK TOUR: {tour_link}
 
 DESCRIZIONE:
 {tour_data['description'] or 'Nessuna descrizione disponibile'}

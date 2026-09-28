@@ -2,6 +2,51 @@ import React, { useState, useRef, useEffect } from 'react';
 import TourService from '../services/TourService';
 import './ChatBot.css';
 
+const CONTACT_EMAIL = 'preventivi@go2west.org';
+
+const renderMessageText = (text) => {
+  if (!text) return null;
+
+  const nodes = [];
+  const urlRegex = /(https?:\/\/[^\s<]+[^.,;:!?\s)\]\"'])/g;
+  let lastIndex = 0;
+  let match;
+  let key = 0;
+
+  while ((match = urlRegex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      nodes.push(text.slice(lastIndex, match.index));
+    }
+    const url = match[0];
+    nodes.push(
+      <a
+        key={`link-${key++}`}
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="chat-message-link"
+      >
+        {url}
+      </a>
+    );
+    lastIndex = match.index + url.length;
+  }
+
+  if (lastIndex < text.length) {
+    nodes.push(text.slice(lastIndex));
+  }
+
+  return nodes.map((node, index) => {
+    if (typeof node !== 'string') return node;
+    return node.split('\n').map((line, lineIndex, arr) => (
+      <React.Fragment key={`text-${index}-${lineIndex}`}>
+        {line}
+        {lineIndex < arr.length - 1 ? <br /> : null}
+      </React.Fragment>
+    ));
+  });
+};
+
 const ChatBot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
@@ -145,7 +190,7 @@ const ChatBot = () => {
       } else {
         const errorMessage = {
           id: Date.now() + 1,
-          text: data.error || "Mi dispiace, si è verificato un errore. Riprova più tardi o contatta direttamente l'agenzia.",
+          text: data.error || `Mi dispiace, si è verificato un errore. Contattaci a ${CONTACT_EMAIL} e ti aiutiamo noi.`,
           sender: 'bot',
           timestamp: new Date()
         };
@@ -154,11 +199,11 @@ const ChatBot = () => {
     } catch (error) {
       console.error('Errore nella chat:', error);
       
-      let errorText = "Mi dispiace, non riesco a connettermi al servizio. Riprova più tardi.";
+      let errorText = `Mi dispiace, non riesco a connettermi al servizio. Riprova più tardi oppure contattaci a ${CONTACT_EMAIL}.`;
       
       // Se l'errore contiene informazioni specifiche, usale
       if (error.message && error.message.includes('503')) {
-        errorText = "Il servizio chatbot non è attualmente disponibile. Per informazioni sui tour, contatta direttamente l'agenzia.";
+        errorText = `Il servizio chatbot non è attualmente disponibile. Contattaci a ${CONTACT_EMAIL} e ti aiutiamo noi.`;
       }
       
       const errorMessage = {
@@ -240,7 +285,7 @@ const ChatBot = () => {
               >
                 <div className="message-content">
                   <div className="message-text">
-                    {message.text}
+                    {message.sender === 'bot' ? renderMessageText(message.text) : message.text}
                   </div>
                   <div className="message-time">
                     {formatTime(message.timestamp)}
