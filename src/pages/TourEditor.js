@@ -139,6 +139,7 @@ const TourEditor = () => {
     duration: tour?.duration || '',
     minPrice: tour?.minPrice || '',
     notes: tour?.notes || '',
+    fornitore: tour?.fornitore || '',
     pdfUrl: tour?.pdfUrl ? 'exists' : '',
     pdfFile: null, // File PDF da caricare per i nuovi tour
     pasti: tour?.pasti || '',
@@ -1306,6 +1307,12 @@ const TourEditor = () => {
                         <span className="info-label">Pasti:</span>
                         <span className="info-value">
                           <EditableText field="basic.pasti" value={formData.pasti} className="info-value-text" placeholder="es. 9 cene incluse" />
+                        </span>
+                      </div>
+                      <div className="info-item">
+                        <span className="info-label">Fornitore:</span>
+                        <span className="info-value">
+                          <EditableText field="basic.fornitore" value={formData.fornitore} className="info-value-text" placeholder="es. nome del fornitore del tour" />
                         </span>
                       </div>
                       <div className="info-item">
