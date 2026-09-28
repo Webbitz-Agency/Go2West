@@ -12,8 +12,9 @@ Il chatbot AI di Go2West è un assistente virtuale intelligente che utilizza Ope
 
 ### 2. Integrazione Vector Store OpenAI.
 - **Vector Store ID**: `vs_68f350c542d88191a4026139f8bae406`
+- **Motore chat**: OpenAI Responses API + `file_search`
 - **Chiave API**: Utilizza `OPENAI_API_KEY` dalle variabili d'ambiente di Render.
-- **Aggiornamento automatico**: I file vengono aggiunti/aggiornati/eliminati automaticamente
+- **Aggiornamento automatico**: I file vengono aggiunti/aggiornati/eliminati automaticamente a ogni create/update/delete (e anche al toggle promozione)
 
 ### 3. Database Tour Files
 ```sql
@@ -92,10 +93,10 @@ Response:
 
 ### Conversazione Chat
 1. Utente scrive messaggio nella chat
-2. Sistema utilizza assistant esistente (`asst_cxykjx2GVPkdYqmHXhRrD6D5`)
-3. Crea nuovo thread per la conversazione
-4. Assistant utilizza vector store per cercare informazioni
-5. Sistema restituisce risposta personalizzata
+2. Backend usa OpenAI Responses API con tool `file_search`
+3. Il modello interroga il vector store dei tour
+4. Risposta sanificata (niente citazioni tecniche) e con link tour normalizzati
+5. Per preventivi invita a contattarci a preventivi@go2west.org
 
 ## Configurazione Richiesta
 
@@ -108,7 +109,7 @@ OPENAI_API_KEY=sk-your-openai-api-key
 
 ### Dipendenze Backend
 ```
-openai==1.55.3
+openai==1.82.0
 httpx==0.27.2
 ```
 
@@ -119,14 +120,13 @@ httpx==0.27.2
 
 ### Fix Errore "proxies" 
 Il problema `Client.__init__() got an unexpected keyword argument 'proxies'` è causato da incompatibilità tra `openai` e `httpx`. La soluzione è usare versioni specifiche compatibili:
-- `openai==1.55.3`
+- `openai==1.82.0`
 - `httpx==0.27.2`
 
 ### OpenAI Resources
 - **Vector Store ID**: `vs_68f350c542d88191a4026139f8bae406`
-- **Assistant ID**: `asst_cxykjx2GVPkdYqmHXhRrD6D5`
-- **Tipo**: File Search
-- **Contenuto**: File .txt dei tour
+- **Motore**: Responses API + file_search
+- **Contenuto**: File .txt dei tour (filename `tour_{id}_{code}.txt`, con campo LINK TOUR)
 
 ## Caratteristiche dell'AI Assistant
 
@@ -147,7 +147,7 @@ Il problema `Client.__init__() got an unexpected keyword argument 'proxies'` è 
 ### Limitazioni
 - Non può effettuare prenotazioni
 - Non può accedere a dati in tempo reale (prezzi dinamici)
-- Suggerisce di contattare l'agenzia per dettagli specifici
+- Per dettagli/preventivi invita a contattarci a preventivi@go2west.org
 
 ## Utilizzo per l'Utente
 
@@ -179,7 +179,7 @@ curl -X POST https://your-backend-url/api/sync-vector-store
 ### Troubleshooting
 1. **Server non si avvia**: 
    - Errore `OpenAIError`: Configura `OPENAI_API_KEY` su Render
-   - Errore `TypeError: Client.__init__()`: Conflitto versioni OpenAI/httpx (usa openai==1.55.3 + httpx==0.27.2)
+   - Errore `TypeError: Client.__init__()`: Conflitto versioni OpenAI/httpx (usa openai==1.82.0 + httpx==0.27.2)
 2. **Chat non risponde**: 
    - Verifica chiave API OpenAI nelle variabili d'ambiente
    - Controlla i log per errori di inizializzazione
